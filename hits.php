@@ -426,7 +426,6 @@ thead th {
     function createRow(array, nomes){
         $.each(nomes, function(ind,val){
             var nome = val;
-            console.log(nome);
             $.each(array, function(index, value){
                         if (value){
                             if (nome === value.nome){
