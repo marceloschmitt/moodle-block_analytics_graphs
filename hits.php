@@ -506,7 +506,6 @@ thead th {
                 document.write(form);
                 </script>
 
-
             <input type="button" value="<?php echo get_string('send_email', 'block_analytics_graphs');?>" class="button-fancy" />
         </p>
         </center>
