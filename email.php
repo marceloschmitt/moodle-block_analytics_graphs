@@ -53,4 +53,4 @@ $event = \block_analytics_graphs\event\block_analytics_graphs_event_view_graph::
     'context' => $context,
     'other'=> 'assign2.php',
 ));
-        $event->trigger();
+        $event_trigger();

@@ -18,7 +18,6 @@
 
 class graphDateOfAccess {
 
-    private $context;
     private $course;
     private $coursename;
     private $startdate;
@@ -30,7 +29,7 @@ class graphDateOfAccess {
         // Control access.
         require_login($course);
         $this->context = get_context_instance(CONTEXT_COURSE, $course);
-        require_capability('block/analytics_graphs:viewpages', $this->context);
+        require_capability('block/analytics_graphs:viewpages', $this->);
 
         $courseparams = get_course($course);
         $this->startdate = $courseparams->startdate;
@@ -176,7 +175,7 @@ class graphDateOfAccess {
             'context' => $this->context,
             'other'=> 'assign.php',
         ));
-        $event->trigger();
+        $event_trigger();
         
 ?>
 <!--DOCTYPE HTML-->
