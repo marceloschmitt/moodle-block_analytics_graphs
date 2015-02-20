@@ -55,7 +55,7 @@ function sendEmail() {
             });
 }
 
-function createEmailForm(titulo, alunos) {
+function createEmailForm(titulo, alunos, course, other) {
 		var nomes="";
                 ids = [];
                 email = [];
@@ -68,6 +68,8 @@ function createEmailForm(titulo, alunos) {
 			"<h3>" + titulo + "</h3>" +  
 			"<p style='font-size:small'>" + nomes + "</p>" +
 			"<form action='email.php' method='post'>" +
+			            "<input type='hidden' name='course' value='" + course + "'>" +
+			            "<input type='hidden' name='other' value='" + other + "'>" +
                         "<input type='hidden' name='emails[]' value='" + email + "'>" +
                         "<input type='hidden' name='ids[]' value='" + ids + "'>" +
                         "<center>" +

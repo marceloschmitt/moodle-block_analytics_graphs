@@ -23,6 +23,9 @@ require_once($CFG->dirroot.'/lib/moodlelib.php');
 $dstination = explode(',', $_POST['emails']);
 $destinationid = explode(',', $_POST['ids']);
 
+$course = $_POST['course'];
+$other = $_POST['other'];
+
 $touser = new stdClass();
 $fromuser = new stdClass();
 $touser->mailformat = 0;
@@ -41,11 +44,13 @@ foreach ($dstination as $i => $x) {
         email_to_user($touser, $fromuser, $subject, $messagetext, $messagehtml, '', '', true);
 }
 
-$mensagem = "ok";
-echo json_encode($mensagem);
 $event = \block_analytics_graphs\event\block_analytics_graphs_event_send_email::create(array(
-    'objectid' => 2245,
+    'objectid' => $course,
     'context' => $PAGE->context,
-    'other'=> "email.php",
+    'other'=> $other,
 ));
 $event->trigger();
+
+$mensagem = "ok";
+echo json_encode($mensagem);
+

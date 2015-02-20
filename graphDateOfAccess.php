@@ -426,7 +426,7 @@ $(function () {
 				        <?php echo json_encode(get_string('in_time_submission', 'block_analytics_graphs')); ?> +
                         " - " +  nome ;
                     div += "<div class='div_nomes' id='" + index + "-0'>" + 
-                        createEmailForm(title, value.in_time_submissions) +
+                        createEmailForm(title, value.in_time_submissions, courseid, 'assign.php') +
                         "</div>";
                 }
                 if (typeof value.latesubmissions != 'undefined')
@@ -436,7 +436,7 @@ $(function () {
 				        <?php echo json_encode(get_string('late_submission', 'block_analytics_graphs')); ?> +
                         " - " +  nome ;
                     div += "<div class='div_nomes' id='" + index + "-1'>" +
-                        createEmailForm(title, value.latesubmissions) +
+                        createEmailForm(title, value.latesubmissions, courseid, 'assign.php') +
                         "</div>";
                 }
         	    if (typeof value.no_submissions != 'undefined')
@@ -446,7 +446,7 @@ $(function () {
                         <?php echo json_encode(get_string('no_submission', 'block_analytics_graphs')); ?> +
                         " - " +  nome ;
                     div += "<div class='div_nomes' id='" + index + "-2'>" +
-                        createEmailForm(title, value.no_submissions) +
+                        createEmailForm(title, value.no_submissions, courseid, 'assign.php') +
                         "</div>";
                 }
                 document.write(div);
