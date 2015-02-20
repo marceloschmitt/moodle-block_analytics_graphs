@@ -138,7 +138,6 @@ thead th {
 
 
 <script type="text/javascript">
-    var courseid = <?php echo json_encode($course); ?>;
     var coursename = <?php echo json_encode($coursename); ?>;
     var geral = <?php echo $resultado; ?>;
     var moduleaccess = <?php echo $accessresults; ?>;
@@ -501,7 +500,7 @@ thead th {
                                 document.write(v.nome+"<br>");
 		});
                 var form ="<div class='div_nomes' id='studentswithnoaccess'>" +
-                            createEmailForm(title , studentswithnoaccess, courseid, 'hits.php')+
+                            createEmailForm(title , studentswithnoaccess)+
                             "</div>";
                 document.write(form);
                 </script>
@@ -528,7 +527,7 @@ thead th {
 				val.totalofresources ; 
 			studentwithaccess[0] = val;             
             div = "<div class='div_nomes' id='" + val.userid + "'>" +                        
-				createEmailForm(title,studentwithaccess, courseid, 'hits.php') + "</div>";
+				createEmailForm(title,studentwithaccess) + "</div>";
             document.write(div);     
         }
     });
