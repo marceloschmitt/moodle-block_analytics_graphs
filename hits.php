@@ -79,7 +79,7 @@ $numberofresourcesresult = json_encode($numberofresourcesresult);
 /* Log */
 $event = \block_analytics_graphs\event\block_analytics_graphs_event_view_graph::create(array(
     'objectid' => $course,
-    'context' => $PAGE->context,
+    'context' => $context,
     'other'=> "hits.php",
 ));
 $event->trigger();

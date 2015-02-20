@@ -47,9 +47,10 @@ foreach ($destination as $i => $x) {
         email_to_user($touser, $fromuser, $subject, $messagetext, $messagehtml, '', '', true);
 }
 
-$event = \block_analytics_graphs\event\block_analytics_graphs_event_send_email::create(array(
+        
+$event = \block_analytics_graphs\event\block_analytics_graphs_event_view_graph::create(array(
     'objectid' => $course,
     'context' => $context,
-    'other'=> $other,
+    'other'=> 'assign2.php',
 ));
-$event_trigger();
+        $event_trigger();
