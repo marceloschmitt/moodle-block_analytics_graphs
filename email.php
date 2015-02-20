@@ -16,12 +16,18 @@
 
 
 require_once("../../config.php");
-global $CFG;
 global $USER;
 require_once($CFG->dirroot.'/lib/moodlelib.php');
+$course = required_param('id', PARAM_INT);
+
+/* Access control */
+require_login($course);
+$context = get_context_instance(CONTEXT_COURSE, $course);
+require_capability('block/analytics_graphs:viewpages', $context);
 
 $dstination = explode(',', $_POST['emails']);
 $destinationid = explode(',', $_POST['ids']);
+$other = $_POST['other'];
 
 $touser = new stdClass();
 $fromuser = new stdClass();
@@ -44,8 +50,8 @@ foreach ($dstination as $i => $x) {
 $mensagem = "ok";
 echo json_encode($mensagem);
 $event = \block_analytics_graphs\event\block_analytics_graphs_event_send_email::create(array(
-    'objectid' => 2245,
-    'context' => $PAGE->context,
-    'other'=> "email.php",
+    'objectid' => $course,
+    'context' => $context,
+    'other'=> $other,
 ));
 $event->trigger();

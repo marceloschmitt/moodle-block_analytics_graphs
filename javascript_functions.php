@@ -26,6 +26,7 @@ function sendEmail() {
                     event.preventDefault();
                     // Get some values from elements on the page:
                     var $form = $( this ),
+                    otherval = $form.find( "input[name='other']" ).val(),
                     emailsval = $form.find( "input[name='emails[]']" ).val(),
                     idsval = $form.find( "input[name='ids[]']" ).val(),
                     subjectval = $form.find( "input[name='subject']" ).val(),
@@ -34,7 +35,7 @@ function sendEmail() {
 
                     //console.log(emailsval);
                     // Send the data using post
-                    var posting = $.post( url, { ids: idsval, emails: emailsval, subject: subjectval, texto: textoval } );
+                    var posting = $.post( url, { other: otherval, ids: idsval, emails: emailsval, subject: subjectval, texto: textoval } );
                     // Put the results in a div
                     posting.done(function( data ) {
                     //alert(data);
@@ -55,7 +56,7 @@ function sendEmail() {
             });
 }
 
-function createEmailForm(titulo, alunos) {
+function createEmailForm(titulo, alunos, courseid, other) {
 		var nomes="";
                 ids = [];
                 email = [];
@@ -67,7 +68,8 @@ function createEmailForm(titulo, alunos) {
                 var string =
 			"<h3>" + titulo + "</h3>" +  
 			"<p style='font-size:small'>" + nomes + "</p>" +
-			"<form action='email.php' method='post'>" +
+			"<form action='email.php?id" + courseid + "' method='post'>" +
+			            "<input type='hidden' name='other' value='" + other + "'>" +
                         "<input type='hidden' name='emails[]' value='" + email + "'>" +
                         "<input type='hidden' name='ids[]' value='" + ids + "'>" +
                         "<center>" +
