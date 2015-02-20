@@ -1,5 +1,5 @@
-<?php
 // This file is part of Moodle - http://moodle.org/
+<?php
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -77,6 +77,13 @@ $studentswithnoaccess = json_encode($studentswithnoaccess);
 $accessresults = json_encode($accessresults);
 $numberofresourcesresult = json_encode($numberofresourcesresult);
 
+/* Log */
+$event = \block_analytics_graphs\event\block_analytics_graphs_event_view_graph::create(array(
+    'objectid' => $course,
+    'context' => $PAGE->context,
+    'other'=> "hits.php",
+));
+$event->trigger();
 ?>
 
 
