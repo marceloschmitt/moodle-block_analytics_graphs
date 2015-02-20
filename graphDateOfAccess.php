@@ -169,14 +169,6 @@ class graphDateOfAccess {
         }
         $statistics = json_encode($statistics);
         
-        
-        $event = \block_analytics_graphs\event\block_analytics_graphs_event_view_graph::create(array(
-            'objectid' => $course,
-            'context' => $context,
-            'other'=> 'assign.php',
-        ));
-        $event_trigger();
-        
 ?>
 <!--DOCTYPE HTML-->
 <html>

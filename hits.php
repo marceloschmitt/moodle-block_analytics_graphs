@@ -79,7 +79,7 @@ $numberofresourcesresult = json_encode($numberofresourcesresult);
 /* Log */
 $event = \block_analytics_graphs\event\block_analytics_graphs_event_view_graph::create(array(
     'objectid' => $course,
-    'context' => $context,
+    'context' => $PAGE->context,
     'other'=> "hits.php",
 ));
 $event->trigger();
@@ -426,6 +426,7 @@ thead th {
     function createRow(array, nomes){
         $.each(nomes, function(ind,val){
             var nome = val;
+            console.log(nome);
             $.each(array, function(index, value){
                         if (value){
                             if (nome === value.nome){
@@ -504,6 +505,7 @@ thead th {
                             "</div>";
                 document.write(form);
                 </script>
+
 
             <input type="button" value="<?php echo get_string('send_email', 'block_analytics_graphs');?>" class="button-fancy" />
         </p>
