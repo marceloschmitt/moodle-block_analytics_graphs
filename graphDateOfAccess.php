@@ -18,6 +18,7 @@
 
 class graphDateOfAccess {
 
+    private $context;
     private $course;
     private $coursename;
     private $startdate;
