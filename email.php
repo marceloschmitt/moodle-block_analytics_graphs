@@ -16,14 +16,17 @@
 
 
 require_once("../../config.php");
-global $CFG;
-global $USER;
 require_once($CFG->dirroot.'/lib/moodlelib.php');
+$course = required_param('id', PARAM_INT);
+global $USER;
 
-$dstination = explode(',', $_POST['emails']);
+/* Access control */
+require_login($course);
+$context = get_context_instance(CONTEXT_COURSE, $course);
+require_capability('block/analytics_graphs:viewpages', $context);
+
+$destination = explode(',', $_POST['emails']);
 $destinationid = explode(',', $_POST['ids']);
-
-$course = $_POST['course'];
 $other = $_POST['other'];
 
 $touser = new stdClass();
@@ -38,7 +41,7 @@ $subject = $_POST['subject'];
 $messagetext = $_POST['texto'];
 $messagehtml = $_POST['texto'];
 
-foreach ($dstination as $i => $x) {
+foreach ($destination as $i => $x) {
         $touser->email = $x;
         $touser->id = $destinationid[$i];
         email_to_user($touser, $fromuser, $subject, $messagetext, $messagehtml, '', '', true);
@@ -46,11 +49,6 @@ foreach ($dstination as $i => $x) {
 
 $event = \block_analytics_graphs\event\block_analytics_graphs_event_send_email::create(array(
     'objectid' => $course,
-    'context' => $PAGE->context,
+    'context' => $context,
     'other'=> $other,
 ));
-$event->trigger();
-
-$mensagem = "ok";
-echo json_encode($mensagem);
-

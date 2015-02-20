@@ -26,6 +26,7 @@ function sendEmail() {
                     event.preventDefault();
                     // Get some values from elements on the page:
                     var $form = $( this ),
+                    emailsval = $form.find( "input[name='other']" ).val(),
                     emailsval = $form.find( "input[name='emails[]']" ).val(),
                     idsval = $form.find( "input[name='ids[]']" ).val(),
                     subjectval = $form.find( "input[name='subject']" ).val(),
@@ -67,8 +68,7 @@ function createEmailForm(titulo, alunos, course, other) {
                 var string =
 			"<h3>" + titulo + "</h3>" +  
 			"<p style='font-size:small'>" + nomes + "</p>" +
-			"<form action='email.php' method='post'>" +
-			            "<input type='hidden' name='course' value='" + course + "'>" +
+			"<form action='email.php?id=" + course + "' method='post'>" +
 			            "<input type='hidden' name='other' value='" + other + "'>" +
                         "<input type='hidden' name='emails[]' value='" + email + "'>" +
                         "<input type='hidden' name='ids[]' value='" + ids + "'>" +
