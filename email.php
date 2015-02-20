@@ -53,4 +53,7 @@ $event = \block_analytics_graphs\event\block_analytics_graphs_event_view_graph::
     'context' => $context,
     'other'=> 'assign2.php',
 ));
+<<<<<<< HEAD
         $event_trigger();
+=======
+>>>>>>> parent of eb4605a... Event send mail creation
