@@ -1,237 +1,180 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+
+
 class graphDateOfAccess {
 
-private $course;
-private $legacy;
-private $course_name;
-private $startdate;
-private $title;
+    private $course;
+    private $coursename;
+    private $startdate;
+    private $title;
 
-function __construct($course, $legacy)
-{
-	$this->course = $course;
-	$this->legacy = $legacy;
-	/* Limita o acesso a quem esta autorizado por access.php */
-	require_login($course);
-	$context = get_context_instance(CONTEXT_COURSE, $course);
-	require_capability('block/analytics_graphs:viewpages', $context);
+    public function __construct($course) {
+        $this->course = $course;
 
-	/* Recupera a data de inicio do curso e o nome completo */
-	$course_params = get_course($course);
-	$this->startdate = $course_params->startdate;
-	$this->course_name = get_string('disciplina','block_analytics_graphs') . ": " . $course_params->fullname;
+        // Control access.
+        require_login($course);
+        $context = get_context_instance(CONTEXT_COURSE, $course);
+        require_capability('block/analytics_graphs:viewpages', $context);
 
-}
-
-public function setTitle($name)
-{  
-	$this->title = $name;
-}
-
-
-private function getAssignSubmission($course)
-{
-global $DB;
-        $params = array($course);
-        $sql = "SELECT (@cnt := @cnt + 1) AS id, a.id AS assignment, name, duedate, cutoffdate,
-                s.userid, user.firstname, user.lastname, user.email, s.timecreated
-                FROM {assign} AS a
-                LEFT JOIN {assign_submission} as s on a.id = s.assignment
-                LEFT JOIN {user} as user ON user.id = s.userid
-                CROSS JOIN (SELECT @cnt := 0) AS dummy
-                WHERE course = ? and nosubmissions = 0 ORDER BY duedate, name, firstname";
-
-        $resultado = $DB->get_records_sql($sql, $params);
-        return($resultado);
-
-
-}
-
-
-public function createGraph()
-{
-global $DB;
-
-require('lib.php');
-
-
-/* Recupera os estudantes do curso */
-$estudantes = getStudents($this->course);
-$num_estudantes = count($estudantes);
-if($num_estudantes == 0)
-{       error("Não há estudantes cadastrados na disciplina!");
-}
-foreach($estudantes AS $tupla)
-{    $vetor_estudantes[] = array('userid'=>$tupla->id , 'nome'=>$tupla->firstname.' '.$tupla->lastname, 'email'=>$tupla->email);
-}
-
-
-/* Recupera as tarefas submetidas */
-$resultado = getAssignSubmission($this->course);
-
-
-$contador = 0;
-$num_submissoes = 0;
-$num_submissoes_atrasadas = 0;
-$num_materiais_topico = 0;
-$tarefa_submetida = 0;
-
-foreach($resultado AS $tupla)
-{   
-    if($tarefa_submetida == 0) /* Se ÃÂ© a primeira entrada no laÃ§o anota oÃÂ³pico e o  nome nome do material */
-    {
-        $estatistica[$contador]['assign'] = $tupla->name;
-        $estatistica[$contador]['duedate'] = $tupla->duedate;
-        $estatistica[$contador]['cutoffdate'] = $tupla->cutoffdate;
-        if($tupla->userid) /* Se um aluno submeteu */
-        	if($tupla->duedate >= $tupla->timecreated || $tupla->duedate == 0) /* No tempo certo */
-		{
-            		$estatistica[$contador]['submissoes'][] = array('userid' => $tupla->userid, 'nome' => $tupla->firstname." ".$tupla->lastname, 'email' => $tupla->email, 'timecreated' => $tupla->timecreated);
-            		$num_submissoes++;
-        	}
-		else /* Atrasado */
-		{
-                        $estatistica[$contador]['submissoes_atrasadas'][] = array('userid' => $tupla->userid, 'nome' => $tupla->firstname." ".$tupla->lastname, 'email' => $tupla->email, 'timecreated' => $tupla->timecreated);
-                        $num_submissoes_atrasadas++;
-                }
-        $tarefa_submetida = $tupla->assignment;
+        $courseparams = get_course($course);
+        $this->startdate = $courseparams->startdate;
+        $this->coursename = get_string('course', 'block_analytics_graphs') . ": " . $courseparams->fullname;
     }
-    else /* Se nÃÂ£o ÃÂ© a primeira vez que entra no laÃÂ§o, testa se ÃÂ© o mesmterial ou material novo */
-    {
-        if($tarefa_submetida == $tupla->assignment and $tupla->userid)  /* Se nao mudou a tarefa,  acrescenta nome de quem acessou */
-		if($tupla->duedate >= $tupla->timecreated || $tupla->duedate == 0) /* No tempo certo */
-                {
-                        $estatistica[$contador]['submissoes'][] = array('userid' => $tupla->userid, 'nome' => $tupla->firstname." ".$tupla->lastname, 'email' => $tupla->email, 'timecreated' => $tupla->timecreated);
-                        $num_submissoes++;
-                }
-                else /* Atrasado */
-                {
-                        $estatistica[$contador]['submissoes_atrasadas'][] = array('userid' => $tupla->userid, 'nome' => $tupla->firstname." ".$tupla->lastname, 'email' => $tupla->email, 'timecreated' => $tupla->timecreated);
-                        $num_submissoes_atrasadas++;
-                }
-
-        if($tarefa_submetida != $tupla->assignment) /* Se mudou material, fecha conta anterior e inicia */
-        {
-
-           	$estatistica[$contador]['num_submissoes'] = $num_submissoes;
-           	$estatistica[$contador]['num_submissoes_atrasadas'] = $num_submissoes_atrasadas;
-            	$estatistica[$contador]['num_nao_submissoes'] = $num_estudantes - $num_submissoes - $num_submissoes_atrasadas;
-		if($estatistica[$contador]['num_nao_submissoes'] == $num_estudantes)
-      			$estatistica[$contador]['nao_submissoes'] = $vetor_estudantes;
-		elseif($num_submissoes_atrasadas == 0)
-      			$estatistica[$contador]['nao_submissoes'] =  diferencaVetores($vetor_estudantes, $estatistica[$contador]['submissoes']);
-		elseif($num_submissoes == 0)
-      			$estatistica[$contador]['nao_submissoes'] =  diferencaVetores($vetor_estudantes, $estatistica[$contador]['submissoes_atrasadas']);
-		else
-      			$estatistica[$contador]['nao_submissoes'] =  diferencaVetores(diferencaVetores($vetor_estudantes, $estatistica[$contador]['submissoes']),$estatistica[$contador]['submissoes_atrasadas']);
 
 
-            	$contador++;
-		$num_submissoes = 0;
-                $num_submissoes_atrasadas = 0;
- 		$estatistica[$contador]['assign'] = $tupla->name;
-        	$estatistica[$contador]['duedate'] = $tupla->duedate;
-        	$estatistica[$contador]['cutoffdate'] = $tupla->cutoffdate;
-            	$tarefa_submetida = $tupla->assignment;
-            	if($tupla->userid) /* Se usuario submeteu */
-            		if($tupla->duedate >= $tupla->timecreated || $tupla->duedate == 0) /* No tempo certo */
-                	{
-                        	$estatistica[$contador]['submissoes'][] = array('userid' => $tupla->userid, 'nome' => $tupla->firstname." ".$tupla->lastname, 'email' => $tupla->email, 'timecreated' => $tupla->timecreated);
-                        	$num_submissoes=1;
-                	}
-                	else /* Atrasado */
-                	{
-                        	$estatistica[$contador]['submissoes_atrasadas'][] = array('userid' => $tupla->userid, 'nome' => $tupla->firstname." ".$tupla->lastname, 'email' => $tupla->email, 'timecreated' => $tupla->timecreated);
-                        	$num_submissoes_atrasadas=1;
-                	} 
+    public function set_title($name) {
+        $this->title = $name;
+    }
+
+
+    public function create_graph() {
+        global $DB;
+        require('lib.php');
+
+        // Recover course students.
+        $students = block_analytics_graphs_get_students($this->course);
+        $numberofstudents = count($students);
+        if ($numberofstudents == 0) {
+            error(get_string('no_students', 'block_analytics_graphs'));
         }
-    }
-}
+        foreach ($students as $tuple) {
+            $arrayofstudents[] = array('userid' => $tuple->id ,
+                'nome' => $tuple->firstname.' '.$tuple->lastname, 'email' => $tuple->email);
+        }
 
+        // Recover submitted tasks.
+        $result = block_analytics_graphs_get_assign_submission($this->course);
 
-/* Ajuste do ÃÂºltimo acesso  */
-$estatistica[$contador]['num_submissoes'] = $num_submissoes;
-$estatistica[$contador]['num_submissoes_atrasadas'] = $num_submissoes_atrasadas;
-$estatistica[$contador]['num_nao_submissoes'] = $num_estudantes - $num_submissoes - $num_submissoes_atrasadas;
+        $counter = 0;
+        $numberofintimesubmissions = 0;
+        $numberoflatesubmissions = 0;
+        $assignmentid = 0;
 
-if($estatistica[$contador]['num_nao_submissoes'] == $num_estudantes)
-      $estatistica[$contador]['nao_submissoes'] = $vetor_estudantes;
-elseif($num_submissoes_atrasadas == 0)
-      $estatistica[$contador]['nao_submissoes'] =  diferencaVetores($vetor_estudantes, $estatistica[$contador]['submissoes']);
-elseif($num_submissoes_ == 0)
-      $estatistica[$contador]['nao_submissoes'] =  diferencaVetores($vetor_estudantes, $estatistica[$contador]['submissoes_atrasadas']);
-else
-      $estatistica[$contador]['nao_submissoes'] =  diferencaVetores(diferencaVetores($vetor_estudantes, $estatistica[$contador]['submissoes']),$estatistica[$contador]['submissoes_atrasadas']);
+        foreach ($result as $tuple) {
+            if ($assignmentid == 0) { // First time in loop.
+                $statistics[$counter]['assign'] = $tuple->name;
+                $statistics[$counter]['duedate'] = $tuple->duedate;
+                $statistics[$counter]['cutoffdate'] = $tuple->cutoffdate;
+                if ($tuple->userid) { // If a student submitted.
+                    if ($tuple->duedate >= $tuple->timecreated || $tuple->duedate == 0) { // In the right time.
+                        $statistics[$counter]['in_time_submissions'][] = array('userid'  => $tuple->userid,
+                            'nome'  => $tuple->firstname." ".$tuple->lastname,
+                            'email'  => $tuple->email, 'timecreated'  => $tuple->timecreated);
+                        $numberofintimesubmissions++;
+                    } else { // Late.
+                        $statistics[$counter]['latesubmissions'][] = array('userid'  => $tuple->userid,
+                            'nome'  => $tuple->firstname." ".$tuple->lastname, 'email'  => $tuple->email,
+                            'timecreated'  => $tuple->timecreated);
+                        $numberoflatesubmissions++;
+                    }
+                }
+                $assignmentid = $tuple->assignment;
+            } else { // Not first time in loop.
+                if ($assignmentid == $tuple->assignment and $tuple->userid) { // Same task -> add student.
+                    if ($tuple->duedate >= $tuple->timecreated || $tuple->duedate == 0) { // Right time.
+                        $statistics[$counter]['in_time_submissions'][] = array('userid'  => $tuple->userid,
+                            'nome'  => $tuple->firstname." ".$tuple->lastname,
+                            'email'  => $tuple->email, 'timecreated'  => $tuple->timecreated);
+                        $numberofintimesubmissions++;
+                    } else { // Late.
+                        $statistics[$counter]['latesubmissions'][] = array('userid'  => $tuple->userid,
+                            'nome'  => $tuple->firstname." ".$tuple->lastname,
+                            'email'  => $tuple->email, 'timecreated'  => $tuple->timecreated);
+                        $numberoflatesubmissions++;
+                    }
+                }
 
+                if ($assignmentid != $tuple->assignment) { // Another task -> finish previous and start.
+                    $statistics[$counter]['numberofintimesubmissions'] = $numberofintimesubmissions;
+                    $statistics[$counter]['numberoflatesubmissions'] = $numberoflatesubmissions;
+                    $statistics[$counter]['numberofnosubmissions'] =
+                            $numberofstudents - $numberofintimesubmissions - $numberoflatesubmissions;
+                    if ($statistics[$counter]['numberofnosubmissions'] == $numberofstudents) {
+                        $statistics[$counter]['no_submissions'] = $arrayofstudents;
+                    } else if ($numberoflatesubmissions == 0) {
+                        $statistics[$counter]['no_submissions'] = block_analytics_graphs_subtract_student_arrays($arrayofstudents,
+                            $statistics[$counter]['in_time_submissions']);
+                    } else if ($numberofintimesubmissions == 0) {
+                        $statistics[$counter]['no_submissions'] = block_analytics_graphs_subtract_student_arrays($arrayofstudents,
+                            $statistics[$counter]['latesubmissions']);
+                    } else {
+                        $statistics[$counter]['no_submissions'] = block_analytics_graphs_subtract_student_arrays(
+                            block_analytics_graphs_subtract_student_arrays($arrayofstudents, $statistics[$counter]['in_time_submissions']),
+                                $statistics[$counter]['latesubmissions']);
+                    }
+                    $counter++;
+                    $numberofintimesubmissions = 0;
+                    $numberoflatesubmissions = 0;
+                    $statistics[$counter]['assign'] = $tuple->name;
+                    $statistics[$counter]['duedate'] = $tuple->duedate;
+                    $statistics[$counter]['cutoffdate'] = $tuple->cutoffdate;
+                    $assignmentid = $tuple->assignment;
+                    if ($tuple->userid) { // If a user has submitted
+                        if ($tuple->duedate >= $tuple->timecreated || $tuple->duedate == 0) { // Right time.
+                            $statistics[$counter]['in_time_submissions'][] = array('userid'  => $tuple->userid,
+                                'nome' => $tuple->firstname." ".$tuple->lastname,
+                                'email' => $tuple->email, 'timecreated'  => $tuple->timecreated);
+                            $numberofintimesubmissions = 1;
+                        } else { // Late.
+                            $statistics[$counter]['latesubmissions'][] = array('userid'  => $tuple->userid,
+                                'nome'  => $tuple->firstname." ".$tuple->lastname,
+                                'email'  => $tuple->email, 'timecreated'  => $tuple->timecreated);
+                            $numberoflatesubmissions = 1;
+                        }
+                    }
+                }
+            }
+        }
 
-/* Informações para os gráficos */
-$i = 0;
-//$x = 0;
-$vetNomesNaoSub = array();					//declara as matrizes que serao usadas. necessario ser fora do foreach para nao ser variavel local e perder o conteudo.
-$vetNomesSub = array();	
-$vetNomesAtr = array();	
+        // Finishing of last access.
+        $statistics[$counter]['numberofintimesubmissions'] = $numberofintimesubmissions;
+        $statistics[$counter]['numberoflatesubmissions'] = $numberoflatesubmissions;
+        $statistics[$counter]['numberofnosubmissions'] = $numberofstudents - $numberofintimesubmissions - $numberoflatesubmissions;
 
-$vetEmailsNaoSub = array();
-$vetEmailsSub = array();
-$vetEmailsAtr= array();
+        if ($statistics[$counter]['numberofnosubmissions'] == $numberofstudents) {
+            $statistics[$counter]['no_submissions'] = $arrayofstudents;
+        } else if ($numberoflatesubmissions == 0) {
+            $statistics[$counter]['no_submissions'] = block_analytics_graphs_subtract_student_arrays($arrayofstudents,
+                    $statistics[$counter]['in_time_submissions']);
+        } else if ($numberofintimesubmissions == 0) {
+            $statistics[$counter]['no_submissions'] = block_analytics_graphs_subtract_student_arrays($arrayofstudents,
+                    $statistics[$counter]['latesubmissions']);
+        } else {
+            $statistics[$counter]['no_submissions'] = block_analytics_graphs_subtract_student_arrays(block_analytics_graphs_subtract_student_arrays($arrayofstudents,
+                    $statistics[$counter]['in_time_submissions']), $statistics[$counter]['latesubmissions']);
+        }
 
-foreach($estatistica AS $tupla)
-{  
-	$vetorTarefas[] = $tupla['assign'];
-	$vetorSubNaData[] = $tupla['num_submissoes'];
-	$vetorSubAtr[] = $tupla['num_submissoes_atrasadas'];
-	$vetorNaoSub[] = $tupla['num_nao_submissoes'];
-	$vetorDatas[] = $tupla['duedate'];
-	$vetorDataFinal[] = $tupla['cutoffdate'];
-	
-
-if ($tupla['num_nao_submissoes'])
-{	
-	//declara a matriz - dimensao i se refere às barras. dimensao j se refere ao conteudo de cada barra
-	$arrlength1 = count($tupla['nao_submissoes']);
-	//echo "<br><br>Nao submetidas" . $i . ":<br>";
-	for ($j1=0; $j1<$arrlength1; $j1++)
-		{	$vetNomesNaoSub[$i][$j1] = $tupla['nao_submissoes'][$j1]['nome'];
-			$vetEmailsNaoSub[$i][$j1] = $tupla['nao_submissoes'][$j1]['email'];
-			//echo $vetNomesNaoSub[$i][$j1];
-		}
-}		
-if ($tupla['num_submissoes'])
-{		
-	//declara a matriz - dimensao i se refere às barras. dimensao j se refere ao conteudo de cada barra
-	$arrlength2 = count($tupla['submissoes']);
-	//echo "<br><br>Submetidas" . $i . ":<br>";
-	for ($j2=0; $j2<$arrlength2; $j2++)
-		{	$vetNomesSub[$i][$j2] = $tupla['submissoes'][$j2]['nome'];
-			$vetEmailsSub[$i][$j2] = $tupla['submissoes'][$j2]['email'];
-			//echo $vetNomesSub[$i][$j2];
-		}
-}
-if ($tupla['num_submissoes_atrasadas'])
-{		
-	//declara a matriz - dimensao i se refere às barras. dimensao j se refere ao conteudo de cada barra
-	$arrlength3 = count($tupla['submissoes_atrasadas']);
-	//echo "<br><br>Atrasadas" . $i . ":<br>";
-	for ($j3=0; $j3<$arrlength3; $j3++)
-		{	$vetNomesAtr[$i][$j3] = $tupla['submissoes_atrasadas'][$j3]['nome'];
-			$vetEmailsAtr[$i][$j3] = $tupla['submissoes_atrasadas'][$j3]['email'];
-			//echo $vetNomesAtr[$i][$j3];
-		}
-}		
-		$i++;	
-		
-}
-
-
-$estatistica = json_encode($estatistica);
-
+        foreach ($statistics as $tuple) {
+            $arrayofassignments[] = $tuple['assign'];
+            $arrayofintimesubmissions[] = $tuple['numberofintimesubmissions'];
+            $arrayoflatesubmissions[] = $tuple['numberoflatesubmissions'];
+            $arrayofnosubmissions[] = $tuple['numberofnosubmissions'];
+            $arrayofduedates[] = $tuple['duedate'];
+            $arrayofcutoffdates[] = $tuple['cutoffdate']; // For future use.
+        }
+        $statistics = json_encode($statistics);
 ?>
 <!--DOCTYPE HTML-->
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <title><?php echo get_string('titulo_submissoes','block_analytics_graphs'); ?></title>
-	<link rel="stylesheet" type="text/css" href="style.css">
+        <title><?php echo get_string('submissions', 'block_analytics_graphs'); ?></title>
+        <link rel="stylesheet" type="text/css" href="styles.css">
         <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
         
         <!--<script src="http://code.jquery.com/jquery-1.10.2.js"></script>-->
@@ -242,39 +185,35 @@ $estatistica = json_encode($estatistica);
         <script src="http://code.highcharts.com/modules/no-data-to-display.js"></script>
         <script src="http://code.highcharts.com/modules/exporting.js"></script> 
 
-		<script type="text/javascript">
-	
+        <script type="text/javascript">
+    
             function parseObjToString(obj) {
                 var array = $.map(obj, function(value) {
                     return [value];
                 });
                 return array;
             }
-	
-		//var geral = <?php echo $estatistica; ?>;
-         //   geral = parseObjToString(geral);
-		
-		
+    
+        
+        
 $(function () {
     $('#container').highcharts({
         chart: {
             zoomType: 'x',
-	
         },
 
         title: {
-            text: '<?php echo get_string('titulo_submissoes','block_analytics_graphs'); ?>',
-		margin: 60,
+            text: '<?php echo get_string('submissions', 'block_analytics_graphs'); ?>',
+        margin: 60,
         },
 
- subtitle: {
-                        text: ' <?php echo $this->course_name . "<br>". 
-				get_string('data_de_inicio','block_analytics_graphs') . ": " . userdate($this->startdate, get_string('strftimerecentfull')); ?>',
-                    },
+        subtitle: {
+            text: ' <?php echo $this->coursename . "<br>" .
+                     get_string('begin_date', 'block_analytics_graphs') . ": " .
+                     userdate($this->startdate, get_string('strftimerecentfull')); ?>',
+        },
 
-
-
-legend: {
+        legend: {
                         layout: 'vertical',
                         align: 'right',
                         verticalAlign: 'top',
@@ -284,29 +223,28 @@ legend: {
                         borderWidth: 1,
                         backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor || '#FFFFFF'),
                         shadow: true
-                    },
- credits: {
-                        enabled: false
-                    },
+        },
+        credits: {
+            enabled: false
+        },
 
         xAxis: [{
-	
-		categories: [
-			<?php $arrlength=count($vetorTarefas);
-			for($x=0;$x < $arrlength;$x++) {
-				echo "'<b>";
-				echo substr($vetorTarefas[$x],0,35);
-				if($vetorDatas[$x])
-                                        echo "</b><br>". userdate($vetorDatas[$x],get_string('strftimerecentfull')) ."',";
-                                else
-                                        echo "</b><br>".get_string('sem_limite','block_analytics_graphs') . "',";
-	
-  			} ?> 
-		],
-labels: {
+            categories: [
+                <?php $arrlength = count($arrayofassignments);
+        for ($x = 0; $x < $arrlength; $x++) {
+            echo "'<b>";
+            echo substr($arrayofassignments[$x], 0, 35);
+            if ($arrayofduedates[$x]) {
+                echo "</b><br>". userdate($arrayofduedates[$x], get_string('strftimerecentfull')) ."',";
+            } else {
+                echo "</b><br>".get_string('no_deadline', 'block_analytics_graphs') . "',";
+            }
+        } ?> 
+            ],
+            labels: {
                 rotation: -45,
-	}
-	}],
+            }
+        }],
 
         yAxis: [{ // Primary yAxis
                 ceiling: 1,
@@ -320,16 +258,16 @@ labels: {
                 },
 
                 title: {
-                        text: 'Ratio',
+                        text: '<?php echo get_string('ratio', 'block_analytics_graphs');?>',
                         style: {
                                 color: Highcharts.getOptions().colors[1]
                         }
                 }
         },
-	{ // Primary yAxis
+        { // Secondary yAxis
                 min: 0,
-		ceiling: <?php echo $num_estudantes; ?>,
-                tickInterval: <?php echo $num_estudantes/4; ?>,
+        	    ceiling: <?php echo $numberofstudents; ?>,
+                tickInterval: <?php echo $numberofstudents / 4; ?>,
                 opposite: true,
                 labels: {
                         format: '{value}',
@@ -339,134 +277,128 @@ labels: {
                 },
 
                 title: {
-                        text: '<?php echo get_string('numero_de_alunos','block_analytics_graphs');?>',
+                        text: '<?php echo get_string('number_of_students', 'block_analytics_graphs');?>',
                         style: {
                                 color: Highcharts.getOptions().colors[1]
                         }
                 }
         }],
+
         tooltip: {
-		 shared: true,
             crosshairs: true
         },
 
-		
+        
         plotOptions: {
-	        series: {
-                	cursor: 'pointer',
+            series: {
+                cursor: 'pointer',
                         
-			point: {
-                        	events: {
-					click: function() {  //Monta o evento com id da tarefa + id do comportamento
-						 var nome_conteudo = this.x + "-" + this.series.index;;
-                                        	$(".div_nomes").dialog("close");
-                                        	$("#" + nome_conteudo).dialog("open");
-					}
-                                }
-                            }
-                        },
-                        bar: {
-                            dataLabels: {
-                                useHTML: this,
-                                enabled: true
-                            }
-                        }
-                    },
-		
-		
-		
-		
-		
-
+                point: {
+                    events: {
+                    click: function() {
+                         var nome_conteudo = this.x + "-" + this.series.index;
+                                            $(".div_nomes").dialog("close");
+                                            $("#" + nome_conteudo).dialog("open");
+                    }
+                }
+            }
+        },
+        
+        bar: {
+            dataLabels: {
+                useHTML: this,
+                enabled: true
+            }
+        }
+    },
+        
         series: [{
-	    yAxis: 1,
-            name: '<?php echo get_string('legenda_envio_no_prazo','block_analytics_graphs'); ?>',
+            yAxis: 1,
+            name: '<?php echo get_string('in_time_submission', 'block_analytics_graphs');?>',
             type: 'column',
             data: [
-			<?php $arrlength=count($vetorTarefas);
-			for($x=0;$x < $arrlength ;$x++) {
-  				echo $vetorSubNaData[$x];
-  				echo ",";
-  			} ?> 
-		],
+            <?php $arrlength = count($arrayofassignments);
+        for ($x = 0; $x < $arrlength; $x++) {
+            echo $arrayofintimesubmissions[$x];
+            echo ",";
+        } ?>
+            ],
             tooltip: {
-                valueSuffix: ' alunos'
+                valueSuffix: ' <?php echo get_string('students', 'block_analytics_graphs');?>'
+            }
+        }, {
+            yAxis: 1,
+            name: '<?php echo get_string('late_submission', 'block_analytics_graphs');?>',
+            type: 'column',
+            data: [
+            <?php $arrlength = count($arrayofassignments);
+        for ($x = 0; $x < $arrlength; $x++) {
+            echo $arrayoflatesubmissions[$x];
+            echo ",";
+        } ?> 
+            ],
+            tooltip: {
+                valueSuffix: ' <?php echo get_string('students', 'block_analytics_graphs');?>'
             }
 
-        },
-	{
-	    yAxis: 1,
-            name: '<?php echo get_string('legenda_envio_fora_do_prazo','block_analytics_graphs'); ?>',
+        }, {
+            yAxis: 1,
+            name: '<?php echo get_string('no_submission', 'block_analytics_graphs');?>',
             type: 'column',
+            color: '#FF1111',    //cor 
             data: [
-			<?php $arrlength=count($vetorTarefas);
-                        for($x=0;$x < $arrlength ;$x++) {
-  				echo $vetorSubAtr[$x];
-  				echo ",";
-  			} ?> 
-		],
+            <?php $arrlength = count($arrayofassignments);
+        for ($x = 0; $x < $arrlength; $x++) {
+            echo $arrayofnosubmissions[$x];
+            echo ",";
+        } ?>
+            ],
             tooltip: {
-                valueSuffix: ' alunos'
+                valueSuffix: ' <?php echo get_string('students', 'block_analytics_graphs');?>'
             }
-
-        },
-	{
-	    yAxis: 1,
-            name: '<?php echo get_string('legenda_sem_envio','block_analytics_graphs'); ?>',
-            type: 'column',
-    	color: '#FF1111',	//cor 
-            data: [
-			<?php $arrlength=count($vetorTarefas);
-                        for($x=0;$x < $arrlength ;$x++) {
-  				echo $vetorNaoSub[$x];
-  				echo ",";
-  			} ?> 
-		],
-            tooltip: {
-                valueSuffix: ' alunos'
-            }//1414152000
-
-        },
-	{
-	    yAxis: 0,
-            name: '<?php echo get_string('legenda_relacao_de_entrega','block_analytics_graphs'); ?>',
+        }, {
+            yAxis: 0,
+            name: '<?php echo get_string('submission_ratio', 'block_analytics_graphs');?>',
             type: 'spline',
-		lineWidth: 2,
-		lineColor: Highcharts.getOptions().colors[2],
+            lineWidth: 2,
+            lineColor: Highcharts.getOptions().colors[2],
             data: [
-			<?php $arrlength=count($vetorTarefas);
-                        for($x=0;$x < $arrlength ;$x++) {
-  				printf("%.2f", ($vetorSubNaData[$x]+$vetorSubAtr[$x])/($vetorSubNaData[$x]+$vetorSubAtr[$x]+$vetorNaoSub[$x]));
-  				echo ",";
-  			} ?>
-		],
-	 marker: {
+            <?php $arrlength = count($arrayofassignments);
+        for ($x = 0; $x < $arrlength; $x++) {
+            printf("%.2f", ($arrayofintimesubmissions[$x] + $arrayoflatesubmissions[$x]) /
+                ($arrayofintimesubmissions[$x] + $arrayoflatesubmissions[$x] + $arrayofnosubmissions[$x]));
+            echo ",";
+        } ?>
+            ],
+            marker: {
                 lineWidth: 2,
                 lineColor: Highcharts.getOptions().colors[2],
                 fillColor: 'white'
             },
-        }, 
-	{
-	    yAxis: 0,
-            name: '<?php echo get_string('legenda_relacao_de_pontualidade','block_analytics_graphs'); ?>',
+        }, { 
+            yAxis: 0,
+            name: '<?php echo get_string('in_time_ratio', 'block_analytics_graphs');?>',
             type: 'spline',
-		lineWidth: 2,
-                lineColor: Highcharts.getOptions().colors[1],
+            lineWidth: 2,
+            lineColor: Highcharts.getOptions().colors[1],
             data: [
-			<?php $arrlength=count($vetorTarefas);
-                        for($x=0;$x < $arrlength ;$x++) {
-				if($vetorDatas[$x] == 0 || $vetorDatas[$x] > time())				//se nao tiver data ou se a data é futura (nao aconteceu ainda), taxa = 1
-					echo 1;
-				else
-  					printf ("%.2f",$vetorSubNaData[$x]/($vetorSubNaData[$x]+$vetorSubAtr[$x]+$vetorNaoSub[$x]));
-  				echo ",";
-  			} ?>
-		],
-marker: {
+            <?php $arrlength = count($arrayofassignments);
+        for ($x = 0; $x < $arrlength; $x++) {
+            if ($arrayofduedates[$x] == 0 || $arrayofduedates[$x] > time()) {
+                // If no duedate or duedate has not passed.
+                echo 1;
+            } else {
+                printf ("%.2f", $arrayofintimesubmissions[$x] /
+                    ($arrayofintimesubmissions[$x] + $arrayoflatesubmissions[$x] + $arrayofnosubmissions[$x]));
+            }
+            echo ",";
+        } ?>
+            ],
+            marker: {
                 lineWidth: 2,
                 lineColor: Highcharts.getOptions().colors[1],
                 fillColor: 'white'
-	},
+            },
         }]
     });
 });
@@ -474,74 +406,56 @@ marker: {
 
 
 
-		</script>
+        </script>
     </head>
     <body>
 
-        <div id="container" style="min-width: 310px; min-width: 800px; height: 650px; margin: 0 auto"></div>
-        <script>
-            //transformamos o objeto de todos alunos em um array
-
-	var geral = <?php echo $estatistica; ?>;
-       	geral = parseObjToString(geral);
+    <div id="container" style="min-width: 310px; min-width: 800px; height: 650px; margin: 0 auto"></div>
+    <script>
+    var geral = <?php echo $statistics; ?>;
+        geral = parseObjToString(geral);
         $.each(geral, function(index, value) {
-               	var nome = value.assign;
-               	var nomes_submissoes = "";
-               	var nomes_submissoes_atrasadas = "";
-               	var nomes_nao_submissoes = "";
-
-                if(typeof value.submissoes != 'undefined')
-                    $.each(value.submissoes, function(ind, val){
-                        nomes_submissoes += val.nome+", ";
-                    });
-                if(typeof value.submissoes_atrasadas != 'undefined')
-                {
-                    $.each(value.submissoes_atrasadas, function(ind, val){
-                        nomes_submissoes_atrasadas += val.nome+", ";
-                    });
-                }
-               	if(typeof value.nao_submissoes != 'undefined')
-                {
-                    $.each(value.nao_submissoes, function(ind, val){
-                        nomes_nao_submissoes += val.nome+", ";
-                    });
-                }
+                var nome = value.assign;
  
                 div = "";
-		titulo = <?php echo json_encode($this->course_name); ?>;
-                if(typeof value.submissoes != 'undefined')
+                if (typeof value.in_time_submissions != 'undefined')
                 {
-			titulo += "</h3>" +  <?php echo json_encode(get_string('legenda_envio_no_prazo','block_analytics_graphs')); ?> +
-                            	" - " +     nome ;
-                    	div += "<div class='div_nomes' id='" + index + "-0'>" + 
-                            	gerarEmailForm(titulo, value.submissoes) +
-                            	"</div>";
+            		title = <?php echo json_encode($this->coursename); ?> +
+				        "</h3>" + 
+				        <?php echo json_encode(get_string('in_time_submission', 'block_analytics_graphs')); ?> +
+                        " - " +  nome ;
+                    div += "<div class='div_nomes' id='" + index + "-0'>" + 
+                        createEmailForm(title, value.in_time_submissions) +
+                        "</div>";
                 }
-                if(typeof value.submissoes_atrasadas != 'undefined')
+                if (typeof value.latesubmissions != 'undefined')
                 {
-			titulo += "</h3>" +  <?php echo json_encode(get_string('legenda_envio_fora_do_prazo','block_analytics_graphs')); ?> +
-                            	" - " +     nome ;
-                    	div += "<div class='div_nomes' id='" + index + "-1'>" +
-                        	gerarEmailForm(titulo, value.submissoes_atrasadas) +
-                        	"</div>";
+            	 	title = <?php echo json_encode($this->coursename); ?> +
+				        "</h3>" +
+				        <?php echo json_encode(get_string('late_submission', 'block_analytics_graphs')); ?> +
+                        " - " +  nome ;
+                    div += "<div class='div_nomes' id='" + index + "-1'>" +
+                        createEmailForm(title, value.latesubmissions) +
+                        "</div>";
                 }
-		if(typeof value.nao_submissoes != 'undefined')
+        	    if (typeof value.no_submissions != 'undefined')
                 {
-			titulo += "</h3>" +  <?php echo json_encode(get_string('legenda_sem_envio','block_analytics_graphs')); ?> +
-                            	" - " +     nome ;
-                    	div += "<div class='div_nomes' id='" + index + "-2'>" +
-                        	gerarEmailForm(titulo, value.nao_submissoes) +
-                        	"</div>";
+            		title = <?php echo json_encode($this->coursename); ?> +
+				        "</h3>" + 
+                        <?php echo json_encode(get_string('no_submission', 'block_analytics_graphs')); ?> +
+                        " - " +  nome ;
+                    div += "<div class='div_nomes' id='" + index + "-2'>" +
+                        createEmailForm(title, value.no_submissions) +
+                        "</div>";
                 }
                 document.write(div);
             });
-
-	enviaEmail();
+    sendEmail();
 
         </script>
     </body>
 </html>
 
 <?php
+    }
 }
-}?>

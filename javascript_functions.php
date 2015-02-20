@@ -1,6 +1,26 @@
+<?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+
+
+?>
+
 <script type="text/javascript">
 	
-function enviaEmail() {
+function sendEmail() {
 		$( "form" ).submit(function( event ) {
                     // Stop form from submitting normally
                     event.preventDefault();
@@ -20,9 +40,9 @@ function enviaEmail() {
                     //alert(data);
                     if(data){
                         $(".div_nomes").dialog("close");
-                        alert("<?php echo get_string('mensagem_enviada','block_analytics_graphs');?>");
+                        alert("<?php echo get_string('sent_message', 'block_analytics_graphs');?>");
                     } else {
-                        alert("<?php echo get_string('mensagem_nao_enviada','block_analytics_graphs');?>");
+                        alert("<?php echo get_string('not_sent_message', 'block_analytics_graphs');?>");
                     }
 
                 });
@@ -35,7 +55,7 @@ function enviaEmail() {
             });
 }
 
-function gerarEmailForm(titulo, alunos) {
+function createEmailForm(titulo, alunos) {
 		var nomes="";
                 ids = [];
                 email = [];
@@ -51,10 +71,13 @@ function gerarEmailForm(titulo, alunos) {
                         "<input type='hidden' name='emails[]' value='" + email + "'>" +
                         "<input type='hidden' name='ids[]' value='" + ids + "'>" +
                         "<center>" +
-                        "<p style='font-size:small'><?php echo get_string('assunto','block_analytics_graphs');?>: <input type='text' name='subject' ></p>" +
+                        "<p style='font-size:small'><?php echo get_string('subject', 'block_analytics_graphs');?>: " +
+			"<input type='text' name='subject' ></p>" +
                         "<textarea style='font-size:small' cols='100' rows='6' name='texto' ></textarea>" +
                         "<br>" +
-                        "<input type='submit' value='<?php echo get_string('enviar_email','block_analytics_graphs');?>' style='font-size: small' ></center>" +
+                        "<input type='submit' " +
+			"value='<?php echo get_string('send_email', 'block_analytics_graphs');?>' " +
+			"style='font-size: small' ></center>" +
                         "</form>";
                 return string;
 }

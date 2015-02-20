@@ -1,46 +1,57 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+
+
 $string['analytics_graphs:addinstance'] = 'Add a new AG block';
 $string['analytics_graphs:myaddinstance'] = 'Add a new AG block to the My Moodle page';
 $string['pluginname'] = 'Analytics Graphs';
 $string['analytics_graphs'] = 'Analytics Graphs';
 
-$string['disciplina'] = 'Course';
-$string['data_de_inicio'] = 'Begin date'; 
-$string['graficos'] = 'Graphs';
-$string['grafico01'] = 'Content accesses (legacy logs)';
-$string['grafico02'] = 'Content accesses';
-$string['grafico03'] = 'Assignment submissions';
-
-
-$string['title_one'] = 'Distribution of access to contents (resources and urls)';
-$string['legenda_acessaram'] = 'Access';
-$string['legenda_nao_acessaram'] = 'No access';
-$string['material'] = 'Contents';
-$string['numero_de_alunos'] = 'Number of students';
-
-$string['titulo_submissoes'] = 'Submissions';
-$string['legenda_envio_no_prazo'] = 'On time submission';
-$string['legenda_envio_fora_do_prazo'] = 'Late submission';
-$string['legenda_sem_envio'] = 'No submission';
-$string['legenda_relacao_de_entrega'] = 'Submission ratio';
-$string['legenda_relacao_de_pontualidade'] = 'On time ration';
-$string['submissao'] = 'Submissão';
-$string['sem_limite'] = 'No deadline';
-
-$string['grafico04'] = 'Hits distribution';
-$string['alunos'] = 'Students';
+$string['access'] = 'Access';
+$string['access_to_contents'] = 'Content accesses';
+$string['begin_date'] = 'Begin date';
+$string['contents'] = 'Contents';
+$string['course'] = 'Course';
+$string['days_by_week'] = 'Number of days by week with access';
+$string['days_with_access'] = 'Days with access';
+$string['graphs'] = 'Graphs';
 $string['hits'] = 'Course hits';
-$string['dias_acessados'] = 'Days with access';
-$string['dias_acessados_na_semana'] = 'Number of days by week with access';
-$string['materiais_acessados'] = 'Resources with access';
-$string['materiais_acessados_na_semana'] = 'Number of resources accessed by week';
-$string['numero_da_semana'] = 'Week number';
-$string['numero_de_semanas'] = 'Number of weeks';
-
-$string['enviar_email'] = 'Send email';
-$string['assunto'] = 'Subject';
-$string['mensagem_enviada'] = 'Message sent to Moodle queue.';
-$string['mensagem_nao_enviada'] = 'Message sending error!';
-
-?>
-
+$string['hits_distribution'] = 'Hits distribution';
+$string['in_time_ratio'] = 'On time ration';
+$string['in_time_submission'] = 'In time submission';
+$string['late_submission'] = 'Late submission';
+$string['legacy'] = 'Legacy (prior to 2.7)';
+$string['no_access'] = 'No access';
+$string['no_deadline'] = 'No deadline';
+$string['no_students'] = 'There are no students in the course';
+$string['no_submission'] = 'No submission';
+$string['not_sent_message'] = 'Message sending error!';
+$string['number_of_students'] = 'Number of students';
+$string['number_of_weeks'] = 'Number of weeks';
+$string['ratio'] = 'Ratio';
+$string['resources_by_week'] = 'Number of resources accessed by week';
+$string['resources_with_access'] = 'Resources with access';
+$string['send_email'] = 'Send email';
+$string['sent_message'] = 'Message sent to Moodle queue.';
+$string['students'] = 'students';
+$string['subject'] = 'Subject';
+$string['submissions'] = 'Submissions';
+$string['submission_ratio'] = 'Submission ratio';
+$string['title_access'] = 'Distribution of access to contents (resources and urls)';
+$string['title_students'] = 'Students';
+$string['topic'] = 'Topic';
+$string['week_number'] = 'Week number';

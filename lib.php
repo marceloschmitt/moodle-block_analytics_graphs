@@ -1,185 +1,193 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-function diferencaVetores($estudantes,$acessaram)
-{
-	foreach($estudantes AS $estudante)
-	{	$encontrou = false;
-		foreach($acessaram AS $acessou)
-			if($estudante['userid']  == $acessou ['userid'])
-			{	$encontrou = true;
-				break;
-			}
-		if(!$encontrou)
-			$resultado[] = $estudante;
-	}
-	return $resultado;	
 
+
+function block_analytics_graphs_subtract_student_arrays($estudantes, $acessaram) {
+    foreach ($estudantes as $estudante) {
+        $encontrou = false;
+        foreach ($acessaram as $acessou) {
+            if ($estudante['userid'] == $acessou ['userid']) {
+                $encontrou = true;
+                break;
+            }
+        }
+        if (!$encontrou) {
+            $resultado[] = $estudante;
+        }
+    }
+    return $resultado;
 }
 
 
-function getStudents($course)
-{
-	$context = get_context_instance(CONTEXT_COURSE, $course);
-	$estudantes = get_role_users(array(5), $context,false,'','firstname');
-	return($estudantes);
+function block_analytics_graphs_get_students($course) {
+    $context = get_context_instance(CONTEXT_COURSE, $course);
+    $estudantes = get_role_users(array(5), $context, false, '', 'firstname');
+    return($estudantes);
 }
 
 
-function getResourceAndUrlAccess($course,$estudantes,$legacy)
-{
-	global $COURSE;
-	global $DB;
+function block_analytics_graphs_get_resource_url_access($course, $estudantes, $legacy) {
+    global $COURSE;
+    global $DB;
 
-	foreach ($estudantes AS $tupla) 
-        	$in_clause[] = $tupla->id;
-	list($insql, $inparams) = $DB->get_in_or_equal($in_clause);
-	$resource = $DB->get_record('modules', array('name'=>'resource'),'id');
-	$url = $DB->get_record('modules', array('name'=>'url'),'id');
-	$startdate = $COURSE->startdate;
+    foreach ($estudantes as $tupla) {
+            $inclause[] = $tupla->id;
+    }
+    list($insql, $inparams) = $DB->get_in_or_equal($inclause);
+    $resource = $DB->get_record('modules', array('name' => 'resource'), 'id');
+    $url = $DB->get_record('modules', array('name' => 'url'), 'id');
+    $startdate = $COURSE->startdate;
 
-	$params = array_merge(array($startdate),$inparams,array($course, $resource->id, $url->id));
+    $params = array_merge(array($startdate), $inparams, array($course, $resource->id, $url->id));
 
-	if($legacy)
-        	$sql = "select (@cnt := @cnt + 1) AS id, cm.id AS ident, cs.section, m.name AS tipo, r.name AS resource, u.name AS url, 
-        	log.userid, user.firstname, user.lastname, user.email, count(*) AS acessos 
-        	FROM {course_modules}  AS cm
-        	LEFT JOIN {course_sections} AS cs ON cm.section = cs.id 
-        	LEFT JOIN {modules} AS m ON cm.module = m.id
-        	LEFT JOIN {resource} AS r ON cm.instance = r.id 
-        	LEFT JOIN {url} AS u ON cm.instance = u.id
-        	LEFT JOIN {log} AS log ON log.time >= ? AND cm.id=log.cmid AND log.userid $insql
-        	LEFT JOIN {user} AS user ON user.id = log.userid
-        	CROSS JOIN (SELECT @cnt := 0) AS dummy
-        	WHERE cm.course = ? and (cm.module=? OR cm.module=?)
-        	GROUP BY ident,userid
-        	ORDER BY cs.section,tipo,resource,url,user.firstname";
-	else
-        	$sql = "select (@cnt := @cnt + 1) AS id, cm.id AS ident, cs.section, m.name AS tipo, r.name AS resource, u.name AS url, 
-        	log.userid, user.firstname, user.lastname, user.email, count(*) AS acessos
-        	FROM {course_modules}  AS cm
-        	LEFT JOIN {course_sections} AS cs ON cm.section = cs.id 
-        	LEFT JOIN {modules} AS m ON cm.module = m.id
-        	LEFT JOIN {resource} AS r ON cm.instance = r.id 
-        	LEFT JOIN {url} AS u ON cm.instance = u.id
-        	LEFT JOIN {logstore_standard_log} AS log ON log.timecreated >= ? AND cm.id=log.contextinstanceid  AND log.userid $insql
-        	LEFT JOIN {user} AS user ON user.id = log.userid
-        	CROSS JOIN (SELECT @cnt := 0) AS dummy
-        	WHERE cm.course = ? AND (cm.module=? OR cm.module=?) 
-        	GROUP BY ident, userid
-        	ORDER BY cs.section, tipo,resource,url,user.firstname";
-
-	$resultado = $DB->get_records_sql($sql, $params);
-	return($resultado);
+    if ($legacy) {
+            $sql = "select cm.id+(COALESCE(log.id,1)*1000000), cm.id as ident, cs.section,
+            m.name as tipo, r.name as resource, u.name as url,
+            log.userid, usr.firstname, usr.lastname, usr.email, count(*) as acessos
+            FROM {course_modules}  as cm
+            LEFT JOIN {course_sections} as cs ON cm.section = cs.id
+            LEFT JOIN {modules} as m ON cm.module = m.id
+            LEFT JOIN {resource} as r ON cm.instance = r.id
+            LEFT JOIN {url} as u ON cm.instance = u.id
+            LEFT JOIN {log} as log ON log.time >= ? AND cm.id=log.cmid AND log.userid $insql
+            LEFT JOIN {user} as usr ON usr.id = log.userid
+            WHERE cm.course = ? and (cm.module=? OR cm.module=?)
+            GROUP BY ident,userid
+            ORDER BY cs.section,tipo,resource,url,usr.firstname";
+    } else {
+            $sql = "select cm.id+(COALESCE(log.id,1)*1000000)as id, cm.id as ident, cs.section,
+            m.name as tipo, r.name as resource, u.name as url,
+            log.userid, usr.firstname, usr.lastname, usr.email, count(*) as acessos
+            FROM {course_modules}  as cm
+            LEFT JOIN {course_sections} as cs ON cm.section = cs.id
+            LEFT JOIN {modules} as m ON cm.module = m.id
+            LEFT JOIN {resource} as r ON cm.instance = r.id
+            LEFT JOIN {url} as u ON cm.instance = u.id
+            LEFT JOIN {logstore_standard_log} as log ON log.timecreated >= ? AND
+                                cm.id=log.contextinstanceid  AND log.userid $insql
+            LEFT JOIN {user} as usr ON usr.id = log.userid
+            WHERE cm.course = ? AND (cm.module=? OR cm.module=?)
+            GROUP BY ident, userid
+            ORDER BY cs.section, tipo,resource,url,usr.firstname";
+    }
+    $resultado = $DB->get_records_sql($sql, $params);
+    return($resultado);
 }
 
-function getAssignSubmission($course)
-{
-global $DB;
-	$params = array($course);
-	$sql = "SELECT (@cnt := @cnt + 1) AS id, a.id AS assignment, name, duedate, cutoffdate,
-                s.userid, user.firstname, user.lastname, user.email, s.timecreated
-                FROM {assign} AS a
-                LEFT JOIN {assign_submission} as s on a.id = s.assignment
-                LEFT JOIN {user} as user ON user.id = s.userid
-                CROSS JOIN (SELECT @cnt := 0) AS dummy
+function block_analytics_graphs_get_assign_submission($course) {
+    global $DB;
+
+    $params = array($course);
+    $sql = "SELECT a.id+(COALESCE(s.id,1)*1000000)as id, a.id as assignment, name, duedate, cutoffdate,
+                s.userid, usr.firstname, usr.lastname, usr.email, s.timecreated
+                FROM {assign} a
+                LEFT JOIN {assign_submission} s on a.id = s.assignment
+                LEFT JOIN {user} usr ON usr.id = s.userid
                 WHERE course = ? and nosubmissions = 0 ORDER BY duedate, name, firstname";
 
- 	$resultado = $DB->get_records_sql($sql, $params);
+     $resultado = $DB->get_records_sql($sql, $params);
         return($resultado);
-
-
 }
 
-function getCourseDayAcessByWeek($course,$estudantes,$startdate,$legacy=0)
-{
-global $DB;
-        foreach ($estudantes AS $tupla)
-                $in_clause[] = $tupla->id;
-        list($insql, $inparams) = $DB->get_in_or_equal($in_clause);
-        $params = array_merge(array($startdate,$course), $inparams);
+function block_analytics_graphs_get_number_of_days_access_by_week($course, $estudantes, $startdate, $legacy=0) {
+    global $DB;
+    foreach ($estudantes as $tupla) {
+        $inclause[] = $tupla->id;
+    }
+    list($insql, $inparams) = $DB->get_in_or_equal($inclause);
+    $params = array_merge(array($startdate, $course), $inparams);
 
-        $sql = "SELECT id, userid, firstname, lastname, email, week, COUNT(*) as number, SUM(numberofpageviews) AS numberofpageviews
+    $sql = "SELECT id, userid, firstname, lastname, email, week, COUNT(*) as number,
+            SUM(numberofpageviews) as numberofpageviews
                 FROM (
-                        SELECT log.id, log.userid, firstname, lastname, email, 
-                        DATE_FORMAT(FROM_UNIXTIME(log.timecreated),'%Y-%m-%d') as day, 
+                        SELECT log.id, log.userid, firstname, lastname, email,
+                        DATE_FORMAT(FROM_UNIXTIME(log.timecreated),'%Y-%m-%d') as day,
                         TIMESTAMPDIFF(WEEK,FROM_UNIXTIME(?),FROM_UNIXTIME(log.timecreated)) as week,
-			COUNT(*) AS numberofpageviews
-                        FROM {logstore_standard_log} AS log
-                        LEFT JOIN {user} AS user ON user.id = log.userid
+                    COUNT(*) as numberofpageviews
+                        FROM {logstore_standard_log} as log
+                        LEFT JOIN {user} usr ON usr.id = log.userid
                         WHERE courseid = ? AND action = 'viewed' AND target = 'course'  AND log.userid $insql
-                        GROUP BY userid, day 
+                        GROUP BY userid, day
                         ) as temp
                 GROUP BY userid, week
                 ORDER BY LOWER(firstname), LOWER(lastname),userid, week";
 
-        $resultado = $DB->get_records_sql($sql,$params);
-        return($resultado);
+    $resultado = $DB->get_records_sql($sql, $params);
+    return($resultado);
 }
 
 
-function getCourseModuleDayAcessByWeek($course,$estudantes,$startdate,$legacy=0)
-{
-global $DB;
-        foreach ($estudantes AS $tupla)
-                $in_clause[] = $tupla->id;
-        list($insql, $inparams) = $DB->get_in_or_equal($in_clause);
-        $params = array_merge(array($startdate,$course,$startdate),$inparams);
-	if(!$legacy)
-	{
-		$sql = "SELECT id, userid, firstname, lastname, email, week, COUNT(*) as number
-		FROM (
-			SELECT log.id, log.userid, firstname, lastname, email, objecttable, objectid,
-			DATE_FORMAT(FROM_UNIXTIME(log.timecreated),'%Y-%m-%d') as day,
-			TIMESTAMPDIFF(WEEK,FROM_UNIXTIME(?),FROM_UNIXTIME(log.timecreated)) as week
-			FROM {logstore_standard_log} AS log 
-			LEFT JOIN {user} AS user ON user.id = log.userid
-			WHERE courseid = ? AND action = 'viewed' AND target = 'course_module' AND log.timecreated >= ? AND log.userid $insql
-			GROUP BY userid, week, objecttable, objectid
-			) as temp
-		GROUP BY userid, week
-		ORDER by LOWER(firstname), LOWER(lastname), userid, week";
-	}
-	else
-	{
-                $sql = "SELECT id, userid, firstname, lastname, email, week, COUNT(*) as number
+function block_analytics_graphs_get_number_of_modules_access_by_week($course, $estudantes, $startdate, $legacy=0) {
+    global $DB;
+    foreach ($estudantes as $tupla) {
+        $inclause[] = $tupla->id;
+    }
+    list($insql, $inparams) = $DB->get_in_or_equal($inclause);
+    $params = array_merge(array($startdate, $course, $startdate), $inparams);
+    if (!$legacy) {
+        $sql = "SELECT id, userid, firstname, lastname, email, week, COUNT(*) as number
+        FROM (
+            SELECT log.id, log.userid, firstname, lastname, email, objecttable, objectid,
+            DATE_FORMAT(FROM_UNIXTIME(log.timecreated),'%Y-%m-%d') as day,
+            TIMESTAMPDIFF(WEEK,FROM_UNIXTIME(?),FROM_UNIXTIME(log.timecreated)) as week
+            FROM {logstore_standard_log} log
+            LEFT JOIN {user} usr ON usr.id = log.userid
+            WHERE courseid = ? AND action = 'viewed' AND target = 'course_module' AND log.timecreated >= ? AND log.userid $insql
+            GROUP BY userid, week, objecttable, objectid
+            ) as temp
+        GROUP BY userid, week
+        ORDER by LOWER(firstname), LOWER(lastname), userid, week";
+    } else {
+        $sql = "SELECT id, userid, firstname, lastname, email, week, COUNT(*) as number
                 FROM (
                         SELECT log.id, log.userid, firstname, lastname, email, module, cmid,
                         DATE_FORMAT(FROM_UNIXTIME(log.time),'%Y-%m-%d') as day,
                         TIMESTAMPDIFF(WEEK,FROM_UNIXTIME(?),FROM_UNIXTIME(log.time)) as week
-                        FROM {log} AS log 
-                        LEFT JOIN {user} AS user ON user.id = log.userid
-                        WHERE course = ? AND action = 'view' AND cmid <> 0 AND module <> 'assign' AND time >= ? AND log.userid $insql
+                        FROM {log} as log
+                        LEFT JOIN {user} as usr ON usr.id = log.userid
+                        WHERE course = ? AND action = 'view' AND cmid <> 0 AND module <> 'assign'
+                            AND time >= ? AND log.userid $insql
                         GROUP BY userid, week, module, cmid
                         ) as temp
                 GROUP BY userid, week
                 ORDER by LOWER(firstname), LOWER(lastname), userid, week";
-        }
-	
-      
-	$resultado = $DB->get_records_sql($sql,$params);
-        return($resultado);
+    }
+    $resultado = $DB->get_records_sql($sql, $params);
+    return($resultado);
 }
 
-function getCourseNumberOfModulesAccessed($course,$estudantes,$startdate,$legacy=0)
-{
-global $DB;
-        foreach ($estudantes AS $tupla)
-                $in_clause[] = $tupla->id;
-        list($insql, $inparams) = $DB->get_in_or_equal($in_clause);
-        $params = array_merge(array($course),$inparams);
-	$sql = "SELECT userid, COUNT(*) as number
+function block_analytics_graphs_get_number_of_modules_accessed($course, $estudantes, $startdate, $legacy=0) {
+    global $DB;
+    foreach ($estudantes as $tupla) {
+        $inclause[] = $tupla->id;
+    }
+    list($insql, $inparams) = $DB->get_in_or_equal($inclause);
+    $params = array_merge(array($course), $inparams);
+    $sql = "SELECT userid, COUNT(*) as number
         FROM (
                 SELECT log.userid, objecttable, objectid
-                FROM {logstore_standard_log} AS log
-                LEFT JOIN {user} AS user ON user.id = log.userid
+                FROM {logstore_standard_log} as log
+                LEFT JOIN {user} usr ON usr.id = log.userid
                 WHERE courseid = ? AND action = 'viewed' AND target = 'course_module'  AND log.userid $insql
                 GROUP BY userid, objecttable, objectid
                 ) as temp
         GROUP BY userid
         ORDER by userid";
 
-        $resultado = $DB->get_records_sql($sql,$params);
+        $resultado = $DB->get_records_sql($sql, $params);
         return($resultado);
 }
-
-
