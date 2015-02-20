@@ -26,7 +26,7 @@ function sendEmail() {
                     event.preventDefault();
                     // Get some values from elements on the page:
                     var $form = $( this ),
-                    emailsval = $form.find( "input[name='other']" ).val(),
+                    otherval = $form.find( "input[name='other']" ).val(),
                     emailsval = $form.find( "input[name='emails[]']" ).val(),
                     idsval = $form.find( "input[name='ids[]']" ).val(),
                     subjectval = $form.find( "input[name='subject']" ).val(),
@@ -35,7 +35,7 @@ function sendEmail() {
 
                     //console.log(emailsval);
                     // Send the data using post
-                    var posting = $.post( url, { ids: idsval, emails: emailsval, subject: subjectval, texto: textoval } );
+                    var posting = $.post( url, { other: otherval, ids: idsval, emails: emailsval, subject: subjectval, texto: textoval } );
                     // Put the results in a div
                     posting.done(function( data ) {
                     //alert(data);

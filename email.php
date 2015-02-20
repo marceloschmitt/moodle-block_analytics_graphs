@@ -52,3 +52,4 @@ $event = \block_analytics_graphs\event\block_analytics_graphs_event_send_email::
     'context' => $context,
     'other'=> $other,
 ));
+$event_trigger();
