@@ -29,7 +29,7 @@ class graphDateOfAccess {
         // Control access.
         require_login($course);
         $this->context = get_context_instance(CONTEXT_COURSE, $course);
-        require_capability('block/analytics_graphs:viewpages', $this->);
+        require_capability('block/analytics_graphs:viewpages', $this->context);
 
         $courseparams = get_course($course);
         $this->startdate = $courseparams->startdate;
