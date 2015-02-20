@@ -26,10 +26,13 @@ $context = get_context_instance(CONTEXT_COURSE, $course);
 require_capability('block/analytics_graphs:viewpages', $context);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 $destination = explode(',', $_POST['emails']);
 $destinationid = explode(',', $_POST['ids']);
 $other = $_POST['other'];
 
+=======
+>>>>>>> parent of bc20a5a... Events creation
 =======
 >>>>>>> parent of bc20a5a... Events creation
 $touser = new stdClass();
@@ -54,9 +57,15 @@ $mensagem = "ok";
 echo json_encode($mensagem);
 $event = \block_analytics_graphs\event\block_analytics_graphs_event_send_email::create(array(
 <<<<<<< HEAD
+<<<<<<< HEAD
     'objectid' => $course,
     'context' => $context,
     'other'=> $other,
+=======
+    'objectid' => 2245,
+    'context' => $PAGE->context,
+    'other'=> "email.php",
+>>>>>>> parent of bc20a5a... Events creation
 ));
 =======
     'objectid' => 2245,
@@ -64,4 +73,7 @@ $event = \block_analytics_graphs\event\block_analytics_graphs_event_send_email::
     'other'=> "email.php",
 ));
 $event->trigger();
+<<<<<<< HEAD
+>>>>>>> parent of bc20a5a... Events creation
+=======
 >>>>>>> parent of bc20a5a... Events creation

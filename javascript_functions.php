@@ -69,8 +69,12 @@ function createEmailForm(titulo, alunos) {
 			"<h3>" + titulo + "</h3>" +  
 			"<p style='font-size:small'>" + nomes + "</p>" +
 <<<<<<< HEAD
+<<<<<<< HEAD
 			"<form action='email.php?id=" + course + "' method='post'>" +
 			            "<input type='hidden' name='other' value='" + other + "'>" +
+=======
+			"<form action='email.php' method='post'>" +
+>>>>>>> parent of bc20a5a... Events creation
 =======
 			"<form action='email.php' method='post'>" +
 >>>>>>> parent of bc20a5a... Events creation
