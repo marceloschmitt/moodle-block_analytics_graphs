@@ -178,7 +178,7 @@ class graphDateOfAccess {
             'context' => $this->context,
             'other' => "assign.php",
         ));
-        $event->trigger(); 
+        $event->trigger();
 ?>
 <!--DOCTYPE HTML-->
 <html>
