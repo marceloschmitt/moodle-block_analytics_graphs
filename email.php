@@ -16,25 +16,13 @@
 
 
 require_once("../../config.php");
-require_once($CFG->dirroot.'/lib/moodlelib.php');
-$course = required_param('id', PARAM_INT);
+global $CFG;
 global $USER;
+require_once($CFG->dirroot.'/lib/moodlelib.php');
 
-/* Access control */
-require_login($course);
-$context = get_context_instance(CONTEXT_COURSE, $course);
-require_capability('block/analytics_graphs:viewpages', $context);
-
-<<<<<<< HEAD
-<<<<<<< HEAD
-$destination = explode(',', $_POST['emails']);
+$dstination = explode(',', $_POST['emails']);
 $destinationid = explode(',', $_POST['ids']);
-$other = $_POST['other'];
 
-=======
->>>>>>> parent of bc20a5a... Events creation
-=======
->>>>>>> parent of bc20a5a... Events creation
 $touser = new stdClass();
 $fromuser = new stdClass();
 $touser->mailformat = 0;
@@ -47,7 +35,7 @@ $subject = $_POST['subject'];
 $messagetext = $_POST['texto'];
 $messagehtml = $_POST['texto'];
 
-foreach ($destination as $i => $x) {
+foreach ($dstination as $i => $x) {
         $touser->email = $x;
         $touser->id = $destinationid[$i];
         email_to_user($touser, $fromuser, $subject, $messagetext, $messagehtml, '', '', true);
@@ -56,24 +44,8 @@ foreach ($destination as $i => $x) {
 $mensagem = "ok";
 echo json_encode($mensagem);
 $event = \block_analytics_graphs\event\block_analytics_graphs_event_send_email::create(array(
-<<<<<<< HEAD
-<<<<<<< HEAD
-    'objectid' => $course,
-    'context' => $context,
-    'other'=> $other,
-=======
-    'objectid' => 2245,
-    'context' => $PAGE->context,
-    'other'=> "email.php",
->>>>>>> parent of bc20a5a... Events creation
-));
-=======
     'objectid' => 2245,
     'context' => $PAGE->context,
     'other'=> "email.php",
 ));
 $event->trigger();
-<<<<<<< HEAD
->>>>>>> parent of bc20a5a... Events creation
-=======
->>>>>>> parent of bc20a5a... Events creation
