@@ -315,7 +315,7 @@ foreach ($numberofresourcesintopic as $topico => $numberoftopics) {
 
                     div += "<div class='div_nomes' id='" + index + "-" + 
                         "<?php echo substr(get_string('access', 'block_analytics_graphs'), 0, 1);?>" +
-                        "'>" + createEmailForm(titulo, value.studentswithaccess, courseid, 'graphResourceUrl.php) + "</div>";
+                        "'>" + createEmailForm(titulo, value.studentswithaccess, courseid, 'graphResourceUrl.php') + "</div>";
                 }
                 if (typeof value.studentswithnoaccess != 'undefined')
                 {
@@ -325,7 +325,7 @@ foreach ($numberofresourcesintopic as $topico => $numberoftopics) {
 
                     div += "<div class='div_nomes' id='" + index + "-" +
                         "<?php echo substr(get_string('no_access', 'block_analytics_graphs'), 0, 1);?>" +
-                        "'>" + createEmailForm(titulo, value.studentswithnoaccess, courseid, 'graphResourceUrl.php) + "</div>";
+                        "'>" + createEmailForm(titulo, value.studentswithnoaccess, courseid, 'graphResourceUrl.php') + "</div>";
                 }
                 document.write(div);
             });
