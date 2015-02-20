@@ -168,6 +168,14 @@ class graphDateOfAccess {
             $arrayofcutoffdates[] = $tuple['cutoffdate']; // For future use.
         }
         $statistics = json_encode($statistics);
+        
+        /* Log */
+        $event = \block_analytics_graphs\event\block_analytics_graphs_event_view_graph::create(array(
+            'objectid' => $course,
+            'context' => $PAGE->context,
+            'other'=> "hits.php",
+        ));
+$event->trigger();
 ?>
 <!--DOCTYPE HTML-->
 <html>

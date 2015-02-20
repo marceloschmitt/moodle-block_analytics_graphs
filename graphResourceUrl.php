@@ -124,7 +124,13 @@ if ($numberofaccesses == 0) {
 
 $statistics = json_encode($statistics);
 
-
+/* Log */
+$event = \block_analytics_graphs\event\block_analytics_graphs_event_view_graph::create(array(
+    'objectid' => $course,
+    'context' => $PAGE->context,
+    'other'=> "graphResourceUrl.php",
+));
+$event->trigger();
 
 ?>
 <!--DOCTYPE HTML-->
