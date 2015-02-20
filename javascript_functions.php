@@ -35,7 +35,8 @@ function sendEmail() {
 
                     //console.log(emailsval);
                     // Send the data using post
-                    var posting = $.post( url, { other: otherval, ids: idsval, emails: emailsval, subject: subjectval, texto: textoval } );
+                    var posting = $.post( url, { other: otherval, ids: idsval, emails: emailsval, 
+                                    subject: subjectval, texto: textoval } );
                     // Put the results in a div
                     posting.done(function( data ) {
                     //alert(data);

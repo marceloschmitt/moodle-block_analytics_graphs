@@ -13,7 +13,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
- 
+
 /**
  * The EVENTNAME event.
  *
@@ -21,8 +21,8 @@
  * @copyright  2014 Marcelo Augusto Rauh Schmitt
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
- 
- 
+
+
 namespace block_analytics_graphs\event;
 defined('MOODLE_INTERNAL') || die();
 /**
@@ -40,7 +40,7 @@ defined('MOODLE_INTERNAL') || die();
  **/
 class block_analytics_graphs_event_send_email extends \core\event\base {
     protected function init() {
-        $this->data['crud'] = 'c'; // c(reate), r(ead), u(pdate), d(elete)
+        $this->data['crud'] = 'c'; // c(reate), r(ead), u(pdate), d(elete).
         $this->data['edulevel'] = self::LEVEL_TEACHING;
         $this->data['objecttable'] = 'block_analytics_graphs';
     }
@@ -48,13 +48,13 @@ class block_analytics_graphs_event_send_email extends \core\event\base {
     public static function get_name() {
         return get_string('event_send_email', 'block_analytics_graphs');
     }
- 
+
     public function get_description() {
         return "User: {$this->userid} - Course: {$this->objectid} - Graph: {$this->other}";
     }
- 
+
     public function get_url() {
         return new \moodle_url('/blocks/analytics_graphs/'.$this->other, array('id' => $this->objectid, 'legacy' => '0'));
     }
- 
+
 }

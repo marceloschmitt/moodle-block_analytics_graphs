@@ -115,7 +115,8 @@ class graphDateOfAccess {
                             $statistics[$counter]['latesubmissions']);
                     } else {
                         $statistics[$counter]['no_submissions'] = block_analytics_graphs_subtract_student_arrays(
-                            block_analytics_graphs_subtract_student_arrays($arrayofstudents, $statistics[$counter]['in_time_submissions']),
+                            block_analytics_graphs_subtract_student_arrays($arrayofstudents,
+                                $statistics[$counter]['in_time_submissions']),
                                 $statistics[$counter]['latesubmissions']);
                     }
                     $counter++;
@@ -156,7 +157,9 @@ class graphDateOfAccess {
             $statistics[$counter]['no_submissions'] = block_analytics_graphs_subtract_student_arrays($arrayofstudents,
                     $statistics[$counter]['latesubmissions']);
         } else {
-            $statistics[$counter]['no_submissions'] = block_analytics_graphs_subtract_student_arrays(block_analytics_graphs_subtract_student_arrays($arrayofstudents,
+            $statistics[$counter]['no_submissions'] =
+                block_analytics_graphs_subtract_student_arrays(block_analytics_graphs_subtract_student_arrays(
+                    $arrayofstudents,
                     $statistics[$counter]['in_time_submissions']), $statistics[$counter]['latesubmissions']);
         }
 
@@ -169,14 +172,13 @@ class graphDateOfAccess {
             $arrayofcutoffdates[] = $tuple['cutoffdate']; // For future use.
         }
         $statistics = json_encode($statistics);
-        
+
         $event = \block_analytics_graphs\event\block_analytics_graphs_event_view_graph::create(array(
             'objectid' => $this->course,
             'context' => $this->context,
-            'other'=> "assign.php",
-));
-$event->trigger();
-        
+            'other' => "assign.php",
+        ));
+        $event->trigger(); 
 ?>
 <!--DOCTYPE HTML-->
 <html>
