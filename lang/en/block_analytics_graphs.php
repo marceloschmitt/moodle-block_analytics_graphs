@@ -29,6 +29,7 @@ $string['course'] = 'Course';
 $string['days_by_week'] = 'Number of days by week with access';
 $string['days_with_access'] = 'Days with access';
 $string['event_view_graph'] = 'LA - View graph';
+$string['event_send_email'] = 'LA - Send email';
 $string['graphs'] = 'Graphs';
 $string['hits'] = 'Course hits';
 $string['hits_distribution'] = 'Hits distribution';

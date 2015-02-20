@@ -43,3 +43,9 @@ foreach ($dstination as $i => $x) {
 
 $mensagem = "ok";
 echo json_encode($mensagem);
+$event = \block_analytics_graphs\event\block_analytics_graphs_event_send_email::create(array(
+    'objectid' => $course,
+    'context' => $PAGE->context,
+    'other'=> "email.php",
+));
+$event->trigger();
