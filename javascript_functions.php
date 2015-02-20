@@ -68,7 +68,7 @@ function createEmailForm(titulo, alunos, courseid, other) {
                 var string =
 			"<h3>" + titulo + "</h3>" +  
 			"<p style='font-size:small'>" + nomes + "</p>" +
-			"<form action='email.php?id" + courseid + "' method='post'>" +
+			"<form action='email.php?id=" + courseid + "' method='post'>" +
 			            "<input type='hidden' name='other' value='" + other + "'>" +
                         "<input type='hidden' name='emails[]' value='" + email + "'>" +
                         "<input type='hidden' name='ids[]' value='" + ids + "'>" +

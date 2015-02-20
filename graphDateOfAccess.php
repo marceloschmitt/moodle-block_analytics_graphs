@@ -18,6 +18,7 @@
 
 class graphDateOfAccess {
 
+    private $context;
     private $course;
     private $coursename;
     private $startdate;
@@ -28,8 +29,8 @@ class graphDateOfAccess {
 
         // Control access.
         require_login($course);
-        $context = get_context_instance(CONTEXT_COURSE, $course);
-        require_capability('block/analytics_graphs:viewpages', $context);
+        $this->context = get_context_instance(CONTEXT_COURSE, $course);
+        require_capability('block/analytics_graphs:viewpages', $this->context);
 
         $courseparams = get_course($course);
         $this->startdate = $courseparams->startdate;
@@ -169,6 +170,13 @@ class graphDateOfAccess {
         }
         $statistics = json_encode($statistics);
         
+        $event = \block_analytics_graphs\event\block_analytics_graphs_event_view_graph::create(array(
+            'objectid' => $this->course,
+            'context' => $this->context,
+            'other'=> "assign.php",
+));
+$event->trigger();
+        
 ?>
 <!--DOCTYPE HTML-->
 <html>
@@ -187,6 +195,7 @@ class graphDateOfAccess {
         <script src="http://code.highcharts.com/modules/exporting.js"></script> 
 
         <script type="text/javascript">
+         var courseid = <?php echo json_encode($this->course); ?>;
     
             function parseObjToString(obj) {
                 var array = $.map(obj, function(value) {
@@ -426,7 +435,7 @@ $(function () {
 				        <?php echo json_encode(get_string('in_time_submission', 'block_analytics_graphs')); ?> +
                         " - " +  nome ;
                     div += "<div class='div_nomes' id='" + index + "-0'>" + 
-                        createEmailForm(title, value.in_time_submissions) +
+                        createEmailForm(title, value.in_time_submissions, courseid, "assign.php") +
                         "</div>";
                 }
                 if (typeof value.latesubmissions != 'undefined')
@@ -436,7 +445,7 @@ $(function () {
 				        <?php echo json_encode(get_string('late_submission', 'block_analytics_graphs')); ?> +
                         " - " +  nome ;
                     div += "<div class='div_nomes' id='" + index + "-1'>" +
-                        createEmailForm(title, value.latesubmissions) +
+                        createEmailForm(title, value.latesubmissions, courseid, "assign.php") +
                         "</div>";
                 }
         	    if (typeof value.no_submissions != 'undefined')
@@ -446,7 +455,7 @@ $(function () {
                         <?php echo json_encode(get_string('no_submission', 'block_analytics_graphs')); ?> +
                         " - " +  nome ;
                     div += "<div class='div_nomes' id='" + index + "-2'>" +
-                        createEmailForm(title, value.no_submissions) +
+                        createEmailForm(title, value.no_submissions, courseid, "assign.php") +
                         "</div>";
                 }
                 document.write(div);
