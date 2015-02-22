@@ -110,20 +110,20 @@ function block_analytics_graphs_get_number_of_days_access_by_week($course, $estu
         $inclause[] = $tupla->id;
     }
     list($insql, $inparams) = $DB->get_in_or_equal($inclause);
-    $params = array_merge(array($startdate, $course), $inparams);
+    $params = array_merge(array($startdate, $course, $startdate), $inparams);
 
     $sql = "SELECT id, userid, firstname, lastname, email, week, COUNT(*) as number,
             SUM(numberofpageviews) as numberofpageviews
                 FROM (
-                        SELECT log.id, log.userid, firstname, lastname, email,
-                        DATE_FORMAT(FROM_UNIXTIME(log.timecreated),'%Y-%m-%d') as day,
-                        TIMESTAMPDIFF(WEEK,FROM_UNIXTIME(?),FROM_UNIXTIME(log.timecreated)) as week,
+                    SELECT log.id, log.userid, firstname, lastname, email,
+                    DATE_FORMAT(FROM_UNIXTIME(log.timecreated),'%Y-%m-%d') as day,
+                    TIMESTAMPDIFF(WEEK,FROM_UNIXTIME(?),FROM_UNIXTIME(log.timecreated)) as week,
                     COUNT(*) as numberofpageviews
-                        FROM {logstore_standard_log} as log
-                        LEFT JOIN {user} usr ON usr.id = log.userid
-                        WHERE courseid = ? AND action = 'viewed' AND target = 'course'  AND log.userid $insql
-                        GROUP BY userid, day
-                        ) as temp
+                    FROM {logstore_standard_log} as log
+                    LEFT JOIN {user} usr ON usr.id = log.userid
+                    WHERE courseid = ? AND action = 'viewed' AND target = 'course' AND log.timecreated >= ? AND log.userid $insql
+                    GROUP BY userid, day
+                    ) as temp
                 GROUP BY userid, week
                 ORDER BY LOWER(firstname), LOWER(lastname),userid, week";
 
@@ -177,15 +177,15 @@ function block_analytics_graphs_get_number_of_modules_accessed($course, $estudan
         $inclause[] = $tupla->id;
     }
     list($insql, $inparams) = $DB->get_in_or_equal($inclause);
-    $params = array_merge(array($course), $inparams);
+    $params = array_merge(array($course, $startdate), $inparams);
     $sql = "SELECT userid, COUNT(*) as number
         FROM (
-                SELECT log.userid, objecttable, objectid
-                FROM {logstore_standard_log} as log
-                LEFT JOIN {user} usr ON usr.id = log.userid
-                WHERE courseid = ? AND action = 'viewed' AND target = 'course_module'  AND log.userid $insql
-                GROUP BY userid, objecttable, objectid
-                ) as temp
+            SELECT log.userid, objecttable, objectid
+            FROM {logstore_standard_log} as log
+            LEFT JOIN {user} usr ON usr.id = log.userid
+            WHERE courseid = ? AND action = 'viewed' AND target = 'course_module' AND log.timecreated >= ? AND log.userid $insql
+            GROUP BY userid, objecttable, objectid
+            ) as temp
         GROUP BY userid
         ORDER by userid";
 
