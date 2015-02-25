@@ -146,7 +146,7 @@ function block_analytics_graphs_get_number_of_modules_access_by_week($course, $e
         FROM (
             SELECT log.id, log.userid, firstname, lastname, email, objecttable, objectid,
             FLOOR((log.timecreated + ?) / 86400)   as day,
-            FLOOR( (((log.timecreated  + ?) / 86400) - (?/86400))/7) as week,
+            FLOOR( (((log.timecreated  + ?) / 86400) - (?/86400))/7) as week
             FROM {logstore_standard_log} log
             LEFT JOIN {user} usr ON usr.id = log.userid
             WHERE courseid = ? AND action = 'viewed' AND target = 'course_module' AND log.timecreated >= ? AND log.userid $insql
@@ -159,7 +159,7 @@ function block_analytics_graphs_get_number_of_modules_access_by_week($course, $e
                 FROM (
                         SELECT log.id, log.userid, firstname, lastname, email, module, cmid,
                         FLOOR((log.timecreated + ?) / 86400)   as day,
-                        FLOOR( (((log.timecreated  + ?) / 86400) - (?/86400))/7) as week,
+                        FLOOR( (((log.timecreated  + ?) / 86400) - (?/86400))/7) as week
                         FROM {log} as log
                         LEFT JOIN {user} as usr ON usr.id = log.userid
                         WHERE course = ? AND action = 'view' AND cmid <> 0 AND module <> 'assign'
