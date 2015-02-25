@@ -106,12 +106,12 @@ function block_analytics_graphs_get_assign_submission($course) {
 
 function block_analytics_graphs_get_number_of_days_access_by_week($course, $estudantes, $startdate, $legacy=0) {
     global $DB;
-    $timezone_adjust = get_user_timezone_offset() * 3600;
+    $timezoneadjust = get_user_timezone_offset() * 3600;
     foreach ($estudantes as $tupla) {
         $inclause[] = $tupla->id;
     }
     list($insql, $inparams) = $DB->get_in_or_equal($inclause);
-    $params = array_merge(array($timezone, $timezone, $startdate, $course, $startdate), $inparams);
+    $params = array_merge(array($timezoneadjust, $timezoneadjust, $startdate, $course, $startdate), $inparams);
 
     $sql = "SELECT id, userid, firstname, lastname, email, week, COUNT(*) as number,
             SUM(numberofpageviews) as numberofpageviews
@@ -135,12 +135,12 @@ function block_analytics_graphs_get_number_of_days_access_by_week($course, $estu
 
 function block_analytics_graphs_get_number_of_modules_access_by_week($course, $estudantes, $startdate, $legacy=0) {
     global $DB;
-    $timezone_adjust = get_user_timezone_offset() * 3600;
+    $timezoneadjust = get_user_timezone_offset() * 3600;
     foreach ($estudantes as $tupla) {
         $inclause[] = $tupla->id;
     }
     list($insql, $inparams) = $DB->get_in_or_equal($inclause);
-    $params = array_merge(array($timezone, $timezone, $startdate, $course, $startdate), $inparams);
+    $params = array_merge(array($timezoneadjust, $timezoneadjust, $startdate, $course, $startdate), $inparams);
     if (!$legacy) {
         $sql = "SELECT id, userid, firstname, lastname, email, week, COUNT(*) as number
         FROM (
