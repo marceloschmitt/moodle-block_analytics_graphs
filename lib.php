@@ -134,7 +134,7 @@ function block_analytics_graphs_get_number_of_days_access_by_week($course, $estu
 
 
 function block_analytics_graphs_get_number_of_modules_access_by_week($course, $estudantes, $startdate, $legacy=0) {
-    global $DB;a
+    global $DB;
     $timezone_adjust = get_user_timezone_offset() * 3600;
     foreach ($estudantes as $tupla) {
         $inclause[] = $tupla->id;
