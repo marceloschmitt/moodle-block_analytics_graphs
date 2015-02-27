@@ -13,9 +13,6 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
-
-
 ?>
 
 <script type="text/javascript">
@@ -27,15 +24,13 @@ function sendEmail() {
                     // Get some values from elements on the page:
                     var $form = $( this ),
                     otherval = $form.find( "input[name='other']" ).val(),
-                    emailsval = $form.find( "input[name='emails[]']" ).val(),
                     idsval = $form.find( "input[name='ids[]']" ).val(),
                     subjectval = $form.find( "input[name='subject']" ).val(),
                     textoval = $form.find( "textarea[name='texto']" ).val(),
                     url = $form.attr( "action" );
 
-                    //console.log(emailsval);
                     // Send the data using post
-                    var posting = $.post( url, { other: otherval, ids: idsval, emails: emailsval, 
+                    var posting = $.post( url, { other: otherval, ids: idsval,  
                                     subject: subjectval, texto: textoval } );
                     // Put the results in a div
                     posting.done(function( data ) {
@@ -71,7 +66,6 @@ function createEmailForm(titulo, alunos, courseid, other) {
 			"<p style='font-size:small'>" + nomes + "</p>" +
 			"<form action='email.php?id=" + courseid + "' method='post'>" +
 			            "<input type='hidden' name='other' value='" + other + "'>" +
-                        "<input type='hidden' name='emails[]' value='" + email + "'>" +
                         "<input type='hidden' name='ids[]' value='" + ids + "'>" +
                         "<center>" +
                         "<p style='font-size:small'><?php echo get_string('subject', 'block_analytics_graphs');?>: " +
