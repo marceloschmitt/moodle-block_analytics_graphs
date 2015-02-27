@@ -19,15 +19,17 @@ require_once("../../config.php");
 global $USER;
 require_once($CFG->dirroot.'/lib/moodlelib.php');
 $course = required_param('id', PARAM_INT);
+$other = required_param('other', PARAM_INT);
+$subject = required_param('subject', PARAM_INT);
+$messagetext = required_param('texto', PARAM_INT);
+$messagehtml = $messagetext;
 
 /* Access control */
 require_login($course);
 $context = get_context_instance(CONTEXT_COURSE, $course);
 require_capability('block/analytics_graphs:viewpages', $context);
 
-$dstination = explode(',', $_POST['emails']);
 $destinationid = explode(',', $_POST['ids']);
-$other = $_POST['other'];
 
 $touser = new stdClass();
 $fromuser = new stdClass();
@@ -37,12 +39,10 @@ $fromuser->firstname = $USER->firstname;
 $fromuser->maildisplay = true;
 $fromuser->lastname = $USER->lastname;
 $fromuser->id = $USER->id;
-$subject = $_POST['subject'];
-$messagetext = $_POST['texto'];
-$messagehtml = $_POST['texto'];
 
-foreach ($dstination as $i => $x) {
-        $touser->email = $x;
+
+foreach ($destination as $i => $x) {
+        $touser->email = $DB->get_field('user','email',$destinationid[$i]);
         $touser->id = $destinationid[$i];
         email_to_user($touser, $fromuser, $subject, $messagetext, $messagehtml, '', '', true);
 }

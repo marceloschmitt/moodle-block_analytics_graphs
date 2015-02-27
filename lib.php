@@ -57,7 +57,7 @@ function block_analytics_graphs_get_resource_url_access($course, $estudantes, $l
     $params = array_merge(array($startdate), $inparams, array($course, $resource->id, $url->id, $page->id));
 
     if ($legacy) {
-            $sql = "select cm.id+(COALESCE(log.id,1)*1000000), cm.id as ident, cs.section,
+            $sql = "select cm.id+(COALESCE(log.id,1)*1000000) as id, cm.id as ident, cs.section as section,
             m.name as tipo, r.name as resource, u.name as url, p.name as page,
             log.userid, usr.firstname, usr.lastname, usr.email, count(*) as acessos
             FROM {course_modules}  as cm
@@ -72,7 +72,7 @@ function block_analytics_graphs_get_resource_url_access($course, $estudantes, $l
             GROUP BY ident,userid
             ORDER BY cs.section,tipo,resource,url,usr.firstname";
     } else {
-            $sql = "select cm.id+(COALESCE(log.id,1)*1000000)as id, cm.id as ident, cs.section,
+            $sql = "select cm.id+(COALESCE(log.id,1)*1000000)as id, cm.id as ident, cs.section as section,
             m.name as tipo, r.name as resource, u.name as url, p.name as page,
             log.userid, usr.firstname, usr.lastname, usr.email, count(*) as acessos
             FROM {course_modules}  as cm
