@@ -35,8 +35,8 @@ function block_analytics_graphs_subtract_student_arrays($estudantes, $acessaram)
 
 function block_analytics_graphs_get_students($course) {
     $context = get_context_instance(CONTEXT_COURSE, $course);
-    $students = get_role_users(array(5), $context, false, '', 'firstname', null, '', '', '', 'u.suspended = :xsuspended',
-                                                                                                    array('xsuspended'=>0));
+    $students = get_role_users(array(5), $context, false, '', 'firstname', null,
+        '', '', '', 'u.suspended = :xsuspended', array('xsuspended' => 0));
     return($students);
 }
 
@@ -51,39 +51,42 @@ function block_analytics_graphs_get_resource_url_access($course, $estudantes, $l
     list($insql, $inparams) = $DB->get_in_or_equal($inclause);
     $resource = $DB->get_record('modules', array('name' => 'resource'), 'id');
     $url = $DB->get_record('modules', array('name' => 'url'), 'id');
+    $page = $DB->get_record('modules', array('name' => 'page'), 'id');
     $startdate = $COURSE->startdate;
 
-    $params = array_merge(array($startdate), $inparams, array($course, $resource->id, $url->id));
+    $params = array_merge(array($startdate), $inparams, array($course, $resource->id, $url->id, $page->id));
 
     if ($legacy) {
-            $sql = "select cm.id+(COALESCE(log.id,1)*1000000), cm.id as ident, cs.section,
-            m.name as tipo, r.name as resource, u.name as url,
+            $sql = "select cm.id+(COALESCE(log.id,1)*1000000) as id, cm.id as ident, cs.section as section,
+            m.name as tipo, r.name as resource, u.name as url, p.name as page,
             log.userid, usr.firstname, usr.lastname, usr.email, count(*) as acessos
             FROM {course_modules}  as cm
             LEFT JOIN {course_sections} as cs ON cm.section = cs.id
             LEFT JOIN {modules} as m ON cm.module = m.id
             LEFT JOIN {resource} as r ON cm.instance = r.id
             LEFT JOIN {url} as u ON cm.instance = u.id
+            LEFT JOIN {page} as p ON cm.instance = p.id
             LEFT JOIN {log} as log ON log.time >= ? AND cm.id=log.cmid AND log.userid $insql
             LEFT JOIN {user} as usr ON usr.id = log.userid
-            WHERE cm.course = ? and (cm.module=? OR cm.module=?)
-            GROUP BY ident,userid
-            ORDER BY cs.section,tipo,resource,url,usr.firstname";
+            WHERE cm.course = ? and (cm.module=? OR cm.module=? OR cm.module=?)
+            GROUP BY ident, userid, section, tipo, resource, url, page, usr.firstname
+            ORDER BY section, tipo, resource, url, page,usr.firstname";
     } else {
-            $sql = "select cm.id+(COALESCE(log.id,1)*1000000)as id, cm.id as ident, cs.section,
-            m.name as tipo, r.name as resource, u.name as url,
+            $sql = "select cm.id+(COALESCE(log.id,1)*1000000)as id, cm.id as ident, cs.section as section,
+            m.name as tipo, r.name as resource, u.name as url, p.name as page,
             log.userid, usr.firstname, usr.lastname, usr.email, count(*) as acessos
             FROM {course_modules}  as cm
             LEFT JOIN {course_sections} as cs ON cm.section = cs.id
             LEFT JOIN {modules} as m ON cm.module = m.id
             LEFT JOIN {resource} as r ON cm.instance = r.id
             LEFT JOIN {url} as u ON cm.instance = u.id
+            LEFT JOIN {page} as p ON cm.instance = p.id
             LEFT JOIN {logstore_standard_log} as log ON log.timecreated >= ? AND
                                 cm.id=log.contextinstanceid  AND log.userid $insql
             LEFT JOIN {user} as usr ON usr.id = log.userid
-            WHERE cm.course = ? AND (cm.module=? OR cm.module=?)
-            GROUP BY ident, userid
-            ORDER BY cs.section, tipo,resource,url,usr.firstname";
+            WHERE cm.course = ? AND (cm.module=? OR cm.module=? OR cm.module=?)
+            GROUP BY ident, userid, section, tipo, resource, url, page, usr.firstname
+            ORDER BY section, tipo, resource, url, page,usr.firstname";
     }
     $resultado = $DB->get_records_sql($sql, $params);
     return($resultado);
@@ -98,7 +101,7 @@ function block_analytics_graphs_get_assign_submission($course) {
                 FROM {assign} a
                 LEFT JOIN {assign_submission} s on a.id = s.assignment
                 LEFT JOIN {user} usr ON usr.id = s.userid
-                WHERE course = ? and nosubmissions = 0 ORDER BY duedate, name, firstname";
+                WHERE course = ? and usr.suspended = 0 and nosubmissions = 0 ORDER BY duedate, name, firstname";
 
      $resultado = $DB->get_records_sql($sql, $params);
         return($resultado);
@@ -106,18 +109,19 @@ function block_analytics_graphs_get_assign_submission($course) {
 
 function block_analytics_graphs_get_number_of_days_access_by_week($course, $estudantes, $startdate, $legacy=0) {
     global $DB;
+    $timezoneadjust = get_user_timezone_offset() * 3600;
     foreach ($estudantes as $tupla) {
         $inclause[] = $tupla->id;
     }
     list($insql, $inparams) = $DB->get_in_or_equal($inclause);
-    $params = array_merge(array($startdate, $course, $startdate), $inparams);
+    $params = array_merge(array($timezoneadjust, $timezoneadjust, $startdate, $course, $startdate), $inparams);
 
     $sql = "SELECT id, userid, firstname, lastname, email, week, COUNT(*) as number,
             SUM(numberofpageviews) as numberofpageviews
                 FROM (
                     SELECT log.id, log.userid, firstname, lastname, email,
-                    DATE_FORMAT(FROM_UNIXTIME(log.timecreated),'%Y-%m-%d') as day,
-                    TIMESTAMPDIFF(WEEK,FROM_UNIXTIME(?),FROM_UNIXTIME(log.timecreated)) as week,
+                    FLOOR((log.timecreated + ?) / 86400)   as day,
+                    FLOOR( (((log.timecreated  + ?) / 86400) - (?/86400))/7) as week,
                     COUNT(*) as numberofpageviews
                     FROM {logstore_standard_log} as log
                     LEFT JOIN {user} usr ON usr.id = log.userid
@@ -134,17 +138,18 @@ function block_analytics_graphs_get_number_of_days_access_by_week($course, $estu
 
 function block_analytics_graphs_get_number_of_modules_access_by_week($course, $estudantes, $startdate, $legacy=0) {
     global $DB;
+    $timezoneadjust = get_user_timezone_offset() * 3600;
     foreach ($estudantes as $tupla) {
         $inclause[] = $tupla->id;
     }
     list($insql, $inparams) = $DB->get_in_or_equal($inclause);
-    $params = array_merge(array($startdate, $course, $startdate), $inparams);
+    $params = array_merge(array($timezoneadjust, $timezoneadjust, $startdate, $course, $startdate), $inparams);
     if (!$legacy) {
         $sql = "SELECT id, userid, firstname, lastname, email, week, COUNT(*) as number
         FROM (
             SELECT log.id, log.userid, firstname, lastname, email, objecttable, objectid,
-            DATE_FORMAT(FROM_UNIXTIME(log.timecreated),'%Y-%m-%d') as day,
-            TIMESTAMPDIFF(WEEK,FROM_UNIXTIME(?),FROM_UNIXTIME(log.timecreated)) as week
+            FLOOR((log.timecreated + ?) / 86400)   as day,
+            FLOOR( (((log.timecreated  + ?) / 86400) - (?/86400))/7) as week
             FROM {logstore_standard_log} log
             LEFT JOIN {user} usr ON usr.id = log.userid
             WHERE courseid = ? AND action = 'viewed' AND target = 'course_module' AND log.timecreated >= ? AND log.userid $insql
@@ -156,8 +161,8 @@ function block_analytics_graphs_get_number_of_modules_access_by_week($course, $e
         $sql = "SELECT id, userid, firstname, lastname, email, week, COUNT(*) as number
                 FROM (
                         SELECT log.id, log.userid, firstname, lastname, email, module, cmid,
-                        DATE_FORMAT(FROM_UNIXTIME(log.time),'%Y-%m-%d') as day,
-                        TIMESTAMPDIFF(WEEK,FROM_UNIXTIME(?),FROM_UNIXTIME(log.time)) as week
+                        FLOOR((log.timecreated + ?) / 86400)   as day,
+                        FLOOR( (((log.timecreated  + ?) / 86400) - (?/86400))/7) as week
                         FROM {log} as log
                         LEFT JOIN {user} as usr ON usr.id = log.userid
                         WHERE course = ? AND action = 'view' AND cmid <> 0 AND module <> 'assign'
