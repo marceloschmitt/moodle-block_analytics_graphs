@@ -43,7 +43,7 @@ $fromuser->id = $USER->id;
 
 foreach ($destination as $i => $x) {
         $touser->id = $destination[$i];
-        $touser->email = $DB->get_field('user','email', array('id' => $destination[$i]));
+        $touser->email = $DB->get_field('user', 'email', array('id' => $destination[$i]));
         email_to_user($touser, $fromuser, $subject, $messagetext, $messagehtml, '', '', true);
 }
 

@@ -57,7 +57,7 @@ foreach ($result as $tuple) {
         $statistics[$counter]['tipo'] = $tuple->tipo;
         if ($tuple->tipo == 'resource') {
                 $statistics[$counter]['material'] = $tuple->resource;
-        } else if($tuple->tipo == 'url') {
+        } else if ($tuple->tipo == 'url') {
                 $statistics[$counter]['material'] = $tuple->url;
         } else {
                $statistics[$counter]['material'] = $tuple->page;
@@ -98,10 +98,10 @@ foreach ($result as $tuple) {
 
             if ($tuple->tipo == 'resource') {
                 $statistics[$counter]['material'] = $tuple->resource;
-            } else if($tuple->tipo == 'url') {
+            } else if ($tuple->tipo == 'url') {
                 $statistics[$counter]['material'] = $tuple->url;
             } else {
-               $statistics[$counter]['material'] = $tuple->page;
+                $statistics[$counter]['material'] = $tuple->page;
             }
 
             if ($tuple->userid) {

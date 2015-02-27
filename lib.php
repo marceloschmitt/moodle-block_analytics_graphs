@@ -35,8 +35,8 @@ function block_analytics_graphs_subtract_student_arrays($estudantes, $acessaram)
 
 function block_analytics_graphs_get_students($course) {
     $context = get_context_instance(CONTEXT_COURSE, $course);
-    $students = get_role_users(array(5), $context, false, '', 'firstname', null, '', '', '', 'u.suspended = :xsuspended',
-                                                                                                    array('xsuspended'=>0));
+    $students = get_role_users(array(5), $context, false, '', 'firstname', null,
+                    '', '', '', 'u.suspended = :xsuspended', array('xsuspended' => 0));                                                                                            
     return($students);
 }
 
