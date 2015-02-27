@@ -17,11 +17,12 @@
 
 require_once("../../config.php");
 global $USER;
+global $DB;
 require_once($CFG->dirroot.'/lib/moodlelib.php');
 $course = required_param('id', PARAM_INT);
 $other = required_param('other', PARAM_INT);
-$subject = required_param('subject', PARAM_INT);
-$messagetext = required_param('texto', PARAM_INT);
+$subject = required_param('subject', PARAM_TEXT);
+$messagetext = required_param('texto', PARAM_TEXT);
 $messagehtml = $messagetext;
 
 /* Access control */
@@ -42,10 +43,10 @@ $fromuser->maildisplay = true;
 $fromuser->lastname = $USER->lastname;
 $fromuser->id = $USER->id;
 
-
 foreach ($destination as $i => $x) {
         $touser->email = $destination[$i];
         $touser->id = $destinationid[$i];
+        $messagetext = $DB->get_field('user','email', 'id', $destinationid[$i]);
         email_to_user($touser, $fromuser, $subject, $messagetext, $messagehtml, '', '', true);
 }
 
