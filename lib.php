@@ -69,8 +69,8 @@ function block_analytics_graphs_get_resource_url_access($course, $estudantes, $l
             LEFT JOIN {log} as log ON log.time >= ? AND cm.id=log.cmid AND log.userid $insql
             LEFT JOIN {user} as usr ON usr.id = log.userid
             WHERE cm.course = ? and (cm.module=? OR cm.module=? OR cm.module=?)
-            GROUP BY ident,userid
-            ORDER BY cs.section,tipo,resource,url,usr.firstname";
+            GROUP BY ident, userid, section, tipo, resource, url, page, usr.firstname
+            ORDER BY section, tipo, resource, url, page,usr.firstname";
     } else {
             $sql = "select cm.id+(COALESCE(log.id,1)*1000000)as id, cm.id as ident, cs.section as section,
             m.name as tipo, r.name as resource, u.name as url, p.name as page,
