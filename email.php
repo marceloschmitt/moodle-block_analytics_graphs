@@ -20,6 +20,7 @@ global $USER;
 global $DB;
 require_once($CFG->dirroot.'/lib/moodlelib.php');
 $course = required_param('id', PARAM_INT);
+$ids = required_param('ids', PARAM_TEXT);
 $other = required_param('other', PARAM_INT);
 $subject = required_param('subject', PARAM_TEXT);
 $messagetext = required_param('texto', PARAM_TEXT);
@@ -30,9 +31,7 @@ require_login($course);
 $context = get_context_instance(CONTEXT_COURSE, $course);
 require_capability('block/analytics_graphs:viewpages', $context);
 
-$destinationid = explode(',', $_POST['ids']);
-$destination = explode(',', $_POST['emails']);
-
+$destinationid = explode(',', $ids);
 
 $touser = new stdClass();
 $fromuser = new stdClass();
@@ -44,9 +43,8 @@ $fromuser->lastname = $USER->lastname;
 $fromuser->id = $USER->id;
 
 foreach ($destination as $i => $x) {
-        $touser->email = $destination[$i];
         $touser->id = $destinationid[$i];
-        $messagetext = $DB->get_field('user','email', 'id', $destinationid[$i]);
+        $touser->email = $DB->get_field('user','email', 'id', $destinationid[$i]);
         email_to_user($touser, $fromuser, $subject, $messagetext, $messagehtml, '', '', true);
 }
 
