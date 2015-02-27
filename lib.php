@@ -68,7 +68,7 @@ function block_analytics_graphs_get_resource_url_access($course, $estudantes, $l
             LEFT JOIN {page} as p ON cm.instance = p.id
             LEFT JOIN {log} as log ON log.time >= ? AND cm.id=log.cmid AND log.userid $insql
             LEFT JOIN {user} as usr ON usr.id = log.userid
-            WHERE cm.course = ? and (cm.module=? OR cm.module=? OR OR cm.module=?)
+            WHERE cm.course = ? and (cm.module=? OR cm.module=? OR cm.module=?)
             GROUP BY ident,userid
             ORDER BY cs.section,tipo,resource,url,usr.firstname";
     } else {
@@ -84,7 +84,7 @@ function block_analytics_graphs_get_resource_url_access($course, $estudantes, $l
             LEFT JOIN {logstore_standard_log} as log ON log.timecreated >= ? AND
                                 cm.id=log.contextinstanceid  AND log.userid $insql
             LEFT JOIN {user} as usr ON usr.id = log.userid
-            WHERE cm.course = ? AND (cm.module=? OR cm.module=? OR OR cm.module=?)
+            WHERE cm.course = ? AND (cm.module=? OR cm.module=? OR cm.module=?)
             GROUP BY ident, userid
             ORDER BY cs.section, tipo,resource,url,usr.firstname";
     }
