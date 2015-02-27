@@ -85,8 +85,8 @@ function block_analytics_graphs_get_resource_url_access($course, $estudantes, $l
                                 cm.id=log.contextinstanceid  AND log.userid $insql
             LEFT JOIN {user} as usr ON usr.id = log.userid
             WHERE cm.course = ? AND (cm.module=? OR cm.module=? OR cm.module=?)
-            GROUP BY ident, userid
-            ORDER BY cs.section, tipo,resource,url,usr.firstname";
+            GROUP BY ident, userid, section, tipo, resource, url, page, usr.firstname
+            ORDER BY section, tipo, resource, url, page,usr.firstname";
     }
     $resultado = $DB->get_records_sql($sql, $params);
     return($resultado);
