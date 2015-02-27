@@ -57,8 +57,10 @@ foreach ($result as $tuple) {
         $statistics[$counter]['tipo'] = $tuple->tipo;
         if ($tuple->tipo == 'resource') {
                 $statistics[$counter]['material'] = $tuple->resource;
-        } else {
+        } else if($tuple->tipo == 'url') {
                 $statistics[$counter]['material'] = $tuple->url;
+        } else {
+               $statistics[$counter]['material'] = $tuple->page;
         }
         if ($tuple->userid) { /* If a user accessed -> get name */
             $statistics[$counter]['studentswithaccess'][] = array('userid' => $tuple->userid,
@@ -96,8 +98,10 @@ foreach ($result as $tuple) {
 
             if ($tuple->tipo == 'resource') {
                 $statistics[$counter]['material'] = $tuple->resource;
-            } else {
+            } else if($tuple->tipo == 'url') {
                 $statistics[$counter]['material'] = $tuple->url;
+            } else {
+               $statistics[$counter]['material'] = $tuple->page;
             }
 
             if ($tuple->userid) {
