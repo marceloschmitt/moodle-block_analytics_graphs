@@ -31,7 +31,7 @@ require_login($course);
 $context = get_context_instance(CONTEXT_COURSE, $course);
 require_capability('block/analytics_graphs:viewpages', $context);
 
-$destinationid = explode(',', $ids);
+$destination = explode(',', $ids);
 
 $touser = new stdClass();
 $fromuser = new stdClass();
@@ -43,8 +43,8 @@ $fromuser->lastname = $USER->lastname;
 $fromuser->id = $USER->id;
 
 foreach ($destination as $i => $x) {
-        $touser->id = $destinationid[$i];
-        $touser->email = $DB->get_field('user','email', 'id', $destinationid[$i]);
+        $touser->id = $destination[$i];
+        $touser->email = $DB->get_field('user','email', 'id', $destination[$i]);
         email_to_user($touser, $fromuser, $subject, $messagetext, $messagehtml, '', '', true);
 }
 
