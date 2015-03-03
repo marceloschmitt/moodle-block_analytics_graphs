@@ -92,9 +92,9 @@ function block_analytics_graphs_get_resource_url_access($course, $estudantes, $l
             
             $sql = "SELECT temp.id+(COALESCE(temp.userid,1)*1000000)as id, temp.id as ident, cs.section, m.name as tipo, 
                     r.name as resource, u.name as url, p.name as page, temp.userid, usr.firstname, 
-                    usr.lastname, usr.email, count(*) as acessos
+                    usr.lastname, usr.email, temp.acessos
                     FROM (
-                        SELECT cm.id, log.userid 
+                        SELECT cm.id, log.userid, count(*) as acessos 
                         FROM {course_modules} as cm
                         LEFT JOIN {logstore_standard_log} as log ON log.timecreated >= ? AND
                                 cm.id=log.contextinstanceid  AND log.userid $insql
