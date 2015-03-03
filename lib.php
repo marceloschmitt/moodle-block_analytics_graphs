@@ -98,7 +98,7 @@ function block_analytics_graphs_get_resource_url_access($course, $estudantes, $l
                         FROM {course_modules} as cm
                         LEFT JOIN {logstore_standard_log} as log ON log.timecreated >= ? AND
                                 cm.id=log.contextinstanceid  AND log.userid $insql
-                        AND cm.course = ? AND (cm.module=? OR cm.module=? OR cm.module=?)
+                        WHERE cm.course = ? AND (cm.module=? OR cm.module=? OR cm.module=?)
                         GROUP BY cm.id, log.userid
                         ) as temp
                     LEFT JOIN {course_modules} as cm ON temp.id = cm.id
