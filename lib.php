@@ -56,41 +56,26 @@ function block_analytics_graphs_get_resource_url_access($course, $estudantes, $l
     $params = array_merge(array($startdate), $inparams, array($course, $resource->id, $url->id, $page->id));
 
     if ($legacy) {
-            $sql = "select cm.id+(COALESCE(log.id,1)*1000000) as id, cm.id as ident, cs.section as section,
-            m.name as tipo, r.name as resource, u.name as url, p.name as page,
-            log.userid, usr.firstname, usr.lastname, usr.email, count(*) as acessos
-            FROM {course_modules}  as cm
-            LEFT JOIN {course_sections} as cs ON cm.section = cs.id
-            LEFT JOIN {modules} as m ON cm.module = m.id
-            LEFT JOIN {resource} as r ON cm.instance = r.id
-            LEFT JOIN {url} as u ON cm.instance = u.id
-            LEFT JOIN {page} as p ON cm.instance = p.id
-            LEFT JOIN {log} as log ON log.time >= ? AND cm.id=log.cmid AND log.userid $insql
-            LEFT JOIN {user} as usr ON usr.id = log.userid
-            WHERE cm.course = ? and (cm.module=? OR cm.module=? OR cm.module=?)
-            GROUP BY cm.id, log.userid, cs.section, m.name, r.name, u.name, p.name, usr.firstname,
-                    usr.lastname, usr.email 
-            ORDER BY cs.section, m.name, r.name, u.name, p.name, usr.firstname";
-    } else {
-          /*  $sql = "select cm.id+(COALESCE(log.id,1)*1000000)as id, cm.id as ident, cs.section as section,
-            m.name as tipo, r.name as resource, u.name as url, p.name as page,
-            log.userid, usr.firstname, usr.lastname, usr.email, count(*) as acessos
-            FROM {course_modules}  as cm
-            LEFT JOIN {course_sections} as cs ON cm.section = cs.id
-            LEFT JOIN {modules} as m ON cm.module = m.id
-            LEFT JOIN {resource} as r ON cm.instance = r.id
-            LEFT JOIN {url} as u ON cm.instance = u.id
-            LEFT JOIN {page} as p ON cm.instance = p.id
-            LEFT JOIN {logstore_standard_log} as log ON log.timecreated >= ? AND
-                                cm.id=log.contextinstanceid  AND log.userid $insql
-            LEFT JOIN {user} as usr ON usr.id = log.userid
-            WHERE cm.course = ? AND (cm.module=? OR cm.module=? OR cm.module=?)
-            GROUP BY cm.id, log.userid, cs.section, m.name, r.name, u.name, p.name, usr.firstname,
-                    usr.lastname, usr.email 
-            ORDER BY cs.section, m.name, r.name, u.name, p.name, usr.firstname"; */
-            
-            
             $sql = "SELECT temp.id+(COALESCE(temp.userid,1)*1000000)as id, temp.id as ident, cs.section, m.name as tipo, 
+                    r.name as resource, u.name as url, p.name as page, temp.userid, usr.firstname, 
+                    usr.lastname, usr.email, temp.acessos
+                    FROM (
+                        SELECT cm.id, log.userid, count(*) as acessos 
+                        FROM {course_modules} as cm
+                        LEFT JOIN {log} as log ON log.time >= ? AND cm.id=log.cmid AND log.userid $insql
+                        WHERE cm.course = ? AND (cm.module=? OR cm.module=? OR cm.module=?)
+                        GROUP BY cm.id, log.userid
+                        ) as temp
+                    LEFT JOIN {course_modules} as cm ON temp.id = cm.id
+                    LEFT JOIN {course_sections} as cs ON cm.section = cs.id
+                    LEFT JOIN {modules} as m ON cm.module = m.id
+                    LEFT JOIN {resource} as r ON cm.instance = r.id
+                    LEFT JOIN {url} as u ON cm.instance = u.id
+                    LEFT JOIN {page} as p ON cm.instance = p.id
+                    LEFT JOIN {user} as usr ON usr.id = temp.userid
+                    ORDER BY cs.section, m.name, r.name, u.name, p.name";
+    } else {
+        $sql = "SELECT temp.id+(COALESCE(temp.userid,1)*1000000)as id, temp.id as ident, cs.section, m.name as tipo, 
                     r.name as resource, u.name as url, p.name as page, temp.userid, usr.firstname, 
                     usr.lastname, usr.email, temp.acessos
                     FROM (
