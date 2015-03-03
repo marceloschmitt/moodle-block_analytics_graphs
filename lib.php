@@ -94,7 +94,7 @@ function block_analytics_graphs_get_resource_url_access($course, $estudantes, $l
                     r.name as resource, u.name as url, p.name as page, temp.userid, usr.firstname, 
                     usr.lastname, usr.email, count(*) as acessos
                     FROM (
-                        SELECT cm.id, log.userid, 
+                        SELECT cm.id, log.userid 
                         FROM {course_modules} as cm
                         LEFT JOIN {logstore_standard_log} as log ON log.timecreated >= ? AND
                                 cm.id=log.contextinstanceid  AND log.userid $insql
