@@ -15,7 +15,6 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 
-
 function block_analytics_graphs_subtract_student_arrays($estudantes, $acessaram) {
     foreach ($estudantes as $estudante) {
         $encontrou = false;
@@ -69,8 +68,9 @@ function block_analytics_graphs_get_resource_url_access($course, $estudantes, $l
             LEFT JOIN {log} as log ON log.time >= ? AND cm.id=log.cmid AND log.userid $insql
             LEFT JOIN {user} as usr ON usr.id = log.userid
             WHERE cm.course = ? and (cm.module=? OR cm.module=? OR cm.module=?)
-            GROUP BY ident, userid, section, tipo, resource, url, page, usr.firstname
-            ORDER BY section, tipo, resource, url, page,usr.firstname";
+            GROUP BY cm.id, log.userid, cs.section, m.name, r.name, u.name, p.name, usr.firstname,
+                    usr.lastname, usr.email 
+            ORDER BY cs.section, m.name, r.name, u.name, p.name, usr.firstname";
     } else {
             $sql = "select cm.id+(COALESCE(log.id,1)*1000000)as id, cm.id as ident, cs.section as section,
             m.name as tipo, r.name as resource, u.name as url, p.name as page,
@@ -85,8 +85,9 @@ function block_analytics_graphs_get_resource_url_access($course, $estudantes, $l
                                 cm.id=log.contextinstanceid  AND log.userid $insql
             LEFT JOIN {user} as usr ON usr.id = log.userid
             WHERE cm.course = ? AND (cm.module=? OR cm.module=? OR cm.module=?)
-            GROUP BY ident, userid, section, tipo, resource, url, page, usr.firstname
-            ORDER BY section, tipo, resource, url, page,usr.firstname";
+            GROUP BY cm.id, log.userid, cs.section, m.name, r.name, u.name, p.name, usr.firstname,
+                    usr.lastname, usr.email 
+            ORDER BY cs.section, m.name, r.name, u.name, p.name, usr.firstname";
     }
     $resultado = $DB->get_records_sql($sql, $params);
     return($resultado);
