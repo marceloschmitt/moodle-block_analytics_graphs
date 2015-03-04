@@ -16,6 +16,7 @@
 
 
 function block_analytics_graphs_subtract_student_arrays($estudantes, $acessaram) {
+    $encontrou = array();
     foreach ($estudantes as $estudante) {
         $encontrou = false;
         foreach ($acessaram as $acessou) {
