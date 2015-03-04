@@ -42,6 +42,7 @@ class block_analytics_graphs_event_view_graph extends \core\event\base {
     protected function init() {
         $this->data['crud'] = 'r'; // Crud c(reate), r(ead), u(pdate), d(elete).
         $this->data['edulevel'] = self::LEVEL_TEACHING;
+        $this->data['objecttable'] = '';
     }
 
     public static function get_name() {
