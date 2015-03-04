@@ -42,7 +42,6 @@ class block_analytics_graphs_event_send_email extends \core\event\base {
     protected function init() {
         $this->data['crud'] = 'c'; // Crud c(reate), r(ead), u(pdate), d(elete).
         $this->data['edulevel'] = self::LEVEL_TEACHING;
-        $this->data['objecttable'] = 'block_analytics_graphs';
     }
 
     public static function get_name() {
