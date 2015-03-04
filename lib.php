@@ -16,6 +16,7 @@
 
 
 function block_analytics_graphs_subtract_student_arrays($estudantes, $acessaram) {
+    $encontrou = array();
     foreach ($estudantes as $estudante) {
         $encontrou = false;
         foreach ($acessaram as $acessou) {
@@ -34,7 +35,7 @@ function block_analytics_graphs_subtract_student_arrays($estudantes, $acessaram)
 
 function block_analytics_graphs_get_students($course) {
     $context = get_context_instance(CONTEXT_COURSE, $course);
-    $students = get_role_users(array(5), $context, false, '', 'firstname', null,
+    $students = get_role_users(5, $context, false, '', 'firstname', null,
         '', '', '', 'u.suspended = :xsuspended', array('xsuspended' => 0));
     return($students);
 }
@@ -100,16 +101,21 @@ function block_analytics_graphs_get_resource_url_access($course, $estudantes, $l
     return($resultado);
 }
 
-function block_analytics_graphs_get_assign_submission($course) {
+function block_analytics_graphs_get_assign_submission($course, $students) {
     global $DB;
-
-    $params = array($course);
+    foreach ($students as $tuple) {
+        $inclause[] = $tuple->id;
+    }
+    list($insql, $inparams) = $DB->get_in_or_equal($inclause);
+    $params = array_merge(array($course), $inparams);
+    
     $sql = "SELECT a.id+(COALESCE(s.id,1)*1000000)as id, a.id as assignment, name, duedate, cutoffdate,
                 s.userid, usr.firstname, usr.lastname, usr.email, s.timecreated
                 FROM {assign} a
                 LEFT JOIN {assign_submission} s on a.id = s.assignment
                 LEFT JOIN {user} usr ON usr.id = s.userid
-                WHERE course = ? and usr.suspended = 0 and nosubmissions = 0 ORDER BY duedate, name, firstname";
+                WHERE course = ? and usr.suspended = 0 and nosubmissions = 0 AND usr.id $insql
+                ORDER BY duedate, name, firstname";
 
      $resultado = $DB->get_records_sql($sql, $params);
         return($resultado);
@@ -127,7 +133,7 @@ function block_analytics_graphs_get_number_of_days_access_by_week($course, $estu
     $sql = "SELECT id, userid, firstname, lastname, email, week, COUNT(*) as number,
             SUM(numberofpageviews) as numberofpageviews
                 FROM (
-                    SELECT log.id, log.userid, firstname, lastname, email,
+                    SELECT MIN(log.id) as id, log.userid, firstname, lastname, email,
                     FLOOR((log.timecreated + ?) / 86400)   as day,
                     FLOOR( (((log.timecreated  + ?) / 86400) - (?/86400))/7) as week,
                     COUNT(*) as numberofpageviews
@@ -197,7 +203,7 @@ function block_analytics_graphs_get_number_of_modules_accessed($course, $estudan
             FROM {logstore_standard_log} as log
             LEFT JOIN {user} usr ON usr.id = log.userid
             WHERE courseid = ? AND action = 'viewed' AND target = 'course_module' AND log.timecreated >= ? AND log.userid $insql
-            GROUP BY userid, objecttable, objectid
+            GROUP BY log.userid, objecttable, objectid
             ) as temp
         GROUP BY userid
         ORDER by userid";

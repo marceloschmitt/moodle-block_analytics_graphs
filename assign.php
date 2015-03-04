@@ -21,6 +21,6 @@ require('javascript_functions.php');
 $course = required_param('id', PARAM_INT);
 
 $x = new graphDateOfAccess($course);
-$titulo = get_string('title_one', 'block_analytics_graphs');
+$titulo = get_string('submissions', 'block_analytics_graphs');
 $x->set_title($titulo);
 $x->create_graph();

@@ -42,7 +42,7 @@ class block_analytics_graphs_event_view_graph extends \core\event\base {
     protected function init() {
         $this->data['crud'] = 'r'; // Crud c(reate), r(ead), u(pdate), d(elete).
         $this->data['edulevel'] = self::LEVEL_TEACHING;
-        $this->data['objecttable'] = 'block_analytics_graphs';
+        $this->data['objecttable'] = 'course';
     }
 
     public static function get_name() {
@@ -54,7 +54,7 @@ class block_analytics_graphs_event_view_graph extends \core\event\base {
     }
 
     public function get_url() {
-        return new \moodle_url('/blocks/analytics_graphs/'.$this->other, array('id' => $this->objectid, 'legacy' => '0'));
+        return new \moodle_url('/blocks/analytics_graphs/' . $this->other, array('id' => $this->objectid, 'legacy' => '0'));
     }
 
 }
