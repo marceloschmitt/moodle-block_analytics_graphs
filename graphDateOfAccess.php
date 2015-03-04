@@ -59,7 +59,7 @@ class graphDateOfAccess {
         }
 
         // Recover submitted tasks.
-        $result = block_analytics_graphs_get_assign_submission($this->course, students);
+        $result = block_analytics_graphs_get_assign_submission($this->course, $students);
 
         $counter = 0;
         $numberofintimesubmissions = 0;
