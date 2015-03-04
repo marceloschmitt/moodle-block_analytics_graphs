@@ -127,7 +127,7 @@ function block_analytics_graphs_get_number_of_days_access_by_week($course, $estu
     $sql = "SELECT id, userid, firstname, lastname, email, week, COUNT(*) as number,
             SUM(numberofpageviews) as numberofpageviews
                 FROM (
-                    SELECT log.id, log.userid, firstname, lastname, email,
+                    SELECT MIN(log.id) as id, log.userid, firstname, lastname, email,
                     FLOOR((log.timecreated + ?) / 86400)   as day,
                     FLOOR( (((log.timecreated  + ?) / 86400) - (?/86400))/7) as week,
                     COUNT(*) as numberofpageviews
@@ -197,7 +197,7 @@ function block_analytics_graphs_get_number_of_modules_accessed($course, $estudan
             FROM {logstore_standard_log} as log
             LEFT JOIN {user} usr ON usr.id = log.userid
             WHERE courseid = ? AND action = 'viewed' AND target = 'course_module' AND log.timecreated >= ? AND log.userid $insql
-            GROUP BY userid, objecttable, objectid
+            GROUP BY log.userid, objecttable, objectid
             ) as temp
         GROUP BY userid
         ORDER by userid";
