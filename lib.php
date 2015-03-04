@@ -101,16 +101,21 @@ function block_analytics_graphs_get_resource_url_access($course, $estudantes, $l
     return($resultado);
 }
 
-function block_analytics_graphs_get_assign_submission($course) {
+function block_analytics_graphs_get_assign_submission($course, $students) {
     global $DB;
-
-    $params = array($course);
+    foreach ($students as $tuple) {
+        $inclause[] = $tuple->id;
+    }
+    list($insql, $inparams) = $DB->get_in_or_equal($inclause);
+    $params = array_merge(array($course), $inparams);
+    
     $sql = "SELECT a.id+(COALESCE(s.id,1)*1000000)as id, a.id as assignment, name, duedate, cutoffdate,
                 s.userid, usr.firstname, usr.lastname, usr.email, s.timecreated
                 FROM {assign} a
                 LEFT JOIN {assign_submission} s on a.id = s.assignment
                 LEFT JOIN {user} usr ON usr.id = s.userid
-                WHERE course = ? and usr.suspended = 0 and nosubmissions = 0 ORDER BY duedate, name, firstname";
+                WHERE course = ? and usr.suspended = 0 and nosubmissions = 0 AND usr.id $insql
+                ORDER BY duedate, name, firstname";
 
      $resultado = $DB->get_records_sql($sql, $params);
         return($resultado);
