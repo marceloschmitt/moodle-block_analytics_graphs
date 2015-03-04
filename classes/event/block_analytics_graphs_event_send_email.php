@@ -55,7 +55,7 @@ class block_analytics_graphs_event_send_email extends \core\event\base {
     }
 
     public function get_url() {
-        return new \moodle_url('/blocks/analytics_graphs/'.$this->other, array('id' => $this->objectid, 'legacy' => '0'));
+        return new \moodle_url('/blocks/analytics_graphs/'.$this->other, array('id' => $this->objectid, 'legacy' => '0'));
     }
 
 }
