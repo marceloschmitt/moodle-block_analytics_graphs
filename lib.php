@@ -137,7 +137,7 @@ function block_analytics_graphs_get_assign_submission($course, $students) {
                 LEFT JOIN {assign_submission} s on a.id = s.assignment AND s.status = 'submitted'
                 LEFT JOIN {user} usr ON usr.id = s.userida
                 LEFT JOIN {course_modules} cm ON cm.idnumber = a.id
-                WHERE course = ? and nosubmissions = 0 and cm.visible = 1
+                WHERE a.course = ? and nosubmissions = 0 and cm.visible = 1
                     and (s.userid IS NULL OR s.userid $insql)
                 ORDER BY duedate, name, firstname";
 
