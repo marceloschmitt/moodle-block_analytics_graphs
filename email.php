@@ -15,6 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 require_once("../../config.php");
+require('lib.php');
 global $USER;
 global $DB;
 require_once($CFG->dirroot.'/lib/moodlelib.php');
@@ -46,6 +47,14 @@ foreach ($destination as $i => $x) {
         $touser->email = $DB->get_field('user', 'email', array('id' => $destination[$i]));
         email_to_user($touser, $fromuser, $subject, $messagetext, $messagehtml, '', '', true);
 }
+
+$userstocopyemail = block_analytics_graphs_get_teachers($course);
+foreach ($userstocopyemail as $i) {
+    $touser->id = $i->id;
+    $touser->email = $DB->get_field('user', 'email', array('id' => $i->id));
+    email_to_user($touser, $fromuser, $subject, "$messagetext, $messagehtml, '', '', true);
+}
+
 
 $mensagem = "ok";
 echo json_encode($mensagem);
