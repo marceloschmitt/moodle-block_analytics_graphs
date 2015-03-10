@@ -32,6 +32,21 @@ function block_analytics_graphs_subtract_student_arrays($estudantes, $acessaram)
     return $resultado;
 }
 
+function block_analytics_graphs_get_course_group_members($course) {
+    $groups = groups_get_all_groups($course);
+    foreach($groups as $group) {
+        $groupmembers[$group->id]['name'] = $group->name;
+        $members = groups_get_members($group->id);
+        $numberofmembers = 0;
+        foreach($members as $member) {
+            $groupmembers[$group->id]['members'][] = $member->id;
+            $numberofmembers++;
+        }
+        $groupmembers[$group->id]['numberofmembers']  = $numberofmembers;
+    }
+    return($groupmembers);
+}
+
 
 function block_analytics_graphs_get_students($course) {
     $context = get_context_instance(CONTEXT_COURSE, $course);
@@ -114,7 +129,7 @@ function block_analytics_graphs_get_assign_submission($course, $students) {
                 FROM {assign} a
                 LEFT JOIN {assign_submission} s on a.id = s.assignment AND s.status = 'submitted'
                 LEFT JOIN {user} usr ON usr.id = s.userid
-                WHERE course = ? and usr.suspended = 0 and nosubmissions = 0 AND usr.id $insql
+                WHERE course = ? and nosubmissions = 0 and (s.userid IS NULL OR s.userid $insql)
                 ORDER BY duedate, name, firstname";
 
      $resultado = $DB->get_records_sql($sql, $params);
