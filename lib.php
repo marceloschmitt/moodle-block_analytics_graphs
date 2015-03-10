@@ -58,7 +58,7 @@ function block_analytics_graphs_get_students($course) {
 
 function block_analytics_graphs_get_teachers($course) {
     $context = get_context_instance(CONTEXT_COURSE, $course);
-    $teachers = get_role_users(array(3, 35, 36), $context, false, 'u.id', 'firstname', null,
+    $teachers = get_role_users(3, $context, false, 'u.id', 'firstname', null,
         '', '', '', 'u.suspended = :xsuspended', array('xsuspended' => 0));
     return($teachers);
 }
