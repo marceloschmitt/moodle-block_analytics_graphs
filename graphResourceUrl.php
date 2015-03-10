@@ -126,7 +126,7 @@ if ($numberofaccesses == 0) {
 }
 
 
-/* Discover groups and members
+/* Discover groups and members */
 $groupmembers = block_analytics_graphs_get_course_group_members($course);
 foreach($groupmembers as $x) {
     echo 'Nome do grupo: '. $x['name'] . '<br>';
