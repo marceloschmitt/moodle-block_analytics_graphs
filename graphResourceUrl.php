@@ -125,7 +125,6 @@ if ($numberofaccesses == 0) {
                                                     $statistics[$counter]['studentswithaccess']);
 }
 
-
 /* Discover groups and members */
 $groupmembers = block_analytics_graphs_get_course_group_members($course);
 /*foreach($groupmembers as $x) {
