@@ -52,9 +52,8 @@ $userstocopyemail = block_analytics_graphs_get_teachers($course);
 foreach ($userstocopyemail as $i) {
     $touser->id = $i->id;
     $touser->email = $DB->get_field('user', 'email', array('id' => $i->id));
-    email_to_user($touser, $fromuser, $subject, "$messagetext, $messagehtml, '', '', true);
+    email_to_user($touser, $fromuser, $subject, $messagetext, $messagehtml, '', '', true);
 }
-
 
 $mensagem = "ok";
 echo json_encode($mensagem);
