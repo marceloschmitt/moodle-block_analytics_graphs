@@ -191,35 +191,39 @@ $event->trigger();
             function convert_series_to_group(group_ids, all){
                 //comeback to original series
                 if(group_ids == "-"){
-                    chart.series[0].setData(nraccess_vet);
-                    chart.series[1].setData(nrntaccess_vet);
+                    $('#container').highcharts().series[0].setData(nraccess_vet);
+                    $('#container').highcharts().series[1].setData(nrntaccess_vet);
                 }else{
                     var access_array = [];
                     var not_access_array = [];
                     var count = 0;
-                    $.each(groups_ids, function(ind, groups_id){
-                        $.each(geral, function(index, value) {
-                            $.each(value.studentswithaccess, function(i, student){
-                                if(student.userid == groups_id){
-                                    count++;
-                                }
-                            });
-                            access_array.push(count);
+                    $.each(group_ids, function(index, groups_id){
+                        $.each(all, function(ind, value) {
+                            if (typeof value.studentswithaccess != 'undefined')
+                            {
+                                $.each(value.studentswithaccess, function(i, student){
+                                    if(student.userid == groups_id){
+                                        count++;
+                                    }
+                                });
+                                access_array.push(count);
+                            }
                             count = 0;
-                            
-                            $.each(value.studentswithnoaccess, function(i, student){
-                                if(student.userid == groups_id){
-                                    count++;
-                                }
-                            });
-                            not_access_array.push(count);
+                            if (typeof value.studentswithnoaccess != 'undefined')
+                            {
+                                $.each(value.studentswithnoaccess, function(i, student){
+                                    if(student.userid == groups_id){
+                                        count++;
+                                    }
+                                });
+                                not_access_array.push(count);
+                            }
                             count = 0;
-
                         });
                     });
 
-                    chart.series[0].setData(access_array);
-                    chart.series[1].setData(not_access_array);
+                    $('#container').highcharts().series[0].setData(access_array);
+                    $('#container').highcharts().series[1].setData(not_access_array);
                 }
         	}
 
