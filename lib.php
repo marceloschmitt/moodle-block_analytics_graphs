@@ -152,7 +152,28 @@ function block_analytics_graphs_get_number_of_days_access_by_week($course, $estu
     list($insql, $inparams) = $DB->get_in_or_equal($inclause);
     $params = array_merge(array($timezoneadjust, $timezoneadjust, $startdate, $course, $startdate), $inparams);
 
-    $sql = "SELECT id, userid, firstname, lastname, email, week, COUNT(*) as number,
+    $sql = "SELECT temp2.userid+(week*1000000) as id, temp2.userid, firstname, lastname, email, week, 
+                number, numberofpageviews
+            FROM (	
+                SELECT temp.userid, week, COUNT(*) as number, SUM(numberofpageviews) as numberofpageviews
+                FROM (
+                    SELECT MIN(log.id) as id, log.userid, 
+                        FLOOR((log.timecreated + ?)/ 86400)   as day,
+                        FLOOR( (((log.timecreated  + ?) / 86400) - (?/86400))/7) as week,
+                        COUNT(*) as numberofpageviews
+                    FROM mdl_logstore_standard_log as log        
+                    WHERE courseid = ? AND action = 'viewed' AND target = 'course' AND log.timecreated >= ?
+                        AND log.userid $insql
+                    GROUP BY userid, day, week
+                ) as temp
+                GROUP BY week, temp.userid
+            ) as temp2
+            LEFT JOIN mdl_user usr ON usr.id = temp2.userid
+            ORDER BY LOWER(firstname), LOWER(lastname),userid, week";
+                
+                /*
+    
+    "SELECT id, userid, firstname, lastname, email, week, COUNT(*) as number,
             SUM(numberofpageviews) as numberofpageviews
                 FROM (
                     SELECT MIN(log.id) as id, log.userid, firstname, lastname, email,
@@ -161,12 +182,12 @@ function block_analytics_graphs_get_number_of_days_access_by_week($course, $estu
                     COUNT(*) as numberofpageviews
                     FROM {logstore_standard_log} as log
                     LEFT JOIN {user} usr ON usr.id = log.userid
-                    WHERE courseid = ? AND action = 'viewed' AND target = 'course' AND log.timecreated >= ? AND log.userid $insql
+                    WHERE courseid = ? AND action = 'viewed' AND target = 'course' AND log.timecreated >= ? 
                     GROUP BY userid, day
                     ) as temp
                 GROUP BY userid, week
                 ORDER BY LOWER(firstname), LOWER(lastname),userid, week";
-
+*/  
     $resultado = $DB->get_records_sql($sql, $params);
     return($resultado);
 }
