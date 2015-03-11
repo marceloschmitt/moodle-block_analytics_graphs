@@ -188,44 +188,58 @@ $event->trigger();
                 }
             });
 
-            function convert_series_to_group(group_ids, all){
+            function convert_series_to_group(group_ids, all)
+            {
                 //comeback to original series
-                if(group_ids == "-"){
+                if(group_ids == "-")
+                {
                     $('#container').highcharts().series[0].setData(nraccess_vet);
                     $('#container').highcharts().series[1].setData(nrntaccess_vet);
-                }else{
+                }
+                else
+                {
                     var access_array = [];
                     var not_access_array = [];
-                    var count = 0;
-                    $.each(group_ids, function(index, groups_id){
-                        $.each(all, function(ind, value) {
+                    $.each(group_ids, function(index, groups_id)
+                    {
+                        $.each(all, function(ind, value) 
+                        {
+                            access_array[ind] = 0;
+                            not_access_array[ind] = 0;
+
                             if (typeof value.studentswithaccess != 'undefined')
                             {
-                                $.each(value.studentswithaccess, function(i, student){
-                                    if(student.userid == groups_id){
-                                        count++;
+                                $.each(value.studentswithaccess, function(i, student)
+                                {
+                                    if (typeof student != 'undefined')
+                                    {
+                                        if(student.userid == groups_id)
+                                        {
+                                            access_array[ind] = access_array[ind]+1;
+                                        }
                                     }
                                 });
-                                access_array.push(count);
                             }
-                            count = 0;
                             if (typeof value.studentswithnoaccess != 'undefined')
                             {
-                                $.each(value.studentswithnoaccess, function(i, student){
-                                    if(student.userid == groups_id){
-                                        count++;
+                                $.each(value.studentswithnoaccess, function(i, student)
+                                {
+                                    if (typeof student != 'undefined')
+                                    {
+                                        if(student.userid == groups_id)
+                                        {
+                                            not_access_array[ind] =  not_access_array[ind]+1;
+                                        }
                                     }
                                 });
-                                not_access_array.push(count);
                             }
-                            count = 0;
+                            
                         });
                     });
-
                     $('#container').highcharts().series[0].setData(access_array);
                     $('#container').highcharts().series[1].setData(not_access_array);
                 }
-        	}
+            }
 
             function parseObjToString(obj) {
                 var array = $.map(obj, function(value) {
