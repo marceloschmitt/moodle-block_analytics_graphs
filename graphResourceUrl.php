@@ -189,15 +189,38 @@ $event->trigger();
             });
 
             function convert_series_to_group(group_ids, all){
-	            $.each(all, function(index, value) {
-	                if (value.numberofaccesses > 0 || value.numberofnoaccess > 0)
-	                {
-	                    var nome = value.material;
-	            	    arrayofcontents.push(nome);
-	                    nraccess_vet.push(value.numberofaccesses);
-	                    nrntaccess_vet.push(value.numberofnoaccess);
-	                }
-	            });
+                //comeback to original series
+                if(group_ids == "-"){
+                    chart.series[0].setData(nraccess_vet);
+                    chart.series[1].setData(nrntaccess_vet);
+                }else{
+                    var access_array = [];
+                    var not_access_array = [];
+                    var count = 0;
+                    $.each(groups_ids, function(ind, groups_id){
+                        $.each(geral, function(index, value) {
+                            $.each(value.studentswithaccess, function(i, student){
+                                if(student.userid == groups_id){
+                                    count++;
+                                }
+                            });
+                            access_array.push(count);
+                            count = 0;
+                            
+                            $.each(value.studentswithnoaccess, function(i, student){
+                                if(student.userid == groups_id){
+                                    count++;
+                                }
+                            });
+                            not_access_array.push(count);
+                            count = 0;
+
+                        });
+                    });
+
+                    chart.series[0].setData(access_array);
+                    chart.series[1].setData(not_access_array);
+                }
         	}
 
             function parseObjToString(obj) {
@@ -372,6 +395,11 @@ foreach ($numberofresourcesintopic as $topico => $numberoftopics) {
 
         $( "#group_select" ).change(function() {
 			console.log($(this).val());
+            var ids = $(this).val();
+            if(ids != "-")
+                ids = ids.split("-");
+
+            convert_series_to_group(ids, geral);
 		});
         </script>
     </body>
