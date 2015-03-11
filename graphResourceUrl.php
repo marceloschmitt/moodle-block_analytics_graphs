@@ -136,7 +136,7 @@ $groupmembers = block_analytics_graphs_get_course_group_members($course);
     }
     echo '<br>';
 }*/
-
+$groupmembers_json = json_encode($groupmembers);
 
 $statistics = json_encode($statistics);
 
@@ -153,8 +153,8 @@ $event->trigger();
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-     <title><?php echo get_string('access_to_contents', 'block_analytics_graphs'); ?></title>
-    <link rel="stylesheet" type="text/css" href="styles.css">
+	    <title><?php echo get_string('access_to_contents', 'block_analytics_graphs'); ?></title>
+	    <link rel="stylesheet" type="text/css" href="styles.css">
         <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
         
         <!--<script src="http://code.jquery.com/jquery-1.10.2.js"></script>-->
@@ -167,6 +167,8 @@ $event->trigger();
 
 
         <script type="text/javascript">
+        	var groups = <?php echo $groupmembers_json; ?>;
+
             var courseid = <?php echo json_encode($course); ?>;
             var coursename = <?php echo json_encode($coursename); ?>;
             var geral = <?php echo $statistics; ?>;
@@ -186,6 +188,17 @@ $event->trigger();
                 }
             });
 
+            function convert_series_to_group(group_ids, all){
+	            $.each(all, function(index, value) {
+	                if (value.numberofaccesses > 0 || value.numberofnoaccess > 0)
+	                {
+	                    var nome = value.material;
+	            	    arrayofcontents.push(nome);
+	                    nraccess_vet.push(value.numberofaccesses);
+	                    nrntaccess_vet.push(value.numberofnoaccess);
+	                }
+	            });
+        	}
 
             function parseObjToString(obj) {
                 var array = $.map(obj, function(value) {
@@ -317,7 +330,16 @@ foreach ($numberofresourcesintopic as $topico => $numberoftopics) {
         </script>
     </head>
     <body>
-
+    	<?php if(sizeof($groupmembers)>0){ ?>
+    	<div style="margin: 20px;">
+			<select id="group_select">
+				<option value="-">Sem separação por grupos</option>
+				<?php foreach ($groupmembers as $key => $value) { ?>
+					<option value="<?php echo implode("-", $value["members"]); ?>"><?php echo $value["name"]; ?></option>
+				<?php } ?>
+			</select>
+    	</div>
+    	<?php } ?>
         <div id="container" style="min-width: 310px; min-width: 800px; min-height: 600px; margin: 0 auto"></div>
         <script>
             $.each(geral, function(index, value) {
@@ -348,6 +370,9 @@ foreach ($numberofresourcesintopic as $topico => $numberoftopics) {
 
         sendEmail();
 
+        $( "#group_select" ).change(function() {
+			console.log($(this).val());
+		});
         </script>
     </body>
 </html>
