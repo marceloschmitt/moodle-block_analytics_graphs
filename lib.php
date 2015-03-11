@@ -140,9 +140,9 @@ function block_analytics_graphs_get_number_of_days_access_by_week($course, $estu
                     FROM {logstore_standard_log} as log
                     LEFT JOIN {user} usr ON usr.id = log.userid
                     WHERE courseid = ? AND action = 'viewed' AND target = 'course' AND log.timecreated >= ? AND log.userid $insql
-                    GROUP BY userid, day
+                    GROUP BY log.userid, firstname, lastname, email, log.timecreated
                     ) as temp
-                GROUP BY userid, week
+                GROUP BY id, userid, firstname, lastname, email, week
                 ORDER BY LOWER(firstname), LOWER(lastname),userid, week";
 
     $resultado = $DB->get_records_sql($sql, $params);
@@ -167,9 +167,9 @@ function block_analytics_graphs_get_number_of_modules_access_by_week($course, $e
             FROM {logstore_standard_log} log
             LEFT JOIN {user} usr ON usr.id = log.userid
             WHERE courseid = ? AND action = 'viewed' AND target = 'course_module' AND log.timecreated >= ? AND log.userid $insql
-            GROUP BY userid, week, objecttable, objectid
+            GROUP BY log.id, log.userid, firstname, lastname, email, week, objecttable, objectid
             ) as temp
-        GROUP BY userid, week
+        GROUP BY id, userid, firstname, lastname, email, week
         ORDER by LOWER(firstname), LOWER(lastname), userid, week";
     } else {
         $sql = "SELECT id, userid, firstname, lastname, email, week, COUNT(*) as number
@@ -181,7 +181,7 @@ function block_analytics_graphs_get_number_of_modules_access_by_week($course, $e
                         LEFT JOIN {user} as usr ON usr.id = log.userid
                         WHERE course = ? AND action = 'view' AND cmid <> 0 AND module <> 'assign'
                             AND time >= ? AND log.userid $insql
-                        GROUP BY userid, week, module, cmid
+                        GROUP BY log.id, log.userid, firstname, lastname, email, module, cmid
                         ) as temp
                 GROUP BY userid, week
                 ORDER by LOWER(firstname), LOWER(lastname), userid, week";
