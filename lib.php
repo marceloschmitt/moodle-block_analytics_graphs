@@ -34,11 +34,11 @@ function block_analytics_graphs_subtract_student_arrays($estudantes, $acessaram)
 
 function block_analytics_graphs_get_course_group_members($course) {
     $groups = groups_get_all_groups($course);
-    foreach($groups as $group) {
+    foreach ($groups as $group) {
         $groupmembers[$group->id]['name'] = $group->name;
         $members = groups_get_members($group->id);
         $numberofmembers = 0;
-        foreach($members as $member) {
+        foreach ($members as $member) {
             $groupmembers[$group->id]['members'][] = $member->id;
             $numberofmembers++;
         }
@@ -79,11 +79,11 @@ function block_analytics_graphs_get_resource_url_access($course, $estudantes, $l
     $params = array_merge(array($startdate), $inparams, array($course, $resource->id, $url->id, $page->id));
 
     if ($legacy) {
-            $sql = "SELECT temp.id+(COALESCE(temp.userid,1)*1000000)as id, temp.id as ident, cs.section, m.name as tipo, 
-                    r.name as resource, u.name as url, p.name as page, temp.userid, usr.firstname, 
+            $sql = "SELECT temp.id+(COALESCE(temp.userid,1)*1000000)as id, temp.id as ident, cs.section, m.name as tipo,
+                    r.name as resource, u.name as url, p.name as page, temp.userid, usr.firstname,
                     usr.lastname, usr.email, temp.acessos
                     FROM (
-                        SELECT cm.id, log.userid, count(*) as acessos 
+                        SELECT cm.id, log.userid, count(*) as acessos
                         FROM {course_modules} as cm
                         LEFT JOIN {log} as log ON log.time >= ? AND cm.id=log.cmid AND log.userid $insql
                         WHERE cm.course = ? AND (cm.module=? OR cm.module=? OR cm.module=?)
@@ -98,11 +98,11 @@ function block_analytics_graphs_get_resource_url_access($course, $estudantes, $l
                     LEFT JOIN {user} as usr ON usr.id = temp.userid
                     ORDER BY cs.section, m.name, r.name, u.name, p.name";
     } else {
-        $sql = "SELECT temp.id+(COALESCE(temp.userid,1)*1000000)as id, temp.id as ident, cs.section, m.name as tipo, 
-                    r.name as resource, u.name as url, p.name as page, temp.userid, usr.firstname, 
+        $sql = "SELECT temp.id+(COALESCE(temp.userid,1)*1000000)as id, temp.id as ident, cs.section, m.name as tipo,
+                    r.name as resource, u.name as url, p.name as page, temp.userid, usr.firstname,
                     usr.lastname, usr.email, temp.acessos
                     FROM (
-                        SELECT cm.id, log.userid, count(*) as acessos 
+                        SELECT cm.id, log.userid, count(*) as acessos
                         FROM {course_modules} as cm
                         LEFT JOIN {logstore_standard_log} as log ON log.timecreated >= ? AND
                                 cm.id=log.contextinstanceid  AND log.userid $insql
@@ -116,8 +116,7 @@ function block_analytics_graphs_get_resource_url_access($course, $estudantes, $l
                     LEFT JOIN {url} as u ON cm.instance = u.id
                     LEFT JOIN {page} as p ON cm.instance = p.id
                     LEFT JOIN {user} as usr ON usr.id = temp.userid
-                    ORDER BY cs.section, m.name, r.name, u.name, p.name";
-                        
+                    ORDER BY cs.section, m.name, r.name, u.name, p.name";          
     }
     $resultado = $DB->get_records_sql($sql, $params);
     return($resultado);
@@ -130,7 +129,7 @@ function block_analytics_graphs_get_assign_submission($course, $students) {
     }
     list($insql, $inparams) = $DB->get_in_or_equal($inclause);
     $params = array_merge(array($course), $inparams);
-    
+
     $sql = "SELECT a.id+(COALESCE(s.id,1)*1000000)as id, a.id as assignment, name, duedate, cutoffdate,
                 s.userid, usr.firstname, usr.lastname, usr.email, s.timecreated
                 FROM {assign} a
@@ -152,16 +151,16 @@ function block_analytics_graphs_get_number_of_days_access_by_week($course, $estu
     list($insql, $inparams) = $DB->get_in_or_equal($inclause);
     $params = array_merge(array($timezoneadjust, $timezoneadjust, $startdate, $course, $startdate), $inparams);
 
-    $sql = "SELECT temp2.userid+(week*1000000) as id, temp2.userid, firstname, lastname, email, week, 
+    $sql = "SELECT temp2.userid+(week*1000000) as id, temp2.userid, firstname, lastname, email, week,
                 number, numberofpageviews
-            FROM (	
+            FROM (
                 SELECT temp.userid, week, COUNT(*) as number, SUM(numberofpageviews) as numberofpageviews
                 FROM (
-                    SELECT MIN(log.id) as id, log.userid, 
+                    SELECT MIN(log.id) as id, log.userid,
                         FLOOR((log.timecreated + ?)/ 86400)   as day,
                         FLOOR( (((log.timecreated  + ?) / 86400) - (?/86400))/7) as week,
                         COUNT(*) as numberofpageviews
-                    FROM mdl_logstore_standard_log as log        
+                    FROM mdl_logstore_standard_log as log
                     WHERE courseid = ? AND action = 'viewed' AND target = 'course' AND log.timecreated >= ?
                         AND log.userid $insql
                     GROUP BY userid, day, week
@@ -170,7 +169,7 @@ function block_analytics_graphs_get_number_of_days_access_by_week($course, $estu
             ) as temp2
             LEFT JOIN mdl_user usr ON usr.id = temp2.userid
             ORDER BY LOWER(firstname), LOWER(lastname),userid, week";
-                
+
     $resultado = $DB->get_records_sql($sql, $params);
     return($resultado);
 }
@@ -185,14 +184,14 @@ function block_analytics_graphs_get_number_of_modules_access_by_week($course, $e
     list($insql, $inparams) = $DB->get_in_or_equal($inclause);
     $params = array_merge(array($timezoneadjust, $startdate, $course, $startdate), $inparams);
     if (!$legacy) {
-        $sql = "SELECT userid+(week*1000000), userid, firstname, lastname, email, week, number 
+        $sql = "SELECT userid+(week*1000000), userid, firstname, lastname, email, week, number
                 FROM (
                     SELECT  userid, week, COUNT(*) as number
                     FROM (
                         SELECT log.userid, objecttable, objectid,
                         FLOOR((((log.timecreated + ?) / 86400) - (?/86400))/7) as week
                         FROM {logstore_standard_log} log
-                        WHERE courseid = ? AND action = 'viewed' AND target = 'course_module' 
+                        WHERE courseid = ? AND action = 'viewed' AND target = 'course_module'
                         AND log.timecreated >= ? AND log.userid $insql
                         GROUP BY userid, week, objecttable, objectid
                     ) as temp
@@ -201,7 +200,7 @@ function block_analytics_graphs_get_number_of_modules_access_by_week($course, $e
                 LEFT JOIN {user} usr ON usr.id = temp2.userid
                 ORDER by LOWER(firstname), LOWER(lastname), userid, week";
     } else {
-        $sql = "SELECT userid+(week*1000000), userid, firstname, lastname, email, week, number 
+        $sql = "SELECT userid+(week*1000000), userid, firstname, lastname, email, week, number
                 FROM (
                     SELECT  userid, week, COUNT(*) as number
                     FROM (
