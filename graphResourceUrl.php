@@ -127,15 +127,6 @@ if ($numberofaccesses == 0) {
 
 /* Discover groups and members */
 $groupmembers = block_analytics_graphs_get_course_group_members($course);
-/*foreach($groupmembers as $x) {
-    echo 'Nome do grupo: '. $x['name'] . '<br>';
-    echo 'Quantidade de membros do grupo: '. $x['numberofmembers'] . '<br>';
-    echo 'Membros do grupo: ';
-    foreach($x['members'] as $member) {
-        echo $member . "  ";
-    }
-    echo '<br>';
-}*/
 $groupmembers_json = json_encode($groupmembers);
 
 $statistics = json_encode($statistics);
