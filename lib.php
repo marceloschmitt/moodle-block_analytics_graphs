@@ -185,7 +185,7 @@ function block_analytics_graphs_get_number_of_modules_access_by_week($course, $e
     list($insql, $inparams) = $DB->get_in_or_equal($inclause);
     $params = array_merge(array($timezoneadjust, $startdate, $course, $startdate), $inparams);
     if (!$legacy) {
-        $sql = "SELECT userid, firstname, lastname, email, week, number 
+        $sql = "SELECT userid+(week*1000000), userid, firstname, lastname, email, week, number 
                 FROM (
                     SELECT  userid, week, COUNT(*) as number
                     FROM (
