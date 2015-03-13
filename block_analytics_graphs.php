@@ -44,12 +44,13 @@ class block_analytics_graphs extends block_base {
                               target=_blank>" . get_string('submissions', 'block_analytics_graphs') . "</a>"
                 . "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/hits.php?id={$course->id}&legacy=0
                               target=_blank>" . get_string('hits_distribution', 'block_analytics_graphs') . "</a>";
-        }
+        } else {
         $this->content->text  = $this->content->text . '<br><br>'.get_string('legacy', 'block_analytics_graphs')
             .  "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/graphResourceUrl.php?id={$course->id}&legacy=1
                           target=_blank>" . get_string('access_to_contents', 'block_analytics_graphs') . "</a>"
             . "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/hits.php?id={$course->id}&legacy=1
                           target=_blank>" . get_string('hits_distribution', 'block_analytics_graphs') . "</a>";
+        }
         $this->content->footer = '---';
         return $this->content;
     }
