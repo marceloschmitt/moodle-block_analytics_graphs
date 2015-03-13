@@ -28,7 +28,7 @@ $messagehtml = $messagetext;
 
 /* Access control */
 require_login($course);
-$context = get_context_instance(CONTEXT_COURSE, $course);
+$context = context_course::instance($course);
 require_capability('block/analytics_graphs:viewpages', $context);
 
 $destination = explode(',', $ids);

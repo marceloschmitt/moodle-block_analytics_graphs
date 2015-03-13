@@ -49,7 +49,7 @@ function block_analytics_graphs_get_course_group_members($course) {
 
 
 function block_analytics_graphs_get_students($course) {
-    $context = get_context_instance(CONTEXT_COURSE, $course);
+    $context = context_course::instance($course);
     $students = get_role_users(5, $context, false, '', 'firstname', null,
         '', '', '', 'u.suspended = :xsuspended', array('xsuspended' => 0));
     return($students);
@@ -57,7 +57,7 @@ function block_analytics_graphs_get_students($course) {
 
 
 function block_analytics_graphs_get_teachers($course) {
-    $context = get_context_instance(CONTEXT_COURSE, $course);
+    $context = context_course::instance($course);
     $teachers = get_role_users(array(3, 35, 36), $context, false, 'u.id', 'firstname', null,
         '', '', '', 'u.suspended = :xsuspended', array('xsuspended' => 0));
     return($teachers);
