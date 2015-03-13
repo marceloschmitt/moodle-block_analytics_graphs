@@ -201,18 +201,20 @@ function block_analytics_graphs_get_number_of_modules_access_by_week($course, $e
                 LEFT JOIN {user} usr ON usr.id = temp2.userid
                 ORDER by LOWER(firstname), LOWER(lastname), userid, week";
     } else {
-        $sql = "SELECT id, userid, firstname, lastname, email, week, COUNT(*) as number
+        $sql = "SELECT userid+(week*1000000), userid, firstname, lastname, email, week, number 
                 FROM (
-                        SELECT log.id, log.userid, firstname, lastname, email, module, cmid,
-                        FLOOR((log.timecreated + ?) / 86400)   as day,
-                        FLOOR( (((log.timecreated  + ?) / 86400) - (?/86400))/7) as week
-                        FROM {log} as log
-                        LEFT JOIN {user} as usr ON usr.id = log.userid
+                    SELECT  userid, week, COUNT(*) as number
+                    FROM (
+                        SELECT log.userid, module, cmid,
+                        FLOOR((((log.timecreated + ?) / 86400) - (?/86400))/7) as week
+                        FROM {log} log
                         WHERE course = ? AND action = 'view' AND cmid <> 0 AND module <> 'assign'
                             AND time >= ? AND log.userid $insql
                         GROUP BY userid, week, module, cmid
-                        ) as temp
-                GROUP BY userid, week
+                    ) as temp
+                    GROUP BY userid, week
+                ) as temp2
+                LEFT JOIN {user} usr ON usr.id = temp2.userid
                 ORDER by LOWER(firstname), LOWER(lastname), userid, week";
     }
     $resultado = $DB->get_records_sql($sql, $params);
