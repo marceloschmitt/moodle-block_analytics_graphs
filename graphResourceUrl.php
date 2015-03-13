@@ -125,9 +125,7 @@ if ($numberofaccesses == 0) {
                                                     $statistics[$counter]['studentswithaccess']);
 }
 
-/* Discover groups and members */
-$groupmembers = block_analytics_graphs_get_course_group_members($course);
-$groupmembers_json = json_encode($groupmembers);
+
 
 $statistics = json_encode($statistics);
 
@@ -158,7 +156,6 @@ $event->trigger();
 
 
         <script type="text/javascript">
-        	var groups = <?php echo $groupmembers_json; ?>;
 
             var courseid = <?php echo json_encode($course); ?>;
             var coursename = <?php echo json_encode($coursename); ?>;
@@ -179,58 +176,7 @@ $event->trigger();
                 }
             });
 
-            function convert_series_to_group(group_ids, all)
-            {
-                //comeback to original series
-                if(group_ids == "-")
-                {
-                    $('#container').highcharts().series[0].setData(nraccess_vet);
-                    $('#container').highcharts().series[1].setData(nrntaccess_vet);
-                }
-                else
-                {
-                    var access_array = [];
-                    var not_access_array = [];
-                    $.each(group_ids, function(index, groups_id)
-                    {
-                        $.each(all, function(ind, value) 
-                        {
-                            access_array[ind] = 0;
-                            not_access_array[ind] = 0;
-
-                            if (typeof value.studentswithaccess != 'undefined')
-                            {
-                                $.each(value.studentswithaccess, function(i, student)
-                                {
-                                    if (typeof student != 'undefined')
-                                    {
-                                        if(student.userid == groups_id)
-                                        {
-                                            access_array[ind] = access_array[ind]+1;
-                                        }
-                                    }
-                                });
-                            }
-                            if (typeof value.studentswithnoaccess != 'undefined')
-                            {
-                                $.each(value.studentswithnoaccess, function(i, student)
-                                {
-                                    if (typeof student != 'undefined')
-                                    {
-                                        if(student.userid == groups_id)
-                                        {
-                                            not_access_array[ind] =  not_access_array[ind]+1;
-                                        }
-                                    }
-                                });
-                            }
-                            
-                        });
-                    });
-                    $('#container').highcharts().series[0].setData(access_array);
-                    $('#container').highcharts().series[1].setData(not_access_array);
-                }
-            }
+            
 
             function parseObjToString(obj) {
                 var array = $.map(obj, function(value) {
@@ -362,16 +308,7 @@ foreach ($numberofresourcesintopic as $topico => $numberoftopics) {
         </script>
     </head>
     <body>
-    	<?php if(sizeof($groupmembers)>0){ ?>
-    	<div style="margin: 20px;">
-			<select id="group_select">
-				<option value="-">Sem separação por grupos</option>
-				<?php foreach ($groupmembers as $key => $value) { ?>
-					<option value="<?php echo implode("-", $value["members"]); ?>"><?php echo $value["name"]; ?></option>
-				<?php } ?>
-			</select>
-    	</div>
-    	<?php } ?>
+    	
         <div id="container" style="min-width: 310px; min-width: 800px; min-height: 600px; margin: 0 auto"></div>
         <script>
             $.each(geral, function(index, value) {
@@ -402,14 +339,7 @@ foreach ($numberofresourcesintopic as $topico => $numberoftopics) {
 
         sendEmail();
 
-        $( "#group_select" ).change(function() {
-			console.log($(this).val());
-            var ids = $(this).val();
-            if(ids != "-")
-                ids = ids.split("-");
-
-            convert_series_to_group(ids, geral);
-		});
+       
         </script>
     </body>
 </html>
