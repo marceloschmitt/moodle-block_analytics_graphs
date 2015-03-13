@@ -116,7 +116,7 @@ function block_analytics_graphs_get_resource_url_access($course, $estudantes, $l
                     LEFT JOIN {url} as u ON cm.instance = u.id
                     LEFT JOIN {page} as p ON cm.instance = p.id
                     LEFT JOIN {user} as usr ON usr.id = temp.userid
-                    ORDER BY cs.section, m.name, r.name, u.name, p.name";          
+                    ORDER BY cs.section, m.name, r.name, u.name, p.name";        
     }
     $resultado = $DB->get_records_sql($sql, $params);
     return($resultado);
