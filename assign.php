@@ -20,7 +20,7 @@ require('graph_submission.php');
 require('javascript_functions.php');
 $course = required_param('id', PARAM_INT);
 
-$x = new graphDateOfAccess($course);
+$x = new graph_submission($course);
 $titulo = get_string('submissions', 'block_analytics_graphs');
 $x->set_title($titulo);
 $x->create_graph();
