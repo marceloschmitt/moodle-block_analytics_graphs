@@ -17,7 +17,7 @@
 
 require('../../config.php');
 require('graph_submission.php');
-require('javascript_functions.php');
+require('javascriptfunctions.php');
 $course = required_param('id', PARAM_INT);
 
 $x = new graph_submission($course);
