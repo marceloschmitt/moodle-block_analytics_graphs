@@ -17,7 +17,7 @@
 
 require('../../config.php');
 require('lib.php');
-require('javascript_functions.php');
+require('javascriptfunctions.php');
 $course = required_param('id', PARAM_INT);
 $legacy = required_param('legacy', PARAM_INT);
 global $DB;

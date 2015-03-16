@@ -16,11 +16,11 @@
 
 
 require('../../config.php');
-require('graphDateOfAccess.php');
-require('javascript_functions.php');
+require('graph_submission.php');
+require('javascriptfunctions.php');
 $course = required_param('id', PARAM_INT);
 
-$x = new graphDateOfAccess($course);
+$x = new graph_submission($course);
 $titulo = get_string('submissions', 'block_analytics_graphs');
 $x->set_title($titulo);
 $x->create_graph();
