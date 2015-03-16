@@ -16,7 +16,7 @@
 
 
 
-class graphDateOfAccess {
+class graph_submission {
 
     private $context;
     private $course;

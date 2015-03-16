@@ -16,7 +16,7 @@
 
 
 require('../../config.php');
-require('graphDateOfAccess.php');
+require('graph_submission.php');
 require('javascript_functions.php');
 $course = required_param('id', PARAM_INT);
 

@@ -38,7 +38,7 @@ class block_analytics_graphs extends block_base {
         $this->content = new stdClass;
         if (floatval($CFG->release) >= 2.7) {
             $this->content->text = get_string('graphs', 'block_analytics_graphs')
-                . "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/graphResourceUrl.php?id={$course->id}&legacy=0
+                . "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/graphresourceurl.php?id={$course->id}&legacy=0
                               target=_blank>" . get_string('access_to_contents', 'block_analytics_graphs') . "</a>"
                 . "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/assign.php?id={$course->id}
                               target=_blank>" . get_string('submissions', 'block_analytics_graphs') . "</a>"
@@ -46,7 +46,7 @@ class block_analytics_graphs extends block_base {
                               target=_blank>" . get_string('hits_distribution', 'block_analytics_graphs') . "</a>";
         } else {
             $this->content->text  = $this->content->text . '<br><br>'.get_string('legacy', 'block_analytics_graphs')
-                .  "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/graphResourceUrl.php?id={$course->id}&legacy=1
+                .  "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/graphresourceurl.php?id={$course->id}&legacy=1
                               target=_blank>" . get_string('access_to_contents', 'block_analytics_graphs') . "</a>"
                 . "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/hits.php?id={$course->id}&legacy=1
                               target=_blank>" . get_string('hits_distribution', 'block_analytics_graphs') . "</a>";
