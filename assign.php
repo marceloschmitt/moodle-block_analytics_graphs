@@ -18,7 +18,6 @@
 require('../../config.php');
 require('graph_submission.php');
 require('javascriptfunctions.php');
-require('lib.php');
 
 $course = required_param('id', PARAM_INT);
 
