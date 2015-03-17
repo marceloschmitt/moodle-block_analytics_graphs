@@ -464,6 +464,7 @@ thead th {
 </head>
 <body>
 <center>
+<H1><?php  echo   "TESTE"?></H1>
 <H2><?php  echo   get_string('hits_distribution', 'block_analytics_graphs');?></H2>
 <H3><?php  echo $coursename;?> </H3>
 <H3><?php  echo   get_string('begin_date', 'block_analytics_graphs') . ": "
