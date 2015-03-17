@@ -45,7 +45,7 @@ class graph_submission {
 
 
     public function set_query_function($func_name) {
-        $this->query_function = $func_name;
+        $this->$query_function = $func_name;
     }
 
 
@@ -66,7 +66,7 @@ class graph_submission {
 
         // Recover submitted tasks.
         // $result = block_analytics_graphs_get_assign_submission($this->course, $students);
-        $result = $this->query_function($this->course, $students);
+        $result = $this->$query_function($this->course, $students);
 
         $counter = 0;
         $numberofintimesubmissions = 0;
