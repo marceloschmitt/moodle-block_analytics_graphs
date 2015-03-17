@@ -23,6 +23,7 @@ class graph_submission {
     private $coursename;
     private $startdate;
     private $title;
+    private $query_function;
 
     public function __construct($course) {
         $this->course = $course;
@@ -43,6 +44,11 @@ class graph_submission {
     }
 
 
+    public function set_query_function($func_name) {
+        $this->query_function = $func_name;
+    }
+
+
     public function create_graph() {
         global $DB;
         require('lib.php');
@@ -59,7 +65,8 @@ class graph_submission {
         }
 
         // Recover submitted tasks.
-        $result = block_analytics_graphs_get_assign_submission($this->course, $students);
+        // $result = block_analytics_graphs_get_assign_submission($this->course, $students);
+        $result = this->query_function($this->course, $students);
 
         $counter = 0;
         $numberofintimesubmissions = 0;

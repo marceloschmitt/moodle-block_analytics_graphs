@@ -18,9 +18,12 @@
 require('../../config.php');
 require('graph_submission.php');
 require('javascriptfunctions.php');
+require('lib.php');
+
 $course = required_param('id', PARAM_INT);
 
 $x = new graph_submission($course);
 $titulo = get_string('submissions', 'block_analytics_graphs');
 $x->set_title($titulo);
+$x->set_query_function('block_analytics_graphs_get_assign_submission');
 $x->create_graph();
