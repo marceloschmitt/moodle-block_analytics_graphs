@@ -310,7 +310,9 @@ thead th {
                 }]
                     });
                 }else{
-                        $("#modulos-"+student.userid).text(":(");
+                        $("#linha-"+student.userid).css('background-color', "#ff0");
+                        $("#modulos-"+student.userid).text("Este usuário não acessou nenhum material na última semana.");
+                        // $("#modulos-"+student.userid).text(":(");
                 }
         }
 
