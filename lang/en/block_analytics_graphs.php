@@ -18,6 +18,8 @@
 
 $string['analytics_graphs:addinstance'] = 'Add a new AG block';
 $string['analytics_graphs:myaddinstance'] = 'Add a new AG block to the My Moodle page';
+$string['analytics_graphs:viewpages'] = 'View graphs';
+
 $string['pluginname'] = 'Analytics Graphs';
 $string['analytics_graphs'] = 'Analytics Graphs';
 
