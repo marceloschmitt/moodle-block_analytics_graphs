@@ -308,12 +308,10 @@ thead th {
                     data: trata_array(student.acessosModulos)
                     
                 }]
-                    });
-                    console.log(Object.keys(student.acessosModulos));
-                    last_week = Math.max.apply(null, Object.keys(student.acessosModulos).map(function(item){return parseInt(item, 10);}));
+                    });                    
+                    last_week = <?php echo $maxnumberofweeks; ?>
                     if(student.acessosModulos[last_week] === 0) {
                         $("#linhatabela-"+student.userid).css('background-color', "#ff5");
-                        $("#modulos-"+student.userid).text("Este usuário não acessou nenhum material na última semana.");
                     }
                 }else{
                         $("#linhatabela-"+student.userid).css('background-color', "#ff5");
