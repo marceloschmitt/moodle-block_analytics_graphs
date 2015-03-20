@@ -17,6 +17,7 @@
 
     $capabilities = array(
      'block/analytics_graphs:viewpages' => array(
+        'riskbitmask' => RISK_SPAM,
         'captype' => 'read',
         'contextlevel' => CONTEXT_COURSE,
         'legacy' => array(
