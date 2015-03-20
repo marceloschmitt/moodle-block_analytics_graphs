@@ -50,7 +50,7 @@ function block_analytics_graphs_get_course_group_members($course) {
 
 function block_analytics_graphs_get_students($course) {
     $context = context_course::instance($course);
-    $studentid = $DB->get_record('roles', array('shortname' => 'student'), 'id');
+    $studentid = $DB->get_record('role', array('shortname' => 'student'), 'id');
     $students = get_role_users($studentid, $context, false, '', 'firstname', null,
         '', '', '', 'u.suspended = :xsuspended', array('xsuspended' => 0));
     return($students);
