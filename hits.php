@@ -310,7 +310,7 @@ thead th {
                 }]
                     });
                 }else{
-                        $("#linha-"+student.userid).css('background-color', "#ff0");
+                        $("#linhatabela-"+student.userid).css('background-color', "#ff5");
                         $("#modulos-"+student.userid).text("Este usuário não acessou nenhum material na última semana.");
                         // $("#modulos-"+student.userid).text(":(");
                 }
@@ -432,7 +432,7 @@ thead th {
             $.each(array, function(index, value){
                         if (value){
                             if (nome === value.nome){
-                                    var linha = "<tr>"+
+                                    var linha = "<tr id='linhatabela-" + value.userid+"'>"+
                                             "<th><span class='nome_student' style='cursor:hand' id='linha-"+value.userid+"'>"+
                                                     value.nome+
                                             "</span></th>"+
