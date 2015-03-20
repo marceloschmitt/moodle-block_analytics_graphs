@@ -50,7 +50,8 @@ function block_analytics_graphs_get_course_group_members($course) {
 
 function block_analytics_graphs_get_students($course) {
     $context = context_course::instance($course);
-    $students = get_role_users(5, $context, false, '', 'firstname', null,
+    $studentid = $DB->get_record('roles', array('shortname' => 'student'), 'id');
+    $students = get_role_users($studentid, $context, false, '', 'firstname', null,
         '', '', '', 'u.suspended = :xsuspended', array('xsuspended' => 0));
     return($students);
 }
@@ -58,10 +59,14 @@ function block_analytics_graphs_get_students($course) {
 
 function block_analytics_graphs_get_teachers($course) {
     $context = context_course::instance($course);
-    $teachers = get_role_users(array(3, 35, 36), $context, false, 'u.id', 'firstname', null,
+    $allusers = get_role_users(null, $context, false, '', 'firstname', null,
         '', '', '', 'u.suspended = :xsuspended', array('xsuspended' => 0));
-    return($teachers);
-}
+    foreach ($allusers as $user) {
+        if (has_capability('block/analytics_graphs:viewpages', $context, $user->id, true)) {
+            $userswithviewcap[] = $user;
+        }
+    }
+    return($userswithviewcap);
 
 function block_analytics_graphs_get_resource_url_access($course, $estudantes, $legacy) {
     global $COURSE;

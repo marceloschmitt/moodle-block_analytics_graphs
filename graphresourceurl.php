@@ -133,7 +133,7 @@ $statistics = json_encode($statistics);
 $event = \block_analytics_graphs\event\block_analytics_graphs_event_view_graph::create(array(
     'objectid' => $course,
     'context' => $context,
-    'other' => "graphResourceUrl.php",
+    'other' => "graphresourceurl.php",
 ));
 $event->trigger();
 
