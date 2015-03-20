@@ -309,7 +309,7 @@ thead th {
                     
                 }]
                     });                    
-                    last_week = <?php echo $maxnumberofweeks; ?>
+                    last_week = <?php echo $maxnumberofweeks; ?>;
                     if(student.acessosModulos[last_week] === 0) {
                         $("#linhatabela-"+student.userid).css('background-color', "#ff5");
                     }
