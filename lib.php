@@ -67,6 +67,7 @@ function block_analytics_graphs_get_teachers($course) {
         }
     }
     return($userswithviewcap);
+}
 
 function block_analytics_graphs_get_resource_url_access($course, $estudantes, $legacy) {
     global $COURSE;
