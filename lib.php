@@ -49,6 +49,7 @@ function block_analytics_graphs_get_course_group_members($course) {
 
 
 function block_analytics_graphs_get_students($course) {
+    global $DB;
     $context = context_course::instance($course);
     $student = $DB->get_record('role', array('shortname' => 'student'), 'id');
     $students = get_role_users($student->id, $context, false, '', 'firstname', null,
