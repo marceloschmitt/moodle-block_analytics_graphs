@@ -49,25 +49,30 @@ function block_analytics_graphs_get_course_group_members($course) {
 
 
 function block_analytics_graphs_get_students($course) {
-    global $DB;
+    $students = array();
     $context = context_course::instance($course);
-    $student = $DB->get_record('role', array('shortname' => 'student'), 'id');
-    $students = get_role_users($student->id, $context, false, '', 'firstname', null,
-        '', '', '', 'u.suspended = :xsuspended', array('xsuspended' => 0));
+    $allstudents = get_enrolled_users($context, 'block/analytics_graphs:bemonitored', 0,
+                    'u.id, u.firstname, u.lastname, u.email, u.suspended', 'firstname, lastname');
+    foreach($allstudents as $student) {
+        if($student->suspended == 0) {
+            $students[] = $student;
+        }
+    }
     return($students);
 }
 
 
 function block_analytics_graphs_get_teachers($course) {
+    $teachers = array();
     $context = context_course::instance($course);
-    $allusers = get_role_users(null, $context, false, '', 'firstname', null,
-        '', '', '', 'u.suspended = :xsuspended', array('xsuspended' => 0));
-    foreach ($allusers as $user) {
-        if (has_capability('block/analytics_graphs:viewpages', $context, $user->id, true)) {
-            $userswithviewcap[] = $user;
+    $allteachers = get_enrolled_users($context, 'block/analytics_graphs:viewpages', 0,
+                    'u.id, u.firstname, u.lastname, u.email, u.suspended', 'firstname, lastname');
+    foreach($allteachers as $teacher) {
+        if($teacher->suspended == 0) {
+            $teachers[] = $teacher;
         }
     }
-    return($userswithviewcap);
+    return($teachers);
 }
 
 function block_analytics_graphs_get_resource_url_access($course, $estudantes, $legacy) {

@@ -40,6 +40,7 @@ $string['in_time_ratio'] = 'Relação de pontualidade';
 $string['in_time_submission'] = 'Envio no prazo';
 $string['late_submission'] = 'Envio fora do prazo';
 $string['legacy'] = 'Legacy (prior to 2.7)';
+$string['mailcopyalert'] = 'Esta é uma cópia de uma mensagem enviada por um professor ou tutor pelo Analytics Grapsh!  ---- ';
 $string['no_access'] = 'Não acessaram';
 $string['no_deadline'] = 'Sem limite';
 $string['no_students'] = 'Não há estudantes no curso';

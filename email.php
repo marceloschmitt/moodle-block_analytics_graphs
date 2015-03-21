@@ -48,6 +48,8 @@ foreach ($destination as $i => $x) {
         email_to_user($touser, $fromuser, $subject, $messagetext, $messagehtml, '', '', true);
 }
 
+$messagetext = get_string('mailcopyalert', 'block_analytics_graphs') . $messagetext;
+$messagehtml = get_string('mailcopyalert', 'block_analytics_graphs') . $messagehtml;
 $userstocopyemail = block_analytics_graphs_get_teachers($course);
 foreach ($userstocopyemail as $i) {
     $touser->id = $i->id;

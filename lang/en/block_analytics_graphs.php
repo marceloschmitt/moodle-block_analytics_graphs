@@ -39,6 +39,7 @@ $string['in_time_ratio'] = 'On time ration';
 $string['in_time_submission'] = 'In time submission';
 $string['late_submission'] = 'Late submission';
 $string['legacy'] = 'Legacy (prior to 2.7)';
+$string['mailcopyalert'] = 'This is a copy of a mail sent by an Analytic Graphs user!  ---- ';
 $string['no_access'] = 'No access';
 $string['no_deadline'] = 'No deadline';
 $string['no_students'] = 'There are no students in the course';
