@@ -268,7 +268,6 @@ $(function () {
 
         yAxis: [{ // Primary yAxis
                 max: 1,
-                ceiling: 1,
                 min: 0,
                 tickInterval: 0.25,
                 labels: {
