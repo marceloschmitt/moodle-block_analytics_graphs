@@ -220,6 +220,7 @@ $(function () {
     $('#container').highcharts({
         chart: {
             zoomType: 'x',
+            alignTicks: false,
         },
 
         title: {
