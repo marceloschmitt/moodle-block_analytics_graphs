@@ -118,6 +118,9 @@ $event->trigger();
     display: none;
     width: 25px;
     height: 20px;
+    padding-right: 5px;
+    padding-left: 5px;
+    vertical-align: middle;
 }
 th {
     font-weight: bold;
@@ -316,10 +319,10 @@ thead th {
                     });                    
                     last_week = <?php echo $maxnumberofweeks; ?>;
                     if(!(last_week in student.acessosModulos)){
-                        $("#yellow_icon_"+student.userid).css('display', "inline");
+                        $("#red_icon_"+student.userid).css('display', "inline");
                     }
                 }else{
-                        $("#red_icon_"+student.userid).css('display', "inline");
+                        $("#yellow_icon_"+student.userid).css('display', "inline");
                         $("#modulos-"+student.userid).text("Este usuário não acessou nenhum material ainda.");
                         // $("#modulos-"+student.userid).text(":(");
                 }
