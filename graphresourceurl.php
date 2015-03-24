@@ -144,8 +144,8 @@ $event->trigger();
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	    <title><?php echo get_string('access_to_contents', 'block_analytics_graphs'); ?></title>
-	    <link rel="stylesheet" type="text/css" href="styles.css">
+        <title><?php echo get_string('access_to_contents', 'block_analytics_graphs'); ?></title>
+        <link rel="stylesheet" type="text/css" href="styles.css">
         <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
         
         <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.1.js"></script>
@@ -157,7 +157,7 @@ $event->trigger();
 
 
         <script type="text/javascript">
-        	var groups = <?php echo $groupmembers_json; ?>;
+            var groups = <?php echo $groupmembers_json; ?>;
 
             var courseid = <?php echo json_encode($course); ?>;
             var coursename = <?php echo json_encode($coursename); ?>;
@@ -183,15 +183,15 @@ $event->trigger();
 
                     $.each(value.studentswithaccess, function(ind, student){
                         $.each(groups, function(i, group){
-                            if(group.material[index] === undefined)
-                                group.material[index] = value.material;
+                            if(group.studentswithaccess[index] === undefined)
+                                group.studentswithaccess[index] = [];
 
                             if(group.numberofaccesses[index] === undefined)
                                 group.numberofaccesses[index] = 0;
 
                             if(group.members.indexOf(student.userid) != -1){
                                 group.numberofaccesses[index] += 1;
-                                group.studentswithaccess[index].push(studentswithaccess[ind]);
+                                group.studentswithaccess[index].push(value.studentswithaccess[ind]);
                             }
                         });
                     });
@@ -204,15 +204,15 @@ $event->trigger();
 
                     $.each(value.studentswithnoaccess, function(ind, student){
                         $.each(groups, function(i, group){
-                            if(group.material[index] === undefined)
-                                group.material[index] = value.material;
+                            if(group.studentswithnoaccess[index] === undefined)
+                                group.studentswithnoaccess[index] = [];
 
                             if(group.numberofnoaccess[index] === undefined)
                                 group.numberofnoaccess[index] = 0;
 
                             if(group.members.indexOf(student.userid) != -1){
-                                group.numberofnoaccess[index] = group.numberofnoaccess[index]+1;
-                                group.studentswithnoaccess[index].push(studentswithnoaccess[ind]);
+                                group.numberofnoaccess[index] += 1;
+                                group.studentswithnoaccess[index].push(value.studentswithnoaccess[ind]);
                             }
                         });
                     });
@@ -341,8 +341,9 @@ $event->trigger();
                                 click: function() {
                                         var nome_conteudo = this.x + "-" + this.series.name.charAt(0);
                                         $(".div_nomes").dialog("close");
-                                        if($( "#group_select" ).val() != "-"){//algum grupo foi selecionado
-                                            $("#" + nome_conteudo + "-group").dialog("open");
+                                        var group_id = $( "#group_select" ).val();
+                                        if(group_id != "-"){//algum grupo foi selecionado
+                                            $("#" + nome_conteudo + "-group-"+group_id).dialog("open");
                                         }else{
                                             $("#" + nome_conteudo).dialog("open");    
                                         }
@@ -391,18 +392,19 @@ $event->trigger();
         </script>
     </head>
     <body>
-    	<?php if(sizeof($groupmembers)>0){ ?>
-    	<div style="margin: 20px;">
-			<select id="group_select">
-				<option value="-">Sem separação por grupos</option>
-				<?php foreach ($groupmembers as $key => $value) { ?>
-					<option value="<?php echo $key; ?>"><?php echo $value["name"]; ?></option>
-				<?php } ?>
-			</select>
-    	</div>
-    	<?php } ?>
+        <?php if(sizeof($groupmembers)>0){ ?>
+        <div style="margin: 20px;">
+            <select id="group_select">
+                <option value="-">Sem separação por grupos</option>
+                <?php foreach ($groupmembers as $key => $value) { ?>
+                    <option value="<?php echo $key; ?>"><?php echo $value["name"]; ?></option>
+                <?php } ?>
+            </select>
+        </div>
+        <?php } ?>
         <div id="container" style="min-width: 310px; min-width: 800px; min-height: 600px; margin: 0 auto"></div>
         <script>
+
             $.each(geral, function(index, value) {
                 var nome = value.material;
                 div = "";
@@ -429,38 +431,44 @@ $event->trigger();
                 document.write(div);
             });
 
-            $.each(groups, function(index, group) {
-                var nome = group.material;
+            $.each(groups, function(index, value) {
+                var nome = value.material;
                 div = "";
-                if (typeof group.studentswithaccess != 'undefined')
-                {
-                     var titulo = coursename + "</h3>" +
-                            <?php  echo json_encode(get_string('access', 'block_analytics_graphs'));?> + " - "+
-                            nome;
 
-                    div += "<div class='div_nomes' id='" + index + "-" + 
-                        "<?php echo substr(get_string('access', 'block_analytics_graphs'), 0, 1);?>" +
-                        "-group'>" + createEmailForm(titulo, group.studentswithaccess, courseid, 'graphResourceUrl.php') + "</div>";
+                if (typeof value.studentswithaccess != 'undefined')
+                {
+                    var titulo = coursename + "</h3>" +
+                        <?php  echo json_encode(get_string('access', 'block_analytics_graphs'));?> + " - "+
+                        nome;
+                    $.each(value.studentswithaccess, function(ind, student){
+                        if(student !== undefined)
+                            div += "<div class='div_nomes' id='" + ind + "-" + 
+                            "<?php echo substr(get_string('access', 'block_analytics_graphs'), 0, 1);?>" +
+                            "-group-"+index+"'>" + createEmailForm(titulo, student, courseid, 'graphResourceUrl.php') + "</div>";
+                    });
                 }
-                if (typeof group.studentswithnoaccess != 'undefined')
+                if (typeof value.studentswithnoaccess != 'undefined')
                 {
                     var titulo = coursename + "</h3>" +
                             <?php  echo json_encode(get_string('no_access', 'block_analytics_graphs'));?> + " - "+
                             nome;
-
-                    div += "<div class='div_nomes' id='" + index + "-" +
-                        "<?php echo substr(get_string('no_access', 'block_analytics_graphs'), 0, 1);?>" +
-                        "-group'>" + createEmailForm(titulo, group.studentswithnoaccess, courseid, 'graphResourceUrl.php') + "</div>";
+                    $.each(value.studentswithnoaccess, function(ind, student){
+                        if(student !== undefined)
+                            div += "<div class='div_nomes' id='" + ind + "-" + 
+                            "<?php echo substr(get_string('no_access', 'block_analytics_graphs'), 0, 1);?>" +
+                            "-group-"+index+"'>" + createEmailForm(titulo, student, courseid, 'graphResourceUrl.php') + "</div>";
+                    });
                 }
                 document.write(div);
             });
 
+
         sendEmail();
 
         $( "#group_select" ).change(function() {
-			console.log($(this).val());
+            console.log($(this).val());
             convert_series_to_group($(this).val());
-		});
+        });
         </script>
     </body>
 </html>
