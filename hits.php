@@ -57,7 +57,12 @@ foreach ($resultado as $tuple) {
         $maxnumberofweeks = $tuple->week;
     }
 }
-$studentswithnoaccess = block_analytics_graphs_subtract_student_arrays($arrayofstudents, $arrayofaccess);
+
+if($maxnumberofweeks) {
+    $studentswithnoaccess = block_analytics_graphs_subtract_student_arrays($arrayofstudents, $arrayofaccess);
+} else {
+    $studentswithnoaccess = $arrayofstudents;
+}
 
 /* Get the number of modules accessed by week */
 $accessresults = block_analytics_graphs_get_number_of_modules_access_by_week($course, $students, $startdate);

@@ -14,12 +14,19 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-
-    $capabilities = array(
-     'block/analytics_graphs:viewpages' => array(
+$capabilities = array(
+    'block/analytics_graphs:bemonitored' => array(
         'captype' => 'read',
-        'contextlevel' => CONTEXT_COURSE,
-        'legacy' => array(
+        'contextlevel' => CONTEXT_BLOCK,
+        'archetypes' => array(
+            'student' => CAP_ALLOW,
+        )
+    ),
+     'block/analytics_graphs:viewpages' => array(
+        'riskbitmask' => RISK_SPAM,
+        'captype' => 'read',
+        'contextlevel' => CONTEXT_BLOCK,
+        'archetypes' => array(
             'guest' => CAP_PREVENT,
             'student' => CAP_PREVENT,
             'teacher' => CAP_ALLOW,
@@ -28,6 +35,7 @@
             'manager' => CAP_ALLOW
         )
     ),
+    
     'block/analytics_graphs:addinstance' => array(
         'riskbitmask' => RISK_SPAM | RISK_XSS,
         'captype' => 'write',

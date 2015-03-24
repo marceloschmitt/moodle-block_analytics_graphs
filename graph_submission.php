@@ -193,7 +193,6 @@ class graph_submission {
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <title><?php echo get_string('submissions', 'block_analytics_graphs'); ?></title>
-        <link rel="stylesheet" type="text/css" href="styles.css">
         <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
         
         <!--<script src="http://code.jquery.com/jquery-1.10.2.js"></script>-->

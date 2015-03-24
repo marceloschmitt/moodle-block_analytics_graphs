@@ -34,11 +34,11 @@ function block_analytics_graphs_subtract_student_arrays($estudantes, $acessaram)
 
 function block_analytics_graphs_get_course_group_members($course) {
     $groups = groups_get_all_groups($course);
-    foreach($groups as $group) {
+    foreach ($groups as $group) {
         $groupmembers[$group->id]['name'] = $group->name;
         $members = groups_get_members($group->id);
         $numberofmembers = 0;
-        foreach($members as $member) {
+        foreach ($members as $member) {
             $groupmembers[$group->id]['members'][] = $member->id;
             $numberofmembers++;
         }
@@ -49,24 +49,36 @@ function block_analytics_graphs_get_course_group_members($course) {
 
 
 function block_analytics_graphs_get_students($course) {
+    $students = array();
     $context = context_course::instance($course);
-    $students = get_role_users(5, $context, false, '', 'firstname', null,
-        '', '', '', 'u.suspended = :xsuspended', array('xsuspended' => 0));
+    $allstudents = get_enrolled_users($context, 'block/analytics_graphs:bemonitored', 0,
+                    'u.id, u.firstname, u.lastname, u.email, u.suspended', 'firstname, lastname');
+    foreach($allstudents as $student) {
+        if($student->suspended == 0) {
+            $students[] = $student;
+        }
+    }
     return($students);
 }
 
 
 function block_analytics_graphs_get_teachers($course) {
+    $teachers = array();
     $context = context_course::instance($course);
-    $teachers = get_role_users(array(3, 35, 36), $context, false, 'u.id', 'firstname', null,
-        '', '', '', 'u.suspended = :xsuspended', array('xsuspended' => 0));
+    $allteachers = get_enrolled_users($context, 'block/analytics_graphs:viewpages', 0,
+                    'u.id, u.firstname, u.lastname, u.email, u.suspended', 'firstname, lastname');
+    foreach($allteachers as $teacher) {
+        if($teacher->suspended == 0) {
+            $teachers[] = $teacher;
+        }
+    }
     return($teachers);
 }
+
 
 function block_analytics_graphs_get_resource_url_access($course, $estudantes, $legacy) {
     global $COURSE;
     global $DB;
-
     foreach ($estudantes as $tupla) {
             $inclause[] = $tupla->id;
     }
@@ -75,15 +87,13 @@ function block_analytics_graphs_get_resource_url_access($course, $estudantes, $l
     $url = $DB->get_record('modules', array('name' => 'url'), 'id');
     $page = $DB->get_record('modules', array('name' => 'page'), 'id');
     $startdate = $COURSE->startdate;
-
     $params = array_merge(array($startdate), $inparams, array($course, $resource->id, $url->id, $page->id));
-
     if ($legacy) {
-            $sql = "SELECT temp.id+(COALESCE(temp.userid,1)*1000000)as id, temp.id as ident, cs.section, m.name as tipo, 
-                    r.name as resource, u.name as url, p.name as page, temp.userid, usr.firstname, 
+            $sql = "SELECT temp.id+(COALESCE(temp.userid,1)*1000000)as id, temp.id as ident, cs.section, m.name as tipo,
+                    r.name as resource, u.name as url, p.name as page, temp.userid, usr.firstname,
                     usr.lastname, usr.email, temp.acessos
                     FROM (
-                        SELECT cm.id, log.userid, count(*) as acessos 
+                        SELECT cm.id, log.userid, count(*) as acessos
                         FROM {course_modules} as cm
                         LEFT JOIN {log} as log ON log.time >= ? AND cm.id=log.cmid AND log.userid $insql
                         WHERE cm.course = ? AND (cm.module=? OR cm.module=? OR cm.module=?)
@@ -98,11 +108,11 @@ function block_analytics_graphs_get_resource_url_access($course, $estudantes, $l
                     LEFT JOIN {user} as usr ON usr.id = temp.userid
                     ORDER BY cs.section, m.name, r.name, u.name, p.name";
     } else {
-        $sql = "SELECT temp.id+(COALESCE(temp.userid,1)*1000000)as id, temp.id as ident, cs.section, m.name as tipo, 
-                    r.name as resource, u.name as url, p.name as page, temp.userid, usr.firstname, 
+        $sql = "SELECT temp.id+(COALESCE(temp.userid,1)*1000000)as id, temp.id as ident, cs.section, m.name as tipo,
+                    r.name as resource, u.name as url, p.name as page, temp.userid, usr.firstname,
                     usr.lastname, usr.email, temp.acessos
                     FROM (
-                        SELECT cm.id, log.userid, count(*) as acessos 
+                        SELECT cm.id, log.userid, count(*) as acessos
                         FROM {course_modules} as cm
                         LEFT JOIN {logstore_standard_log} as log ON log.timecreated >= ? AND
                                 cm.id=log.contextinstanceid  AND log.userid $insql
@@ -117,11 +127,11 @@ function block_analytics_graphs_get_resource_url_access($course, $estudantes, $l
                     LEFT JOIN {page} as p ON cm.instance = p.id
                     LEFT JOIN {user} as usr ON usr.id = temp.userid
                     ORDER BY cs.section, m.name, r.name, u.name, p.name";
-                        
     }
     $resultado = $DB->get_records_sql($sql, $params);
     return($resultado);
 }
+
 
 function block_analytics_graphs_get_assign_submission($course, $students) {
     global $DB;

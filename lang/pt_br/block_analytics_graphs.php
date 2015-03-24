@@ -19,6 +19,8 @@
 
 $string['analytics_graphs:addinstance'] = 'Add a new AG block';
 $string['analytics_graphs:myaddinstance'] = 'Add a new AG block to the My Moodle page';
+$string['analytics_graphs:viewpages'] = 'Visualiza gráficos';
+
 $string['pluginname'] = 'Analytics Graphs';
 $string['analytics_graphs'] = 'Analytics Graphs';
 
@@ -38,6 +40,7 @@ $string['in_time_ratio'] = 'Relação de pontualidade';
 $string['in_time_submission'] = 'Envio no prazo';
 $string['late_submission'] = 'Envio fora do prazo';
 $string['legacy'] = 'Legacy (prior to 2.7)';
+$string['mailcopyalert'] = 'Esta é uma cópia de uma mensagem enviada por um professor ou tutor pelo Analytics Graphs!  ---- ';
 $string['no_access'] = 'Não acessaram';
 $string['no_deadline'] = 'Sem limite';
 $string['no_students'] = 'Não há estudantes no curso';
