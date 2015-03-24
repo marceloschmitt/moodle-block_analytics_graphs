@@ -114,6 +114,11 @@ $event->trigger();
         margin: 0 auto;
     	border-collapse: collapse;
 }
+.img_excl {
+    display: none;
+    width: 25px;
+    height: 20px;
+}
 th {
     font-weight: bold;
     text-align: left;
@@ -311,11 +316,11 @@ thead th {
                     });                    
                     last_week = <?php echo $maxnumberofweeks; ?>;
                     if(!(last_week in student.acessosModulos)){
-                        $("#linhatabela-"+student.userid).css('background-color', "#ff5");
+                        $("#yellow_icon_"+student.userid).css('display', "inline");
                     }
                 }else{
-                        $("#linhatabela-"+student.userid).css('background-color', "#ff5");
-                        $("#modulos-"+student.userid).text("Este usuário não acessou nenhum material.");
+                        $("#red_icon_"+student.userid).css('display', "inline");
+                        $("#modulos-"+student.userid).text("Este usuário não acessou nenhum material ainda.");
                         // $("#modulos-"+student.userid).text(":(");
                 }
         }
@@ -431,15 +436,18 @@ thead th {
 
 
     function createRow(array, nomes){
+        var red_excl = "http://www.pd4pic.com/images250_/warning-attention-road-sign-exclamation-mark.png";
+        var yellow_excl = "http://www.wpclipart.com/signs_symbol/assorted/assorted_6/exclamation_sign.png";
         $.each(nomes, function(ind,val){
             var nome = val;
             $.each(array, function(index, value){
                         if (value){
                             if (nome === value.nome){
-                                    var linha = "<tr id='linhatabela-" + value.userid+"'>"+
-                                            "<th><span class='nome_student' style='cursor:hand' id='linha-"+value.userid+"'>"+
-                                                    value.nome+
-                                            "</span></th>"+
+                                    var linha = "<tr>"+
+                                            "<th>
+                                            <span class='nome_student' style='cursor:hand' id='linha-"+value.userid+"'>"+value.nome+"</span>"+
+                                            "<img src=" + red_excl + " class='img_excl' id='red_icon_" + value.userid + "'>" +
+                                            "<img src=" + yellow_excl + " class='img_excl' id=yellow_icon_" + value.userid + "'></th>" +
                                             "<td>"+
                                                     value.pageViews+
                                             "</td>"+
