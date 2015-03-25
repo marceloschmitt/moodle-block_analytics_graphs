@@ -472,7 +472,7 @@ thead th {
                             if (nome === value.nome){
                                     var linha = "<tr><th><span class='nome_student' style='cursor:hand' id='linha-"+value.userid+"'>"+value.nome+"</span>"+
                                             "<div class='warnings'>\
-                                                <div> class='warning1' id='"+value.userid+"_1'>\
+                                                <div class='warning1' id='"+value.userid+"_1'>\
                                                     <img\
                                                         src='" + red_excl + "'
                                                         title='Nenhum material foi acessado na última semana'
@@ -480,7 +480,7 @@ thead th {
                                                         id='" + value.userid + "'-1-img'
                                                     >
                                                 </div>\
-                                                <div> class='warning2' id='"+value.userid+"_2'>\
+                                                <div class='warning2' id='"+value.userid+"_2'>\
                                                     <img
                                                         src='" + yellow_excl + "'
                                                         title='Nenhum material foi acessado até o momento'
