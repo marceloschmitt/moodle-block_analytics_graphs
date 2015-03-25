@@ -242,8 +242,6 @@ thead th {
     }
 
     function gerar_grafico_modulos(student){
-        var warning_semana_url = "http://www.pd4pic.com/images250_/warning-attention-road-sign-exclamation-mark.png";
-        var warning_nenhum_mat_url = "http://www.wpclipart.com/signs_symbol/assorted/assorted_6/exclamation_sign.png";
         if (student.acessosModulos !== undefined){
                 $("#modulos-"+student.userid).highcharts({
 
@@ -346,7 +344,7 @@ thead th {
                         $("#" + student.userid + "-1-img").css("visibility", "visible");
                     }
                 }else{
-                        $("#" + student.userid + "-2-img").append("visibility", "visible");
+                        $("#" + student.userid + "-2-img").css("visibility", "visible");
                         $("#modulos-"+student.userid).text("Este usuário não acessou nenhum material ainda.");
                         // $("#modulos-"+student.userid).text(":(");
                 }
@@ -477,7 +475,7 @@ thead th {
                                                         src='" + red_excl + "'\
                                                         title='Nenhum material foi acessado na última semana'\
                                                         class='image-exclamation'\
-                                                        id='" + value.userid + "'-1-img'\
+                                                        id='" + value.userid + "-1-img'\
                                                     >\
                                                 </div>\
                                                 <div class='warning2' id='"+value.userid+"_2'>\
@@ -485,7 +483,7 @@ thead th {
                                                         src='" + yellow_excl + "'\
                                                         title='Nenhum material foi acessado até o momento'\
                                                         class='image-exclamation'\
-                                                        id='" + value.userid + "'-2-img'\
+                                                        id='" + value.userid + "-2-img'\
                                                     >\
                                                 </div>\
                                             </div></th>" +
