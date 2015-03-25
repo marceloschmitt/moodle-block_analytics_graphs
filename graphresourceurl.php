@@ -219,7 +219,7 @@ $event->trigger();
                     nrntaccess_vet.push(0);
                 }
             });
-
+            var groups2 = groups;
             function convert_series_to_group(group_id)
             {
                 //comeback to original series
