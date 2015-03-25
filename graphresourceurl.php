@@ -241,15 +241,15 @@ $event->trigger();
                         }
                     });
 
-                    $('#container').highcharts().series[0].setData(nraccess_vet);
-                    $('#container').highcharts().series[1].setData(nrntaccess_vet);
+                    $('#container').highcharts().series[0].setData(nraccess_vet, true);
+                    $('#container').highcharts().series[1].setData(nrntaccess_vet, true);
                 }
                 else
                 {
                     $.each(groups, function(index, group){
                         if(index == group_id){
-                            $('#container').highcharts().series[0].setData(group.numberofaccesses);
-                            $('#container').highcharts().series[1].setData(group.numberofnoaccess);
+                            $('#container').highcharts().series[0].setData(group.numberofaccesses, true);
+                            $('#container').highcharts().series[1].setData(group.numberofnoaccess, true);
                         }
                     });
                 }
