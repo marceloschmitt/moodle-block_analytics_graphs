@@ -119,13 +119,30 @@ $event->trigger();
         margin: 0 auto;
     	border-collapse: collapse;
 }
-.img_excl {
-    display: none;
+.image-exclamation {
     width: 25px;
     height: 20px;
-    padding-right: 5px;
-    padding-left: 5px;
     vertical-align: middle;
+    visibility: hidden;
+}
+.warnings {
+    float: right;
+    align: right;
+    margin-left: 10px;
+    display: inline-flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 55px;
+}
+.warning1, .warning2 {
+    width: 25px;
+}
+.warning1 {
+    order: 1;
+    margin-right: 5px;
+}
+.warning2 {
+    order: 2;
 }
 th {
     font-weight: bold;
@@ -225,6 +242,8 @@ thead th {
     }
 
     function gerar_grafico_modulos(student){
+        var warning_semana_url = "http://www.pd4pic.com/images250_/warning-attention-road-sign-exclamation-mark.png";
+        var warning_nenhum_mat_url = "http://www.wpclipart.com/signs_symbol/assorted/assorted_6/exclamation_sign.png";
         if (student.acessosModulos !== undefined){
                 $("#modulos-"+student.userid).highcharts({
 
@@ -324,10 +343,10 @@ thead th {
                     });                    
                     last_week = <?php echo $maxnumberofweeks; ?>;
                     if(!(last_week in student.acessosModulos)){
-                        $("#red_icon_"+student.userid).css('display', "inline");
+                        $("#" + student.userid + "-1-img").css("visibility", "visible");
                     }
                 }else{
-                        $("#yellow_icon_"+student.userid).css('display', "inline");
+                        $("#" + student.userid + "-2-img").append("visibility", "visible");
                         $("#modulos-"+student.userid).text("Este usuário não acessou nenhum material ainda.");
                         // $("#modulos-"+student.userid).text(":(");
                 }
@@ -452,8 +471,24 @@ thead th {
                         if (value){
                             if (nome === value.nome){
                                     var linha = "<tr><th><span class='nome_student' style='cursor:hand' id='linha-"+value.userid+"'>"+value.nome+"</span>"+
-                                            "<img src='" + red_excl + "' class='img_excl' id='red_icon_" + value.userid + "'>" +
-                                            "<img src='" + yellow_excl + "' class='img_excl' id='yellow_icon_" + value.userid + "'></th>" +
+                                            "<div class='warnings'>\
+                                                <div> class='warning1' id='"+value.userid+"_1'>\
+                                                    <img\
+                                                        src='" + red_excl + "'
+                                                        title='Nenhum material foi acessado na última semana'
+                                                        class='image-exclamation'
+                                                        id='" + value.userid + "'-1-img'
+                                                    >
+                                                </div>\
+                                                <div> class='warning2' id='"+value.userid+"_2'>\
+                                                    <img
+                                                        src='" + yellow_excl + "'
+                                                        title='Nenhum material foi acessado até o momento'
+                                                        class='image-exclamation'
+                                                        id='" + value.userid + "'-2-img'
+                                                    >
+                                                </div>\
+                                            </div></th>" +
                                             "<td>"+
                                                     value.pageViews+
                                             "</td>"+
