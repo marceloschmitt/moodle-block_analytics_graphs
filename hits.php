@@ -345,7 +345,7 @@ thead th {
                     }
                 }else{
                         $("#" + student.userid + "-2-img").css("visibility", "visible");
-                        $("#modulos-"+student.userid).text("Este usuário não acessou nenhum material ainda.");
+                        // $("#modulos-"+student.userid).text("Este usuário não acessou nenhum material ainda.");
                         // $("#modulos-"+student.userid).text(":(");
                 }
         }
