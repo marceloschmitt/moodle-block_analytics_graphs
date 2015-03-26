@@ -463,8 +463,8 @@ thead th {
     function createRow(array, nomes){
         var red_excl = "http://www.pd4pic.com/images250_/warning-attention-road-sign-exclamation-mark.png";
         var yellow_excl = "http://www.wpclipart.com/signs_symbol/assorted/assorted_6/exclamation_sign.png";
-        var red_tooltip = <?php echo get_string('red_tooltip', 'block_analytics_graphs'); ?>;
-        var yellow_tooltip = <?php echo get_string('red_tooltip', 'block_analytics_graphs'); ?>;
+        var red_tooltip = <?php get_string('red_tooltip', 'block_analytics_graphs'); ?>;
+        var yellow_tooltip = <?php get_string('red_tooltip', 'block_analytics_graphs'); ?>;
         $.each(nomes, function(ind,val){
             var nome = val;
             $.each(array, function(index, value){
