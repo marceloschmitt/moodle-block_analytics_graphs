@@ -1,10 +1,6 @@
 <?php
 // This file is part of Moodle - http://moodle.org/
 //
-// Moodle is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
 //
 // Moodle is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -21,9 +17,9 @@ require('javascriptfunctions.php');
 $course = required_param('id', PARAM_INT);
 $legacy = required_param('legacy', PARAM_INT);
 global $DB;
-
+    
 /* Access control */
-require_login($course);
+require_login($course); 
 $context = context_course::instance($course);
 require_capability('block/analytics_graphs:viewpages', $context);
 
@@ -31,11 +27,11 @@ $courseparams = get_course($course);
 $startdate = $courseparams->startdate;
 $coursename = get_string('course', 'block_analytics_graphs') . ": " . $courseparams->fullname;
 $students = block_analytics_graphs_get_students($course);
-
+    
 $numberofstudents = count($students);
 if ($numberofstudents == 0) {
     error(get_string('no_students', 'block_analytics_graphs'));
-}
+} 
 
 foreach ($students as $tuple) {
     $arrayofstudents[] = array('userid' => $tuple->id , 'nome' => $tuple->firstname.' '.$tuple->lastname, 'email' => $tuple->email);
@@ -161,7 +157,7 @@ $event->trigger();
             var courseid = <?php echo json_encode($course); ?>;
             var coursename = <?php echo json_encode($coursename); ?>;
             var geral = <?php echo $statistics; ?>;
-            var geral2 = geral = parseObjToString(geral);
+            var geral = parseObjToString(geral);
             var nome = "";
             var arrayofcontents = [];
             var nraccess_vet = [];
@@ -172,16 +168,17 @@ $event->trigger();
                 group.numberofnoaccess = [];
                 group.studentswithaccess = [];
                 group.studentswithnoaccess = [];
-                group.material = "";
+                group.material = [];
             });
+                
+            /*$.each(geral, function(index, value) {
 
-            $.each(geral, function(index, value) {
+                arrayofcontents.push(value.material);
                 if (value.numberofaccesses > 0){
-                    arrayofcontents.push(value.material);
+                     //default series value
                     nraccess_vet.push(value.numberofaccesses);
-
-                    $.each(value.studentswithaccess, function(ind, student){
-                        $.each(groups, function(i, group){
+                    $.each(groups, function(ind, group){
+                        $.each(value.studentswithaccess, function(i, student){
                             if(group.studentswithaccess[index] === undefined)
                                 group.studentswithaccess[index] = [];
 
@@ -190,15 +187,25 @@ $event->trigger();
 
                             if(group.members.indexOf(student.userid) != -1){
                                 group.numberofaccesses[index] += 1;
-                                group.studentswithaccess[index].push(value.studentswithaccess[ind]);
+                                group.studentswithaccess[index].push(value.studentswithaccess[i]);
                             }
                         });
                     });
                 }else{
                     nraccess_vet.push(0);
+                        $.each(groups, function(ind, group){
+                            if(group.studentswithaccess[index] === undefined)
+                                group.studentswithaccess[index] = [];
+
+                            if(group.numberofaccesses[index] === undefined)
+                                group.numberofaccesses[index] = 0;
+
+                        });
+
                 }
 
                 if(value.numberofnoaccess > 0){
+                    //default series value
                     nrntaccess_vet.push(value.numberofnoaccess);
 
                     $.each(value.studentswithnoaccess, function(ind, student){
@@ -214,42 +221,116 @@ $event->trigger();
                                 group.studentswithnoaccess[index].push(value.studentswithnoaccess[ind]);
                             }
                         });
-                    });
+                    }); 
                 }else{
                     nrntaccess_vet.push(0);
+                        $.each(groups, function(ind, group){
+                            if(group.studentswithaccess[index] === undefined)
+                                group.studentswithnoaccess[index] = [];
+
+                            if(group.numberofaccesses[index] === undefined)
+                                group.numberofnoaccesses[index] = 0;
+
+                        });
+
                 }
+            });*/
+            $.each(geral, function(index, value) {
+
+                arrayofcontents.push(value.material);
+
+                $.each(groups, function(ind, group){
+                    if (value.numberofaccesses > 0){
+                         //default series value
+                        nraccess_vet.push(value.numberofaccesses);
+
+                        $.each(value.studentswithaccess, function(i, student){
+                            if(group.studentswithaccess[index] === undefined)
+                                group.studentswithaccess[index] = [];
+
+                            if(group.numberofaccesses[index] === undefined)
+                                group.numberofaccesses[index] = 0;
+
+                            if(group.members.indexOf(student.userid) != -1){
+                                group.numberofaccesses[index] += 1;
+                                group.studentswithaccess[index].push(value.studentswithaccess[i]);
+                            }
+                        });
+                        
+                    }else{
+                        nraccess_vet.push(0);
+                        if(group.studentswithaccess[index] === undefined)
+                            group.studentswithaccess[index] = [];
+
+                        if(group.numberofaccesses[index] === undefined)
+                            group.numberofaccesses[index] = 0;
+
+                    }
+
+                    if(value.numberofnoaccess > 0){
+                        //default series value
+                        nrntaccess_vet.push(value.numberofnoaccess);
+
+                        $.each(value.studentswithnoaccess, function(ind, student){
+                            if(group.studentswithnoaccess[index] === undefined)
+                                group.studentswithnoaccess[index] = [];
+
+                            if(group.numberofnoaccess[index] === undefined)
+                                group.numberofnoaccess[index] = 0;
+
+                            if(group.members.indexOf(student.userid) != -1){
+                                group.numberofnoaccess[index] += 1;
+                                group.studentswithnoaccess[index].push(value.studentswithnoaccess[ind]);
+                            }
+                        }); 
+                    }else{
+                        nrntaccess_vet.push(0);
+                        if(group.studentswithaccess[index] === undefined)
+                            group.studentswithnoaccess[index] = [];
+
+                        if(group.numberofaccesses[index] === undefined)
+                            group.numberofnoaccesses[index] = 0;
+                    }
+                });
             });
-            var groups2 = groups;
-            function convert_series_to_group(group_id)
+
+            function convert_series_to_group(group_id, groups)
             {
+                
+                $('#container').highcharts().series[0].setData([0]);
+                $('#container').highcharts().series[1].setData([0]);
+
                 //comeback to original series
                 if(group_id == "-")
                 {
                     var nraccess_vet = [];
                     var nrntaccess_vet = [];
-                    $.each(geral2, function(index, value) {
+                    $.each(geral, function(index, value) {
                         if (value.numberofaccesses > 0){
                             nraccess_vet.push(value.numberofaccesses);
                         }else{
-                            nraccess_vet.push(0);
+                            nraccess_vet.push([0]);
                         }
 
                         if(value.numberofnoaccess > 0){
                             nrntaccess_vet.push(value.numberofnoaccess);
                         }else{
-                            nrntaccess_vet.push(0);
+                            nrntaccess_vet.push([0]);
                         }
                     });
 
-                    $('#container').highcharts().series[0].setData(nraccess_vet, true);
-                    $('#container').highcharts().series[1].setData(nrntaccess_vet, true);
+                    $('#container').highcharts().series[0].setData(nraccess_vet);
+                    $('#container').highcharts().series[1].setData(nrntaccess_vet);
                 }
                 else
                 {
                     $.each(groups, function(index, group){
                         if(index == group_id){
-                            $('#container').highcharts().series[0].setData(group.numberofaccesses, true);
-                            $('#container').highcharts().series[1].setData(group.numberofnoaccess, true);
+                                console.log(group);
+                                var access = group.numberofaccesses;
+                                var noaccess = group.numberofnoaccess;
+                            $('#container').highcharts().series[0].setData(access);
+                            $('#container').highcharts().series[1].setData(noaccess);
                         }
                     });
                 }
@@ -394,7 +475,7 @@ $event->trigger();
         <?php if(sizeof($groupmembers)>0){ ?>
         <div style="margin: 20px;">
             <select id="group_select">
-                <option value="-">Sem separação por grupos</option>
+                <option value="-"><?php  echo json_encode(get_string('all_groups', 'block_analytics_graphs'));?></option>
                 <?php foreach ($groupmembers as $key => $value) { ?>
                     <option value="<?php echo $key; ?>"><?php echo $value["name"]; ?></option>
                 <?php } ?>
@@ -415,7 +496,7 @@ $event->trigger();
 
                     div += "<div class='div_nomes' id='" + index + "-" + 
                         "<?php echo substr(get_string('access', 'block_analytics_graphs'), 0, 1);?>" +
-                        "'>" + createEmailForm(titulo, value.studentswithaccess, courseid, 'graphResourceUrl.php') + "</div>";
+                        "'>" + createEmailForm(titulo, value.studentswithaccess, courseid, 'graphResourceUrl.php') + "</div>";
                 }
                 if (typeof value.studentswithnoaccess != 'undefined')
                 {
@@ -466,7 +547,7 @@ $event->trigger();
 
         $( "#group_select" ).change(function() {
             console.log($(this).val());
-            convert_series_to_group($(this).val());
+            convert_series_to_group($(this).val(), groups);
         });
         </script>
     </body>
