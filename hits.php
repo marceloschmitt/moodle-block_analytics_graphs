@@ -463,6 +463,8 @@ thead th {
     function createRow(array, nomes){
         var red_excl = "http://www.pd4pic.com/images250_/warning-attention-road-sign-exclamation-mark.png";
         var yellow_excl = "http://www.wpclipart.com/signs_symbol/assorted/assorted_6/exclamation_sign.png";
+        var red_tooltip = <?php echo json_encode(get_string('red_tooltip', 'block_analytics_graphs')); ?>;
+        var yellow_tooltip = <?php echo json_encode(get_string('yellow_tooltip', 'block_analytics_graphs')); ?>;
         $.each(nomes, function(ind,val){
             var nome = val;
             $.each(array, function(index, value){
@@ -473,7 +475,7 @@ thead th {
                                                 <div class='warning1' id='"+value.userid+"_1'>\
                                                     <img\
                                                         src='" + red_excl + "'\
-                                                        title='Nenhum material foi acessado na última semana'\
+                                                        title='" + red_tooltip + "'\
                                                         class='image-exclamation'\
                                                         id='" + value.userid + "-1-img'\
                                                     >\
@@ -481,7 +483,7 @@ thead th {
                                                 <div class='warning2' id='"+value.userid+"_2'>\
                                                     <img\
                                                         src='" + yellow_excl + "'\
-                                                        title='Nenhum material foi acessado até o momento'\
+                                                        title='" + yellow_tooltip +"'\
                                                         class='image-exclamation'\
                                                         id='" + value.userid + "-2-img'\
                                                     >\
@@ -517,7 +519,6 @@ thead th {
 </head>
 <body>
 <center>
-<H1><?php  echo   "TESTE"?></H1>
 <H2><?php  echo   get_string('hits_distribution', 'block_analytics_graphs');?></H2>
 <H3><?php  echo $coursename;?> </H3>
 <H3><?php  echo   get_string('begin_date', 'block_analytics_graphs') . ": "
