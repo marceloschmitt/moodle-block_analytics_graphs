@@ -58,3 +58,4 @@ $string['title_access'] = 'Distribution of access to contents (resources, urls a
 $string['title_students'] = 'Students';
 $string['topic'] = 'Topic';
 $string['week_number'] = 'Week number';
+$string['all_groups'] = 'Show all groups';
