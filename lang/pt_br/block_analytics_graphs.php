@@ -61,9 +61,6 @@ $string['title_access'] = 'Distribuição de acesso aos materiais (recursos, lin
 $string['title_students'] = 'Estudantes';
 $string['topic'] = 'Topico';
 $string['week_number'] = 'Numero da semana';
-<<<<<<< HEAD
 $string['all_groups'] = 'Todos os grupos';
-=======
 $string['yellow_tooltip'] = 'Nenhum material foi acessado até agora';
 $string['red_tooltip'] = 'Nenhum material foi acessado na última semana';
->>>>>>> origin/master

@@ -58,9 +58,6 @@ $string['title_access'] = 'Distribution of access to contents (resources, urls a
 $string['title_students'] = 'Students';
 $string['topic'] = 'Topic';
 $string['week_number'] = 'Week number';
-<<<<<<< HEAD
 $string['all_groups'] = 'Show all groups';
-=======
 $string['yellow_tooltip'] = 'No module was accessed until now';
 $string['red_tooltip'] = 'No module was accessed in the last week';
->>>>>>> origin/master
