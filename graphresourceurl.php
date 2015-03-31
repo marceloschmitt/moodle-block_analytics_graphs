@@ -168,9 +168,9 @@ $event->trigger();
                 group.numberofnoaccess = [];
                 group.studentswithaccess = [];
                 group.studentswithnoaccess = [];
-                group.material = [];
             });
-                
+            groups.material = [];
+
             /*$.each(geral, function(index, value) {
 
                 arrayofcontents.push(value.material);
@@ -238,6 +238,7 @@ $event->trigger();
             $.each(geral, function(index, value) {
 
                 arrayofcontents.push(value.material);
+                groups.push(value.material);
 
                 $.each(groups, function(ind, group){
                     if (value.numberofaccesses > 0){
@@ -512,15 +513,15 @@ $event->trigger();
             });
 
             $.each(groups, function(index, value) {
-                var nome = value.material;
                 div = "";
 
                 if (typeof value.studentswithaccess != 'undefined')
                 {
-                    var titulo = coursename + "</h3>" +
-                        <?php  echo json_encode(get_string('access', 'block_analytics_graphs'));?> + " - "+
-                        nome;
                     $.each(value.studentswithaccess, function(ind, student){
+                        var titulo = coursename + "</h3>" +
+                        <?php  echo json_encode(get_string('access', 'block_analytics_graphs'));?> + " - "+
+                        groups.material[ind];
+                    
                         if(student !== undefined)
                             div += "<div class='div_nomes' id='" + ind + "-" + 
                             "<?php echo substr(get_string('access', 'block_analytics_graphs'), 0, 1);?>" +
@@ -529,10 +530,11 @@ $event->trigger();
                 }
                 if (typeof value.studentswithnoaccess != 'undefined')
                 {
-                    var titulo = coursename + "</h3>" +
-                            <?php  echo json_encode(get_string('no_access', 'block_analytics_graphs'));?> + " - "+
-                            nome;
                     $.each(value.studentswithnoaccess, function(ind, student){
+                        var titulo = coursename + "</h3>" +
+                            <?php  echo json_encode(get_string('no_access', 'block_analytics_graphs'));?> + " - "+
+                            groups.material[ind];
+                    
                         if(student !== undefined)
                             div += "<div class='div_nomes' id='" + ind + "-" + 
                             "<?php echo substr(get_string('no_access', 'block_analytics_graphs'), 0, 1);?>" +
