@@ -171,70 +171,6 @@ $event->trigger();
                 group.material = [];
             });
 
-            /*$.each(geral, function(index, value) {
-
-                arrayofcontents.push(value.material);
-                if (value.numberofaccesses > 0){
-                     //default series value
-                    nraccess_vet.push(value.numberofaccesses);
-                    $.each(groups, function(ind, group){
-                        $.each(value.studentswithaccess, function(i, student){
-                            if(group.studentswithaccess[index] === undefined)
-                                group.studentswithaccess[index] = [];
-
-                            if(group.numberofaccesses[index] === undefined)
-                                group.numberofaccesses[index] = 0;
-
-                            if(group.members.indexOf(student.userid) != -1){
-                                group.numberofaccesses[index] += 1;
-                                group.studentswithaccess[index].push(value.studentswithaccess[i]);
-                            }
-                        });
-                    });
-                }else{
-                    nraccess_vet.push(0);
-                        $.each(groups, function(ind, group){
-                            if(group.studentswithaccess[index] === undefined)
-                                group.studentswithaccess[index] = [];
-
-                            if(group.numberofaccesses[index] === undefined)
-                                group.numberofaccesses[index] = 0;
-
-                        });
-
-                }
-
-                if(value.numberofnoaccess > 0){
-                    //default series value
-                    nrntaccess_vet.push(value.numberofnoaccess);
-
-                    $.each(value.studentswithnoaccess, function(ind, student){
-                        $.each(groups, function(i, group){
-                            if(group.studentswithnoaccess[index] === undefined)
-                                group.studentswithnoaccess[index] = [];
-
-                            if(group.numberofnoaccess[index] === undefined)
-                                group.numberofnoaccess[index] = 0;
-
-                            if(group.members.indexOf(student.userid) != -1){
-                                group.numberofnoaccess[index] += 1;
-                                group.studentswithnoaccess[index].push(value.studentswithnoaccess[ind]);
-                            }
-                        });
-                    }); 
-                }else{
-                    nrntaccess_vet.push(0);
-                        $.each(groups, function(ind, group){
-                            if(group.studentswithaccess[index] === undefined)
-                                group.studentswithnoaccess[index] = [];
-
-                            if(group.numberofaccesses[index] === undefined)
-                                group.numberofnoaccesses[index] = 0;
-
-                        });
-
-                }
-            });*/
             $.each(geral, function(index, value) {
 
                 arrayofcontents.push(value.material);
@@ -243,7 +179,7 @@ $event->trigger();
                 nrntaccess_vet.push(value.numberofnoaccess);
 
                 $.each(groups, function(ind, group){
-                    if(group.material[index] === index)
+                    if(group.material[index] === undefined)
                         group.material[index] = value.material;
                     if (value.numberofaccesses > 0){
                         $.each(value.studentswithaccess, function(i, student){
