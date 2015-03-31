@@ -238,14 +238,14 @@ $event->trigger();
             $.each(geral, function(index, value) {
 
                 arrayofcontents.push(value.material);
+                //default series value
+                nraccess_vet.push(value.numberofaccesses);
+                nrntaccess_vet.push(value.numberofnoaccess);
 
                 $.each(groups, function(ind, group){
                     if(group.material[index] === index)
                         group.material[index] = value.material;
                     if (value.numberofaccesses > 0){
-                         //default series value
-                        nraccess_vet.push(value.numberofaccesses);
-
                         $.each(value.studentswithaccess, function(i, student){
                             if(group.studentswithaccess[index] === undefined)
                                 group.studentswithaccess[index] = [];
@@ -260,19 +260,14 @@ $event->trigger();
                         });
                         
                     }else{
-                        nraccess_vet.push(0);
                         if(group.studentswithaccess[index] === undefined)
                             group.studentswithaccess[index] = [];
 
                         if(group.numberofaccesses[index] === undefined)
                             group.numberofaccesses[index] = 0;
-
                     }
 
                     if(value.numberofnoaccess > 0){
-                        //default series value
-                        nrntaccess_vet.push(value.numberofnoaccess);
-
                         $.each(value.studentswithnoaccess, function(ind, student){
                             if(group.studentswithnoaccess[index] === undefined)
                                 group.studentswithnoaccess[index] = [];
@@ -286,7 +281,6 @@ $event->trigger();
                             }
                         }); 
                     }else{
-                        nrntaccess_vet.push(0);
                         if(group.studentswithaccess[index] === undefined)
                             group.studentswithnoaccess[index] = [];
 
