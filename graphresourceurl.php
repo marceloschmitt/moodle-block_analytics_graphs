@@ -238,7 +238,7 @@ $event->trigger();
             $.each(geral, function(index, value) {
 
                 arrayofcontents.push(value.material);
-                groups.push(value.material);
+                groups.material.push(value.material);
 
                 $.each(groups, function(ind, group){
                     if (value.numberofaccesses > 0){
