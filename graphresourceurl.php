@@ -521,7 +521,7 @@ $event->trigger();
                     $.each(value.studentswithaccess, function(ind, student){
                         var titulo = coursename + "</h3>" +
                         <?php  echo json_encode(get_string('access', 'block_analytics_graphs'));?> + " - "+
-                        groups.material[ind];
+                        group.material[ind];
                     
                         if(student !== undefined)
                             div += "<div class='div_nomes' id='" + ind + "-" + 
@@ -534,7 +534,7 @@ $event->trigger();
                     $.each(value.studentswithnoaccess, function(ind, student){
                         var titulo = coursename + "</h3>" +
                             <?php  echo json_encode(get_string('no_access', 'block_analytics_graphs'));?> + " - "+
-                            groups.material[ind];
+                            group.material[ind];
                     
                         if(student !== undefined)
                             div += "<div class='div_nomes' id='" + ind + "-" + 
