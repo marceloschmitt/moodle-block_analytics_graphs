@@ -168,8 +168,8 @@ $event->trigger();
                 group.numberofnoaccess = [];
                 group.studentswithaccess = [];
                 group.studentswithnoaccess = [];
+                group.material = [];
             });
-            groups.material = [];
 
             /*$.each(geral, function(index, value) {
 
@@ -238,9 +238,10 @@ $event->trigger();
             $.each(geral, function(index, value) {
 
                 arrayofcontents.push(value.material);
-                groups.material.push(value.material);
 
                 $.each(groups, function(ind, group){
+                    if(group.material[index] === index)
+                        group.material[index] = value.material;
                     if (value.numberofaccesses > 0){
                          //default series value
                         nraccess_vet.push(value.numberofaccesses);
