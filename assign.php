@@ -30,6 +30,7 @@ $submissions_graph = new graph_submission($course, $title);
 
 $students = block_analytics_graphs_get_students($course);
 $result = block_analytics_graphs_get_assign_submission($course, $students);
+echo '<h1>debug<h1';
 $submissions_graph_options = $submissions_graph->create_graph($result, $students);
 ?>
 
