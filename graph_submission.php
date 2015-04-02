@@ -195,8 +195,7 @@ class graph_submission {
         }
         $this->statistics = json_encode($this->statistics);
 
-        $chart = '<script>
-            options = {
+        $chart = 'options = {
                 chart: {
                     zoomType: "x",
                     alignTicks: false,
@@ -391,8 +390,7 @@ class graph_submission {
                         },
                     }
                 ]
-            }
-        </script>';
+            }';
         
         $event = \block_analytics_graphs\event\block_analytics_graphs_event_view_graph::create(array(
             'objectid' => $this->course,
