@@ -190,13 +190,13 @@ class graph_submission {
                     alignTicks: false,
                 },
                 title: {
-                    text: '.get_string('submissions', 'block_analytics_graphs').',
+                    text: ' . get_string("submissions", "block_analytics_graphs") . ',
                     margin: 60,
                 },
                 subtitle: {
-                    text: '.$this->coursename . '<br>' .
-                             get_string('begin_date', 'block_analytics_graphs') . ': ' .
-                             userdate($this->startdate, get_string('strftimerecentfull')).',
+                    text: ' . $this->coursename . '<br>' .
+                             get_string("begin_date", "block_analytics_graphs") . ': ' .
+                             userdate($this->startdate, get_string("strftimerecentfull")) . ',
                 },
                 legend: {
                     layout: "vertical",
@@ -220,9 +220,9 @@ class graph_submission {
                                 $chart .= '"<b>';
                                 $chart .= substr($arrayofassignments[$x], 0, 35);
                                 if ($arrayofduedates[$x]) {
-                                    $chart .= '</b><br>'. userdate($arrayofduedates[$x], get_string('strftimerecentfull')) .'",';
+                                    $chart .= '</b><br>'. userdate($arrayofduedates[$x], get_string("strftimerecentfull")) . '",';
                                 } else {
-                                    $chart .= '</b><br>'.get_string('no_deadline', 'block_analytics_graphs') . '",';
+                                    $chart .= '</b><br>'.get_string("no_deadline", "block_analytics_graphs") . '",';
                                 }
                             } 
                         $chart .= '],
@@ -243,15 +243,15 @@ class graph_submission {
                             }
                         },
                         title: {
-                            text: '.get_string('ratio', 'block_analytics_graphs').',
+                            text: ' . get_string("ratio", "block_analytics_graphs") . ',
                             style: {
                                 color: Highcharts.getOptions().colors[1]
                             }
                         }
                     }, { // Secondary yAxis
                         min: 0,
-                        ceiling: '.json_encode($numberofstudents).',
-                        tickInterval: '.json_encode($numberofstudents / 4).',
+                        ceiling: ' . json_encode($numberofstudents) . ',
+                        tickInterval: ' . json_encode($numberofstudents / 4) . ',
                         opposite: true,
                         labels: {
                             format: "{value}",
@@ -260,7 +260,7 @@ class graph_submission {
                             }
                         },
                         title: {
-                            text: '.get_string('number_of_students', 'block_analytics_graphs').',
+                            text: ' . get_string("number_of_students", "block_analytics_graphs") . ',
                             style: {
                                 color: Highcharts.getOptions().colors[1]
                             }
@@ -275,10 +275,11 @@ class graph_submission {
                         cursor: "pointer",
                         point: {
                             events: {
-                            click: function() {
-                                        var nome_conteudo = this.x + "-" + this.series.index;
-                                        $(".div_nomes").dialog("close");
-                                        $("#" + nome_conteudo).dialog("open");
+                                click: function() {
+                                            var nome_conteudo = this.x + "-" + this.series.index;
+                                            $(".div_nomes").dialog("close");
+                                            $("#" + nome_conteudo).dialog("open");
+                                }
                             }
                         }
                     }
@@ -292,50 +293,50 @@ class graph_submission {
                 series: [
                     {
                         yAxis: 1,
-                        name: '.get_string('in_time_submission', 'block_analytics_graphs').',
+                        name: ' . get_string("in_time_submission", "block_analytics_graphs") . ',
                         type: "column",
                         data: [';
                             $arrlength = count($arrayofassignments);
                             for($x = 0; $x < $arrlength; $x++) {
-                                $chart .= (string)$arrayofintimesubmissions[$x];
+                                $chart .= $arrayofintimesubmissions[$x];
                                 $chart .= ',';
                             }
                         $chart .= '],
                         tooltip: {
-                            valueSuffix: '.get_string('students', 'block_analytics_graphs').'
+                            valueSuffix: ' . get_string("students", "block_analytics_graphs") . '
                         }
                     }, {
                         yAxis: 1,
-                        name: '.get_string('late_submission', 'block_analytics_graphs').',
+                        name: ' . get_string("late_submission", "block_analytics_graphs") . ',
                         type: "column",
                         data: [';
                             $arrlength = count($arrayofassignments);
                             for ($x = 0; $x < $arrlength; $x++) {
-                                $chart .= (string)$arrayoflatesubmissions[$x];
+                                $chart .= $arrayoflatesubmissions[$x];
                                 $chart .= ',';
                             }
                         $chart .= '],
                         tooltip: {
-                            valueSuffix: '.get_string('students', 'block_analytics_graphs').'
+                            valueSuffix: ' . get_string("students", "block_analytics_graphs") . '
                         }
                     }, {
                         yAxis: 1,
-                        name: '.get_string('no_submission', 'block_analytics_graphs').',
+                        name: ' . get_string("no_submission", "block_analytics_graphs") . ',
                         type: "column",
                         color: "#FF1111", //cor 
                         data: [';
                             $arrlength = count($arrayofassignments);
                             for ($x = 0; $x < $arrlength; $x++) {
-                                $chart .= (string)$arrayofnosubmissions[$x];
+                                $chart .= $arrayofnosubmissions[$x];
                                 $chart .= ',';
                             }
                         $chart .= '],
                         tooltip: {
-                            valueSuffix: '.get_string('students', 'block_analytics_graphs').'
+                            valueSuffix: ' . get_string("students", "block_analytics_graphs") . '
                         }
                     }, {
                         yAxis: 0,
-                        name: '.get_string('submission_ratio', 'block_analytics_graphs').',
+                        name: ' . get_string("submission_ratio", "block_analytics_graphs") . ',
                         type: "spline",
                         lineWidth: 2,
                         lineColor: Highcharts.getOptions().colors[2],
@@ -354,7 +355,7 @@ class graph_submission {
                         },
                     }, { 
                         yAxis: 0,
-                        name: '.get_string('in_time_ratio', 'block_analytics_graphs').',
+                        name: ' . get_string("in_time_ratio", "block_analytics_graphs") . ',
                         type: "spline",
                         lineWidth: 2,
                         lineColor: Highcharts.getOptions().colors[1],
@@ -363,9 +364,9 @@ class graph_submission {
                             for ($x = 0; $x < $arrlength; $x++) {
                                 if ($arrayofduedates[$x] == 0 || $arrayofduedates[$x] > time()) {
                                     // If no duedate or duedate has not passed.
-                                    $chart .= (string)1;
+                                    $chart .= 1;
                                 } else {
-                                    $chart .= sprintf ("%.2f", $arrayofintimesubmissions[$x] /
+                                    $chart .= sprintf("%.2f", $arrayofintimesubmissions[$x] /
                                         ($arrayofintimesubmissions[$x] + $arrayoflatesubmissions[$x] + $arrayofnosubmissions[$x]));
                                 }
                                 $chart .= ',';
