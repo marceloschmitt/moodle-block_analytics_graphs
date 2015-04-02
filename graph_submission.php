@@ -183,6 +183,8 @@ class graph_submission {
         }
         $statistics = json_encode($statistics);
 
+        echo "teste";
+
         $chart = '<script>
             options = {
                 chart: {
