@@ -22,16 +22,17 @@ class graph_submission {
     private $course;
     private $coursename;
     private $startdate;
-    private $title;
-    private $query_func_name;
+    // private $title;
+    // private $query_func_name;
 
-    public function __construct($course) {
+    public function __construct($course, $title) {
         $this->course = $course;
 
         // Control access.
         require_login($course);
         $this->context = context_course::instance($course);
-        require_capability('block/analytics_graphs:viewpages', $this->context);
+
+        require_capability('block/analytics_graphs:viewpages', $this->$context);
 
         $courseparams = get_course($course);
         $this->startdate = $courseparams->startdate;
@@ -39,22 +40,22 @@ class graph_submission {
     }
 
 
-    public function set_title($name) {
-        $this->title = $name;
-    }
+    // public function set_title($name) {
+    //     $this->title = $name;
+    // }
 
 
-    public function set_query_function($func_name) {
-        $this->query_func_name = $func_name;
-    }
+    // public function set_query_function($func_name) {
+    //     $this->query_func_name = $func_name;
+    // }
 
 
-    public function create_graph() {
-        global $DB;
+    public function create_graph($result, $students) {
+        // global $DB;
         require('lib.php');
 
         // Recover course students.
-        $students = block_analytics_graphs_get_students($this->course);
+        // $students = block_analytics_graphs_get_students($this->course);
         $numberofstudents = count($students);
         if ($numberofstudents == 0) {
             error(get_string('no_students', 'block_analytics_graphs'));
@@ -66,8 +67,8 @@ class graph_submission {
 
         // Recover submitted tasks.
         // $result = block_analytics_graphs_get_assign_submission($this->course, $students);
-        $func = $this->query_func_name;
-        $result = $func($this->course, $students);
+        // $func = $this->query_func_name;
+        // $result = $func($this->course, $students);
 
         $counter = 0;
         $numberofintimesubmissions = 0;
@@ -181,301 +182,212 @@ class graph_submission {
         }
         $statistics = json_encode($statistics);
 
+        $chart = '<script>
+            options = {
+                chart: {
+                    zoomType: "x",
+                    alignTicks: false,
+                },
+                title: {
+                    text: '.get_string('submissions', 'block_analytics_graphs').',
+                    margin: 60,
+                },
+                subtitle: {
+                    text: '.$this->coursename . '<br>' .
+                             get_string('begin_date', 'block_analytics_graphs') . ': ' .
+                             userdate($this->startdate, get_string('strftimerecentfull')).',
+                },
+                legend: {
+                    layout: "vertical",
+                    align: "right",
+                    verticalAlign: "top",
+                    x: -40,
+                    y: 5,
+                    floating: true,
+                    borderWidth: 1,
+                    backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor || "#FFFFFF"),
+                    shadow: true
+                },
+                credits: {
+                    enabled: false
+                },
+                xAxis: [
+                    {
+                        categories: [';
+                            $arrlength = count($arrayofassignments);
+                            for ($x = 0; $x < $arrlength; $x++) {
+                                $chart .= '"<b>';
+                                $chart .= substr($arrayofassignments[$x], 0, 35);
+                                if ($arrayofduedates[$x]) {
+                                    $chart .= '</b><br>'. userdate($arrayofduedates[$x], get_string('strftimerecentfull')) .'",';
+                                } else {
+                                    $chart .= '</b><br>'.get_string('no_deadline', 'block_analytics_graphs') . '",';
+                                }
+                            } 
+                        $chart .= '],
+                        labels: {
+                            rotation: -45,
+                        }
+                    }
+                ],
+                yAxis: [
+                    { // Primary yAxis
+                        max: 1,
+                        min: 0,
+                        tickInterval: 0.25,
+                        labels: {
+                            format: "{value}",
+                            style: {
+                                color: Highcharts.getOptions().colors[1]
+                            }
+                        },
+                        title: {
+                            text: '.get_string('ratio', 'block_analytics_graphs').',
+                            style: {
+                                color: Highcharts.getOptions().colors[1]
+                            }
+                        }
+                    }, { // Secondary yAxis
+                        min: 0,
+                        ceiling: '.json_encode($numberofstudents).',
+                        tickInterval: '.json_encode($numberofstudents / 4).',
+                        opposite: true,
+                        labels: {
+                            format: "{value}",
+                            style: {
+                                color: Highcharts.getOptions().colors[1]
+                            }
+                        },
+                        title: {
+                            text: '.get_string('number_of_students', 'block_analytics_graphs').',
+                            style: {
+                                color: Highcharts.getOptions().colors[1]
+                            }
+                        }
+                    }
+                ],
+                tooltip: {
+                    crosshairs: true
+                },                
+                plotOptions: {
+                    series: {
+                        cursor: "pointer",
+                        point: {
+                            events: {
+                            click: function() {
+                                        var nome_conteudo = this.x + "-" + this.series.index;
+                                        $(".div_nomes").dialog("close");
+                                        $("#" + nome_conteudo).dialog("open");
+                            }
+                        }
+                    }
+                },
+                bar: {
+                    dataLabels: {
+                        useHTML: this,
+                        enabled: true
+                    }
+                }              
+                series: [
+                    {
+                        yAxis: 1,
+                        name: '.get_string('in_time_submission', 'block_analytics_graphs').',
+                        type: "column",
+                        data: [';
+                            $arrlength = count($arrayofassignments);
+                            for($x = 0; $x < $arrlength; $x++) {
+                                $chart .= (string)$arrayofintimesubmissions[$x];
+                                $chart .= ',';
+                            }
+                        $chart .= '],
+                        tooltip: {
+                            valueSuffix: '.get_string('students', 'block_analytics_graphs').'
+                        }
+                    }, {
+                        yAxis: 1,
+                        name: '.get_string('late_submission', 'block_analytics_graphs').',
+                        type: "column",
+                        data: [';
+                            $arrlength = count($arrayofassignments);
+                            for ($x = 0; $x < $arrlength; $x++) {
+                                $chart .= (string)$arrayoflatesubmissions[$x];
+                                $chart .= ',';
+                            }
+                        $chart .= '],
+                        tooltip: {
+                            valueSuffix: '.get_string('students', 'block_analytics_graphs').'
+                        }
+                    }, {
+                        yAxis: 1,
+                        name: '.get_string('no_submission', 'block_analytics_graphs').',
+                        type: "column",
+                        color: "#FF1111", //cor 
+                        data: [';
+                            $arrlength = count($arrayofassignments);
+                            for ($x = 0; $x < $arrlength; $x++) {
+                                $chart .= (string)$arrayofnosubmissions[$x];
+                                $chart .= ',';
+                            }
+                        $chart .= '],
+                        tooltip: {
+                            valueSuffix: '.get_string('students', 'block_analytics_graphs').'
+                        }
+                    }, {
+                        yAxis: 0,
+                        name: '.get_string('submission_ratio', 'block_analytics_graphs').',
+                        type: "spline",
+                        lineWidth: 2,
+                        lineColor: Highcharts.getOptions().colors[2],
+                        data: [';
+                            $arrlength = count($arrayofassignments);
+                            for ($x = 0; $x < $arrlength; $x++) {
+                                $chart .= sprintf("%.2f", ($arrayofintimesubmissions[$x] + $arrayoflatesubmissions[$x]) /
+                                    ($arrayofintimesubmissions[$x] + $arrayoflatesubmissions[$x] + $arrayofnosubmissions[$x]));
+                                $chart .= ',';
+                            }
+                        $chart .= '],
+                        marker: {
+                            lineWidth: 2,
+                            lineColor: Highcharts.getOptions().colors[2],
+                            fillColor: "white"
+                        },
+                    }, { 
+                        yAxis: 0,
+                        name: '.get_string('in_time_ratio', 'block_analytics_graphs').',
+                        type: "spline",
+                        lineWidth: 2,
+                        lineColor: Highcharts.getOptions().colors[1],
+                        data: [';
+                            $arrlength = count($arrayofassignments);
+                            for ($x = 0; $x < $arrlength; $x++) {
+                                if ($arrayofduedates[$x] == 0 || $arrayofduedates[$x] > time()) {
+                                    // If no duedate or duedate has not passed.
+                                    $chart .= (string)1;
+                                } else {
+                                    $chart .= sprintf ("%.2f", $arrayofintimesubmissions[$x] /
+                                        ($arrayofintimesubmissions[$x] + $arrayoflatesubmissions[$x] + $arrayofnosubmissions[$x]));
+                                }
+                                $chart .= ',';
+                            }
+                        $chart .= '],
+                        marker: {
+                            lineWidth: 2,
+                            lineColor: Highcharts.getOptions().colors[1],
+                            fillColor: "white"
+                        },
+                    }
+                ]
+            }
+        </script>';
+        
         $event = \block_analytics_graphs\event\block_analytics_graphs_event_view_graph::create(array(
             'objectid' => $this->course,
             'context' => $this->context,
             'other' => "assign.php",
         ));
         $event->trigger();
-?>
-<!--DOCTYPE HTML-->
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <title><?php echo get_string('submissions', 'block_analytics_graphs'); ?></title>
-        <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
         
-        <!--<script src="http://code.jquery.com/jquery-1.10.2.js"></script>-->
-        <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.1.js"></script>
-        
-        <script src="http://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
-        <script src="http://code.highcharts.com/highcharts.js"></script>
-        <script src="http://code.highcharts.com/modules/no-data-to-display.js"></script>
-        <script src="http://code.highcharts.com/modules/exporting.js"></script> 
-
-        <script type="text/javascript">
-         var courseid = <?php echo json_encode($this->course); ?>;
-    
-            function parseObjToString(obj) {
-                var array = $.map(obj, function(value) {
-                    return [value];
-                });
-                return array;
-            }
-    
-        
-        
-$(function () {
-    $('#container').highcharts({
-        chart: {
-            zoomType: 'x',
-            alignTicks: false,
-        },
-
-        title: {
-            text: '<?php echo get_string('submissions', 'block_analytics_graphs'); ?>',
-        margin: 60,
-        },
-
-        subtitle: {
-            text: ' <?php echo $this->coursename . "<br>" .
-                     get_string('begin_date', 'block_analytics_graphs') . ": " .
-                     userdate($this->startdate, get_string('strftimerecentfull')); ?>',
-        },
-
-        legend: {
-                        layout: 'vertical',
-                        align: 'right',
-                        verticalAlign: 'top',
-                        x: -40,
-                        y: 5,
-                        floating: true,
-                        borderWidth: 1,
-                        backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor || '#FFFFFF'),
-                        shadow: true
-        },
-        credits: {
-            enabled: false
-        },
-
-        xAxis: [{
-            categories: [
-                <?php $arrlength = count($arrayofassignments);
-        for ($x = 0; $x < $arrlength; $x++) {
-            echo "'<b>";
-            echo substr($arrayofassignments[$x], 0, 35);
-            if ($arrayofduedates[$x]) {
-                echo "</b><br>". userdate($arrayofduedates[$x], get_string('strftimerecentfull')) ."',";
-            } else {
-                echo "</b><br>".get_string('no_deadline', 'block_analytics_graphs') . "',";
-            }
-        } ?> 
-            ],
-            labels: {
-                rotation: -45,
-            }
-        }],
-
-        yAxis: [{ // Primary yAxis
-                max: 1,
-                min: 0,
-                tickInterval: 0.25,
-                labels: {
-                        format: '{value}',
-                        style: {
-                                color: Highcharts.getOptions().colors[1]
-                        }
-                },
-
-                title: {
-                        text: '<?php echo get_string('ratio', 'block_analytics_graphs');?>',
-                        style: {
-                                color: Highcharts.getOptions().colors[1]
-                        }
-                }
-        },
-        { // Secondary yAxis
-                min: 0,
-        	    ceiling: <?php echo $numberofstudents; ?>,
-                tickInterval: <?php echo $numberofstudents / 4; ?>,
-                opposite: true,
-                labels: {
-                        format: '{value}',
-                        style: {
-                                color: Highcharts.getOptions().colors[1]
-                        }
-                },
-
-                title: {
-                        text: '<?php echo get_string('number_of_students', 'block_analytics_graphs');?>',
-                        style: {
-                                color: Highcharts.getOptions().colors[1]
-                        }
-                }
-        }],
-
-        tooltip: {
-            crosshairs: true
-        },
-
-        
-        plotOptions: {
-            series: {
-                cursor: 'pointer',
-                        
-                point: {
-                    events: {
-                    click: function() {
-                         var nome_conteudo = this.x + "-" + this.series.index;
-                                            $(".div_nomes").dialog("close");
-                                            $("#" + nome_conteudo).dialog("open");
-                    }
-                }
-            }
-        },
-        
-        bar: {
-            dataLabels: {
-                useHTML: this,
-                enabled: true
-            }
-        }
-    },
-        
-        series: [{
-            yAxis: 1,
-            name: '<?php echo get_string('in_time_submission', 'block_analytics_graphs');?>',
-            type: 'column',
-            data: [
-            <?php $arrlength = count($arrayofassignments);
-        for ($x = 0; $x < $arrlength; $x++) {
-            echo $arrayofintimesubmissions[$x];
-            echo ",";
-        } ?>
-            ],
-            tooltip: {
-                valueSuffix: ' <?php echo get_string('students', 'block_analytics_graphs');?>'
-            }
-        }, {
-            yAxis: 1,
-            name: '<?php echo get_string('late_submission', 'block_analytics_graphs');?>',
-            type: 'column',
-            data: [
-            <?php $arrlength = count($arrayofassignments);
-        for ($x = 0; $x < $arrlength; $x++) {
-            echo $arrayoflatesubmissions[$x];
-            echo ",";
-        } ?> 
-            ],
-            tooltip: {
-                valueSuffix: ' <?php echo get_string('students', 'block_analytics_graphs');?>'
-            }
-
-        }, {
-            yAxis: 1,
-            name: '<?php echo get_string('no_submission', 'block_analytics_graphs');?>',
-            type: 'column',
-            color: '#FF1111',    //cor 
-            data: [
-            <?php $arrlength = count($arrayofassignments);
-        for ($x = 0; $x < $arrlength; $x++) {
-            echo $arrayofnosubmissions[$x];
-            echo ",";
-        } ?>
-            ],
-            tooltip: {
-                valueSuffix: ' <?php echo get_string('students', 'block_analytics_graphs');?>'
-            }
-        }, {
-            yAxis: 0,
-            name: '<?php echo get_string('submission_ratio', 'block_analytics_graphs');?>',
-            type: 'spline',
-            lineWidth: 2,
-            lineColor: Highcharts.getOptions().colors[2],
-            data: [
-            <?php $arrlength = count($arrayofassignments);
-        for ($x = 0; $x < $arrlength; $x++) {
-            printf("%.2f", ($arrayofintimesubmissions[$x] + $arrayoflatesubmissions[$x]) /
-                ($arrayofintimesubmissions[$x] + $arrayoflatesubmissions[$x] + $arrayofnosubmissions[$x]));
-            echo ",";
-        } ?>
-            ],
-            marker: {
-                lineWidth: 2,
-                lineColor: Highcharts.getOptions().colors[2],
-                fillColor: 'white'
-            },
-        }, { 
-            yAxis: 0,
-            name: '<?php echo get_string('in_time_ratio', 'block_analytics_graphs');?>',
-            type: 'spline',
-            lineWidth: 2,
-            lineColor: Highcharts.getOptions().colors[1],
-            data: [
-            <?php $arrlength = count($arrayofassignments);
-        for ($x = 0; $x < $arrlength; $x++) {
-            if ($arrayofduedates[$x] == 0 || $arrayofduedates[$x] > time()) {
-                // If no duedate or duedate has not passed.
-                echo 1;
-            } else {
-                printf ("%.2f", $arrayofintimesubmissions[$x] /
-                    ($arrayofintimesubmissions[$x] + $arrayoflatesubmissions[$x] + $arrayofnosubmissions[$x]));
-            }
-            echo ",";
-        } ?>
-            ],
-            marker: {
-                lineWidth: 2,
-                lineColor: Highcharts.getOptions().colors[1],
-                fillColor: 'white'
-            },
-        }]
-    });
-});
-
-
-
-
-        </script>
-    </head>
-    <body>
-
-    <div id="container" style="min-width: 310px; min-width: 800px; height: 650px; margin: 0 auto"></div>
-    <script>
-    var geral = <?php echo $statistics; ?>;
-        geral = parseObjToString(geral);
-        $.each(geral, function(index, value) {
-                var nome = value.assign;
- 
-                div = "";
-                if (typeof value.in_time_submissions != 'undefined')
-                {
-            		title = <?php echo json_encode($this->coursename); ?> +
-				        "</h3>" + 
-				        <?php echo json_encode(get_string('in_time_submission', 'block_analytics_graphs')); ?> +
-                        " - " +  nome ;
-                    div += "<div class='div_nomes' id='" + index + "-0'>" + 
-                        createEmailForm(title, value.in_time_submissions, courseid, "assign.php") +
-                        "</div>";
-                }
-                if (typeof value.latesubmissions != 'undefined')
-                {
-            	 	title = <?php echo json_encode($this->coursename); ?> +
-				        "</h3>" +
-				        <?php echo json_encode(get_string('late_submission', 'block_analytics_graphs')); ?> +
-                        " - " +  nome ;
-                    div += "<div class='div_nomes' id='" + index + "-1'>" +
-                        createEmailForm(title, value.latesubmissions, courseid, "assign.php") +
-                        "</div>";
-                }
-        	    if (typeof value.no_submissions != 'undefined')
-                {
-            		title = <?php echo json_encode($this->coursename); ?> +
-				        "</h3>" + 
-                        <?php echo json_encode(get_string('no_submission', 'block_analytics_graphs')); ?> +
-                        " - " +  nome ;
-                    div += "<div class='div_nomes' id='" + index + "-2'>" +
-                        createEmailForm(title, value.no_submissions, courseid, "assign.php") +
-                        "</div>";
-                }
-                document.write(div);
-            });
-    sendEmail();
-
-        </script>
-    </body>
-</html>
-
-<?php
+        return $chart;
     }
 }
+?>

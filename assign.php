@@ -18,11 +18,88 @@
 require('../../config.php');
 require('graph_submission.php');
 require('javascriptfunctions.php');
+require('lib.php')
 
 $course = required_param('id', PARAM_INT);
 
-$x = new graph_submission($course);
 $titulo = get_string('submissions', 'block_analytics_graphs');
-$x->set_title($titulo);
-$x->set_query_function('block_analytics_graphs_get_assign_submission');
-$x->create_graph();
+$submissions_graph = new graph_submission($course, $title);
+
+// $x->set_title($titulo);
+// $x->set_query_function('block_analytics_graphs_get_assign_submission');
+
+$students = block_analytics_graphs_get_students($course);
+$result = block_analytics_graphs_get_assign_submission($course, $students);
+$submissions_graph_options->create_graph($result, $students);
+?>
+
+<!--DOCTYPE HTML-->
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title><?php echo get_string('submissions', 'block_analytics_graphs'); ?></title>
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">        
+        <!--<script src="http://code.jquery.com/jquery-1.10.2.js"></script>-->
+        <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.1.js"></script>        
+        <script src="http://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
+        <script src="http://code.highcharts.com/highcharts.js"></script>
+        <script src="http://code.highcharts.com/modules/no-data-to-display.js"></script>
+        <script src="http://code.highcharts.com/modules/exporting.js"></script> 
+        <script type="text/javascript">
+    	    var courseid = <?php echo json_encode($this->course); ?>;
+            function parseObjToString(obj) {
+                var array = $.map(obj, function(value) {
+                    return [value];
+                });
+                return array;
+            }
+        </script>
+    </head>
+    <body>
+    	<div id="container" style="min-width: 310px; min-width: 800px; height: 650px; margin: 0 auto"></div>
+    	<script>
+    		$(function(){
+    			$('#container').highcharts(<?php echo $submissions_graph_options; ?>);
+    		})
+
+	    	var geral = <?php echo $statistics; ?>;
+	        geral = parseObjToString(geral);
+	        $.each(geral, function(index, value) {
+	            var nome = value.assign;
+	            div = "";
+	            if (typeof value.in_time_submissions != 'undefined')
+	            {
+	        		title = <?php echo json_encode($submissions_graph->coursename); ?> +
+				        "</h3>" + 
+				        <?php echo json_encode(get_string('in_time_submission', 'block_analytics_graphs')); ?> +
+	                    " - " +  nome ;
+	                div += "<div class='div_nomes' id='" + index + "-0'>" + 
+	                    createEmailForm(title, value.in_time_submissions, courseid, "assign.php") +
+	                    "</div>";
+	            }
+	            if (typeof value.latesubmissions != 'undefined')
+	            {
+	        	 	title = <?php echo json_encode($submissions_graph->coursename); ?> +
+				        "</h3>" +
+				        <?php echo json_encode(get_string('late_submission', 'block_analytics_graphs')); ?> +
+	                    " - " +  nome ;
+	                div += "<div class='div_nomes' id='" + index + "-1'>" +
+	                    createEmailForm(title, value.latesubmissions, courseid, "assign.php") +
+	                    "</div>";
+	            }
+	    	    if (typeof value.no_submissions != 'undefined')
+	            {
+	        		title = <?php echo json_encode($submissions_graph->coursename); ?> +
+				        "</h3>" + 
+	                    <?php echo json_encode(get_string('no_submission', 'block_analytics_graphs')); ?> +
+	                    " - " +  nome ;
+	                div += "<div class='div_nomes' id='" + index + "-2'>" +
+	                    createEmailForm(title, value.no_submissions, courseid, "assign.php") +
+	                    "</div>";
+	            }
+	            document.write(div);
+	        });
+	    	sendEmail();
+        </script>
+    </body>
+</html>
