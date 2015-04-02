@@ -33,7 +33,7 @@ class graph_submission {
         require_login($course);
         $this->context = context_course::instance($course);
 
-        require_capability('block/analytics_graphs:viewpages', $this->$context);
+        require_capability('block/analytics_graphs:viewpages', $this->context);
 
         $courseparams = get_course($course);
         $this->startdate = $courseparams->startdate;
@@ -182,8 +182,6 @@ class graph_submission {
             $arrayofcutoffdates[] = $tuple['cutoffdate']; // For future use.
         }
         $statistics = json_encode($statistics);
-
-        echo "teste";
 
         $chart = '<script>
             options = {
