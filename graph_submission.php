@@ -198,11 +198,11 @@ class graph_submission {
         $chart = 'options = {
                 chart: {
                     zoomType: "x",
-                    alignTicks: false,
+                    alignTicks: false
                 },
                 title: {
                     text: "' . get_string("submissions", "block_analytics_graphs") . '",
-                    margin: 60,
+                    margin: 60
                 },
                 subtitle: {
                     text: "' . $this->coursename . '<br>' .
@@ -300,7 +300,7 @@ class graph_submission {
                         useHTML: this,
                         enabled: true
                     }
-                }              
+                },         
                 series: [
                     {
                         yAxis: 1,
@@ -363,7 +363,7 @@ class graph_submission {
                             lineWidth: 2,
                             lineColor: Highcharts.getOptions().colors[2],
                             fillColor: "white"
-                        },
+                        }
                     }, { 
                         yAxis: 0,
                         name: "' . get_string("in_time_ratio", "block_analytics_graphs") . '",
@@ -387,7 +387,7 @@ class graph_submission {
                             lineWidth: 2,
                             lineColor: Highcharts.getOptions().colors[1],
                             fillColor: "white"
-                        },
+                        }
                     }
                 ]
             }';
