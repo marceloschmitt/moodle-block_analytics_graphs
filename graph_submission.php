@@ -40,6 +40,13 @@ class graph_submission {
         $this->coursename = get_string('course', 'block_analytics_graphs') . ": " . $courseparams->fullname;
     }
 
+    public function get_course(){
+        return $this->course;
+    }
+
+    public function get_coursename(){
+        return $this->coursename;
+    }
 
     // public function set_title($name) {
     //     $this->title = $name;
