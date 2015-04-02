@@ -30,8 +30,8 @@ $submissions_graph = new graph_submission($course, $title);
 
 $students = block_analytics_graphs_get_students($course);
 $result = block_analytics_graphs_get_assign_submission($course, $students);
-echo '<h1>debug<h1';
 $submissions_graph_options = $submissions_graph->create_graph($result, $students);
+echo '<h1>debug<h1';
 ?>
 
 <!--DOCTYPE HTML-->
@@ -47,7 +47,7 @@ $submissions_graph_options = $submissions_graph->create_graph($result, $students
         <script src="http://code.highcharts.com/modules/no-data-to-display.js"></script>
         <script src="http://code.highcharts.com/modules/exporting.js"></script> 
         <script type="text/javascript">
-    	    var courseid = <?php echo json_encode($this->course); ?>;
+    	    var courseid = <?php echo json_encode($submissions_graph->course); ?>;
             function parseObjToString(obj) {
                 var array = $.map(obj, function(value) {
                     return [value];
