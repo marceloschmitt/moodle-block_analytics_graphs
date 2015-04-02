@@ -22,11 +22,12 @@ class graph_submission {
     private $course;
     private $coursename;
     private $startdate;
-    // private $title;
+    private $title;
     // private $query_func_name;
 
     public function __construct($course, $title) {
         $this->course = $course;
+        $this->title = $title;
 
         // Control access.
         require_login($course);
@@ -52,7 +53,7 @@ class graph_submission {
 
     public function create_graph($result, $students) {
         // global $DB;
-        require('lib.php');
+        // require('lib.php');
 
         // Recover course students.
         // $students = block_analytics_graphs_get_students($this->course);
