@@ -31,6 +31,7 @@ $submissions_graph = new graph_submission($course, $title);
 $students = block_analytics_graphs_get_students($course);
 $result = block_analytics_graphs_get_assign_submission($course, $students);
 $submissions_graph_options->create_graph($result, $students);
+echo "<h1>teste</h1>";
 ?>
 
 <!--DOCTYPE HTML-->
