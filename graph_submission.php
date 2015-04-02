@@ -201,13 +201,13 @@ class graph_submission {
                     alignTicks: false,
                 },
                 title: {
-                    text: ' . get_string("submissions", "block_analytics_graphs") . ',
+                    text: "' . get_string("submissions", "block_analytics_graphs") . '",
                     margin: 60,
                 },
                 subtitle: {
-                    text: ' . $this->coursename . '<br>' .
+                    text: "' . $this->coursename . '<br>' .
                              get_string("begin_date", "block_analytics_graphs") . ': ' .
-                             userdate($this->startdate, get_string("strftimerecentfull")) . ',
+                             userdate($this->startdate, get_string("strftimerecentfull")) . '",
                 },
                 legend: {
                     layout: "vertical",
@@ -254,7 +254,7 @@ class graph_submission {
                             }
                         },
                         title: {
-                            text: ' . get_string("ratio", "block_analytics_graphs") . ',
+                            text: "' . get_string("ratio", "block_analytics_graphs") . '",
                             style: {
                                 color: Highcharts.getOptions().colors[1]
                             }
@@ -271,7 +271,7 @@ class graph_submission {
                             }
                         },
                         title: {
-                            text: ' . get_string("number_of_students", "block_analytics_graphs") . ',
+                            text: "' . get_string("number_of_students", "block_analytics_graphs") . '",
                             style: {
                                 color: Highcharts.getOptions().colors[1]
                             }
@@ -304,7 +304,7 @@ class graph_submission {
                 series: [
                     {
                         yAxis: 1,
-                        name: ' . get_string("in_time_submission", "block_analytics_graphs") . ',
+                        name: "' . get_string("in_time_submission", "block_analytics_graphs") . '",
                         type: "column",
                         data: [';
                             $arrlength = count($arrayofassignments);
@@ -314,11 +314,11 @@ class graph_submission {
                             }
                         $chart .= '],
                         tooltip: {
-                            valueSuffix: ' . get_string("students", "block_analytics_graphs") . '
+                            valueSuffix: "' . get_string("students", "block_analytics_graphs") . '"
                         }
                     }, {
                         yAxis: 1,
-                        name: ' . get_string("late_submission", "block_analytics_graphs") . ',
+                        name: "' . get_string("late_submission", "block_analytics_graphs") . '",
                         type: "column",
                         data: [';
                             $arrlength = count($arrayofassignments);
@@ -328,11 +328,11 @@ class graph_submission {
                             }
                         $chart .= '],
                         tooltip: {
-                            valueSuffix: ' . get_string("students", "block_analytics_graphs") . '
+                            valueSuffix: "' . get_string("students", "block_analytics_graphs") . '"
                         }
                     }, {
                         yAxis: 1,
-                        name: ' . get_string("no_submission", "block_analytics_graphs") . ',
+                        name: "' . get_string("no_submission", "block_analytics_graphs") . '",
                         type: "column",
                         color: "#FF1111", //cor 
                         data: [';
@@ -343,11 +343,11 @@ class graph_submission {
                             }
                         $chart .= '],
                         tooltip: {
-                            valueSuffix: ' . get_string("students", "block_analytics_graphs") . '
+                            valueSuffix: "' . get_string("students", "block_analytics_graphs") . '"
                         }
                     }, {
                         yAxis: 0,
-                        name: ' . get_string("submission_ratio", "block_analytics_graphs") . ',
+                        name: "' . get_string("submission_ratio", "block_analytics_graphs") . '",
                         type: "spline",
                         lineWidth: 2,
                         lineColor: Highcharts.getOptions().colors[2],
@@ -366,7 +366,7 @@ class graph_submission {
                         },
                     }, { 
                         yAxis: 0,
-                        name: ' . get_string("in_time_ratio", "block_analytics_graphs") . ',
+                        name: "' . get_string("in_time_ratio", "block_analytics_graphs") . '",
                         type: "spline",
                         lineWidth: 2,
                         lineColor: Highcharts.getOptions().colors[1],
