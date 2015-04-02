@@ -62,7 +62,7 @@ $submissions_graph_options = $submissions_graph->create_graph($result, $students
     			$('#container').highcharts(<?php echo $submissions_graph_options; ?>);
     		})
 
-	    	var geral = <?php echo $statistics; ?>;
+	    	var geral = <?php echo $submissions_graph->get_statistics(); ?>;
 	        geral = parseObjToString(geral);
 	        $.each(geral, function(index, value) {
 	            var nome = value.assign;
