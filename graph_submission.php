@@ -53,15 +53,6 @@ class graph_submission {
         return $this->statistics;
     }
 
-    // public function set_title($name) {
-    //     $this->title = $name;
-    // }
-
-
-    // public function set_query_function($func_name) {
-    //     $this->query_func_name = $func_name;
-    // }
-
 
     public function create_graph($result, $students) {
         // global $DB;
