@@ -153,6 +153,35 @@ function block_analytics_graphs_get_assign_submission($course, $students) {
         return($resultado);
 }
 
+function block_analytics_graphs_get_hotpot_submission($course, $students) {
+    global $DB;
+    foreach ($students as $tuple) {
+        $inclause[] = $tuple->id;
+    }
+    list($insql, $inparams) = $DB->get_in_or_equal($inclause);
+    $params = array_merge(array($course), $inparams);
+    $sql = "SELECT temp.id+(COALESCE(temp.userid,1)*1000000) as id, temp.id as assignment, name, 
+                timeclose as duedate, timeclose as cutoffdate,
+                usr.id, usr.firstname, usr.lastname, usr.email, temp.timecreated
+            FROM (
+                SELECT h.id, ha.userid, MAX(ha.timefinish) as timecreated
+                FROM {hotpot} h
+                LEFT JOIN {hotpot_attempts} ha on h.id = ha.hotpotid AND ha.status = 4
+                WHERE h.course = ?
+                GROUP BY h.id, ha.userid
+
+            ) temp
+            LEFT JOIN {hotpot} h on h.id = temp.id
+            LEFT JOIN {user} usr ON usr.id = temp.userid and temp.userid $insql
+            ORDER BY duedate, name, firstname";
+
+     $resultado = $DB->get_records_sql($sql, $params);
+     return($resultado);
+}
+
+
+
+
 function block_analytics_graphs_get_number_of_days_access_by_week($course, $estudantes, $startdate, $legacy=0) {
     global $DB;
     $timezoneadjust = get_user_timezone_offset() * 3600;

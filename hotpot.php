@@ -22,14 +22,10 @@ require('lib.php');
 
 $course = required_param('id', PARAM_INT);
 
-$title = get_string('submissions_assign', 'block_analytics_graphs');
+$title = get_string('submissions_hotopot', 'block_analytics_graphs');
 $submissions_graph = new graph_submission($course, $title);
-
-// $x->set_title($titulo);
-// $x->set_query_function('block_analytics_graphs_get_assign_submission');
-
-$students = block_analytics_graphs_get_students($course);
-$result = block_analytics_graphs_get_assign_submission($course, $students);
+students = block_analytics_graphs_get_students($course);
+$result = block_analytics_graphs_get_hotpot_submission($course, $students);
 $submissions_graph_options = $submissions_graph->create_graph($result, $students);
 ?>
 
