@@ -35,14 +35,16 @@ function block_analytics_graphs_subtract_student_arrays($estudantes, $acessaram)
 function block_analytics_graphs_get_course_group_members($course) {
     $groups = groups_get_all_groups($course);
     foreach ($groups as $group) {
-        $groupmembers[$group->id]['name'] = $group->name;
         $members = groups_get_members($group->id);
-        $numberofmembers = 0;
-        foreach ($members as $member) {
-            $groupmembers[$group->id]['members'][] = $member->id;
-            $numberofmembers++;
+        if (!empty($members)) {
+            $groupmembers[$group->id]['name'] = $group->name;
+            $numberofmembers = 0;
+            foreach ($members as $member) {
+                $groupmembers[$group->id]['members'][] = $member->id;
+                $numberofmembers++;
+            }
+            $groupmembers[$group->id]['numberofmembers']  = $numberofmembers;
         }
-        $groupmembers[$group->id]['numberofmembers']  = $numberofmembers;
     }
     return($groupmembers);
 }
