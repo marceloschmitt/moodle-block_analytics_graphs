@@ -79,5 +79,50 @@ function createEmailForm(titulo, alunos, courseid, other) {
                 return string;
 }
 
+
+function convert_series_to_group(group_id, groups, all_content, chart_id)
+{
+    
+    $(chart_id).highcharts().series[0].setData([0]);
+    $(chart_id).highcharts().series[1].setData([0]);
+
+    //comeback to original series
+    if(group_id == "-")
+    {
+        var nraccess_vet = [];
+        var nrntaccess_vet = [];
+        $.each(geral, function(index, value) {
+            if (value.numberofaccesses > 0){
+                nraccess_vet.push(value.numberofaccesses);
+            }else{
+                nraccess_vet.push([0]);
+            }
+
+            if(value.numberofnoaccess > 0){
+                nrntaccess_vet.push(value.numberofnoaccess);
+            }else{
+                nrntaccess_vet.push([0]);
+            }
+        });
+
+        $(chart_id).highcharts().series[0].setData(nraccess_vet);
+        $(chart_id).highcharts().series[1].setData(nrntaccess_vet);
+    }
+    else
+    {
+        $.each(groups, function(index, group){
+            if(index == group_id){
+                    console.log(group);
+                    var access = group.numberofaccesses;
+                    var noaccess = group.numberofnoaccess;
+                $(chart_id).highcharts().series[0].setData(access);
+                $(chart_id).highcharts().series[1].setData(noaccess);
+            }
+        });
+    }
+}
+
+
+
 </script>
 

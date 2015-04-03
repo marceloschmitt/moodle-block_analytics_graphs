@@ -226,47 +226,6 @@ $event->trigger();
                 });
             });
 
-            function convert_series_to_group(group_id, groups)
-            {
-                
-                $('#container').highcharts().series[0].setData([0]);
-                $('#container').highcharts().series[1].setData([0]);
-
-                //comeback to original series
-                if(group_id == "-")
-                {
-                    var nraccess_vet = [];
-                    var nrntaccess_vet = [];
-                    $.each(geral, function(index, value) {
-                        if (value.numberofaccesses > 0){
-                            nraccess_vet.push(value.numberofaccesses);
-                        }else{
-                            nraccess_vet.push([0]);
-                        }
-
-                        if(value.numberofnoaccess > 0){
-                            nrntaccess_vet.push(value.numberofnoaccess);
-                        }else{
-                            nrntaccess_vet.push([0]);
-                        }
-                    });
-
-                    $('#container').highcharts().series[0].setData(nraccess_vet);
-                    $('#container').highcharts().series[1].setData(nrntaccess_vet);
-                }
-                else
-                {
-                    $.each(groups, function(index, group){
-                        if(index == group_id){
-                                console.log(group);
-                                var access = group.numberofaccesses;
-                                var noaccess = group.numberofnoaccess;
-                            $('#container').highcharts().series[0].setData(access);
-                            $('#container').highcharts().series[1].setData(noaccess);
-                        }
-                    });
-                }
-            }
 
             function parseObjToString(obj) {
                 var array = $.map(obj, function(value) {
@@ -480,7 +439,7 @@ $event->trigger();
 
         $( "#group_select" ).change(function() {
             console.log($(this).val());
-            convert_series_to_group($(this).val(), groups);
+            convert_series_to_group($(this).val(), groups, geral, '#container');
         });
         </script>
     </body>
