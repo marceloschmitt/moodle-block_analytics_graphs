@@ -55,11 +55,9 @@ class graph_submission {
 
 
     public function create_graph($result, $students) {
-        // global $DB;
-        // require('lib.php');
-
-        // Recover course students.
-        // $students = block_analytics_graphs_get_students($this->course);
+        if (empty($result)) {
+            exit;
+        }
         $numberofstudents = count($students);
         if ($numberofstudents == 0) {
             error(get_string('no_students', 'block_analytics_graphs'));
