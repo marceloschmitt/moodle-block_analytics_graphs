@@ -24,7 +24,7 @@ $course = required_param('id', PARAM_INT);
 
 $title = get_string('submissions_hotopot', 'block_analytics_graphs');
 $submissions_graph = new graph_submission($course, $title);
-students = block_analytics_graphs_get_students($course);
+$tudents = block_analytics_graphs_get_students($course);
 $result = block_analytics_graphs_get_hotpot_submission($course, $students);
 $submissions_graph_options = $submissions_graph->create_graph($result, $students);
 ?>

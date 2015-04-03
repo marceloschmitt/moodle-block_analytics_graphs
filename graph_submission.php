@@ -93,7 +93,7 @@ class graph_submission {
                 $this->statistics[$counter]['assign'] = $tuple->name;
                 $this->statistics[$counter]['duedate'] = $tuple->duedate;
                 $this->statistics[$counter]['cutoffdate'] = $tuple->cutoffdate;
-                if ($tuple->userid) { // If a student submitted.
+                if (isset($tuple->userid)) { // If a student submitted.
                     if ($tuple->duedate >= $tuple->timecreated || $tuple->duedate == 0) { // In the right time.
                         $this->statistics[$counter]['in_time_submissions'][] = array('userid'  => $tuple->userid,
                             'nome'  => $tuple->firstname." ".$tuple->lastname,
@@ -314,7 +314,7 @@ class graph_submission {
                             }
                         $chart .= '],
                         tooltip: {
-                            valueSuffix: "' . get_string("students", "block_analytics_graphs") . '"
+                            valueSuffix: " ' . get_string("students", "block_analytics_graphs") . '"
                         }
                     }, {
                         yAxis: 1,
@@ -328,7 +328,7 @@ class graph_submission {
                             }
                         $chart .= '],
                         tooltip: {
-                            valueSuffix: "' . get_string("students", "block_analytics_graphs") . '"
+                            valueSuffix: " ' . get_string("students", "block_analytics_graphs") . '"
                         }
                     }, {
                         yAxis: 1,
@@ -343,7 +343,7 @@ class graph_submission {
                             }
                         $chart .= '],
                         tooltip: {
-                            valueSuffix: "' . get_string("students", "block_analytics_graphs") . '"
+                            valueSuffix: " ' . get_string("students", "block_analytics_graphs") . '"
                         }
                     }, {
                         yAxis: 0,
