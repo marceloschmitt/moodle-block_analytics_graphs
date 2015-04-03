@@ -162,7 +162,7 @@ function block_analytics_graphs_get_hotpot_submission($course, $students) {
     $params = array_merge(array($course), $inparams);
     $sql = "SELECT temp.id+(COALESCE(temp.userid,1)*1000000) as id, temp.id as assignment, name, 
                 timeclose as duedate, timeclose as cutoffdate,
-                usr.id, usr.firstname, usr.lastname, usr.email, temp.timecreated
+                temp.userid, usr.firstname, usr.lastname, usr.email, temp.timecreated
             FROM (
                 SELECT h.id, ha.userid, MAX(ha.timefinish) as timecreated
                 FROM {hotpot} h
