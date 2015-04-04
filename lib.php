@@ -33,6 +33,7 @@ function block_analytics_graphs_subtract_student_arrays($estudantes, $acessaram)
 }
 
 function block_analytics_graphs_get_course_group_members($course) {
+    $groupmembers = array();
     $groups = groups_get_all_groups($course);
     foreach ($groups as $group) {
         $members = groups_get_members($group->id);
