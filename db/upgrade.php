@@ -20,7 +20,7 @@ function xmldb_block_analytics_graphs_upgrade($oldversion, $block) {
 
     $dbman = $DB->get_manager(); // loads ddl manager and xmldb classes
 
-    if ($oldversion < 2015042002) {
+    if ($oldversion < 2015042003) {
 
         // Define table block_analytics_graphs_msg to be created.
         $table = new xmldb_table('block_analytics_graphs_msg');
@@ -38,8 +38,27 @@ function xmldb_block_analytics_graphs_upgrade($oldversion, $block) {
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
         }
+        
+        // Define table block_analytics_graphs_dest to be created.
+        $table = new xmldb_table('block_analytics_graphs_dest');
+
+        // Adding fields to table block_analytics_graphs_dest.
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('messageid', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
+        $table->add_field('toid', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
+
+        // Adding keys to table block_analytics_graphs_dest.
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
+        $table->add_key('messageid', XMLDB_KEY_FOREIGN, array('messageid'), 'block_analytics_graphs_msg', array('id'));
+        $table->add_key('toid', XMLDB_KEY_FOREIGN, array('toid'), 'user', array('id'));
+
+        // Conditionally launch create table for block_analytics_graphs_dest.
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
 
         // Analytics_graphs savepoint reached.
-        upgrade_block_savepoint(true, 2015042002, 'analytics_graphs');
+        upgrade_block_savepoint(true, 2015042003, 'analytics_graphs');
     }
 }
