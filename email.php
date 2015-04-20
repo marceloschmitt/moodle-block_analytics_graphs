@@ -42,15 +42,26 @@ $fromuser->maildisplay = true;
 $fromuser->lastname = $USER->lastname;
 $fromuser->id = $USER->id;
 
+$record_msg = new stdClass();
+$record_msg->fromid = $fromuser->id;
+$record_msg->subject = $subject;
+$record_msg->message = $messagetext;
+$messageid = $DB->insert_record('block_analytics_graphs_msg', $record_msg, true);
+$record_dest = new stdClass();
+$record_dest->messageid = $messageid;
+
 foreach ($destination as $i => $x) {
         $touser->id = $destination[$i];
+        $record_dest->toid = $touser->id;
         $touser->email = $DB->get_field('user', 'email', array('id' => $destination[$i]));
         email_to_user($touser, $fromuser, $subject, $messagetext, $messagehtml, '', '', true);
+        $DB->insert_record('block_analytics_graphs_dest', $record_dest, false);
 }
 
 $messagetext = get_string('mailcopyalert', 'block_analytics_graphs') . $messagetext;
 $messagehtml = get_string('mailcopyalert', 'block_analytics_graphs') . $messagehtml;
 $userstocopyemail = block_analytics_graphs_get_teachers($course);
+
 foreach ($userstocopyemail as $i) {
     $touser->id = $i->id;
     $touser->email = $DB->get_field('user', 'email', array('id' => $i->id));

@@ -28,6 +28,7 @@ function xmldb_block_analytics_graphs_upgrade($oldversion, $block) {
         // Adding fields to table block_analytics_graphs_msg.
         $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
         $table->add_field('fromid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('subject', XMLDB_TYPE_TEXT, null, null, null, null, null);
         $table->add_field('message', XMLDB_TYPE_TEXT, null, null, null, null, null);
 
         // Adding keys to table block_analytics_graphs_msg.
@@ -38,6 +39,7 @@ function xmldb_block_analytics_graphs_upgrade($oldversion, $block) {
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
         }
+
         
         // Define table block_analytics_graphs_dest to be created.
         $table = new xmldb_table('block_analytics_graphs_dest');

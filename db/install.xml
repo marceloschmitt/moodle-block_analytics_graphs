@@ -8,6 +8,7 @@
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
         <FIELD NAME="fromid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Id of the user who sent the message."/>
+        <FIELD NAME="subject" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Subject of the message that was sent."/>
         <FIELD NAME="message" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Text of the message that was sent to the students."/>
       </FIELDS>
       <KEYS>
