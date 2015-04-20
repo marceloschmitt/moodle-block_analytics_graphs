@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="blocks/analytics_graphs/db" VERSION="20150420" COMMENT="XMLDB file for Moodle blocks/analytics_graphs"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+>
+  <TABLES>
+    <TABLE NAME="block_analytics_graphs_msg" COMMENT="Table to save messages sent to students.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="fromid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Id of the user who sent the message."/>
+        <FIELD NAME="message" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Text of the message that was sent to the students."/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="fromid" TYPE="foreign" FIELDS="fromid" REFTABLE="user" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="block_analytics_graphs_dest" COMMENT="Table to relate message with students.">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="messageid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Id of the message sent according to table analytics_graphs_message."/>
+        <FIELD NAME="toid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Id of a student for whom a message was sent."/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="messageid" TYPE="foreign" FIELDS="messageid" REFTABLE="block_analytics_graphs_msg" REFFIELDS="id"/>
+        <KEY NAME="toid" TYPE="foreign" FIELDS="toid" REFTABLE="user" REFFIELDS="id"/>
+      </KEYS>
+    </TABLE>
+  </TABLES>
+</XMLDB>

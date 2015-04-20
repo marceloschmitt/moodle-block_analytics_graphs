@@ -16,8 +16,8 @@
 
 
 
-$plugin->version = 2015032401;  // YYYYMMDDHH (year, month, day, 24-hr time).
+$plugin->version = 2015042001;  // YYYYMMDDHH (year, month, day, 24-hr time).
 $plugin->requires = 2011120500; // YYYYMMDDHH (This is the release version for Moodle 2.0).
 $plugin->maturity = MATURITY_STABLE; 
-$plugin->release = 'v1.1.2';
+$plugin->release = 'v1.2.0';
 $plugin->component = 'block_analytics_graphs';
