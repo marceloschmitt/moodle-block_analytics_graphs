@@ -644,7 +644,7 @@ thead th {
 
 
 	sendEmail();
-    $("#student_tabs").tabs();
+    $("#student-tabs").tabs();
     $(".div_nomes").dialog("close");
 
 	$("div .highcharts-tooltip").css('top', '-9999990px');
