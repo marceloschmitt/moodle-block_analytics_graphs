@@ -586,15 +586,15 @@ thead th {
                 "<div class='div_nomes' id='" + val.userid + "'>" +
                     "<div class='student-tabs'> \
                         <ul> \
-                            <li class='navi-tab'><a href='#student-tab-panel-'" + val.userid + "' class='msgs' id='tab-link-" + val.userid + "'>\
+                            <li class='navi_tab'><a href='#student_tab_panel-'" + val.userid + "' class='msgs' id='tab_link-" + val.userid + "'>\
                                 Mensagens enviadas a este aluno</a></li> \
-                            <li class='navi-tab'><a href='#student-tab-panel-'" + val.userid + "' class='info' id='tab-link-" + val.userid + "'>\
+                            <li class='navi_tab'><a href='#student_tab_panel-'" + val.userid + "' class='info' id='tab_link-" + val.userid + "'>\
                                 Informações gerais sobre o aluno</a></li> \
-                            <li class='navi-tab'><a href='#student-tab-panel-'" + val.userid + "' class='mail' id='tab-link-" + val.userid + "'>\
+                            <li class='navi_tab'><a href='#email_panel-'" + val.userid + "' class='mail' id='tab_link-" + val.userid + "'>\
                                 Mandar mensagem</a></li> \
                         </ul>" + 
-                        "<div id='student-tab-panel-'" + val.userid + "'></div>" + 
-        				"<div id='email-panel-'" + val.userid + "'>" + createEmailForm(title,studentwithaccess, courseid, 'hits.php') + "</div>" + 
+                        "<div id='student_tab_panel-'" + val.userid + "'></div>" + 
+        				"<div id='email_panel-'" + val.userid + "'>" + createEmailForm(title,studentwithaccess, courseid, 'hits.php') + "</div>" + 
                     "</div>" + 
                 "</div>";
             document.write(div);     
@@ -602,12 +602,12 @@ thead th {
     });
         
 
-    $("li.navi-tab a").click(function(){
+    $("li.navi_tab a").click(function(){
         if($(this).hasClass("msgs")){
-            // $("#student-tab-panel").empty().append("<div id='loading'>Loading</div>");
+            // $("#student_tab_panel").empty().append("<div id='loading'>Loading</div>");
             $(this).removeClass('current');
             $(this).addClass('current');
-            $("#student-tab-panel-" + this.id).empty().append("<div id='loading'>AJAX para query em tabela block_analytics_graphs_msg com userid = " + this.id.split("-")[1] + "</div>");
+            $("#student_tab_panel-" + this.id.split("-")[1]).empty().append("<div id='loading'>AJAX para query em tabela block_analytics_graphs_msg com userid = " + this.id.split("-")[1] + "</div>");
      
             // $.ajax({
             //     method: "POST",
@@ -617,14 +617,14 @@ thead th {
             //         userid: this.id.split("-")[1]
             //     },
             //     success: function(html){
-            //         $("#student-tab-panel").empty().append(html);
+            //         $("#student_tab_panel" + this.id.split("-")[1]).empty().append(html);
             //     }
             // });
         }
         else if($(this).hasClass("info")){
-            $("#student-tab-panel-" + this.id).empty().append("<div id='test'><h3>Aqui ficam informações sobre " + this.id.split("-")[1] + "</h3></div>");
             $(this).removeClass('current');
             $(this).addClass('current');
+            $("#student_tab_panel-" + this.id.split("-")[1]).empty().append("<div id='test'><h3>Aqui ficam informações sobre " + this.id.split("-")[1] + "</h3></div>");
         }
         return false;
     });
