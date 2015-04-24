@@ -593,8 +593,8 @@ thead th {
                             <li class='navi_tab'><a href='#email_panel-'" + val.userid + "' class='mail' id='tab_link-" + val.userid + "'>\
                                 Mandar mensagem</a></li> \
                         </ul>" + 
-                        "<div id='student_tab_panel-'" + val.userid + "'></div>" + 
-        				"<div id='email_panel-'" + val.userid + "'>" + createEmailForm(title,studentwithaccess, courseid, 'hits.php') + "</div>" + 
+                        "<div id='student_tab_panel-" + val.userid + "'></div>" + 
+        				"<div id='email_panel-" + val.userid + "'>" + createEmailForm(title,studentwithaccess, courseid, 'hits.php') + "</div>" + 
                     "</div>" + 
                 "</div>";
             document.write(div);     
