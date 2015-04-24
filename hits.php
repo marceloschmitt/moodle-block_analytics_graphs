@@ -605,7 +605,7 @@ thead th {
     $("li.navi_tab a").click(function(){
         if($(this).hasClass("msgs")){
             // $("#student_tab_panel").empty().append("<div id='loading'>Loading</div>");
-            $("#student_tab_panel-" + this.id.split("-")[1]).empty().append("<div id='loading'>AJAX para query em tabela block_analytics_graphs_msg com userid = " + this.id.split("-")[1] + "</div>");
+            $("#student_tab_panel-" + this.id.split("-")[1]).empty().append("<div id='loading'>AJAX para query em tabela</div>");
             $(this).removeClass('current');
             $(this).addClass('current');
      
@@ -622,7 +622,7 @@ thead th {
             // });
         }
         else if($(this).hasClass("info")){
-            $("#student_tab_panel-" + this.id.split("-")[1]).empty().append("<div id='test'><h3>Aqui ficam informações sobre " + this.id.split("-")[1] + "</h3></div>");
+            $("#student_tab_panel-" + this.id.split("-")[1]).empty().append("<div id='test'><h3>Aqui ficam informações sobre o aluno</h3></div>");
             $(this).removeClass('current');
             $(this).addClass('current');
         }
