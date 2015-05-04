@@ -608,18 +608,37 @@ thead th {
             $("#student_tab_panel-" + this.id.split("-")[1]).empty().append("<div id='loading'>AJAX para query em tabela</div>");
             $(this).removeClass('current');
             $(this).addClass('current');
+
+            var fill_panel = function(panel_id){
+                return function fill_panel_callback(data){
+                    if(jQuery.isEmptyObject(data)){
+                        $("#student_tab_panel" + panel_id).empty().append("Nenhuma mensagem para este(s) aluno(s)");
+                    }
+                    else{
+                        var table = "<table><tr><th>Remetente</th><th>Assunto</th><th>Mensagem</th></tr>";
+                        for(elem in data){
+                            table += "<tr>";
+                            table += "<td>" + elem["fromid"] +  "</td>";
+                            table += "<td>" + elem["subject"] +  "</td>";
+                            table += "<td>" + elem["messagetext"] +  "</td>";
+                            table += "</tr>";
+                        }
+                        table += "</table>";
+                        $("#student_tab_panel-" + panel_id).empty().append(table);
+                    }
+                }
+            }; 
      
-            // $.ajax({
-            //     method: "POST",
-            //     url: "messages.php",
-            //     data: {
-            //         table: "block_analytics_graphs_msg",
-            //         userid: this.id.split("-")[1]
-            //     },
-            //     success: function(html){
-            //         $("#student_tab_panel" + this.id.split("-")[1]).empty().append(html);
-            //     }
-            // });
+            $.ajax({
+                method: "POST",
+                url: "messages.php",
+                dataType: "JSON",
+                data: {
+                    table: "block_analytics_graphs_msg",
+                    userid: this.id.split("-")[1]
+                },
+                success: fill_panel(this.id.split("-")[1])
+            });
         }
         else if($(this).hasClass("info")){
             $("#student_tab_panel-" + this.id.split("-")[1]).empty().append("<div id='test'><h3>Aqui ficam informações sobre o aluno</h3></div>");
