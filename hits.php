@@ -605,7 +605,7 @@ thead th {
     $("li.navi_tab a").click(function(){
         if($(this).hasClass("msgs")){
             // $("#student_tab_panel").empty().append("<div id='loading'>Loading</div>");
-            $("#student_tab_panel-" + this.id.split("-")[1]).empty().append("<div id='loading'>AJAX para query em tabela</div>");
+            $("#student_tab_panel-" + this.id.split("-")[1]).empty().append("<div id='loading'>Carregando...</div>");
             $(this).removeClass('current');
             $(this).addClass('current');
 
@@ -631,7 +631,7 @@ thead th {
      
             $.ajax({
                 method: "POST",
-                url: "messages.php",
+                url: "query_messages.php",
                 dataType: "JSON",
                 data: {
                     table: "block_analytics_graphs_msg",
