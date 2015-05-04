@@ -277,7 +277,11 @@ class graph_submission {
                             events: {
                                 click: function() {
                                             var nome_conteudo = this.x + "-" + this.series.index;
+                                            var group = $("#group_select").val();
                                             $(".div_nomes").dialog("close");
+                                            if(group != "-")
+                                                nome_conteudo +=  "-" + group;
+                                            
                                             $("#" + nome_conteudo).dialog("open");
                                 }
                             }
@@ -389,6 +393,169 @@ class graph_submission {
         $event->trigger();
         
         return $chart;
+    }
+
+
+    public static function graph_series($result, $students) {
+        require 'lib.php';
+        $statistics = [];
+        if (empty($result)) {
+            exit;
+        }
+        $numberofstudents = count($students);
+        if ($numberofstudents == 0) {
+            error(get_string('no_students', 'block_analytics_graphs'));
+        }
+        foreach ($students as $tuple) {
+            $arrayofstudents[] = array('userid' => $tuple['id'] ,
+                'nome' => $tuple['firstname'].' '.$tuple['lastname'], 'email' => $tuple['email']);
+        }
+
+        // Recover submitted tasks.
+        // $result = block_analytics_graphs_get_assign_submission($this->course, $students);
+        // $func = $this->query_func_name;
+        // $result = $func($this->course, $students);
+
+        $counter = 0;
+        $numberofintimesubmissions = 0;
+        $numberoflatesubmissions = 0;
+        $assignmentid = 0;
+
+        foreach ($result as $tuple) {
+            if ($assignmentid == 0) { // First time in loop.
+                $statistics[$counter]['assign'] = $tuple['name'];
+                $statistics[$counter]['duedate'] = $tuple['duedate'];
+                $statistics[$counter]['cutoffdate'] = $tuple['cutoffdate'];
+                if (isset($tuple['userid'])) { // If a student submitted.
+                    if ($tuple['duedate'] >= $tuple['timecreated'] || $tuple['duedate'] == 0) { // In the right time.
+                        $statistics[$counter]['in_time_submissions'][] = array('userid'  => $tuple['userid'],
+                            'nome'  => $tuple['firstname']." ".$tuple['lastname'],
+                            'email'  => $tuple['email'], 'timecreated'  => $tuple['timecreated']);
+                        $numberofintimesubmissions++;
+                    } else { // Late.
+                        $statistics[$counter]['latesubmissions'][] = array('userid'  => $tuple['userid'],
+                            'nome'  => $tuple['firstname']." ".$tuple['lastname'], 'email'  => $tuple['email'],
+                            'timecreated'  => $tuple['timecreated']);
+                        $numberoflatesubmissions++;
+                    }
+                }
+                $assignmentid = $tuple['assignment'];
+            } else { // Not first time in loop.
+                if ($assignmentid == $tuple['assignment'] and $tuple['userid']) { // Same task -> add student.
+                    if ($tuple['duedate'] >= $tuple['timecreated'] || $tuple['duedate'] == 0) { // Right time.
+                        $statistics[$counter]['in_time_submissions'][] = array('userid'  => $tuple['userid'],
+                            'nome'  => $tuple['firstname']." ".$tuple['lastname'],
+                            'email'  => $tuple['email'], 'timecreated'  => $tuple['timecreated']);
+                        $numberofintimesubmissions++;
+                    } else { // Late.
+                        $statistics[$counter]['latesubmissions'][] = array('userid'  => $tuple['userid'],
+                            'nome'  => $tuple['firstname']." ".$tuple['lastname'],
+                            'email'  => $tuple['email'], 'timecreated'  => $tuple['timecreated']);
+                        $numberoflatesubmissions++;
+                    }
+                }
+
+                if ($assignmentid != $tuple['assignment']) { // Another task -> finish previous and start.
+                    $statistics[$counter]['numberofintimesubmissions'] = $numberofintimesubmissions;
+                    $statistics[$counter]['numberoflatesubmissions'] = $numberoflatesubmissions;
+                    $statistics[$counter]['numberofnosubmissions'] =
+                            $numberofstudents - $numberofintimesubmissions - $numberoflatesubmissions;
+                    if ($statistics[$counter]['numberofnosubmissions'] == $numberofstudents) {
+                        $statistics[$counter]['no_submissions'] = $arrayofstudents;
+                    } else if ($numberoflatesubmissions == 0) {
+                        $statistics[$counter]['no_submissions'] = block_analytics_graphs_subtract_student_arrays($arrayofstudents,
+                            $statistics[$counter]['in_time_submissions']);
+                    } else if ($numberofintimesubmissions == 0) {
+                        $statistics[$counter]['no_submissions'] = block_analytics_graphs_subtract_student_arrays($arrayofstudents,
+                            $statistics[$counter]['latesubmissions']);
+                    } else {
+                        $statistics[$counter]['no_submissions'] = block_analytics_graphs_subtract_student_arrays(
+                            block_analytics_graphs_subtract_student_arrays($arrayofstudents,
+                                $statistics[$counter]['in_time_submissions']),
+                                $statistics[$counter]['latesubmissions']);
+                    }
+                    $counter++;
+                    $numberofintimesubmissions = 0;
+                    $numberoflatesubmissions = 0;
+                    $statistics[$counter]['assign'] = $tuple['name'];
+                    $statistics[$counter]['duedate'] = $tuple['duedate'];
+                    $statistics[$counter]['cutoffdate'] = $tuple['cutoffdate'];
+                    $assignmentid = $tuple['assignment'];
+                    if ($tuple['userid']) { // If a user has submitted
+                        if ($tuple['duedate'] >= $tuple['timecreated'] || $tuple['duedate'] == 0) { // Right time.
+                            $statistics[$counter]['in_time_submissions'][] = array('userid'  => $tuple['userid'],
+                                'nome' => $tuple['firstname']." ".$tuple['lastname'],
+                                'email' => $tuple['email'], 'timecreated'  => $tuple['timecreated']);
+                            $numberofintimesubmissions = 1;
+                        } else { // Late.
+                            $statistics[$counter]['latesubmissions'][] = array('userid'  => $tuple['userid'],
+                                'nome'  => $tuple['firstname']." ".$tuple['lastname'],
+                                'email'  => $tuple['email'], 'timecreated'  => $tuple['timecreated']);
+                            $numberoflatesubmissions = 1;
+                        }
+                    }
+                }
+            }
+        }
+
+        // Finishing of last access.
+        $statistics[$counter]['numberofintimesubmissions'] = $numberofintimesubmissions;
+        $statistics[$counter]['numberoflatesubmissions'] = $numberoflatesubmissions;
+        $statistics[$counter]['numberofnosubmissions'] = $numberofstudents - $numberofintimesubmissions - $numberoflatesubmissions;
+
+        if ($statistics[$counter]['numberofnosubmissions'] == $numberofstudents) {
+            $statistics[$counter]['no_submissions'] = $arrayofstudents;
+        } else if ($numberoflatesubmissions == 0) {
+            $statistics[$counter]['no_submissions'] = block_analytics_graphs_subtract_student_arrays($arrayofstudents,
+                    $statistics[$counter]['in_time_submissions']);
+        } else if ($numberofintimesubmissions == 0) {
+            $statistics[$counter]['no_submissions'] = block_analytics_graphs_subtract_student_arrays($arrayofstudents,
+                    $statistics[$counter]['latesubmissions']);
+        } else {
+            $statistics[$counter]['no_submissions'] =
+                block_analytics_graphs_subtract_student_arrays(block_analytics_graphs_subtract_student_arrays(
+                    $arrayofstudents,
+                    $statistics[$counter]['in_time_submissions']), $statistics[$counter]['latesubmissions']);
+        }
+
+        foreach ($statistics as $tuple) {
+            $arrayofassignments[] = $tuple['assign'];
+            $arrayofintimesubmissions[] = $tuple['numberofintimesubmissions'];
+            $arrayoflatesubmissions[] = $tuple['numberoflatesubmissions'];
+            $arrayofnosubmissions[] = $tuple['numberofnosubmissions'];
+            $arrayofduedates[] = $tuple['duedate'];
+            $arrayofcutoffdates[] = $tuple['cutoffdate']; // For future use.
+        }
+        //$statistics = json_encode($statistics);
+
+        $data = [];
+        $data["statistics"] = $statistics;
+        $data["serie1"] = $arrayofintimesubmissions;
+        $data["serie2"] = $arrayoflatesubmissions;
+        $data["serie3"] = $arrayofnosubmissions;
+        
+        $var = [];
+        $arrlength = count($arrayofassignments);
+            for ($x = 0; $x < $arrlength; $x++) {
+                $var[] = (float) number_format(($arrayofintimesubmissions[$x] + $arrayoflatesubmissions[$x]) /
+                    ($arrayofintimesubmissions[$x] + $arrayoflatesubmissions[$x] + $arrayofnosubmissions[$x]), 2, '.', '');
+            }
+        $data["serie4"] = $var;
+
+        $var2 = [];
+        $arrlength = count($arrayofassignments);
+            for ($x = 0; $x < $arrlength; $x++) {
+                if ($arrayofduedates[$x] == 0 || $arrayofduedates[$x] > time()) {
+                    // If no duedate or duedate has not passed.
+                    $var2[] = 1;
+                } else {
+                    $var2[] = (float) number_format($arrayofintimesubmissions[$x] /
+                        ($arrayofintimesubmissions[$x] + $arrayoflatesubmissions[$x] + $arrayofnosubmissions[$x]), 2, '.', '');
+                }
+            }
+        $data["serie5"] = $var2;
+        
+        echo json_encode($data);
     }
 }
 ?>

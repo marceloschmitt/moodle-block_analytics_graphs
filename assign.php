@@ -25,12 +25,17 @@ $course = required_param('id', PARAM_INT);
 $title = get_string('submissions_assign', 'block_analytics_graphs');
 $submissions_graph = new graph_submission($course, $title);
 
-// $x->set_title($titulo);
-// $x->set_query_function('block_analytics_graphs_get_assign_submission');
 
 $students = block_analytics_graphs_get_students($course);
 $result = block_analytics_graphs_get_assign_submission($course, $students);
 $submissions_graph_options = $submissions_graph->create_graph($result, $students);
+
+/* Discover groups and members */
+$groupmembers = block_analytics_graphs_get_course_group_members($course);
+$groupmembers_json = json_encode($groupmembers);
+
+$students_json = json_encode($students);
+$result_json = json_encode($result);
 ?>
 
 <!--DOCTYPE HTML-->
@@ -39,26 +44,52 @@ $submissions_graph_options = $submissions_graph->create_graph($result, $students
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <title><?php echo get_string('submissions', 'block_analytics_graphs'); ?></title>
         <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">        
-        <!--<script src="http://code.jquery.com/jquery-1.10.2.js"></script>-->
         <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.1.js"></script>        
         <script src="http://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
         <script src="http://code.highcharts.com/highcharts.js"></script>
         <script src="http://code.highcharts.com/modules/no-data-to-display.js"></script>
         <script src="http://code.highcharts.com/modules/exporting.js"></script> 
         <script type="text/javascript">
-    	    var courseid = <?php echo json_encode($submissions_graph->get_course()); ?>;
-            function parseObjToString(obj) {
-                var array = $.map(obj, function(value) {
-                    return [value];
-                });
-                return array;
-            }
+            var courseid = <?php echo json_encode($submissions_graph->get_course()); ?>;
+    	    
+
+    	    var groups = <?php echo $groupmembers_json; ?>;
+            var result_json = <?php echo $result_json; ?>;
+            var students_json = <?php echo $students_json; ?>;
+
+            var course = '<?php echo $course; ?>';
+            var title_php = "<?php echo $title; ?>";
+
+            var nome = "";
+            var arrayofcontents = [];
+            var nraccess_vet = [];
+            var nrntaccess_vet = [];
+
+            $.each(groups, function(index, group){
+                group.numberofaccesses = [];
+                group.numberofnoaccess = [];
+                group.studentswithaccess = [];
+                group.studentswithnoaccess = [];
+                group.material = [];
+            });
+
         </script>
     </head>
     <body>
+    	<?php if(sizeof($groupmembers)>0){ ?>
+        <div style="margin: 20px;">
+            <select id="group_select">
+                <option value="-"><?php  echo json_encode(get_string('all_groups', 'block_analytics_graphs'));?></option>
+                <?php foreach ($groupmembers as $key => $value) { ?>
+                    <option value="<?php echo $key; ?>"><?php echo $value["name"]; ?></option>
+                <?php } ?>
+            </select>
+        </div>
+        <?php } ?>
     	<div id="container" style="min-width: 310px; min-width: 800px; height: 650px; margin: 0 auto"></div>
     	<script>
     		$(function(){
+    			var groups = <?php echo $groupmembers_json; ?>;
     			$('#container').highcharts(<?php echo $submissions_graph_options; ?>);
     		})
 
@@ -100,6 +131,30 @@ $submissions_graph_options = $submissions_graph->create_graph($result, $students
 	            document.write(div);
 	        });
 	    	sendEmail();
+
+	    	$( "#group_select" ).change(function() {
+                var students = [];
+                var group_students = [];
+                var group = $(this).val();
+                if(group != "-"){
+                    $.each(groups, function(index, value){
+                        if(index == group)
+                            students = value.members;
+                    });
+                    //select group students
+                    $.each(students_json, function(index, value){
+                        $.each(students, function(ind, val){
+                            if(value.id == val){
+                                group_students.push(value);
+                            }
+                        });
+                    });
+
+                }else{
+                    group_students = students_json;
+                }
+                series_update(course, title_php, result_json, group_students, "#container", group);
+        	});
         </script>
     </body>
 </html>
