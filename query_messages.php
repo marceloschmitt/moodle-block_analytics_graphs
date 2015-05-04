@@ -1,5 +1,7 @@
 <?php
+require_once("../../config.php");
 global $DB;
+require_once($CFG->dirroot.'/lib/moodlelib.php');
 $student_ids = required_param('student_ids', PARAM_INT);
 $course_id = required_param('course_id', PARAM_INT);
 
