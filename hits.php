@@ -586,7 +586,7 @@ thead th {
                 "<div class='div_nomes' id='" + val.userid + "'>" +
                     "<div class='student_tabs'> \
                         <ul> \
-                            <li class='navi_tab'><a href='#student_tab_panel-" + val.userid + "' class='msgs' id='tab_link-" + val.userid + "'>\
+                            <li class='navi_tab'><a href='#student_tab_panel-" + val.userid + "-" + courseid + "' class='msgs' id='tab_link-" + val.userid + "'>\
                                 Mensagens enviadas a este aluno</a></li> \
                             <li class='navi_tab'><a href='#student_tab_panel-" + val.userid + "' class='info' id='tab_link-" + val.userid + "'>\
                                 Informações gerais sobre o aluno</a></li> \
@@ -634,14 +634,14 @@ thead th {
                 url: "query_messages.php",
                 dataType: "JSON",
                 data: {
-                    table: "block_analytics_graphs_msg",
-                    userid: this.id.split("-")[1]
+                    student_ids: this.id.split("-")[1],
+                    course_id: this.id.split("-")[2]
                 },
                 success: fill_panel(this.id.split("-")[1])
             });
         }
         else if($(this).hasClass("info")){
-            $("#student_tab_panel-" + this.id.split("-")[1]).empty().append("<div id='test'><h3>Aqui ficam informações sobre o aluno</h3></div>");
+            $("#student_tab_panel-" + this.id.split("-")[1]).empty().append("<div id='test-info'>Info sobre o aluno</div>");
             $(this).removeClass('current');
             $(this).addClass('current');
         }

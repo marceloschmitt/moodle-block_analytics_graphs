@@ -1,6 +1,6 @@
 <?php
 global $DB;
-$student_ids = required_param('student_ids', PARAM_TEXT);
+$student_ids = required_param('student_ids', PARAM_INT);
 $course_id = required_param('course_id', PARAM_INT);
 
 /* Access control */
