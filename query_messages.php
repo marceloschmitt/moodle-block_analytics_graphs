@@ -10,19 +10,13 @@ require_login($course_id);
 $context = context_course::instance($course_id);
 require_capability('block/analytics_graphs:viewpages', $context);
 
-$num_students = count($student_ids);
-$student_ids = implode(",", $student_ids);
-
 $sql = 
-    "SELECT
-        {block_analytics_graphs_msg}.fromid, {block_analytics_graphs_msg}.subject, {block_analytics_graphs_msg}.messagetext
-    FROM
-        block_analytics_graphs_msg, block_analytics_graphs_dest
-    WHERE
-        {block_analytics_graphs_msg}.id = {block_analytics_graphs_dest}.messageid AND
-        {block_analytics_graphs_dest}.toid IN :student_ids";
+    "SELECT subject, message
+    FROM {block_analytics_graphs_msg} AS msg
+    LEFT JOIN {block_analytics_graphs_dest} AS dest ON dest.messageid = msg.id
+    WHERE msg.courseid = :course_id and dest.toid = :student_id";
 
-$params = array('student_ids'=>$student_ids);
+$params = array('student_id'=>$student_ids, 'course_id'=>$course_id);
 
 $result = $DB->get_records_sql($sql, $params);
 
