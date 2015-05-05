@@ -49,6 +49,7 @@ $record_msg->message = $messagetext;
 $messageid = $DB->insert_record('block_analytics_graphs_msg', $record_msg, true);
 $record_dest = new stdClass();
 $record_dest->messageid = $messageid;
+$record_dest->courseid = $course;
 
 foreach ($destination as $i => $x) {
         $touser->id = $destination[$i];
