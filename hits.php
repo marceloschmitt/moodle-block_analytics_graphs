@@ -586,7 +586,7 @@ thead th {
                 "<div class='div_nomes' id='" + val.userid + "'>" +
                     "<div class='student_tabs'> \
                         <ul> \
-                            <li class='navi_tab'><a href='#student_tab_panel-" + val.userid + "-" + courseid + "' class='msgs' id='tab_link-" + val.userid + "'>\
+                            <li class='navi_tab'><a href='#student_tab_panel-" + val.userid + "' class='msgs' id='tab_link-" + val.userid + "-" + courseid + "'>\
                                 Mensagens enviadas a este aluno</a></li> \
                             <li class='navi_tab'><a href='#student_tab_panel-" + val.userid + "' class='info' id='tab_link-" + val.userid + "'>\
                                 Informações gerais sobre o aluno</a></li> \
