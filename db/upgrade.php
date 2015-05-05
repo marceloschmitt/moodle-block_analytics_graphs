@@ -21,7 +21,6 @@ function xmldb_block_analytics_graphs_upgrade($oldversion, $block) {
     $dbman = $DB->get_manager(); // loads ddl manager and xmldb classes
 
     if ($oldversion < 2015042003) {
-
         // Define table block_analytics_graphs_msg to be created.
         $table = new xmldb_table('block_analytics_graphs_msg');
 
@@ -30,16 +29,17 @@ function xmldb_block_analytics_graphs_upgrade($oldversion, $block) {
         $table->add_field('fromid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
         $table->add_field('subject', XMLDB_TYPE_TEXT, null, null, null, null, null);
         $table->add_field('message', XMLDB_TYPE_TEXT, null, null, null, null, null);
+        $table->add_field('courseid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
 
         // Adding keys to table block_analytics_graphs_msg.
         $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
         $table->add_key('fromid', XMLDB_KEY_FOREIGN, array('fromid'), 'user', array('id'));
+        $table->add_key('courseid', XMLDB_KEY_FOREIGN, array('courseid'), 'course', array('id'));
 
         // Conditionally launch create table for block_analytics_graphs_msg.
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
         }
-
         
         // Define table block_analytics_graphs_dest to be created.
         $table = new xmldb_table('block_analytics_graphs_dest');
@@ -58,9 +58,28 @@ function xmldb_block_analytics_graphs_upgrade($oldversion, $block) {
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
         }
+        
+        // Analytics_graphs savepoint reached.
+        upgrade_block_savepoint(true, 2015050501, 'analytics_graphs');
+    }
+    else if ($oldversion == 2015042003) {
 
+       // Define field courseid to be added to block_analytics_graphs_msg.
+        $table = new xmldb_table('block_analytics_graphs_msg');
+        $field = new xmldb_field('courseid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null, 'message');
+        
+        // Conditionally launch add field courseid.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        //Define key courseid (foreign) to be added to block_analytics_graphs_msg.
+        $key = new xmldb_key('courseid', XMLDB_KEY_FOREIGN, array('courseid'), 'course', array('id'));
+
+        // Launch add key courseid.
+        $dbman->add_key($table, $key);
 
         // Analytics_graphs savepoint reached.
-        upgrade_block_savepoint(true, 2015042003, 'analytics_graphs');
+        upgrade_block_savepoint(true, 2015050501, 'analytics_graphs');
     }
 }
