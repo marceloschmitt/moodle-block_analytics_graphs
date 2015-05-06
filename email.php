@@ -47,6 +47,7 @@ $record_msg->fromid = $fromuser->id;
 $record_msg->subject = $subject;
 $record_msg->message = $messagetext;
 $record_msg->courseid = $course;
+$record_msg->timecreated = time();
 $messageid = $DB->insert_record('block_analytics_graphs_msg', $record_msg, true);
 $record_dest = new stdClass();
 $record_dest->messageid = $messageid;

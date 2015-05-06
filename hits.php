@@ -615,12 +615,13 @@ thead th {
                         $("#student_tab_panel" + panel_id).empty().append("Nenhuma mensagem para este(s) aluno(s)");
                     }
                     else{
-                        var table = "<table><tr><th>Remetente</th><th>Assunto</th><th>Mensagem</th></tr>";
+                        var table = "<table><tr><th>Data</th><th>Remetente</th><th>Assunto</th><th>Mensagem</th></tr>";
                         for(elem in data){
                             table += "<tr>";
-                            table += "<td>" + elem["fromid"] +  "</td>";
-                            table += "<td>" + elem["subject"] +  "</td>";
-                            table += "<td>" + elem["messagetext"] +  "</td>";
+                            table += "<td>" + new Date(data[elem]['timecreated'] *1000) +  "</td>";
+                            table += "<td>" + data[elem]['fromid'] +  "</td>";
+                            table += "<td>" + data[elem]['subject'] +  "</td>";
+                            table += "<td>" + data[elem]["message"] +  "</td>";
                             table += "</tr>";
                         }
                         table += "</table>";
