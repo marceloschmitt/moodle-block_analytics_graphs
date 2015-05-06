@@ -604,18 +604,25 @@ thead th {
 
     $("li.navi_tab a").click(function(){
         if($(this).hasClass("msgs")){
-            // $("#student_tab_panel").empty().append("<div id='loading'>Loading</div>");
-            $("#student_tab_panel-" + this.id.split("-")[1]).empty().append("<div id='loading'>Carregando...</div>");
+            $("#student_tab_panel-" + this.id.split("-")[1]).empty();
             $(this).removeClass('current');
             $(this).addClass('current');
 
             var fill_panel = function(panel_id){
                 return function fill_panel_callback(data){
                     if(jQuery.isEmptyObject(data)){
-                        $("#student_tab_panel" + panel_id).empty().append("Nenhuma mensagem para este(s) aluno(s)");
+                        $("#student_tab_panel" + panel_id).empty().append("<div>" + <?php echo json_encode(get_string('no_messages', 'block_analytics_graphs')); ?> + "</div>");
                     }
                     else{
-                        var table = "<table><tr><th>Data</th><th>Remetente</th><th>Assunto</th><th>Mensagem</th></tr>";
+                        var date_string = <?php echo json_encode(get_string('date_sent', 'block_analytics_graphs')); ?>;
+                        var sender_string = <?php echo json_encode(get_string('sender', 'block_analytics_graphs')); ?>;
+                        var subject_string = <?php echo json_encode(get_string('subject', 'block_analytics_graphs')); ?>;
+                        var message_text_string = <?php echo json_encode(get_string('message_text', 'block_analytics_graphs')); ?>;
+                        var table = "<table><tr><th>" + date_string + 
+                                            "</th><th>" + sender_string + 
+                                            "</th><th>" + subject_string + 
+                                            "</th><th>" + message_text_string + 
+                                            "</th></tr>";
                         for(elem in data){
                             table += "<tr>";
                             table += "<td>" + new Date(data[elem]['timecreated'] *1000) +  "</td>";

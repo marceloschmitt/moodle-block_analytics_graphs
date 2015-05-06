@@ -67,3 +67,7 @@ $string['week_number'] = 'Numero da semana';
 $string['all_groups'] = 'Todos os grupos';
 $string['yellow_tooltip'] = 'Nenhum material foi acessado até agora';
 $string['red_tooltip'] = 'Nenhum material foi acessado na última semana';
+$string['no_messages'] = "Nenhuma mensagem para este aluno";
+$string['date_sent'] = "Data de envio";
+$string['sender'] = "Remetente";
+$string['message_text'] = "Texto da Mensagem";

@@ -65,3 +65,7 @@ $string['week_number'] = 'Week number';
 $string['all_groups'] = 'Show all groups';
 $string['yellow_tooltip'] = 'No module was accessed until now';
 $string['red_tooltip'] = 'No module was accessed in the last week';
+$string['no_messages'] = "This student has no messages";
+$string['date_sent'] = "Date sent";
+$string['sender'] = "Sender";
+$string['message_text'] = "Message Text";
