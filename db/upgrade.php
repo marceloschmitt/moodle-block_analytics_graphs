@@ -21,7 +21,7 @@ function xmldb_block_analytics_graphs_upgrade($oldversion, $block) {
     $dbman = $DB->get_manager(); // loads ddl manager and xmldb classes
 
     if ($oldversion < 2015042003) {
-        // Define table block_analytics_graphs_msg to be created.
+                // Define table block_analytics_graphs_msg to be created.
         $table = new xmldb_table('block_analytics_graphs_msg');
 
         // Adding fields to table block_analytics_graphs_msg.
@@ -29,7 +29,8 @@ function xmldb_block_analytics_graphs_upgrade($oldversion, $block) {
         $table->add_field('fromid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
         $table->add_field('subject', XMLDB_TYPE_TEXT, null, null, null, null, null);
         $table->add_field('message', XMLDB_TYPE_TEXT, null, null, null, null, null);
-        $table->add_field('courseid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('courseid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '1');
+        $table->add_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
 
         // Adding keys to table block_analytics_graphs_msg.
         $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
@@ -64,18 +65,34 @@ function xmldb_block_analytics_graphs_upgrade($oldversion, $block) {
     }
     else if ($oldversion == 2015042003) {
 
-       // Define field courseid to be added to block_analytics_graphs_msg.
+        // Define field courseid to be added to block_analytics_graphs_msg.
         $table = new xmldb_table('block_analytics_graphs_msg');
-        $field = new xmldb_field('courseid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null, 'message');
-        
+        $field = new xmldb_field('courseid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '1', 'message');
+
         // Conditionally launch add field courseid.
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
         }
 
-        //Define key courseid (foreign) to be added to block_analytics_graphs_msg.
+        // Define key courseid (foreign) to be added to block_analytics_graphs_msg.
         $key = new xmldb_key('courseid', XMLDB_KEY_FOREIGN, array('courseid'), 'course', array('id'));
 
+        // Define field timecreated to be added to block_analytics_graphs_msg.
+        $field = new xmldb_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0', 'courseid');
+
+        // Conditionally launch add field timecreated.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Launch add key courseid.
+        $dbman->add_key($table, $key);
+        
+        
+        
+        
+        
+        
         // Launch add key courseid.
         $dbman->add_key($table, $key);
 
