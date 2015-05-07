@@ -611,7 +611,7 @@ thead th {
             var fill_panel = function(panel_id){
                 return function fill_panel_callback(data){
                     if(jQuery.isEmptyObject(data)){
-                        $("#student_tab_panel" + panel_id).empty().append("<div>" + <?php echo json_encode(get_string('no_messages', 'block_analytics_graphs')); ?> + "</div>");
+                        $("#student_tab_panel-" + panel_id).empty().append("<div>" + <?php echo json_encode(get_string('no_messages', 'block_analytics_graphs')); ?> + "</div>");
                     }
                     else{
                         var date_string = <?php echo json_encode(get_string('date_sent', 'block_analytics_graphs')); ?>;
