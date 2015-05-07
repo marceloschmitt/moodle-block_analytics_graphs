@@ -586,15 +586,15 @@ thead th {
                 "<div class='div_nomes' id='" + val.userid + "'>" +
                     "<div class='student_tabs'> \
                         <ul> \
+                            <li class='navi_tab'><a href='#email_panel-" + val.userid + "' class='mail' id='tab_link-" + val.userid + "'>\
+                                Mandar mensagem</a></li> \
                             <li class='navi_tab'><a href='#student_tab_panel-" + val.userid + "' class='msgs' id='tab_link-" + val.userid + "-" + courseid + "'>\
                                 Mensagens enviadas a este aluno</a></li> \
                             <li class='navi_tab'><a href='#student_tab_panel-" + val.userid + "' class='info' id='tab_link-" + val.userid + "'>\
                                 Informações gerais sobre o aluno</a></li> \
-                            <li class='navi_tab'><a href='#email_panel-" + val.userid + "' class='mail' id='tab_link-" + val.userid + "'>\
-                                Mandar mensagem</a></li> \
                         </ul>" + 
-                        "<div id='student_tab_panel-" + val.userid + "'></div>" + 
         				"<div id='email_panel-" + val.userid + "'>" + createEmailForm(title,studentwithaccess, courseid, 'hits.php') + "</div>" + 
+                        "<div id='student_tab_panel-" + val.userid + "'></div>" + 
                     "</div>" + 
                 "</div>";
             document.write(div);     
@@ -670,7 +670,7 @@ thead th {
 
 
 	sendEmail();
-    $(".student_tabs").tabs();
+    $(".student_tabs").tabs({active: 0});
     $(".div_nomes").dialog("close");
 
 	$("div .highcharts-tooltip").css('top', '-9999990px');
