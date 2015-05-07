@@ -119,6 +119,15 @@ $event->trigger();
         margin: 0 auto;
     	border-collapse: collapse;
 }
+div.student_panel{
+    font-size: 0.85em;
+}
+a.info, a.msgs, a.mail{
+    font-size: 0.85em;
+}
+table.res_query {
+    font-size: 0.85em;
+}
 .image-exclamation {
     width: 25px;
     height: 20px;
@@ -593,8 +602,8 @@ thead th {
                             <li class='navi_tab'><a href='#student_tab_panel-" + val.userid + "' class='info' id='tab_link-" + val.userid + "'>\
                                 Informações gerais sobre o aluno</a></li> \
                         </ul>" + 
-        				"<div id='email_panel-" + val.userid + "'>" + createEmailForm(title,studentwithaccess, courseid, 'hits.php') + "</div>" + 
-                        "<div id='student_tab_panel-" + val.userid + "'></div>" + 
+        				"<div class='student_panel' id='email_panel-" + val.userid + "'>" + createEmailForm(title,studentwithaccess, courseid, 'hits.php') + "</div>" + 
+                        "<div class='student_panel' id='student_tab_panel-" + val.userid + "'></div>" + 
                     "</div>" + 
                 "</div>";
             document.write(div);     
@@ -618,7 +627,7 @@ thead th {
                         var sender_string = <?php echo json_encode(get_string('sender', 'block_analytics_graphs')); ?>;
                         var subject_string = <?php echo json_encode(get_string('subject', 'block_analytics_graphs')); ?>;
                         var message_text_string = <?php echo json_encode(get_string('message_text', 'block_analytics_graphs')); ?>;
-                        var table = "<table><tr><th>" + date_string + 
+                        var table = "<table class='res_query'><tr><th>" + date_string + 
                                             "</th><th>" + sender_string + 
                                             "</th><th>" + subject_string + 
                                             "</th><th>" + message_text_string + 
