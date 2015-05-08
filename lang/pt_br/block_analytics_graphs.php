@@ -48,6 +48,7 @@ $string['no_submission'] = 'Sem envio';
 $string['not_sent_message'] = 'Erro no envio da mensagem!';
 $string['number_of_students'] = 'Número de alunos';
 $string['number_of_weeks'] = 'Número de semanas';
+$string['old_log'] = 'Pre-2.7';
 $string['ratio'] = 'Ratio';
 $string['resources_by_week'] = 'Materiais acessados na semana';
 $string['resources_with_access'] = 'Materiais acessados';
