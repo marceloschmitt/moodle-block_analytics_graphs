@@ -59,9 +59,6 @@ function xmldb_block_analytics_graphs_upgrade($oldversion, $block) {
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
         }
-        
-        // Analytics_graphs savepoint reached.
-        upgrade_block_savepoint(true, 2015050501, 'analytics_graphs');
     }
     else if ($oldversion == 2015042003) {
 
@@ -88,15 +85,9 @@ function xmldb_block_analytics_graphs_upgrade($oldversion, $block) {
         // Launch add key courseid.
         $dbman->add_key($table, $key);
         
-        
-        
-        
-        
-        
         // Launch add key courseid.
         $dbman->add_key($table, $key);
-
-        // Analytics_graphs savepoint reached.
-        upgrade_block_savepoint(true, 2015050501, 'analytics_graphs');
     }
+    // Analytics_graphs savepoint reached.
+    upgrade_block_savepoint(true, 2015050801, 'analytics_graphs');
 }
