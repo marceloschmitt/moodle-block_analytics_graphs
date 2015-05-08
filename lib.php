@@ -91,14 +91,15 @@ function block_analytics_graphs_get_resource_url_access($course, $estudantes, $l
     $page = $DB->get_record('modules', array('name' => 'page'), 'id');
     $startdate = $COURSE->startdate;
     $params = array_merge(array($startdate), $inparams, array($course, $resource->id, $url->id, $page->id));
-    if ($legacy) {
-            $sql = "SELECT temp.id+(COALESCE(temp.userid,1)*1000000)as id, temp.id as ident, cs.section, m.name as tipo,
+    if (!$legacy) {
+        $sql = "SELECT temp.id+(COALESCE(temp.userid,1)*1000000)as id, temp.id as ident, cs.section, m.name as tipo,
                     r.name as resource, u.name as url, p.name as page, temp.userid, usr.firstname,
                     usr.lastname, usr.email, temp.acessos
                     FROM (
                         SELECT cm.id, log.userid, count(*) as acessos
                         FROM {course_modules} as cm
-                        LEFT JOIN {log} as log ON log.time >= ? AND cm.id=log.cmid AND log.userid $insql
+                        LEFT JOIN {logstore_standard_log} as log ON log.timecreated >= ?
+                            AND log.userid $insql AND action = 'viewed' AND cm.id=log.contextinstanceid  
                         WHERE cm.course = ? AND (cm.module=? OR cm.module=? OR cm.module=?)
                         GROUP BY cm.id, log.userid
                         ) as temp
@@ -117,8 +118,8 @@ function block_analytics_graphs_get_resource_url_access($course, $estudantes, $l
                     FROM (
                         SELECT cm.id, log.userid, count(*) as acessos
                         FROM {course_modules} as cm
-                        LEFT JOIN {logstore_standard_log} as log ON log.timecreated >= ? AND
-                                cm.id=log.contextinstanceid  AND log.userid $insql
+                        LEFT JOIN {log} as log ON log.time >= ? 
+                            AND log.userid $insql AND action = 'view' AND cm.id = log.cmid 
                         WHERE cm.course = ? AND (cm.module=? OR cm.module=? OR cm.module=?)
                         GROUP BY cm.id, log.userid
                         ) as temp
@@ -130,7 +131,8 @@ function block_analytics_graphs_get_resource_url_access($course, $estudantes, $l
                     LEFT JOIN {page} as p ON cm.instance = p.id
                     LEFT JOIN {user} as usr ON usr.id = temp.userid
                     ORDER BY cs.section, m.name, r.name, u.name, p.name";
-    }
+   |
+        
     $resultado = $DB->get_records_sql($sql, $params);
     return($resultado);
 }

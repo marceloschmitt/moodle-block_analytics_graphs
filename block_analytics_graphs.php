@@ -41,7 +41,7 @@ class block_analytics_graphs extends block_base {
                 . "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/graphresourceurl.php?id={$course->id}&legacy=0
                               target=_blank>" . get_string('access_to_contents', 'block_analytics_graphs') . "</a>"
                     . "<a href= {$CFG->wwwroot}/blocks/analytics_graphs/graphresourceurl.php?id={$course->id}&legacy=1
-                              target=_blank>" . get_string('old_log', 'block_analytics_graphs') . "</a>"
+                              target=_blank> - " . get_string('old_log', 'block_analytics_graphs') . "</a>"
                 . "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/assign.php?id={$course->id}
                               target=_blank>" . get_string('submissions_assign', 'block_analytics_graphs') . "</a>"
                 . "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/quiz.php?id={$course->id}
@@ -51,7 +51,7 @@ class block_analytics_graphs extends block_base {
                 . "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/hits.php?id={$course->id}&legacy=0
                               target=_blank>" . get_string('hits_distribution', 'block_analytics_graphs') . "</a>"
                     . "<a href= {$CFG->wwwroot}/blocks/analytics_graphs/hits.php?id={$course->id}&legacy=1
-                              target=_blank>" . get_string('old_log', 'block_analytics_graphs') . "</a>";
+                              target=_blank> - " . get_string('old_log', 'block_analytics_graphs') . "</a>";
         } else {
         $this->content->text  = $this->content->text . '<br><br>'.get_string('legacy', 'block_analytics_graphs')
             .  "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/graphresourceurl.php?id={$course->id}&legacy=1
