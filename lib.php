@@ -218,26 +218,45 @@ function block_analytics_graphs_get_number_of_days_access_by_week($course, $estu
     }
     list($insql, $inparams) = $DB->get_in_or_equal($inclause);
     $params = array_merge(array($timezoneadjust, $timezoneadjust, $startdate, $course, $startdate), $inparams);
-
-    $sql = "SELECT temp2.userid+(week*1000000) as id, temp2.userid, firstname, lastname, email, week, 
+    if (!legacy) {
+        $sql = "SELECT temp2.userid+(week*1000000) as id, temp2.userid, firstname, lastname, email, week, 
                 number, numberofpageviews
-            FROM (	
-                SELECT temp.userid, week, COUNT(*) as number, SUM(numberofpageviews) as numberofpageviews
+                FROM (	
+                    SELECT temp.userid, week, COUNT(*) as number, SUM(numberofpageviews) as numberofpageviews
+                    FROM (
+                        SELECT MIN(log.id) as id, log.userid, 
+                            FLOOR((log.timecreated + ?)/ 86400)   as day,
+                            FLOOR( (((log.timecreated  + ?) / 86400) - (?/86400))/7) as week,
+                            COUNT(*) as numberofpageviews
+                        FROM {logstore_standard_log} as log        
+                        WHERE courseid = ? AND action = 'viewed' AND target = 'course'
+                            AND log.timecreated >= ? AND log.userid $insql
+                        GROUP BY userid, day, week
+                    ) as temp
+                    GROUP BY week, temp.userid
+                ) as temp2
+                LEFT JOIN {user} usr ON usr.id = temp2.userid
+                ORDER BY LOWER(firstname), LOWER(lastname),userid, week";
+    } else {
+        $sql = "SELECT temp2.userid+(week*1000000) as id, temp2.userid, firstname, lastname, email, week,
+                number, numberofpageviews
                 FROM (
-                    SELECT MIN(log.id) as id, log.userid, 
-                        FLOOR((log.timecreated + ?)/ 86400)   as day,
-                        FLOOR( (((log.timecreated  + ?) / 86400) - (?/86400))/7) as week,
-                        COUNT(*) as numberofpageviews
-                    FROM mdl_logstore_standard_log as log        
-                    WHERE courseid = ? AND action = 'viewed' AND target = 'course' AND log.timecreated >= ?
-                        AND log.userid $insql
-                    GROUP BY userid, day, week
-                ) as temp
-                GROUP BY week, temp.userid
-            ) as temp2
-            LEFT JOIN mdl_user usr ON usr.id = temp2.userid
-            ORDER BY LOWER(firstname), LOWER(lastname),userid, week";
-                
+                    SELECT temp.userid, week, COUNT(*) as number, SUM(numberofpageviews) as numberofpageviews
+                    FROM (
+                        SELECT MIN(log.id) as id, log.userid,
+                            FLOOR((log.time + ?)/ 86400)   as day,
+                            FLOOR( (((log.time  + ?) / 86400) - (?/86400))/7) as week,
+                            COUNT(*) as numberofpageviews
+                        FROM {log} as log
+                        WHERE course = ? AND action = 'view' AND module = 'course'
+                            AND log.time >= ? AND log.userid $insql
+                        GROUP BY userid, day, week
+                    ) as temp
+                    GROUP BY week, temp.userid
+                ) as temp2
+                LEFT JOIN {user} usr ON usr.id = temp2.userid
+                ORDER BY LOWER(firstname), LOWER(lastname),userid, week";   
+    }           
     $resultado = $DB->get_records_sql($sql, $params);
     return($resultado);
 }
@@ -275,8 +294,8 @@ function block_analytics_graphs_get_number_of_modules_access_by_week($course, $e
                         SELECT log.userid, module, cmid,
                         FLOOR((((log.timecreated + ?) / 86400) - (?/86400))/7) as week
                         FROM {log} log
-                        WHERE course = ? AND action = 'view' AND cmid <> 0 AND module <> 'assign'
-                            AND time >= ? AND log.userid $insql
+                        WHERE course = ? AND (action = 'view' OR action = action = 'view forum')
+                            AND module <> 'assign' AND cmid <> 0 AND time >= ? AND log.userid $insql
                         GROUP BY userid, week, module, cmid
                     ) as temp
                     GROUP BY userid, week
@@ -295,17 +314,31 @@ function block_analytics_graphs_get_number_of_modules_accessed($course, $estudan
     }
     list($insql, $inparams) = $DB->get_in_or_equal($inclause);
     $params = array_merge(array($course, $startdate), $inparams);
-    $sql = "SELECT userid, COUNT(*) as number
-        FROM (
-            SELECT log.userid, objecttable, objectid
-            FROM {logstore_standard_log} as log
-            LEFT JOIN {user} usr ON usr.id = log.userid
-            WHERE courseid = ? AND action = 'viewed' AND target = 'course_module' AND log.timecreated >= ? AND log.userid $insql
-            GROUP BY log.userid, objecttable, objectid
+    if (!$legacy) {
+        $sql = "SELECT userid, COUNT(*) as number
+            FROM (
+                SELECT log.userid, objecttable, objectid
+                FROM {logstore_standard_log} as log
+                LEFT JOIN {user} usr ON usr.id = log.userid
+                WHERE courseid = ? AND action = 'viewed' AND target = 'course_module'
+                    AND log.timecreated >= ? AND log.userid $insql
+                GROUP BY log.userid, objecttable, objectid
             ) as temp
-        GROUP BY userid
-        ORDER by userid";
-
-        $resultado = $DB->get_records_sql($sql, $params);
-        return($resultado);
+            GROUP BY userid
+            ORDER by userid";       
+    } else {
+        $sql = "SELECT userid, COUNT(*) as number
+            FROM (
+                SELECT log.userid, module, cmid
+                FROM {log} as log
+                LEFT JOIN {user} usr ON usr.id = log.userid
+                WHERE course = ? AND (action = 'view' OR action = 'view forum')
+                    AND module <> 'assign' AND cmid <> 0  AND log.time >= ? AND log.userid $insql
+                GROUP BY log.userid, module, cmid
+            ) as temp
+            GROUP BY userid
+            ORDER by userid";
+    }
+    $resultado = $DB->get_records_sql($sql, $params);
+    return($resultado);
 }

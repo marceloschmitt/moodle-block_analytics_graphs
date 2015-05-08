@@ -45,7 +45,7 @@ foreach ($students as $tuple) {
 }
 
 /* Get the number of days with access by week */
-$resultado = block_analytics_graphs_get_number_of_days_access_by_week($course, $students, $startdate);
+$resultado = block_analytics_graphs_get_number_of_days_access_by_week($course, $students, $startdate, $legacy);
 
 /* Get the students that have no access */
 $maxnumberofweeks = 0;
@@ -65,7 +65,7 @@ if($maxnumberofweeks) {
 }
 
 /* Get the number of modules accessed by week */
-$accessresults = block_analytics_graphs_get_number_of_modules_access_by_week($course, $students, $startdate);
+$accessresults = block_analytics_graphs_get_number_of_modules_access_by_week($course, $students, $startdate, $legacy);
 $maxnumberofresources = 0;
 foreach ($accessresults as $tuple) {
     if ( $tuple->number > $maxnumberofresources) {
@@ -74,7 +74,7 @@ foreach ($accessresults as $tuple) {
 }
 
 /* Get the total number of modules accessed */
-$numberofresourcesresult = block_analytics_graphs_get_number_of_modules_accessed($course, $students, $startdate);
+$numberofresourcesresult = block_analytics_graphs_get_number_of_modules_accessed($course, $students, $startdate, $legacy);
 
 /* Conver results to javascript */
 $resultado = json_encode($resultado);
