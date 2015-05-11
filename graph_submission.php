@@ -190,7 +190,7 @@ class graph_submission {
                     alignTicks: false
                 },
                 title: {
-                    text: "' . get_string("submissions", "block_analytics_graphs") . '",
+                    text: "' . $this->title . '",
                     margin: 60
                 },
                 subtitle: {
