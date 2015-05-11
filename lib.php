@@ -171,12 +171,12 @@ function block_analytics_graphs_get_hotpot_submission($course, $students) {
                 SELECT h.id, ha.userid, MAX(ha.timefinish) as timecreated
                 FROM {hotpot} h
                 LEFT JOIN {hotpot_attempts} ha on h.id = ha.hotpotid AND ha.status = 4
-                WHERE h.course = ?
+                WHERE h.course = ? (ha.userid IS NULL OR ha.userid $insql)
                 GROUP BY h.id, ha.userid
 
             ) temp
             LEFT JOIN {hotpot} h on h.id = temp.id
-            LEFT JOIN {user} usr ON usr.id = temp.userid and temp.userid $insql
+            LEFT JOIN {user} usr on usr.id = temp.userid
             ORDER BY duedate, name, firstname";
 
      $resultado = $DB->get_records_sql($sql, $params);
@@ -197,12 +197,12 @@ function block_analytics_graphs_get_quiz_submission($course, $students) {
                 SELECT q.id, qa.userid, MAX(qa.timefinish) as timecreated
                 FROM {quiz} q
                 LEFT JOIN {quiz_attempts} qa on q.id = qa.quiz AND qa.state = 'finished'
-                WHERE q.course = ?
+                WHERE q.course = ? AND (qa.userid IS NULL OR qa.userid $insql)
                 GROUP BY q.id, qa.userid
     
             ) temp
             LEFT JOIN {quiz} q on q.id = temp.id
-            LEFT JOIN {user} usr ON usr.id = temp.userid and temp.userid $insql
+            LEFT JOIN {user} usr on usr.id = temp.userid
             ORDER BY duedate, name, firstname";
 
      $resultado = $DB->get_records_sql($sql, $params);
