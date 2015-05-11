@@ -29,6 +29,7 @@
         <script type="text/javascript">
             var courseid = <?php echo json_encode($submissions_graph->get_course()); ?>;
             
+            var codename = <?php echo json_encode($codename); ?>;           
 
             var groups = <?php echo $groupmembers_json; ?>;
             var result_json = <?php echo $result_json; ?>;
@@ -176,7 +177,7 @@
                         <?php echo json_encode(get_string('in_time_submission', 'block_analytics_graphs')); ?> +
                         " - " +  nome ;
                     div += "<div class='div_nomes' id='" + index + "-0'>" + 
-                        createEmailForm(title, value.in_time_submissions, courseid, $codename) +
+                        createEmailForm(title, value.in_time_submissions, courseid, codename) +
                         "</div>";
                 }
                 if (typeof value.latesubmissions != 'undefined')
@@ -186,7 +187,7 @@
                         <?php echo json_encode(get_string('late_submission', 'block_analytics_graphs')); ?> +
                         " - " +  nome ;
                     div += "<div class='div_nomes' id='" + index + "-1'>" +
-                        createEmailForm(title, value.latesubmissions, courseid, $codename) +
+                        createEmailForm(title, value.latesubmissions, courseid, codename) +
                         "</div>";
                 }
                 if (typeof value.no_submissions != 'undefined')
@@ -196,7 +197,7 @@
                         <?php echo json_encode(get_string('no_submission', 'block_analytics_graphs')); ?> +
                         " - " +  nome ;
                     div += "<div class='div_nomes' id='" + index + "-2'>" +
-                        createEmailForm(title, value.no_submissions, courseid, $codename) +
+                        createEmailForm(title, value.no_submissions, courseid, codename) +
                         "</div>";
                 }
                 document.write(div);
@@ -213,7 +214,7 @@
                             <?php echo json_encode(get_string('in_time_submission', 'block_analytics_graphs')); ?> +
                             " - " +  nome ;
                         div += "<div class='div_nomes' id='" + index + "-0-"+ind+"'>" + 
-                            createEmailForm(title, group.in_time_submissions[index], courseid, $codename) +
+                            createEmailForm(title, group.in_time_submissions[index], courseid, codename) +
                             "</div>";
                     }
                     if (typeof group.latesubmissions[index] != 'undefined')
@@ -223,7 +224,7 @@
                             <?php echo json_encode(get_string('late_submission', 'block_analytics_graphs')); ?> +
                             " - " +  nome ;
                         div += "<div class='div_nomes' id='" + index + "-1-"+ind+"'>" +
-                            createEmailForm(title, group.latesubmissions[index], courseid, $codename) +
+                            createEmailForm(title, group.latesubmissions[index], courseid, codename) +
                             "</div>";
                     }
                     if (typeof group.no_submissions[index] != 'undefined')
@@ -233,7 +234,7 @@
                             <?php echo json_encode(get_string('no_submission', 'block_analytics_graphs')); ?> +
                             " - " +  nome ;
                         div += "<div class='div_nomes' id='" + index + "-2-"+ind+"'>" +
-                            createEmailForm(title, group.no_submissions[index], courseid, $codename) +
+                            createEmailForm(title, group.no_submissions[index], courseid, codename) +
                             "</div>";
                     }
                     document.write(div);
