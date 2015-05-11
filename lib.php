@@ -171,7 +171,7 @@ function block_analytics_graphs_get_hotpot_submission($course, $students) {
                 SELECT h.id, ha.userid, MAX(ha.timefinish) as timecreated
                 FROM {hotpot} h
                 LEFT JOIN {hotpot_attempts} ha on h.id = ha.hotpotid AND ha.status = 4
-                WHERE h.course = ? (ha.userid IS NULL OR ha.userid $insql)
+                WHERE h.course = ? AND (ha.userid IS NULL OR ha.userid $insql)
                 GROUP BY h.id, ha.userid
 
             ) temp
