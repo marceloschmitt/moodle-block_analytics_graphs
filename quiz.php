@@ -14,7 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-
 require('../../config.php');
 require('graph_submission.php');
 require('javascriptfunctions.php');
@@ -24,11 +23,20 @@ $course = required_param('id', PARAM_INT);
 
 $title = get_string('submissions_quiz', 'block_analytics_graphs');
 $submissions_graph = new graph_submission($course, $title);
+
+
 $students = block_analytics_graphs_get_students($course);
 $result = block_analytics_graphs_get_quiz_submission($course, $students);
 $submissions_graph_options = $submissions_graph->create_graph($result, $students);
 
-$codename = "quiz.php";
+/* Discover groups and members */
+$groupmembers = block_analytics_graphs_get_course_group_members($course);
+$groupmembers_json = json_encode($groupmembers);
 
+$students_json = json_encode($students);
+$result_json = json_encode($result);
+$statistics_json = $submissions_graph->get_statistics();
+
+$codename = "quiz.php";
 require('groupjavascript.php');
 ?>
