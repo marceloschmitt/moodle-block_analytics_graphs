@@ -219,7 +219,7 @@ function block_analytics_graphs_get_number_of_days_access_by_week($course, $estu
     }
     list($insql, $inparams) = $DB->get_in_or_equal($inclause);
     $params = array_merge(array($timezoneadjust, $timezoneadjust, $startdate, $course, $startdate), $inparams);
-    if (!legacy) {
+    if (!$legacy) {
         $sql = "SELECT temp2.userid+(week*1000000) as id, temp2.userid, firstname, lastname, email, week, 
                 number, numberofpageviews
                 FROM (	
