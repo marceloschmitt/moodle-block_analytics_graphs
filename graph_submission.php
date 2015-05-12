@@ -279,7 +279,7 @@ class graph_submission {
                                             var nome_conteudo = this.x + "-" + this.series.index;
                                             var group = $("#group_select").val();
                                             $(".div_nomes").dialog("close");
-                                            if(group != "-")
+                                            if(group !== undefined && group != "-")
                                                 nome_conteudo +=  "-" + group;
                                             
                                             $("#" + nome_conteudo).dialog("open");
