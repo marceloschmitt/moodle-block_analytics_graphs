@@ -26,9 +26,11 @@ $string['analytics_graphs'] = 'Analytics Graphs';
 
 $string['access'] = 'Acessaram';
 $string['access_to_contents'] = 'Materiais acessados';
+$string['all_groups'] = 'Todos os grupos';
 $string['begin_date'] = 'Data de início';
 $string['contents'] = 'Material';
 $string['course'] = 'Disciplina';
+$string['date_sent'] = "Data de envio";
 $string['days_by_week'] = 'Dias acessados na semana';
 $string['days_with_access'] = 'Dias acessados';
 $string['event_view_graph'] = 'LA - View graph';
@@ -41,19 +43,26 @@ $string['in_time_submission'] = 'Envio no prazo';
 $string['late_submission'] = 'Envio fora do prazo';
 $string['legacy'] = 'Legacy (prior to 2.7)';
 $string['mailcopyalert'] = 'Esta é uma cópia de uma mensagem enviada por um professor ou tutor pelo Analytics Graphs!  ---- ';
+$string['message_text'] = "Texto da Mensagem";
+$string['new_message'] = 'Nova mensagem';
 $string['no_access'] = 'Não acessaram';
 $string['no_deadline'] = 'Sem limite';
+$string['no_messages'] = "Nenhuma mensagem para este aluno";
 $string['no_students'] = 'Não há estudantes no curso';
 $string['no_submission'] = 'Sem envio';
 $string['not_sent_message'] = 'Erro no envio da mensagem!';
 $string['number_of_students'] = 'Número de alunos';
 $string['number_of_weeks'] = 'Número de semanas';
 $string['old_log'] = 'old logs';
+$string['old_messages'] = 'Mensagens enviadas';
 $string['ratio'] = 'Ratio';
+$string['red_tooltip'] = 'Nenhum material foi acessado na última semana';
 $string['resources_by_week'] = 'Materiais acessados na semana';
 $string['resources_with_access'] = 'Materiais acessados';
 $string['send_email'] = 'Enviar mensagem';
+$string['sender'] = "Remetente";
 $string['sent_message'] = 'Mensagem colocada na fila do Moodle.';
+$string['student_information'] = 'Informações';
 $string['students'] = 'alunos';
 $string['subject'] = 'Assunto';
 $string['submissions'] = 'Submissões';
@@ -64,11 +73,10 @@ $string['submission_ratio'] = 'Relação de envio';
 $string['title_access'] = 'Distribuição de acesso aos materiais (recursos, links e páginas)';
 $string['title_students'] = 'Estudantes';
 $string['topic'] = 'Topico';
+$string['under_development'] = 'Aguarde a próxima versão!';
 $string['week_number'] = 'Numero da semana';
-$string['all_groups'] = 'Todos os grupos';
 $string['yellow_tooltip'] = 'Nenhum material foi acessado até agora';
-$string['red_tooltip'] = 'Nenhum material foi acessado na última semana';
-$string['no_messages'] = "Nenhuma mensagem para este aluno";
-$string['date_sent'] = "Data de envio";
-$string['sender'] = "Remetente";
-$string['message_text'] = "Texto da Mensagem";
+
+
+
+

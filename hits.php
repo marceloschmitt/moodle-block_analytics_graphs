@@ -597,14 +597,17 @@ thead th {
                     "<div class='student_tabs'> \
                         <ul> \
                             <li class='navi_tab'><a href='#email_panel-" + val.userid +
-                                "' class='mail' id='tab_link-" + val.userid + "'>\
-                                Mandar mensagem</a></li> \
+                                "' class='mail' id='tab_link-" + val.userid + "'>" +
+                        <?php  echo json_encode(get_string('new_message', 'block_analytics_graphs'));?> +
+                                </a></li> \
                             <li class='navi_tab'><a href='#student_tab_panel-" + val.userid +
-                                "' class='msgs' id='tab_link-" + val.userid + "-" + courseid + "'>\
-                                Mensagens enviadas a este aluno</a></li> \
+                                "' class='msgs' id='tab_link-" + val.userid + "-" + courseid + "'>" +
+                        <?php  echo json_encode(get_string('old_messages', 'block_analytics_graphs'));?> +
+                                "</a></li> \
                             <li class='navi_tab'><a href='#student_tab_panel-" + val.userid +
-                                "' class='info' id='tab_link-" + val.userid + "'>\
-                                Informações gerais sobre o aluno</a></li> \
+                                "' class='info' id='tab_link-" + val.userid + "'>" +
+                        <?php  echo json_encode(get_string('student_information', 'block_analytics_graphs'));?> + 
+                                "</a></li> \
                         </ul>" + 
         				"<div class='student_panel' id='email_panel-" + val.userid + "'>" +
         				createEmailForm(title,studentwithaccess, courseid, 'hits.php') + "</div>" + 
@@ -665,7 +668,9 @@ thead th {
             });
         }
         else if($(this).hasClass("info")){
-            $("#student_tab_panel-" + this.id.split("-")[1]).empty().append("<div id='test-info'>Info sobre o aluno</div>");
+            $("#student_tab_panel-" + this.id.split("-")[1]).empty().append("<div id='test-info'>" +
+                <?php  echo json_encode(get_string('under_development', 'block_analytics_graphs'));?> + 
+                "</div>");
             $(this).removeClass('current');
             $(this).addClass('current');
         }

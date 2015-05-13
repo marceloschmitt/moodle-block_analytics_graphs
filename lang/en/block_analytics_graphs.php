@@ -24,9 +24,11 @@ $string['analytics_graphs'] = 'Analytics Graphs';
 
 $string['access'] = 'Access';
 $string['access_to_contents'] = 'Content accesses';
+$string['all_groups'] = 'Show all groups';
 $string['begin_date'] = 'Begin date';
 $string['contents'] = 'Contents';
 $string['course'] = 'Course';
+$string['date_sent'] = "Date sent";
 $string['days_by_week'] = 'Number of days by week with access';
 $string['days_with_access'] = 'Days with access';
 $string['event_view_graph'] = 'LA - View graph';
@@ -39,19 +41,26 @@ $string['in_time_submission'] = 'In time submission';
 $string['late_submission'] = 'Late submission';
 $string['legacy'] = 'Legacy (prior to 2.7)';
 $string['mailcopyalert'] = 'Copy of Analytics Graphs message!  ---- ';
+$string['message_text'] = "Message Text";
+$string['new_message'] = 'New message';
 $string['no_access'] = 'No access';
 $string['no_deadline'] = 'No deadline';
+$string['no_messages'] = "This student has no messages";
 $string['no_students'] = 'There are no students in the course';
 $string['no_submission'] = 'No submission';
 $string['not_sent_message'] = 'Message sending error!';
 $string['number_of_students'] = 'Number of students';
 $string['number_of_weeks'] = 'Number of weeks';
 $string['old_log'] = 'old logs';
+$string['old_messages'] = 'Messages sent';
 $string['ratio'] = 'Ratio';
+$string['red_tooltip'] = 'No module was accessed in the last week';
 $string['resources_by_week'] = 'Number of resources accessed by week';
 $string['resources_with_access'] = 'Resources with access';
 $string['send_email'] = 'Send email';
+$string['sender'] = "Sender";
 $string['sent_message'] = 'Message sent to Moodle queue.';
+$string['student_information'] = 'Information';
 $string['students'] = 'students';
 $string['subject'] = 'Subject';
 $string['submissions'] = 'Submissions';
@@ -62,11 +71,11 @@ $string['submission_ratio'] = 'Submission ratio';
 $string['title_access'] = 'Distribution of access to contents (resources, urls and pages)';
 $string['title_students'] = 'Students';
 $string['topic'] = 'Topic';
+$string['under_development'] = "Wait for next release!";
 $string['week_number'] = 'Week number';
-$string['all_groups'] = 'Show all groups';
 $string['yellow_tooltip'] = 'No module was accessed until now';
-$string['red_tooltip'] = 'No module was accessed in the last week';
-$string['no_messages'] = "This student has no messages";
-$string['date_sent'] = "Date sent";
-$string['sender'] = "Sender";
-$string['message_text'] = "Message Text";
+
+
+
+
+

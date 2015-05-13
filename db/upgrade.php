@@ -87,5 +87,5 @@ function xmldb_block_analytics_graphs_upgrade($oldversion, $block) {
         $dbman->add_key($table, $key);
     }
     // Analytics_graphs savepoint reached.
-    upgrade_block_savepoint(true, 2015050801, 'analytics_graphs');
+    upgrade_block_savepoint(true, 2015051301, 'analytics_graphs');
 }
