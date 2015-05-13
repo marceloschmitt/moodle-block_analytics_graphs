@@ -599,7 +599,7 @@ thead th {
                             <li class='navi_tab'><a href='#email_panel-" + val.userid +
                                 "' class='mail' id='tab_link-" + val.userid + "'>" +
                         <?php  echo json_encode(get_string('new_message', 'block_analytics_graphs'));?> +
-                                </a></li> \
+                                "</a></li> \
                             <li class='navi_tab'><a href='#student_tab_panel-" + val.userid +
                                 "' class='msgs' id='tab_link-" + val.userid + "-" + courseid + "'>" +
                         <?php  echo json_encode(get_string('old_messages', 'block_analytics_graphs'));?> +
