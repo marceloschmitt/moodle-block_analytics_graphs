@@ -20,9 +20,9 @@ require('javascriptfunctions.php');
 $course = required_param('id', PARAM_INT);
 $legacy = required_param('legacy', PARAM_INT);
 global $DB;
-    
+
 /* Access control */
-require_login($course); 
+require_login($course);
 $context = context_course::instance($course);
 require_capability('block/analytics_graphs:viewpages', $context);
 
@@ -30,11 +30,11 @@ $courseparams = get_course($course);
 $startdate = $courseparams->startdate;
 $coursename = get_string('course', 'block_analytics_graphs') . ": " . $courseparams->fullname;
 $students = block_analytics_graphs_get_students($course);
-    
+
 $numberofstudents = count($students);
 if ($numberofstudents == 0) {
     error(get_string('no_students', 'block_analytics_graphs'));
-} 
+}
 
 foreach ($students as $tuple) {
     $arrayofstudents[] = array('userid' => $tuple->id , 'nome' => $tuple->firstname.' '.$tuple->lastname, 'email' => $tuple->email);
@@ -126,7 +126,7 @@ if ($numberofaccesses == 0) {
 
 /* Discover groups and members */
 $groupmembers = block_analytics_graphs_get_course_group_members($course);
-$groupmembers_json = json_encode($groupmembers);
+$groupmembersjson = json_encode($groupmembers);
 
 $statistics = json_encode($statistics);
 
@@ -155,7 +155,7 @@ $event->trigger();
 
 
         <script type="text/javascript">
-            var groups = <?php echo $groupmembers_json; ?>;
+            var groups = <?php echo $groupmembersjson; ?>;
 
             var courseid = <?php echo json_encode($course); ?>;
             var coursename = <?php echo json_encode($coursename); ?>;
@@ -197,6 +197,7 @@ $event->trigger();
                                 group.studentswithaccess[index].push(value.studentswithaccess[i]);
                             }
                         });
+                        
                     }else{
                         if(group.studentswithaccess[index] === undefined)
                             group.studentswithaccess[index] = [];
@@ -261,12 +262,12 @@ $event->trigger();
                         },
         
                     plotBands: [
-                                <?php
-                                $inicio = -0.5;
-                                $par = 2;
-                                foreach ($numberofresourcesintopic as $topico => $numberoftopics) {
-                                    $fim = $inicio + $numberoftopics;
-                                ?>        
+<?php
+$inicio = -0.5;
+$par = 2;
+foreach ($numberofresourcesintopic as $topico => $numberoftopics) {
+    $fim = $inicio + $numberoftopics;
+?>        
                     {
                          color: ' <?php echo ($par % 2 ? 'rgba(0, 0, 0, 0)' : 'rgba(68, 170, 213, 0.1)'); ?>',
                          label: {
@@ -315,7 +316,7 @@ $event->trigger();
                                         var nome_conteudo = this.x + "-" + this.series.name.charAt(0);
                                         $(".div_nomes").dialog("close");
                                         var group_id = $( "#group_select" ).val();
-                                        if(group_id !== undefined && group_id != "-"){//algum grupo foi selecionado
+                                        if(group_id != "-"){//algum grupo foi selecionado
                                             $("#" + nome_conteudo + "-group-"+group_id).dialog("open");
                                         }else{
                                             $("#" + nome_conteudo).dialog("open");    
@@ -365,16 +366,22 @@ $event->trigger();
         </script>
     </head>
     <body>
-        <?php if(sizeof($groupmembers)>0){ ?>
+        <?php if (count($groupmembers) > 0) { ?>
         <div style="margin: 20px;">
             <select id="group_select">
                 <option value="-"><?php  echo json_encode(get_string('all_groups', 'block_analytics_graphs'));?></option>
-                <?php foreach ($groupmembers as $key => $value) { ?>
+<?php
+    foreach ($groupmembers as $key => $value) {
+?>
                     <option value="<?php echo $key; ?>"><?php echo $value["name"]; ?></option>
-                <?php } ?>
+<?php 
+    }
+?>
             </select>
         </div>
-        <?php } ?>
+<?php 
+}
+?>
         <div id="container" style="min-width: 310px; min-width: 800px; min-height: 600px; margin: 0 auto"></div>
         <script>
 
@@ -445,6 +452,4 @@ $event->trigger();
         });
         </script>
     </body>
-</html>
-body>
 </html>
