@@ -28,7 +28,7 @@ $submissionsgraph = new graph_submission($course, $title);
 
 $students = block_analytics_graphs_get_students($course);
 $result = block_analytics_graphs_get_assign_submission($course, $students);
-$submissionsgraphoptions = $submissions_graph->create_graph($result, $students);
+$submissionsgraphoptions = $submissionsgraph->create_graph($result, $students);
 
 /* Discover groups and members */
 $groupmembers = block_analytics_graphs_get_course_group_members($course);
@@ -36,7 +36,7 @@ $groupmembersjson = json_encode($groupmembers);
 
 $studentsjson = json_encode($students);
 $resultjson = json_encode($result);
-$statisticsjson = $submissions_graph->get_statistics();
+$statisticsjson = $submissionsgraph->get_statistics();
 
 $codename = "assign.php";
 require('groupjavascript.php');
