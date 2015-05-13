@@ -375,12 +375,12 @@ foreach ($numberofresourcesintopic as $topico => $numberoftopics) {
 ?>
                     <option value="<?php echo $key; ?>"><?php echo $value["name"]; ?></option>
 <?php 
-}
+    }
 ?>
             </select>
         </div>
 <?php 
-} 
+}
 ?>
         <div id="container" style="min-width: 310px; min-width: 800px; min-height: 600px; margin: 0 auto"></div>
         <script>

@@ -162,7 +162,7 @@
 ?>
                     <option value="<?php echo $key; ?>"><?php echo $value["name"]; ?></option>
 <?php
-}
+    }
 ?>
             </select>
         </div>

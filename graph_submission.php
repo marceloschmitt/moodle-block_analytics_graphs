@@ -277,7 +277,6 @@ class graph_submission {
                                             $(".div_nomes").dialog("close");
                                             if(group !== undefined && group != "-")
                                                 nome_conteudo +=  "-" + group;
-    
                                             $("#" + nome_conteudo).dialog("open");
                                 }
                             }
