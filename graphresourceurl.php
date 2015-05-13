@@ -285,7 +285,7 @@ foreach ($numberofresourcesintopic as $topico => $numberoftopics) {
                     <?php
                     $inicio = $fim;
                     $par++;
-                                }
+}
                 ?>
                     ]
                 },
@@ -366,20 +366,22 @@ foreach ($numberofresourcesintopic as $topico => $numberoftopics) {
         </script>
     </head>
     <body>
-        <?php if(sizeof($groupmembers) > 0){ ?>
+        <?php if (count($groupmembers) > 0) { ?>
         <div style="margin: 20px;">
             <select id="group_select">
                 <option value="-"><?php  echo json_encode(get_string('all_groups', 'block_analytics_graphs'));?></option>
-                <?php   foreach ($groupmembers as $key => $value) { ?>
+<?php
+    foreach ($groupmembers as $key => $value) {
+?>
                     <option value="<?php echo $key; ?>"><?php echo $value["name"]; ?></option>
-                <?php 
-                }
-                ?>
+<?php 
+}
+?>
             </select>
         </div>
-        <?php 
-        } 
-        ?>
+<?php 
+} 
+?>
         <div id="container" style="min-width: 310px; min-width: 800px; min-height: 600px; margin: 0 auto"></div>
         <script>
 

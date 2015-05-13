@@ -41,7 +41,7 @@ function xmldb_block_analytics_graphs_upgrade($oldversion, $block) {
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
         }
-        
+
         // Define table block_analytics_graphs_dest to be created.
         $table = new xmldb_table('block_analytics_graphs_dest');
 

@@ -42,7 +42,6 @@ $result = $DB->get_records_sql($sql, $params);
 
 if (count($result) > 0) {
     echo json_encode($result);
-}
-else {
+} else {
     echo json_encode(array());
 }

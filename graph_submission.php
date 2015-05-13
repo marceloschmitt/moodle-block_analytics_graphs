@@ -152,7 +152,8 @@ class graph_submission {
         // Finishing of last access.
         $this->statistics[$counter]['numberofintimesubmissions'] = $numberofintimesubmissions;
         $this->statistics[$counter]['numberoflatesubmissions'] = $numberoflatesubmissions;
-        $this->statistics[$counter]['numberofnosubmissions'] = $numberofstudents - $numberofintimesubmissions - $numberoflatesubmissions;
+        $this->statistics[$counter]['numberofnosubmissions'] = $numberofstudents - $numberofintimesubmissions -
+            $numberoflatesubmissions;
 
         if ($this->statistics[$counter]['numberofnosubmissions'] == $numberofstudents) {
             $this->statistics[$counter]['no_submissions'] = $arrayofstudents;
@@ -276,7 +277,7 @@ class graph_submission {
                                             $(".div_nomes").dialog("close");
                                             if(group !== undefined && group != "-")
                                                 nome_conteudo +=  "-" + group;
-                                           
+    
                                             $("#" + nome_conteudo).dialog("open");
                                 }
                             }
@@ -296,7 +297,7 @@ class graph_submission {
                         type: "column",
                         data: [';
         $arrlength = count($arrayofassignments);
-        for($x = 0; $x < $arrlength; $x++) {
+        for ($x = 0; $x < $arrlength; $x++) {
             $chart .= $arrayofintimesubmissions[$x];
             $chart .= ',';
         }
@@ -340,13 +341,13 @@ class graph_submission {
                         lineWidth: 2,
                         lineColor: Highcharts.getOptions().colors[2],
                         data: [';
-                            $arrlength = count($arrayofassignments);
-                            for ($x = 0; $x < $arrlength; $x++) {
-                                $chart .= sprintf("%.2f", ($arrayofintimesubmissions[$x] + $arrayoflatesubmissions[$x]) /
-                                    ($arrayofintimesubmissions[$x] + $arrayoflatesubmissions[$x] + $arrayofnosubmissions[$x]));
-                                $chart .= ',';
-                            }
-                        $chart .= '],
+        $arrlength = count($arrayofassignments);
+        for ($x = 0; $x < $arrlength; $x++) {
+            $chart .= sprintf("%.2f", ($arrayofintimesubmissions[$x] + $arrayoflatesubmissions[$x]) /
+                ($arrayofintimesubmissions[$x] + $arrayoflatesubmissions[$x] + $arrayofnosubmissions[$x]));
+            $chart .= ',';
+        }
+        $chart .= '],
                         marker: {
                             lineWidth: 2,
                             lineColor: Highcharts.getOptions().colors[2],
