@@ -58,7 +58,7 @@ foreach ($resultado as $tuple) {
     }
 }
 
-if($maxnumberofweeks) {
+if ($maxnumberofweeks) {
     $studentswithnoaccess = block_analytics_graphs_subtract_student_arrays($arrayofstudents, $arrayofaccess);
 } else {
     $studentswithnoaccess = $arrayofstudents;
@@ -479,7 +479,8 @@ thead th {
             $.each(array, function(index, value){
                         if (value){
                             if (nome === value.nome){
-                                    var linha = "<tr><th><span class='nome_student' style='cursor:hand' id='linha-"+value.userid+"'>"+value.nome+"</span>"+
+                                    var linha = "<tr><th><span class='nome_student' style='cursor:hand'
+                                     id='linha-"+value.userid+"'>"+value.nome+"</span>"+
                                             "<div class='warnings'>\
                                                 <div class='warning1' id='"+value.userid+"_1'>\
                                                     <img\
@@ -579,7 +580,7 @@ thead th {
 
 <script type="text/javascript">
 	var studentwithaccess = [];
-    $.each(students, function(ind, val){
+    $.each(students, function(ind, val) {
         var div = "";
         if (val !== undefined){   
 			var title = coursename + 
@@ -595,14 +596,18 @@ thead th {
                 "<div class='div_nomes' id='" + val.userid + "'>" +
                     "<div class='student_tabs'> \
                         <ul> \
-                            <li class='navi_tab'><a href='#email_panel-" + val.userid + "' class='mail' id='tab_link-" + val.userid + "'>\
+                            <li class='navi_tab'><a href='#email_panel-" + val.userid +
+                                "' class='mail' id='tab_link-" + val.userid + "'>\
                                 Mandar mensagem</a></li> \
-                            <li class='navi_tab'><a href='#student_tab_panel-" + val.userid + "' class='msgs' id='tab_link-" + val.userid + "-" + courseid + "'>\
+                            <li class='navi_tab'><a href='#student_tab_panel-" + val.userid +
+                                "' class='msgs' id='tab_link-" + val.userid + "-" + courseid + "'>\
                                 Mensagens enviadas a este aluno</a></li> \
-                            <li class='navi_tab'><a href='#student_tab_panel-" + val.userid + "' class='info' id='tab_link-" + val.userid + "'>\
+                            <li class='navi_tab'><a href='#student_tab_panel-" + val.userid +
+                                "' class='info' id='tab_link-" + val.userid + "'>\
                                 Informações gerais sobre o aluno</a></li> \
                         </ul>" + 
-        				"<div class='student_panel' id='email_panel-" + val.userid + "'>" + createEmailForm(title,studentwithaccess, courseid, 'hits.php') + "</div>" + 
+        				"<div class='student_panel' id='email_panel-" + val.userid + "'>" +
+        				createEmailForm(title,studentwithaccess, courseid, 'hits.php') + "</div>" + 
                         "<div class='student_panel' id='student_tab_panel-" + val.userid + "'></div>" + 
                     "</div>" + 
                 "</div>";
@@ -620,7 +625,9 @@ thead th {
             var fill_panel = function(panel_id){
                 return function fill_panel_callback(data){
                     if(jQuery.isEmptyObject(data)){
-                        $("#student_tab_panel-" + panel_id).empty().append("<div>" + <?php echo json_encode(get_string('no_messages', 'block_analytics_graphs')); ?> + "</div>");
+                        $("#student_tab_panel-" + panel_id).empty().append("<div>" + 
+                        <?php echo json_encode(get_string('no_messages', 'block_analytics_graphs')); ?> + 
+                        "</div>");
                     }
                     else{
                         var date_string = <?php echo json_encode(get_string('date_sent', 'block_analytics_graphs')); ?>;

@@ -42,23 +42,23 @@ $fromuser->maildisplay = true;
 $fromuser->lastname = $USER->lastname;
 $fromuser->id = $USER->id;
 
-$record_msg = new stdClass();
-$record_msg->fromid = $fromuser->id;
-$record_msg->subject = $subject;
-$record_msg->message = $messagetext;
-$record_msg->courseid = $course;
-$record_msg->timecreated = time();
-$messageid = $DB->insert_record('block_analytics_graphs_msg', $record_msg, true);
-$record_dest = new stdClass();
-$record_dest->messageid = $messageid;
+$recordmsg = new stdClass();
+$recordmsg->fromid = $fromuser->id;
+$recordmsg->subject = $subject;
+$recordmsg->message = $messagetext;
+$recordmsg->courseid = $course;
+$recordmsg->timecreated = time();
+$messageid = $DB->insert_record('block_analytics_graphs_msg', $recordmsg, true);
+$recorddest = new stdClass();
+$recorddest->messageid = $messageid;
 
 
 foreach ($destination as $i => $x) {
         $touser->id = $destination[$i];
-        $record_dest->toid = $touser->id;
+        $recorddest->toid = $touser->id;
         $touser->email = $DB->get_field('user', 'email', array('id' => $destination[$i]));
         email_to_user($touser, $fromuser, $subject, $messagetext, $messagehtml, '', '', true);
-        $DB->insert_record('block_analytics_graphs_dest', $record_dest, false);
+        $DB->insert_record('block_analytics_graphs_dest', $recorddest, false);
 }
 
 $messagetext = get_string('mailcopyalert', 'block_analytics_graphs') . $messagetext;

@@ -18,7 +18,7 @@
 function xmldb_block_analytics_graphs_upgrade($oldversion, $block) {
     global $CFG, $DB;
 
-    $dbman = $DB->get_manager(); // loads ddl manager and xmldb classes
+    $dbman = $DB->get_manager(); // Loads ddl manager and xmldb classes.
 
     if ($oldversion < 2015042003) {
                 // Define table block_analytics_graphs_msg to be created.
@@ -59,9 +59,7 @@ function xmldb_block_analytics_graphs_upgrade($oldversion, $block) {
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
         }
-    }
-    else if ($oldversion == 2015042003) {
-
+    } else if ($oldversion == 2015042003) {
         // Define field courseid to be added to block_analytics_graphs_msg.
         $table = new xmldb_table('block_analytics_graphs_msg');
         $field = new xmldb_field('courseid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '1', 'message');
@@ -84,7 +82,7 @@ function xmldb_block_analytics_graphs_upgrade($oldversion, $block) {
 
         // Launch add key courseid.
         $dbman->add_key($table, $key);
-        
+
         // Launch add key courseid.
         $dbman->add_key($table, $key);
     }

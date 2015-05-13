@@ -27,14 +27,14 @@
         <script src="http://code.highcharts.com/modules/no-data-to-display.js"></script>
         <script src="http://code.highcharts.com/modules/exporting.js"></script> 
         <script type="text/javascript">
-            var courseid = <?php echo json_encode($submissions_graph->get_course()); ?>;
+            var courseid = <?php echo json_encode($submissionsgraph->get_course()); ?>;
             
             var codename = <?php echo json_encode($codename); ?>;           
 
-            var groups = <?php echo $groupmembers_json; ?>;
-            var result_json = <?php echo $result_json; ?>;
-            var students_json = <?php echo $students_json; ?>;
-            var geral = <?php echo $statistics_json; ?>;
+            var groups = <?php echo $groupmembersjson; ?>;
+            var result_json = <?php echo $resultjson; ?>;
+            var students_json = <?php echo $studentsjson; ?>;
+            var geral = <?php echo $statisticsjson; ?>;
             
             //full students on groups
             $.each(groups, function(index, group){
@@ -134,14 +134,17 @@
 
                     var time = new Date().getTime();
 
-                    group.submission_ratio[index] = parseFloat(parseFloat((group.numberofintimesubmissions[index] + group.numberoflatesubmissions[index]) /
-                                (group.numberofintimesubmissions[index] + group.numberoflatesubmissions[index] + group.numberofnosubmissions[index])).toFixed(2));
+                    group.submission_ratio[index] = parseFloat(parseFloat((group.numberofintimesubmissions[index] +
+                        group.numberoflatesubmissions[index]) /
+                        (group.numberofintimesubmissions[index] + group.numberoflatesubmissions[index] +    
+                        group.numberofnosubmissions[index])).toFixed(2));
 
                     if(group.duedate[index] == 0  || group.duedate[index] > time){
                         group.in_time_ratio[index] = 1;
                     }else{
                         group.in_time_ratio[index] = parseFloat(parseFloat(group.numberofintimesubmissions[index] /
-                            (group.numberofintimesubmissions[index] + group.numberoflatesubmissions[index] + group.numberofnosubmissions[index])).toFixed(2));
+                            (group.numberofintimesubmissions[index] + group.numberoflatesubmissions[index] +
+                            group.numberofnosubmissions[index])).toFixed(2));
                     }
                 });
             });
@@ -150,21 +153,25 @@
         </script>
     </head>
     <body>
-        <?php if(sizeof($groupmembers)>0){ ?>
+        <?php if(sizeof($groupmembers)>0) { ?>
         <div style="margin: 20px;">
             <select id="group_select">
                 <option value="-"><?php  echo json_encode(get_string('all_groups', 'block_analytics_graphs'));?></option>
-                <?php foreach ($groupmembers as $key => $value) { ?>
+                <?php   foreach ($groupmembers as $key => $value) { ?>
                     <option value="<?php echo $key; ?>"><?php echo $value["name"]; ?></option>
-                <?php } ?>
+                <?php
+                }
+                ?>
             </select>
         </div>
-        <?php } ?>
+        <?php
+        }
+        ?>
         <div id="container" style="min-width: 310px; min-width: 800px; height: 650px; margin: 0 auto"></div>
         <script>
             $(function(){
-                var groups = <?php echo $groupmembers_json; ?>;
-                $('#container').highcharts(<?php echo $submissions_graph_options; ?>);
+                var groups = <?php echo $groupmembersjson; ?>;
+                $('#container').highcharts(<?php echo $submissionsgraphoptions; ?>);
             })
             geral = parseObjToString(geral);
             $.each(geral, function(index, value) {
@@ -172,7 +179,7 @@
                 div = "";
                 if (typeof value.in_time_submissions != 'undefined')
                 {
-                    title = <?php echo json_encode($submissions_graph->get_coursename()); ?> +
+                    title = <?php echo json_encode($submissionsgraph->get_coursename()); ?> +
                         "</h3>" + 
                         <?php echo json_encode(get_string('in_time_submission', 'block_analytics_graphs')); ?> +
                         " - " +  nome ;
@@ -182,7 +189,7 @@
                 }
                 if (typeof value.latesubmissions != 'undefined')
                 {
-                    title = <?php echo json_encode($submissions_graph->get_coursename()); ?> +
+                    title = <?php echo json_encode($submissionsgraph->get_coursename()); ?> +
                         "</h3>" +
                         <?php echo json_encode(get_string('late_submission', 'block_analytics_graphs')); ?> +
                         " - " +  nome ;
@@ -192,7 +199,7 @@
                 }
                 if (typeof value.no_submissions != 'undefined')
                 {
-                    title = <?php echo json_encode($submissions_graph->get_coursename()); ?> +
+                    title = <?php echo json_encode($submissionsgraph->get_coursename()); ?> +
                         "</h3>" + 
                         <?php echo json_encode(get_string('no_submission', 'block_analytics_graphs')); ?> +
                         " - " +  nome ;
@@ -209,7 +216,7 @@
 
                     if (typeof group.in_time_submissions[index] != 'undefined')
                     {
-                        title = <?php echo json_encode($submissions_graph->get_coursename()); ?> +
+                        title = <?php echo json_encode($submissionsgraph->get_coursename()); ?> +
                             "</h3>" + 
                             <?php echo json_encode(get_string('in_time_submission', 'block_analytics_graphs')); ?> +
                             " - " +  nome ;
@@ -219,7 +226,7 @@
                     }
                     if (typeof group.latesubmissions[index] != 'undefined')
                     {
-                        title = <?php echo json_encode($submissions_graph->get_coursename()); ?> +
+                        title = <?php echo json_encode($submissionsgraph->get_coursename()); ?> +
                             "</h3>" +
                             <?php echo json_encode(get_string('late_submission', 'block_analytics_graphs')); ?> +
                             " - " +  nome ;
@@ -229,7 +236,7 @@
                     }
                     if (typeof group.no_submissions[index] != 'undefined')
                     {
-                        title = <?php echo json_encode($submissions_graph->get_coursename()); ?> +
+                        title = <?php echo json_encode($submissionsgraph->get_coursename()); ?> +
                             "</h3>" + 
                             <?php echo json_encode(get_string('no_submission', 'block_analytics_graphs')); ?> +
                             " - " +  nome ;
@@ -274,14 +281,17 @@
                     $.each(geral, function(index, value){
 
                         var time = new Date().getTime();
-                        var submission_ratio_value = parseFloat(parseFloat((value.numberofintimesubmissions + value.numberoflatesubmissions) /
-                                    (value.numberofintimesubmissions + value.numberoflatesubmissions + value.numberofnosubmissions)).toFixed(2));
+                        var submission_ratio_value = parseFloat(parseFloat((value.numberofintimesubmissions +
+                            value.numberoflatesubmissions) /
+                            (value.numberofintimesubmissions + value.numberoflatesubmissions +
+                            value.numberofnosubmissions)).toFixed(2));
 
                         if(value.duedate == 0 || value.duedate > time){
                             var in_time_ratio_value = 1;
                         }else{
                             var in_time_ratio_value = parseFloat(parseFloat(value.numberofintimesubmissions /
-                                (value.numberofintimesubmissions + value.numberoflatesubmissions + value.numberofnosubmissions)).toFixed(2));
+                                (value.numberofintimesubmissions + value.numberoflatesubmissions +
+                                value.numberofnosubmissions)).toFixed(2));
                         }
                         numberofintimesubmissions.push(value.numberofintimesubmissions);
                         numberoflatesubmissions.push(value.numberoflatesubmissions);

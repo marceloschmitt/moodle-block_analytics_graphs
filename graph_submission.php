@@ -24,7 +24,6 @@ class graph_submission {
     private $startdate;
     private $title;
     private $statistics;
-    // private $query_func_name;
 
     public function __construct($course, $title) {
         $this->course = $course;
@@ -41,15 +40,15 @@ class graph_submission {
         $this->coursename = get_string('course', 'block_analytics_graphs') . ": " . $courseparams->fullname;
     }
 
-    public function get_course(){
+    public function get_course() {
         return $this->course;
     }
 
-    public function get_coursename(){
+    public function get_coursename() {
         return $this->coursename;
     }
 
-    public function get_statistics(){
+    public function get_statistics() {
         return $this->statistics;
     }
 
@@ -66,12 +65,6 @@ class graph_submission {
             $arrayofstudents[] = array('userid' => $tuple->id ,
                 'nome' => $tuple->firstname.' '.$tuple->lastname, 'email' => $tuple->email);
         }
-
-        // Recover submitted tasks.
-        // $result = block_analytics_graphs_get_assign_submission($this->course, $students);
-        // $func = $this->query_func_name;
-        // $result = $func($this->course, $students);
-
         $counter = 0;
         $numberofintimesubmissions = 0;
         $numberoflatesubmissions = 0;
@@ -119,11 +112,13 @@ class graph_submission {
                     if ($this->statistics[$counter]['numberofnosubmissions'] == $numberofstudents) {
                         $this->statistics[$counter]['no_submissions'] = $arrayofstudents;
                     } else if ($numberoflatesubmissions == 0) {
-                        $this->statistics[$counter]['no_submissions'] = block_analytics_graphs_subtract_student_arrays($arrayofstudents,
-                            $this->statistics[$counter]['in_time_submissions']);
+                        $this->statistics[$counter]['no_submissions'] =
+                            block_analytics_graphs_subtract_student_arrays($arrayofstudents,
+                                $this->statistics[$counter]['in_time_submissions']);
                     } else if ($numberofintimesubmissions == 0) {
-                        $this->statistics[$counter]['no_submissions'] = block_analytics_graphs_subtract_student_arrays($arrayofstudents,
-                            $this->statistics[$counter]['latesubmissions']);
+                        $this->statistics[$counter]['no_submissions'] =
+                            block_analytics_graphs_subtract_student_arrays($arrayofstudents,
+                                $this->statistics[$counter]['latesubmissions']);
                     } else {
                         $this->statistics[$counter]['no_submissions'] = block_analytics_graphs_subtract_student_arrays(
                             block_analytics_graphs_subtract_student_arrays($arrayofstudents,
@@ -215,17 +210,17 @@ class graph_submission {
                 xAxis: [
                     {
                         categories: [';
-                            $arrlength = count($arrayofassignments);
-                            for ($x = 0; $x < $arrlength; $x++) {
-                                $chart .= '"<b>';
-                                $chart .= substr($arrayofassignments[$x], 0, 35);
-                                if ($arrayofduedates[$x]) {
-                                    $chart .= '</b><br>'. userdate($arrayofduedates[$x], get_string("strftimerecentfull")) . '",';
-                                } else {
-                                    $chart .= '</b><br>'.get_string("no_deadline", "block_analytics_graphs") . '",';
-                                }
-                            } 
-                        $chart .= '],
+        $arrlength = count($arrayofassignments);
+        for ($x = 0; $x < $arrlength; $x++) {
+            $chart .= '"<b>';
+            $chart .= substr($arrayofassignments[$x], 0, 35);
+            if ($arrayofduedates[$x]) {
+                $chart .= '</b><br>'. userdate($arrayofduedates[$x], get_string("strftimerecentfull")) . '",';
+            } else {
+                $chart .= '</b><br>'.get_string("no_deadline", "block_analytics_graphs") . '",';
+            }
+        }
+        $chart .= '],
                         labels: {
                             rotation: -45,
                         }
@@ -269,7 +264,7 @@ class graph_submission {
                 ],
                 tooltip: {
                     crosshairs: true
-                },                
+                },
                 plotOptions: {
                     series: {
                         cursor: "pointer",
@@ -281,7 +276,7 @@ class graph_submission {
                                             $(".div_nomes").dialog("close");
                                             if(group !== undefined && group != "-")
                                                 nome_conteudo +=  "-" + group;
-                                            
+                                           
                                             $("#" + nome_conteudo).dialog("open");
                                 }
                             }
@@ -293,19 +288,19 @@ class graph_submission {
                         useHTML: this,
                         enabled: true
                     }
-                },         
+                },
                 series: [
                     {
                         yAxis: 1,
                         name: "' . get_string("in_time_submission", "block_analytics_graphs") . '",
                         type: "column",
                         data: [';
-                            $arrlength = count($arrayofassignments);
-                            for($x = 0; $x < $arrlength; $x++) {
-                                $chart .= $arrayofintimesubmissions[$x];
-                                $chart .= ',';
-                            }
-                        $chart .= '],
+        $arrlength = count($arrayofassignments);
+        for($x = 0; $x < $arrlength; $x++) {
+            $chart .= $arrayofintimesubmissions[$x];
+            $chart .= ',';
+        }
+        $chart .= '],
                         tooltip: {
                             valueSuffix: " ' . get_string("students", "block_analytics_graphs") . '"
                         }
@@ -314,12 +309,12 @@ class graph_submission {
                         name: "' . get_string("late_submission", "block_analytics_graphs") . '",
                         type: "column",
                         data: [';
-                            $arrlength = count($arrayofassignments);
-                            for ($x = 0; $x < $arrlength; $x++) {
-                                $chart .= $arrayoflatesubmissions[$x];
-                                $chart .= ',';
-                            }
-                        $chart .= '],
+        $arrlength = count($arrayofassignments);
+        for ($x = 0; $x < $arrlength; $x++) {
+            $chart .= $arrayoflatesubmissions[$x];
+            $chart .= ',';
+        }
+        $chart .= '],
                         tooltip: {
                             valueSuffix: " ' . get_string("students", "block_analytics_graphs") . '"
                         }
@@ -327,14 +322,14 @@ class graph_submission {
                         yAxis: 1,
                         name: "' . get_string("no_submission", "block_analytics_graphs") . '",
                         type: "column",
-                        color: "#FF1111", //cor 
+                        color: "#FF1111", //cor
                         data: [';
-                            $arrlength = count($arrayofassignments);
-                            for ($x = 0; $x < $arrlength; $x++) {
-                                $chart .= $arrayofnosubmissions[$x];
-                                $chart .= ',';
-                            }
-                        $chart .= '],
+        $arrlength = count($arrayofassignments);
+        for ($x = 0; $x < $arrlength; $x++) {
+            $chart .= $arrayofnosubmissions[$x];
+            $chart .= ',';
+        }
+        $chart .= '],
                         tooltip: {
                             valueSuffix: " ' . get_string("students", "block_analytics_graphs") . '"
                         }
@@ -357,25 +352,25 @@ class graph_submission {
                             lineColor: Highcharts.getOptions().colors[2],
                             fillColor: "white"
                         }
-                    }, { 
+                    }, {
                         yAxis: 0,
                         name: "' . get_string("in_time_ratio", "block_analytics_graphs") . '",
                         type: "spline",
                         lineWidth: 2,
                         lineColor: Highcharts.getOptions().colors[1],
                         data: [';
-                            $arrlength = count($arrayofassignments);
-                            for ($x = 0; $x < $arrlength; $x++) {
-                                if ($arrayofduedates[$x] == 0 || $arrayofduedates[$x] > time()) {
-                                    // If no duedate or duedate has not passed.
-                                    $chart .= 1;
-                                } else {
-                                    $chart .= sprintf("%.2f", $arrayofintimesubmissions[$x] /
-                                        ($arrayofintimesubmissions[$x] + $arrayoflatesubmissions[$x] + $arrayofnosubmissions[$x]));
-                                }
-                                $chart .= ',';
-                            }
-                        $chart .= '],
+        $arrlength = count($arrayofassignments);
+        for ($x = 0; $x < $arrlength; $x++) {
+            if ($arrayofduedates[$x] == 0 || $arrayofduedates[$x] > time()) {
+                // If no duedate or duedate has not passed.
+                $chart .= 1;
+            } else {
+                $chart .= sprintf("%.2f", $arrayofintimesubmissions[$x] /
+                    ($arrayofintimesubmissions[$x] + $arrayoflatesubmissions[$x] + $arrayofnosubmissions[$x]));
+            }
+            $chart .= ',';
+        }
+        $chart .= '],
                         marker: {
                             lineWidth: 2,
                             lineColor: Highcharts.getOptions().colors[1],
@@ -384,7 +379,7 @@ class graph_submission {
                     }
                 ]
             }';
-        
+
         $event = \block_analytics_graphs\event\block_analytics_graphs_event_view_graph::create(array(
             'objectid' => $this->course,
             'context' => $this->context,
@@ -396,4 +391,3 @@ class graph_submission {
     }
 
 }
-?>
