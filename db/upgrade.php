@@ -59,33 +59,31 @@ function xmldb_block_analytics_graphs_upgrade($oldversion, $block) {
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
         }
-    } else if ($oldversion == 2015042003) {
-        // Define field courseid to be added to block_analytics_graphs_msg.
+    } else if ($oldversion < 2015051302) {
         $table = new xmldb_table('block_analytics_graphs_msg');
+        
+        // Define field courseid to be added to block_analytics_graphs_msg.      
         $field = new xmldb_field('courseid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '1', 'message');
-
         // Conditionally launch add field courseid.
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
+            $key = new xmldb_key('courseid', XMLDB_KEY_FOREIGN, array('courseid'), 'course', array('id'));
+            $dbman->add_key($table, $key);
         }
 
-        // Define key courseid (foreign) to be added to block_analytics_graphs_msg.
-        $key = new xmldb_key('courseid', XMLDB_KEY_FOREIGN, array('courseid'), 'course', array('id'));
 
         // Define field timecreated to be added to block_analytics_graphs_msg.
-        $field = new xmldb_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0', 'courseid');
-
+        $field = new xmldb_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, null, null, '0', 'courseid');
         // Conditionally launch add field timecreated.
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
+            $index = new xmldb_index('timecreated', XMLDB_INDEX_NOTUNIQUE, array('timecreated'));
+            if (!$dbman->index_exists($table, $index)) {
+                $dbman->add_index($table, $index);
+            }
         }
-
-        // Launch add key courseid.
-        $dbman->add_key($table, $key);
-
-        // Launch add key courseid.
-        $dbman->add_key($table, $key);
+        
     }
     // Analytics_graphs savepoint reached.
-    upgrade_block_savepoint(true, 2015051301, 'analytics_graphs');
+    upgrade_block_savepoint(true, 2015051302, 'analytics_graphs');
 }

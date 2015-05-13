@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="blocks/analytics_graphs/db" VERSION="20150420" COMMENT="XMLDB file for Moodle blocks/analytics_graphs"
+<XMLDB PATH="blocks/analytics_graphs/db" VERSION="20150513" COMMENT="XMLDB file for Moodle blocks/analytics_graphs"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
@@ -10,11 +10,17 @@
         <FIELD NAME="fromid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Id of the user who sent the message."/>
         <FIELD NAME="subject" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Subject of the message that was sent."/>
         <FIELD NAME="message" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Text of the message that was sent to the students."/>
+        <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="1" SEQUENCE="false"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
         <KEY NAME="fromid" TYPE="foreign" FIELDS="fromid" REFTABLE="user" REFFIELDS="id"/>
+        <KEY NAME="courseid" TYPE="foreign" FIELDS="courseid" REFTABLE="course" REFFIELDS="id"/>
       </KEYS>
+      <INDEXES>
+        <INDEX NAME="timecreated" UNIQUE="false" FIELDS="timecreated"/>
+      </INDEXES>
     </TABLE>
     <TABLE NAME="block_analytics_graphs_dest" COMMENT="Table to relate message with students.">
       <FIELDS>
