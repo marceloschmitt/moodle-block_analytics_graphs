@@ -316,7 +316,7 @@ foreach ($numberofresourcesintopic as $topico => $numberoftopics) {
                                         var nome_conteudo = this.x + "-" + this.series.name.charAt(0);
                                         $(".div_nomes").dialog("close");
                                         var group_id = $( "#group_select" ).val();
-                                        if(group_id != "-"){//algum grupo foi selecionado
+                                        if(group_id !== undefined && group_id != "-"){//algum grupo foi selecionado
                                             $("#" + nome_conteudo + "-group-"+group_id).dialog("open");
                                         }else{
                                             $("#" + nome_conteudo).dialog("open");    
