@@ -99,14 +99,14 @@ $event->trigger();
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title><?php echo get_string('hits_distribution', 'block_analytics_graphs'); ?></title>
-<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css">
 
-<!--<script src="http://code.jquery.com/jquery-1.10.2.js"></script>-->
-<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.1.js"></script>
+<link rel="stylesheet" href="externalref/jquery-ui.css">
+<script src="externalref/jquery-1.11.1.js"></script> 
+<script src="externalref/jquery-ui.js"></script>
+<script src="externalref/highcharts.js"></script>
+<script src="externalref/no-data-to-display.js"></script>
+<script src="externalref/exporting.js"></script> 
 
-<script src="http://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
-<script src="http://code.highcharts.com/highcharts.js"></script>
-<script src="http://code.highcharts.com/modules/no-data-to-display.js"></script>
 <!--<script src="http://code.highcharts.com/modules/exporting.js"></script> -->
 
 <style>
