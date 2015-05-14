@@ -107,8 +107,6 @@ $event->trigger();
 <script src="externalref/no-data-to-display.js"></script>
 <script src="externalref/exporting.js"></script> 
 
-<!--<script src="http://code.highcharts.com/modules/exporting.js"></script> -->
-
 <style>
 #result {
         text-align: right;
@@ -470,8 +468,8 @@ thead th {
 
 
     function createRow(array, nomes){
-        var red_excl = "http://www.pd4pic.com/images250_/warning-attention-road-sign-exclamation-mark.png";
-        var yellow_excl = "http://www.wpclipart.com/signs_symbol/assorted/assorted_6/exclamation_sign.png";
+        var red_excl = "images/warning-attention-road-sign-exclamation-mark.png";
+        var yellow_excl = "images/exclamation_sign.png";
         var red_tooltip = <?php echo json_encode(get_string('red_tooltip', 'block_analytics_graphs')); ?>;
         var yellow_tooltip = <?php echo json_encode(get_string('yellow_tooltip', 'block_analytics_graphs')); ?>;
         $.each(nomes, function(ind,val){
