@@ -344,7 +344,13 @@ thead th {
                     //data: trata_array(student.acessos)
                     data: trata_array(student.acessosModulos)
                     
-                }]
+                }],
+                
+                
+                exporting: {
+                    enabled: false
+                },
+                
                     });                    
                     last_week = <?php echo $maxnumberofweeks; ?>;
                     if(!(last_week in student.acessosModulos)){
@@ -461,7 +467,12 @@ thead th {
 
                 series: [{
                     data: trata_array(student.acessos)
-                }]
+                }],
+                
+                
+                exporting: {
+                    enabled: false
+                },
 
             });
         }
@@ -692,7 +703,6 @@ thead th {
     $(".student_tabs").tabs({active: 0});
     $(".div_nomes").dialog("close");
 
-	$("div .highcharts-tooltip").css('top', '-9999990px');
     </script>
 </body>
 </html>
