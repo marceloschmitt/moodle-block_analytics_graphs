@@ -76,7 +76,7 @@ foreach ($accessresults as $tuple) {
 /* Get the total number of modules accessed */
 $numberofresourcesresult = block_analytics_graphs_get_number_of_modules_accessed($course, $students, $startdate, $legacy);
 
-/* Conver results to javascript */
+/* Convert results to javascript */
 $resultado = json_encode($resultado);
 $studentswithnoaccess = json_encode($studentswithnoaccess);
 $accessresults = json_encode($accessresults);
