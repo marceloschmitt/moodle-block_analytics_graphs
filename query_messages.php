@@ -43,7 +43,7 @@ $result = $DB->get_records_sql($sql, $params);
 if (count($result) > 0) {
 	$keys = array_keys($result);
 	for($x=0; $x<count($keys); $x++){
-		$result[$keys[$x]]->timecreated = usergetdate($result[$keys[$x]]->timecreated);
+		$result[$keys[$x]]->timecreated = userdate($result[$keys[$x]]->timecreated, get_string('strftimerecentfull'));
 	}
     echo json_encode($result);
 } else {
