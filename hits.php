@@ -660,7 +660,7 @@ thead th {
                                                 data[elem]['timecreated']['year'] + ", " +
                                                 data[elem]['timecreated']['hours'] + ":" +
                                                 data[elem]['timecreated']['minutes'] + ":" +
-                                                data[elem]['timecreated']['seconds'] + ":" +
+                                                data[elem]['timecreated']['seconds'] +
                              "</td>";
                             table += "<td>" + data[elem]['fromid'] +  "</td>";
                             table += "<td>" + data[elem]['subject'] +  "</td>";
