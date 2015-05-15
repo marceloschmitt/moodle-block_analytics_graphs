@@ -41,6 +41,10 @@ $sql = "SELECT msg.id, CONCAT(firstname, ' ', lastname) fromid, subject, message
 $result = $DB->get_records_sql($sql, $params);
 
 if (count($result) > 0) {
+	$keys = array_keys($result);
+	for($x=0; $x<count($result); x++){
+		$result[$keys[$x]]["timecreated"] = usergetdate($result[$keys[$x]]["timecreated"]);
+	}
     echo json_encode($result);
 } else {
     echo json_encode(array());
