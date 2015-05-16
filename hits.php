@@ -73,6 +73,11 @@ foreach ($accessresults as $tuple) {
     }
 }
 
+
+/* Discover groups and members */
+$groupmembers = block_analytics_graphs_get_course_group_members($course);
+$groupmembersjson = json_encode($groupmembers);
+
 /* Get the total number of modules accessed */
 $numberofresourcesresult = block_analytics_graphs_get_number_of_modules_accessed($course, $students, $startdate, $legacy);
 
@@ -115,7 +120,7 @@ $event->trigger();
 }
 #table-sparkline {
         margin: 0 auto;
-    	border-collapse: collapse;
+        border-collapse: collapse;
 }
 div.student_panel{
     font-size: 0.85em;
@@ -157,6 +162,7 @@ th {
 }
 td, th {
     padding: 5px;
+    border-top: 1px solid silver;
     border-bottom: 1px solid silver;
     border-right: 1px solid silver;
     height: 60px;
@@ -182,6 +188,7 @@ thead th {
     var moduleaccess = <?php echo $accessresults; ?>;
     var numberofresources = <?php echo $numberofresourcesresult; ?>;
     var studentswithnoaccess = <?php echo $studentswithnoaccess; ?>;
+    var groups = <?php echo $groupmembersjson; ?>;
 
     var nomes = [];
     $.each(geral, function(ind, val){   
@@ -216,10 +223,10 @@ thead th {
             student.acessos[val.week] = Number(val.number);
             student.totalofaccesses = Number(val.number);
             student.pageViews = Number(val.numberofpageviews);
-	        if (numberofresources[val.userid])
-		        student.totalofresources = numberofresources[val.userid].number ;
-	        else
-		        student.totalofresources = 0;
+            if (numberofresources[val.userid])
+                student.totalofresources = numberofresources[val.userid].number ;
+            else
+                student.totalofresources = 0;
             students[val.userid] = student;
         }
     });
@@ -273,7 +280,7 @@ thead th {
                         startOnTick: false,
                         endOnTick: false,
                         tickPositions: [],
-			max: <?php echo $maxnumberofweeks; ?>
+            max: <?php echo $maxnumberofweeks; ?>
                  },
                 
                 yAxis: {
@@ -287,7 +294,7 @@ thead th {
                                 text: null
                         },
                         tickPositions: [0],
-			max: <?php echo $maxnumberofresources;?>,
+            max: <?php echo $maxnumberofresources;?>,
                         tickInterval: 5
                 },
 
@@ -389,7 +396,7 @@ thead th {
                         startOnTick: false,
                         endOnTick: false,
                         tickPositions: [],
-			max: <?php echo $maxnumberofweeks; ?>
+            max: <?php echo $maxnumberofweeks; ?>
                  },
 
                 
@@ -404,7 +411,7 @@ thead th {
                                 text: null
                         },
                         tickPositions: [0],
-			max: 7,
+            max: 7,
                         tickInterval: 1
                 },
 
@@ -488,7 +495,7 @@ thead th {
             $.each(array, function(index, value){
                         if (value){
                             if (nome === value.nome){
-                                    var linha = "<tr><th><span class='nome_student' style='cursor:hand'\
+                                    var linha = "<tr id='tr-student-"+value.userid+"'><th><span class='nome_student' style='cursor:hand'\
                                      id='linha-"+value.userid+"'>"+value.nome+"</span>"+
                                             "<div class='warnings'>\
                                                 <div class='warning1' id='"+value.userid+"_1'>\
@@ -537,6 +544,16 @@ thead th {
 
 </head>
 <body>
+    <?php if (count($groupmembers) > 0) { ?>
+        <div style="margin: 20px;">
+            <select id="group_select">
+                <option value="-"><?php  echo json_encode(get_string('all_groups', 'block_analytics_graphs'));?></option>
+            <?php foreach ($groupmembers as $key => $value) { ?>
+                <option value="<?php echo $key; ?>"><?php echo $value["name"]; ?></option>
+            <?php  } ?>
+            </select>
+        </div>
+    <?php  } ?>
 <center>
 <H2><?php  echo   get_string('hits_distribution', 'block_analytics_graphs');?></H2>
 <H3><?php  echo $coursename;?> </H3>
@@ -546,14 +563,14 @@ thead th {
     <table id="table-sparkline" >
         <thead>
             <tr>                
-		<th><?php  echo   get_string('students', 'block_analytics_graphs');?></th>                
-		<th width=50><?php echo get_string('hits', 'block_analytics_graphs');?></th>                
-		<th width=50><?php echo get_string('days_with_access', 'block_analytics_graphs');?></th>                
+        <th><?php  echo   get_string('students', 'block_analytics_graphs');?></th>                
+        <th width=50><?php echo get_string('hits', 'block_analytics_graphs');?></th>                
+        <th width=50><?php echo get_string('days_with_access', 'block_analytics_graphs');?></th>                
         <th><center><?php echo get_string('days_by_week', 'block_analytics_graphs');
             echo "<br><i>(". get_string('number_of_weeks', 'block_analytics_graphs')
                     . ": " . ($maxnumberofweeks + 1).")</i>";?></center></th>
-		<th width=50><?php  echo   get_string('resources_with_access', 'block_analytics_graphs');?></th>                
-		<th><center><?php echo get_string('resources_by_week', 'block_analytics_graphs');?></center></th>
+        <th width=50><?php  echo   get_string('resources_with_access', 'block_analytics_graphs');?></th>                
+        <th><center><?php echo get_string('resources_by_week', 'block_analytics_graphs');?></center></th>
             </tr>
         </thead>
         <tbody  id='tbody-sparklines'>
@@ -563,17 +580,17 @@ thead th {
         </tbody>
     </table>
     <div class="nao-acessaram">
-	<br><BR>
+    <br><BR>
         <center>
         <h3><?php echo get_string('no_access', 'block_analytics_graphs');?></h3>
         <p>
 
 
                 <script type="text/javascript">
-		var title = <?php echo json_encode(get_string('no_access', 'block_analytics_graphs'));?> + " - " + coursename;
-		$.each(studentswithnoaccess, function(i, v) {
+        var title = <?php echo json_encode(get_string('no_access', 'block_analytics_graphs'));?> + " - " + coursename;
+        $.each(studentswithnoaccess, function(i, v) {
                                 document.write(v.nome+"<br>");
-		});
+        });
                 var form ="<div class='div_nomes' id='studentswithnoaccess'>" +
                             createEmailForm(title , studentswithnoaccess, courseid, 'hits.php')+
                             "</div>";
@@ -588,19 +605,19 @@ thead th {
 
 
 <script type="text/javascript">
-	var studentwithaccess = [];
+    var studentwithaccess = [];
     $.each(students, function(ind, val) {
         var div = "";
         if (val !== undefined){   
-			var title = coursename + 
-			    "</h3><p style='font-size:small'>" + 
-				<?php  echo json_encode(get_string('hits', 'block_analytics_graphs'));?> + ": "+
- 				val.pageViews + 
-				", "+ <?php  echo json_encode(get_string('days_with_access', 'block_analytics_graphs'));?> + ": "+
-				val.totalofaccesses + 
-				", "+ <?php  echo json_encode(get_string('resources_with_access', 'block_analytics_graphs'));?> + ": "+
-				val.totalofresources ; 
-			studentwithaccess[0] = val;             
+            var title = coursename + 
+                "</h3><p style='font-size:small'>" + 
+                <?php  echo json_encode(get_string('hits', 'block_analytics_graphs'));?> + ": "+
+                val.pageViews + 
+                ", "+ <?php  echo json_encode(get_string('days_with_access', 'block_analytics_graphs'));?> + ": "+
+                val.totalofaccesses + 
+                ", "+ <?php  echo json_encode(get_string('resources_with_access', 'block_analytics_graphs'));?> + ": "+
+                val.totalofresources ; 
+            studentwithaccess[0] = val;             
             div = 
                 "<div class='div_nomes' id='" + val.userid + "'>" +
                     "<div class='student_tabs'> \
@@ -618,8 +635,8 @@ thead th {
                         <?php  echo json_encode(get_string('student_information', 'block_analytics_graphs'));?> + 
                                 "</a></li> \
                         </ul>" + 
-        				"<div class='student_panel' id='email_panel-" + val.userid + "'>" +
-        				createEmailForm(title,studentwithaccess, courseid, 'hits.php') + "</div>" + 
+                        "<div class='student_panel' id='email_panel-" + val.userid + "'>" +
+                        createEmailForm(title,studentwithaccess, courseid, 'hits.php') + "</div>" + 
                         "<div class='student_panel' id='student_tab_panel-" + val.userid + "'></div>" + 
                     "</div>" + 
                 "</div>";
@@ -653,16 +670,7 @@ thead th {
                                             "</th></tr>";
                         for(elem in data){
                             table += "<tr>";
-                            // table += "<td>" + new Date(data[elem]['timecreated'] *1000) +  "</td>";
-                            table += "<td>" + data[elem]['timecreated'] +  "</td>";
-                            // table += "<td>" + data[elem]['timecreated']['weekday'] + ", " + 
-                            //                     data[elem]['timecreated']['mday'] + "/" +
-                            //                     data[elem]['timecreated']['month'] + "/" +
-                            //                     data[elem]['timecreated']['year'] + ", " +
-                            //                     data[elem]['timecreated']['hours'] + ":" +
-                            //                     data[elem]['timecreated']['minutes'] + ":" +
-                            //                     data[elem]['timecreated']['seconds'] +
-                            //  "</td>";
+                            table += "<td>" + new Date(data[elem]['timecreated'] *1000) +  "</td>";
                             table += "<td>" + data[elem]['fromid'] +  "</td>";
                             table += "<td>" + data[elem]['subject'] +  "</td>";
                             table += "<td>" + data[elem]["message"] +  "</td>";
@@ -708,10 +716,26 @@ thead th {
     });
 
 
-	sendEmail();
+    sendEmail();
     $(".student_tabs").tabs({active: 0});
     $(".div_nomes").dialog("close");
 
+    /*group selection*/
+    $( "#group_select" ).change(function() {
+        var group = $(this).val();
+        if(group == "-")
+            $("tr").show();
+        else{
+            $.each(groups, function(index, value){
+                if(index == group){
+                    $.each(value.members, function(ind, val){
+                        $("#tr-student-"+val).show();
+                    });
+                }
+            });
+        }
+    });
     </script>
+        }
 </body>
 </html>
