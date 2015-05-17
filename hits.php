@@ -728,6 +728,7 @@ thead th {
         else{
             $.each(groups, function(index, value){
                 if(index == group){
+                    $("tbody>tr").hide();
                     $.each(value.members, function(ind, val){
                         $("#tr-student-"+val).show();
                     });
