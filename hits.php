@@ -737,6 +737,5 @@ thead th {
         }
     });
     </script>
-        }
 </body>
 </html>
