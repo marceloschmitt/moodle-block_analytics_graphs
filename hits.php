@@ -589,7 +589,7 @@ thead th {
                 <script type="text/javascript">
         var title = <?php echo json_encode(get_string('no_access', 'block_analytics_graphs'));?> + " - " + coursename;
         $.each(studentswithnoaccess, function(i, v) {
-                                document.write(v.nome+"<br>");
+                                document.write("<span class='span-name' id='span-name-"+v.userid+"'>"+v.nome+"</span><br>");
         });
                 var form ="<div class='div_nomes' id='studentswithnoaccess'>" +
                             createEmailForm(title , studentswithnoaccess, courseid, 'hits.php')+
@@ -723,15 +723,30 @@ thead th {
     /*group selection*/
     $( "#group_select" ).change(function() {
         var group = $(this).val();
-        if(group == "-")
+        if(group == "-"){
             $("tr").show();
-        else{
+            $(".span-name").show();
+            $(".div_nomes").children().remove();
+            var title = <?php echo json_encode(get_string('no_access', 'block_analytics_graphs'));?> + " - " + coursename;
+            $(".div_nomes").append(createEmailForm(title , studentswithnoaccess, courseid, 'hits.php'));
+        }else{
             $.each(groups, function(index, value){
                 if(index == group){
                     $("tbody>tr").hide();
+                    $(".span-name").hide();
+                    var studentswithnoaccessgroup = [];
                     $.each(value.members, function(ind, val){
                         $("#tr-student-"+val).show();
+                        $("#span-name-"+val).show();
+
+                        $.each(studentswithnoaccess, function(i, v) {
+                            if(v.userid == val)
+                                studentswithnoaccessgroup.push(v);
+                        });
                     });
+                    $(".div_nomes").children().remove();
+                    var title = <?php echo json_encode(get_string('no_access', 'block_analytics_graphs'));?> + " - " + coursename;
+                    $(".div_nomes").append(createEmailForm(title , studentswithnoaccessgroup, courseid, 'hits.php'));
                 }
             });
         }
