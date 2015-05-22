@@ -722,13 +722,18 @@ thead th {
 
     /*group selection*/
     $( "#group_select" ).change(function() {
+        $(".button-fancy").removeAttr('disabled');
         var group = $(this).val();
         if(group == "-"){
             $("tr").show();
             $(".span-name").show();
-            $(".div_nomes").children().remove();
-            var title = <?php echo json_encode(get_string('no_access', 'block_analytics_graphs'));?> + " - " + coursename;
-            $(".div_nomes").append(createEmailForm(title , studentswithnoaccess, courseid, 'hits.php'));
+            if(studentswithnoaccessgroup.length==0){
+                $(".button-fancy").attr('disabled', 'disabled');
+            }else{
+                $("#studentswithnoaccess").children().remove();
+                var title = <?php echo json_encode(get_string('no_access', 'block_analytics_graphs'));?> + " - " + coursename;
+                $("#studentswithnoaccess").append(createEmailForm(title , studentswithnoaccessgroup, courseid, 'hits.php'));
+            }
         }else{
             $.each(groups, function(index, value){
                 if(index == group){
@@ -744,9 +749,13 @@ thead th {
                                 studentswithnoaccessgroup.push(v);
                         });
                     });
-                    $(".div_nomes").children().remove();
-                    var title = <?php echo json_encode(get_string('no_access', 'block_analytics_graphs'));?> + " - " + coursename;
-                    $(".div_nomes").append(createEmailForm(title , studentswithnoaccessgroup, courseid, 'hits.php'));
+                    if(studentswithnoaccessgroup.length==0){
+                        $(".button-fancy").attr('disabled', 'disabled');
+                    }else{
+                        $("#studentswithnoaccess").children().remove();
+                        var title = <?php echo json_encode(get_string('no_access', 'block_analytics_graphs'));?> + " - " + coursename;
+                        $("#studentswithnoaccess").append(createEmailForm(title , studentswithnoaccessgroup, courseid, 'hits.php'));
+                    }
                 }
             });
         }
