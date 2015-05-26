@@ -696,7 +696,7 @@ thead th {
                 url: "query_messages.php",
                 dataType: "JSON",
                 data: {
-                    student_id: this.id.split("-")[1],
+                    student_ids: this.id.split("-")[1],
                     course_id: this.id.split("-")[2]
                 },
                 success: fill_panel(this.id.split("-")[1])
@@ -782,7 +782,7 @@ thead th {
                     student_id: this.id.split("-")[1],
                     course_id: this.id.split("-")[2]
                 },
-                success: fill_panel(this.id)
+                success: fill_panel(this.id.split("-")[1])
             });
         }
         return false;
