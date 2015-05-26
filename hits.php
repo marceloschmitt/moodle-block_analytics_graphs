@@ -724,7 +724,7 @@ thead th {
                         else if(elem["tipo"] === "url"){
                             material_names.push(elem["url"]);
                         }
-                        material_points.push(elem["acessos"]);
+                        materials_points.push(elem["acessos"]);
                     }
                     for(var x=0; x<material_names.length; x++){
                         material_data.push([material_names[x], materials_points[x]]);
