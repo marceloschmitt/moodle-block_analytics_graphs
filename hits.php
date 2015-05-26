@@ -113,6 +113,15 @@ $event->trigger();
 <script src="externalref/exporting.js"></script> 
 
 <style>
+div.res_query {
+    display:table;
+    margin-right:auto;
+    margin-left:auto;
+}
+.chart {
+    float: left;
+    display: block;
+}
 #result {
         text-align: right;
         color: gray;
@@ -631,7 +640,7 @@ thead th {
                         <?php  echo json_encode(get_string('old_messages', 'block_analytics_graphs'));?> +
                                 "</a></li> \
                             <li class='navi_tab'><a href='#student_tab_panel-" + val.userid +
-                                "' class='info' id='tab_link-" + val.userid + "'>" +
+                                "' class='info' id='tab_link-" + val.userid + "-" + courseid + "'>" +
                         <?php  echo json_encode(get_string('student_information', 'block_analytics_graphs'));?> + 
                                 "</a></li> \
                         </ul>" + 
@@ -687,18 +696,94 @@ thead th {
                 url: "query_messages.php",
                 dataType: "JSON",
                 data: {
-                    student_ids: this.id.split("-")[1],
+                    student_id: this.id.split("-")[1],
                     course_id: this.id.split("-")[2]
                 },
                 success: fill_panel(this.id.split("-")[1])
             });
         }
         else if($(this).hasClass("info")){
-            $("#student_tab_panel-" + this.id.split("-")[1]).empty().append("<div id='test-info'>" +
-                <?php  echo json_encode(get_string('under_development', 'block_analytics_graphs'));?> + 
-                "</div>");
+            // $("#student_tab_panel-" + this.id.split("-")[1]).empty().append("<div id='test-info'>" +
+            //     <?php  echo json_encode(get_string('under_development', 'block_analytics_graphs'));?> + 
+            //     "</div>");
             $(this).removeClass('current');
             $(this).addClass('current');
+
+            var fill_panel = function(panel_id){
+                return function fill_panel_callback(data){
+                    var material_names = [];
+                    var materials_points = [];
+                    var material_data = [];
+                    for(elem in data){
+                        if(elem["tipo"] === "page"){
+                            material_names.push(elem["page"]);
+                        }
+                        else if(elem["tipo"] === "resource"){
+                            material_names.push(elem["resource"]);
+                        }
+                        else if(elem["tipo"] === "url"){
+                            material_names.push(elem["url"]);
+                        }
+                        material_points.push(elem["acessos"]);
+                    }
+                    for(var x=0; x<material_names.length; x++){
+                        material_data.push([material_names[x], materials_points[x]]);
+                    }
+                    $("#student_tab_panel-" + panel_id).empty().append("\
+                        <div class='res_query'>\
+                        <div class='chart-' id='" + panel_id + "-1'></div>\
+                        </div>");                    
+
+                    var materials_chart_options = {
+                        chart: {
+                                plotBackgroundColor: null,
+                                plotBorderWidth: null,
+                                plotShadow: false
+                        },
+                        title: {
+                            text: <?php echo json_encode(get_string('access_to_contents', 'block_analytics_graphs'))?>,
+                            style: {
+                                fontSize: '13px',
+                                fontWeight: 'bold'
+                            }
+                        },
+                        tooltip: {
+                            enabled: false,
+                        },
+                        plotOptions: {
+                            pie: {
+                                allowPointSelect: true,
+                                cursor: 'pointer',
+                                dataLabels: {
+                                    enabled: true,
+                                    format: '<b>{point.name}</b>:<br/>{point.percentage:.1f} %',
+                                    style: {
+                                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                                    }
+                                }
+                            }
+                        },
+                        series: [{
+                            type: 'pie'
+                            data: material_data
+                        }],
+                    };
+
+                    $("#" + panel_id + "-1.chart").empty().highcharts(materials_chart_options);
+                    $("#" + panel_id + "-1.chart").highcharts().setSize(350, 250, true);                    
+                }
+            };
+
+            $.ajax({
+                method: "POST",
+                url: "query_resources_access.php",
+                dataType : "JSON",
+                data: {
+                    student_id: this.id.split("-")[1],
+                    course_id: this.id.split("-")[2]
+                },
+                success: fill_panel(this.id)
+            });
         }
         return false;
     });
