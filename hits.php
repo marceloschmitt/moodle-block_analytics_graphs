@@ -764,7 +764,7 @@ thead th {
                             }
                         },
                         series: [{
-                            type: 'pie'
+                            type: 'pie',
                             data: material_data
                         }],
                     };
