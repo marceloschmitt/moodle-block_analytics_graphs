@@ -715,16 +715,16 @@ thead th {
                     var materials_points = [];
                     var material_data = [];
                     for(elem in data){
-                        if(elem["tipo"] === "page"){
-                            material_names.push(elem["page"]);
+                        if(data[elem]["tipo"] === "page"){
+                            material_names.push(data[elem]["page"]);
                         }
-                        else if(elem["tipo"] === "resource"){
-                            material_names.push(elem["resource"]);
+                        else if(data[elem]["tipo"] === "resource"){
+                            material_names.push(data[elem]["resource"]);
                         }
-                        else if(elem["tipo"] === "url"){
-                            material_names.push(elem["url"]);
+                        else if(data[elem]["tipo"] === "url"){
+                            material_names.push(data[elem]["url"]);
                         }
-                        materials_points.push(elem["acessos"]);
+                        materials_points.push(data[elem]["acessos"]);
                     }
                     for(var x=0; x<material_names.length; x++){
                         material_data.push([material_names[x], materials_points[x]]);
