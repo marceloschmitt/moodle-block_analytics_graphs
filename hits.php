@@ -731,7 +731,7 @@ thead th {
                     }
                     $("#student_tab_panel-" + panel_id).empty().append("\
                         <div class='res_query'>\
-                        <div class='chart-' id='" + panel_id + "-1'></div>\
+                        <div class='chart' id='" + panel_id + "-1'></div>\
                         </div>");                    
 
                     var materials_chart_options = {
