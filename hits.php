@@ -679,7 +679,8 @@ thead th {
                                             "</th></tr>";
                         for(elem in data){
                             table += "<tr>";
-                            table += "<td>" + new Date(data[elem]['timecreated'] *1000) +  "</td>";
+                            // table += "<td>" + new Date(data[elem]['timecreated'] *1000) +  "</td>";
+                            table += "<td>" + data[elem]['timecreated'] +  "</td>";
                             table += "<td>" + data[elem]['fromid'] +  "</td>";
                             table += "<td>" + data[elem]['subject'] +  "</td>";
                             table += "<td>" + data[elem]["message"] +  "</td>";
