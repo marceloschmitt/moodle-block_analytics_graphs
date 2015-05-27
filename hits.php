@@ -730,7 +730,7 @@ thead th {
                             name = data[elem]["url"];
                         }
                         
-                        if(data[elem]["user_id"] !== "0"){
+                        if(data[elem]["userid"] !== "0"){
                             material_names["accessed"].push(name);
                         }
                         else{
