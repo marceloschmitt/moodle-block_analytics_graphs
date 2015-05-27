@@ -712,24 +712,33 @@ thead th {
 
             var fill_panel = function(panel_id){
                 return function fill_panel_callback(data){
-                    var material_names = [];
-                    var materials_points = [];
+                    var material_names = {
+                        "accessed" : [],
+                        "not_accessed" : []
+                    };
                     var material_data = [];
+
+                    var name;
                     for(elem in data){
                         if(data[elem]["tipo"] === "page"){
-                            material_names.push(data[elem]["page"]);
+                            name = data[elem]["page"];
                         }
                         else if(data[elem]["tipo"] === "resource"){
-                            material_names.push(data[elem]["resource"]);
+                            name = data[elem]["resource"];
                         }
                         else if(data[elem]["tipo"] === "url"){
-                            material_names.push(data[elem]["url"]);
+                            name = data[elem]["url"];
                         }
-                        materials_points.push(parseFloat(data[elem]["acessos"]));
+                        
+                        if(data[elem]["user_id"] !== "0"){
+                            material_names["accessed"].push(name);
+                        }
+                        else{
+                            material_names["not_accessed"].push(name);
+                        }
                     }
-                    for(var x=0; x<material_names.length; x++){
-                        material_data.push([material_names[x], materials_points[x]]);
-                    }
+                    material_data = [["Total de materiais acessados", material_names["accessed"].length],
+                                        ["Total de materiais não acessados", material_names["not_accessed"].length]];
                     $("#student_tab_panel-" + panel_id).empty().append("\
                         <div class='res_query'>\
                         <div class='chart' id='" + panel_id + "-1'></div>\
@@ -771,7 +780,7 @@ thead th {
                     };
 
                     $("#" + panel_id + "-1.chart").empty().highcharts(materials_chart_options);
-                    $("#" + panel_id + "-1.chart").highcharts().setSize(350, 250, true);                    
+                    $("#" + panel_id + "-1.chart").highcharts().setSize(400, 300, true);                    
                 }
             };
 
