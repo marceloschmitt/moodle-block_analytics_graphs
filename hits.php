@@ -768,8 +768,10 @@ thead th {
                                     enabled: true,
                                     format: '<b>{point.name}</b>:<br/>{point.percentage:.1f} %',
                                     style: {
-                                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
-                                    }
+                                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black',
+                                        width: 100
+                                    },
+                                    useHTML: true
                                 }
                             }
                         },
@@ -780,7 +782,7 @@ thead th {
                     };
 
                     $("#" + panel_id + "-1.chart").empty().highcharts(materials_chart_options);
-                    $("#" + panel_id + "-1.chart").highcharts().setSize(400, 300, true);                    
+                    $("#" + panel_id + "-1.chart").highcharts().setSize(400, 400, true);                    
                 }
             };
 
