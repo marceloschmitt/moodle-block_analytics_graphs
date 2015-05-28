@@ -11,11 +11,8 @@ require_login($courseid);
 $context = context_course::instance($courseid);
 require_capability('block/analytics_graphs:viewpages', $context);
 
-$result =  block_analytics_graphs_get_user_resource_url_page_access($courseid, $studentid, 0);
+$resource_access =  block_analytics_graphs_get_user_resource_url_page_access($courseid, $studentid, 0);
+$assign_info = block_analytics_graphs_get_user_assign_submission($courseid, $studentid);
 
-if (count($result) > 0) {
-    echo json_encode($result);
-} else {
-    echo json_encode(array());
-}
+echo json_encode(array("resources"=>$resource_access, "assign"=>$assign_info));
 ?>

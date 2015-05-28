@@ -712,36 +712,76 @@ thead th {
 
             var fill_panel = function(panel_id){
                 return function fill_panel_callback(data){
+
                     var material_names = {
                         "accessed" : [],
                         "not_accessed" : []
                     };
+                    var assign_status = {
+                        "on_time" : [],
+                        "late" : [],
+                        "no_submission" : [],
+                        "simply_submit" : []
+                    }
                     var material_data = [];
+                    var assign_data = [];
 
                     var name;
-                    for(elem in data){
-                        if(data[elem]["tipo"] === "page"){
-                            name = data[elem]["page"];
+                    for(elem in data["resources"]){
+                        if(data["resources"][elem]["tipo"] === "page"){
+                            name = data["resources"][elem]["page"];
                         }
-                        else if(data[elem]["tipo"] === "resource"){
-                            name = data[elem]["resource"];
+                        else if(data["resources"][elem]["tipo"] === "resource"){
+                            name = data["resources"][elem]["resource"];
                         }
-                        else if(data[elem]["tipo"] === "url"){
-                            name = data[elem]["url"];
+                        else if(data["resources"][elem]["tipo"] === "url"){
+                            name = data["resources"][elem]["url"];
                         }
                         
-                        if(data[elem]["userid"] !== "0"){
+                        if(data["resources"][elem]["userid"] !== "0"){
                             material_names["accessed"].push(name);
                         }
                         else{
                             material_names["not_accessed"].push(name);
                         }
                     }
+                    var student_time, assign_time;
+                    for(elem in data["assign"]){
+                        name = data["assign"][elem]["name"];
+                        student_time = data["assign"][elem]["timecreated"];
+                        assign_time = data["assign"][elem]["duedate"];
+                        if(assign_time === "0"){
+                            if(student_time === "0"]){
+                                assign_status["no_submission"].push(name);
+                            }
+                            else{
+                                assign_status["simply_submit"].push(name);
+                            }
+                        }
+                        else if (assign_time !== "0"){
+                            if(parseInt(student_time) <= parseInt(assign_time)){
+                                if(student_time === "0"){
+                                    assign_status["no_submission"].push(name);
+                                } else {
+                                    assign_status["on_time"].push(name);
+                                }
+                            }
+                            else if(parseInt(student_time) > parseInt(assign_time)){
+                                assign_status["late"].push(name);
+                            }
+                        }
+                    }
                     material_data = [["Total de materiais acessados", material_names["accessed"].length],
                                         ["Total de materiais não acessados", material_names["not_accessed"].length]];
+                    assign_data = [["Em tempo", assign_status["on_time"].length],
+                                    ["Atrasado", assign_status["late"].length],
+                                    ["Não enviou", assign_status["no_submission"].length],
+                                    ["Submissão sem data limite", assign_status["simpy_submit"].length]];
+
                     $("#student_tab_panel-" + panel_id).empty().append("\
                         <div class='res_query'>\
                         <div class='chart' id='" + panel_id + "-1'></div>\
+                        <div class='chart' id='" + panel_id + "-2'></div>\
                         </div>");                    
 
                     var materials_chart_options = {
@@ -778,11 +818,50 @@ thead th {
                         series: [{
                             type: 'pie',
                             data: material_data
-                        }],
+                        }]
+                    };
+
+                    var assign_chart_options = {
+                        chart: {
+                                plotBackgroundColor: null,
+                                plotBorderWidth: null,
+                                plotShadow: false
+                        },
+                        title: {
+                            text: <?php echo json_encode(get_string('submissions_assign', 'block_analytics_graphs'))?>,
+                            style: {
+                                fontSize: '13px',
+                                fontWeight: 'bold'
+                            }
+                        },
+                        tooltip: {
+                            enabled: false,
+                        },
+                        plotOptions: {
+                            pie: {
+                                allowPointSelect: true,
+                                cursor: 'pointer',
+                                dataLabels: {
+                                    enabled: true,
+                                    format: '<b>{point.name}</b>:<br/>{point.percentage:.1f} %',
+                                    style: {
+                                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black',
+                                        width: 100
+                                    },
+                                    useHTML: true
+                                }
+                            }
+                        },
+                        series: [{
+                            type: 'pie',
+                            data: assign_data
+                        }]
                     };
 
                     $("#" + panel_id + "-1.chart").empty().highcharts(materials_chart_options);
-                    $("#" + panel_id + "-1.chart").highcharts().setSize(400, 400, true);                    
+                    $("#" + panel_id + "-1.chart").highcharts().setSize(400, 400, true);
+                    $("#" + panel_id + "-2.chart").empty().highcharts(assign_chart_options);
+                    $("#" + panel_id + "-2.chart").highcharts().setSize(400, 400, true);
                 }
             };
 
