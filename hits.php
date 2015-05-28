@@ -777,7 +777,7 @@ thead th {
                     assign_data = [["Em tempo", assign_status["on_time"].length],
                                     ["Atrasado", assign_status["late"].length],
                                     ["Não enviou", assign_status["no_submission"].length],
-                                    ["Submissão sem data limite", assign_status["simpy_submit"].length]];
+                                    ["Submissão sem data limite", assign_status["simply_submit"].length]];
 
                     $("#student_tab_panel-" + panel_id).empty().append("\
                         <div class='res_query'>\
