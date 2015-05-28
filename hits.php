@@ -751,7 +751,7 @@ thead th {
                         student_time = data["assign"][elem]["timecreated"];
                         assign_time = data["assign"][elem]["duedate"];
                         if(assign_time === "0"){
-                            if(student_time === "0"]){
+                            if(student_time === "0"){
                                 assign_status["no_submission"].push(name);
                             }
                             else{
@@ -762,7 +762,8 @@ thead th {
                             if(parseInt(student_time) <= parseInt(assign_time)){
                                 if(student_time === "0"){
                                     assign_status["no_submission"].push(name);
-                                } else {
+                                }
+                                else {
                                     assign_status["on_time"].push(name);
                                 }
                             }
