@@ -342,3 +342,51 @@ function block_analytics_graphs_get_number_of_modules_accessed($course, $estudan
     $resultado = $DB->get_records_sql($sql, $params);
     return($resultado);
 }
+
+
+function block_analytics_graphs_get_user_resource_url_page_access($course, $student, $legacy) {
+    global $COURSE;
+    global $DB;
+
+    $resource = $DB->get_record('modules', array('name' => 'resource'), 'id');
+    $url = $DB->get_record('modules', array('name' => 'url'), 'id');
+    $page = $DB->get_record('modules', array('name' => 'page'), 'id');
+    $startdate = $COURSE->startdate;
+    $params = array($startdate,$student, $course, $resource->id, $url->id, $page->id);
+    if(!$legacy) {
+        $sql = "SELECT temp.id, m.name as tipo,
+                    r.name as resource, u.name as url, p.name as page, COALESCE(temp.userid,0) as userid,  temp.acessos
+                    FROM (
+                        SELECT cm.id, log.userid, count(*) as acessos
+                        FROM {course_modules} as cm
+                        LEFT JOIN {logstore_standard_log} as log ON log.timecreated >= ?
+                            AND log.userid = ? AND action = 'viewed' AND cm.id=log.contextinstanceid
+                        WHERE cm.course = ? AND (cm.module=? OR cm.module=? OR cm.module=?)
+                        GROUP BY cm.id, log.userid
+                        ) as temp
+                    LEFT JOIN {course_modules} as cm ON temp.id = cm.id
+                    LEFT JOIN {modules} as m ON cm.module = m.id
+                    LEFT JOIN {resource} as r ON cm.instance = r.id
+                    LEFT JOIN {url} as u ON cm.instance = u.id
+                    LEFT JOIN {page} as p ON cm.instance = p.id
+                    ORDER BY m.name, r.name, u.name, p.name";
+    }
+    $result = $DB->get_records_sql($sql, $params);
+    return($result);
+
+}
+
+
+function block_analytics_graphs_get_user_assign_submission($course, $student) {
+    global $DB;
+
+    $params = array($course, $student);
+    $sql = "SELECT  a.id, name, COALESCE(duedate, 0) as duedate, COALESCE(s.timecreated,0) as timecreated
+                FROM mdl_assign a
+                LEFT JOIN mdl_assign_submission s on a.id = s.assignment AND s.status = 'submitted'
+                WHERE course = ? and nosubmissions = 0 and (s.userid IS NULL OR s.userid = ?)
+                ORDER BY duedate, name";
+
+     $resultado = $DB->get_records_sql($sql, $params);
+     return($resultado);
+}
