@@ -76,7 +76,11 @@ $string['topic'] = 'Topico';
 $string['under_development'] = 'Aguarde a próxima versão!';
 $string['week_number'] = 'Numero da semana';
 $string['yellow_tooltip'] = 'Nenhum material foi acessado até agora';
-
-
+$string['total_accessed_resources'] = 'Total de materiais acessados';
+$string['total_not_accessed_resources'] = 'Total de materiais não acessados';
+$string['on_time'] = 'Em tempo';
+$string['late'] = 'Atrasado';
+$string['no_submission'] = 'Não enviou';
+$string['simply_submit'] = 'Submissão sem data limite';
 
 

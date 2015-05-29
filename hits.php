@@ -772,12 +772,12 @@ thead th {
                             }
                         }
                     }
-                    material_data = [["Total de materiais acessados", material_names["accessed"].length],
-                                        ["Total de materiais não acessados", material_names["not_accessed"].length]];
-                    assign_data = [["Em tempo", assign_status["on_time"].length],
-                                    ["Atrasado", assign_status["late"].length],
-                                    ["Não enviou", assign_status["no_submission"].length],
-                                    ["Submissão sem data limite", assign_status["simply_submit"].length]];
+                    material_data = [[<?php echo json_encode(get_string('total_accessed_resources', 'block_analytics_graphs'))?>, material_names["accessed"].length],
+                                        [<?php echo json_encode(get_string('total_not_accessed_resources', 'block_analytics_graphs'))?>, material_names["not_accessed"].length]];
+                    assign_data = [[<?php echo json_encode(get_string('on_time', 'block_analytics_graphs'))?>, assign_status["on_time"].length],
+                                    [<?php echo json_encode(get_string('late', 'block_analytics_graphs'))?>, assign_status["late"].length],
+                                    [<?php echo json_encode(get_string('no_submission', 'block_analytics_graphs'))?>, assign_status["no_submission"].length],
+                                    [<?php echo json_encode(get_string('simply_submit', 'block_analytics_graphs'))?>, assign_status["simply_submit"].length]];
 
                     $("#student_tab_panel-" + panel_id).empty().append("\
                         <div class='res_query'>\

@@ -74,7 +74,12 @@ $string['topic'] = 'Topic';
 $string['under_development'] = "Wait for next release!";
 $string['week_number'] = 'Week number';
 $string['yellow_tooltip'] = 'No module was accessed until now';
-
+$string['total_accessed_resources'] = 'Total accessed resources';
+$string['total_not_accessed_resources'] = 'Total not accessed resources';
+$string['on_time'] = 'On time';
+$string['late'] = 'Late';
+$string['no_submission'] = 'No submission';
+$string['simply_submit'] = 'Submission without time limit';
 
 
 
