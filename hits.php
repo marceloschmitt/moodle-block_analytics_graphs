@@ -133,6 +133,9 @@ div.res_query {
 }
 div.student_panel{
     font-size: 0.85em;
+    min-height: 450px;
+    margin-left: auto;
+    margin-right: auto;
 }
 a.info, a.msgs, a.mail{
     font-size: 0.85em;
