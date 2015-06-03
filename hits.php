@@ -890,11 +890,21 @@ thead th {
         var val = $(this).attr('id');                
         val = val.split("-");
         $("#" + val[1]).dialog("open");
+        $("#" + val[1]).dialog("option", "position", {
+            my:"center",
+            at:"center",
+            of:window
+        });
+        $("#" + val[1]).dialog("option", "width", 1000);
+        $("#" + val[1]).dialog("option", "height", 600);
     });
 
 
     sendEmail();
-    $(".student_tabs").tabs({active: 0});
+    $(".student_tabs").tabs({
+        active: 0,
+        heightStyle: "auto"
+    });
     $(".div_nomes").dialog("close");
 
     /*group selection*/
