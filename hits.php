@@ -121,6 +121,7 @@ div.res_query {
 .chart {
     float: left;
     display: block;
+    margin: auto;
 }
 #result {
         text-align: right;
@@ -690,7 +691,7 @@ thead th {
                             table += "</tr>";
                         }
                         table += "</table>";
-                        $("#student_tab_panel-" + panel_id).empty().append(table);
+                        $("#student_tab_panel-" + panel_id).empty().append('<div class="res_query">' + table + '</div>');
                     }
                 }
             }; 
