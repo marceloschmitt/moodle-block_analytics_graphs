@@ -123,6 +123,9 @@ div.res_query {
     display: block;
     margin: auto;
 }
+.ui-dialog {
+    position: fixed;
+}
 #result {
         text-align: right;
         color: gray;
@@ -894,13 +897,14 @@ thead th {
         var val = $(this).attr('id');                
         val = val.split("-");
         $("#" + val[1]).dialog("open");
-        $("#" + val[1]).dialog("option", "position", {
-            my:"center",
-            at:"center",
-            of:window
-        });
         $("#" + val[1]).dialog("option", "width", 1000);
         $("#" + val[1]).dialog("option", "height", 600);
+        var offsetTop = window.innerHeight/2 - $("#" + val[1]).dialog("option", "height")/2;
+        $("#" + val[1]).dialog("option", "position", {
+            my:"center top",
+            at:"center top+" + offsetTop,
+            of:window
+        });
     });
 
 
