@@ -863,7 +863,8 @@ thead th {
                         series: [{
                             type: 'pie',
                             data: assign_data
-                        }]
+                        }],
+                        colors: ['#7cb5ec', '#333333', '#FF3333']
                     };
 
                     $("#" + panel_id + "-1.chart").empty().highcharts(materials_chart_options);
