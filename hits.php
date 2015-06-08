@@ -858,7 +858,7 @@ thead th {
                                     },
                                     useHTML: true
                                 },
-                                colors: ['#7cb5ec', '#333333', '#FF3333']
+                                colors: ['#7cb5ec', '#434348', '#FF1111', '#2b908f']
                             }
                         },
                         series: [{
