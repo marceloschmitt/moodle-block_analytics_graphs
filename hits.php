@@ -847,9 +847,8 @@ thead th {
                             enabled: true,
                             useHTML: true,
                             formatter: function(){
-                                var tooltipStr = \
-                                    "<span style='font-size: 13px'><b>" + \
-                                    <?php echo json_encode(get_string('submissions_assign', 'block_analytics_graphs'))?> + \
+                                var tooltipStr = "<span style='font-size: 13px'><b>" +
+                                    <?php echo json_encode(get_string('submissions_assign', 'block_analytics_graphs'))?> +
                                     "</b></span>:<br>";
                                 if(this.point.name == <?php echo json_encode(get_string('on_time', 'block_analytics_graphs'))?>){
                                     for(var i = 0; i< assign_status[this.point.name].length; i++){
