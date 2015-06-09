@@ -719,16 +719,15 @@ thead th {
 
             var fill_panel = function(panel_id){
                 return function fill_panel_callback(data){
-
                     var material_names = {
                         "accessed" : [],
                         "not_accessed" : []
                     };
                     var assign_status = {
-                        "on_time" : [],
-                        "late" : [],
-                        "no_submission" : [],
-                        "simply_submit" : []
+                        <?php echo json_encode(get_string('on_time', 'block_analytics_graphs'))?> : [],
+                        <?php echo json_encode(get_string('late', 'block_analytics_graphs'))?> : [],
+                        <?php echo json_encode(get_string('no_submission', 'block_analytics_graphs'))?> : [],
+                        <?php echo json_encode(get_string('simply_submit', 'block_analytics_graphs'))?> : []
                     }
                     var material_data = [];
                     var assign_data = [];
@@ -779,12 +778,22 @@ thead th {
                             }
                         }
                     }
-                    material_data = [[<?php echo json_encode(get_string('total_accessed_resources', 'block_analytics_graphs'))?>, material_names["accessed"].length],
-                                        [<?php echo json_encode(get_string('total_not_accessed_resources', 'block_analytics_graphs'))?>, material_names["not_accessed"].length]];
-                    assign_data = [[<?php echo json_encode(get_string('on_time', 'block_analytics_graphs'))?>, assign_status["on_time"].length],
-                                    [<?php echo json_encode(get_string('late', 'block_analytics_graphs'))?>, assign_status["late"].length],
-                                    [<?php echo json_encode(get_string('no_submission', 'block_analytics_graphs'))?>, assign_status["no_submission"].length],
-                                    [<?php echo json_encode(get_string('simply_submit', 'block_analytics_graphs'))?>, assign_status["simply_submit"].length]];
+                    material_data = [
+                                        [<?php echo json_encode(get_string('total_accessed_resources', 'block_analytics_graphs'))?>, 
+                                            material_names["accessed"].length],
+                                        [<?php echo json_encode(get_string('total_not_accessed_resources', 'block_analytics_graphs'))?>, 
+                                            material_names["not_accessed"].length]
+                                    ];
+                    assign_data = [
+                                    [<?php echo json_encode(get_string('on_time', 'block_analytics_graphs'))?>, 
+                                        assign_status[<?php echo json_encode(get_string('on_time', 'block_analytics_graphs'))?>].length],
+                                    [<?php echo json_encode(get_string('late', 'block_analytics_graphs'))?>, 
+                                        assign_status[<?php echo json_encode(get_string('late', 'block_analytics_graphs'))?>].length],
+                                    [<?php echo json_encode(get_string('no_submission', 'block_analytics_graphs'))?>, 
+                                        assign_status[<?php echo json_encode(get_string('no_submission', 'block_analytics_graphs'))?>].length],
+                                    [<?php echo json_encode(get_string('simply_submit', 'block_analytics_graphs'))?>, 
+                                        assign_status[<?php echo json_encode(get_string('simply_submit', 'block_analytics_graphs'))?>].length]
+                                    ];
 
                     $("#student_tab_panel-" + panel_id).empty().append("\
                         <div class='res_query'>\
