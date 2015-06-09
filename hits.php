@@ -719,6 +719,10 @@ thead th {
 
             var fill_panel = function(panel_id){
                 return function fill_panel_callback(data){
+                    var ONTIMESTR = <?php echo json_encode(get_string('on_time', 'block_analytics_graphs'))?>;
+                    var LATESTR = <?php echo json_encode(get_string('late', 'block_analytics_graphs'))?>;
+                    var NOSUBMISSIONSTR = <?php echo json_encode(get_string('no_submission', 'block_analytics_graphs'))?>;
+                    var SIMPLYSUBMITSTR = <?php echo json_encode(get_string('simply_submit', 'block_analytics_graphs'))?>;
                     var material_names = {
                         "accessed" : [],
                         "not_accessed" : []
@@ -758,42 +762,36 @@ thead th {
                         assign_time = data["assign"][elem]["duedate"];
                         if(assign_time === "0"){
                             if(student_time === "0"){
-                                assign_status["no_submission"].push(name);
+                                assign_status[NOSUBMISSIONSTR].push(name);
                             }
                             else{
-                                assign_status["simply_submit"].push(name);
+                                assign_status[SIMPLYSUBMITSTR].push(name);
                             }
                         }
                         else if (assign_time !== "0"){
                             if(parseInt(student_time) <= parseInt(assign_time)){
                                 if(student_time === "0"){
-                                    assign_status["no_submission"].push(name);
+                                    assign_status[NOSUBMISSIONSTR].push(name);
                                 }
                                 else {
-                                    assign_status["on_time"].push(name);
+                                    assign_status[ONTIMESTR].push(name);
                                 }
                             }
                             else if(parseInt(student_time) > parseInt(assign_time)){
-                                assign_status["late"].push(name);
+                                assign_status[LATESTR].push(name);
                             }
                         }
                     }
-                    material_data = [
-                                        [<?php echo json_encode(get_string('total_accessed_resources', 'block_analytics_graphs'))?>, 
-                                            material_names["accessed"].length],
-                                        [<?php echo json_encode(get_string('total_not_accessed_resources', 'block_analytics_graphs'))?>, 
-                                            material_names["not_accessed"].length]
-                                    ];
-                    assign_data = [
-                                    [<?php echo json_encode(get_string('on_time', 'block_analytics_graphs'))?>, 
-                                        assign_status[<?php echo json_encode(get_string('on_time', 'block_analytics_graphs'))?>].length],
-                                    [<?php echo json_encode(get_string('late', 'block_analytics_graphs'))?>, 
-                                        assign_status[<?php echo json_encode(get_string('late', 'block_analytics_graphs'))?>].length],
-                                    [<?php echo json_encode(get_string('no_submission', 'block_analytics_graphs'))?>, 
-                                        assign_status[<?php echo json_encode(get_string('no_submission', 'block_analytics_graphs'))?>].length],
-                                    [<?php echo json_encode(get_string('simply_submit', 'block_analytics_graphs'))?>, 
-                                        assign_status[<?php echo json_encode(get_string('simply_submit', 'block_analytics_graphs'))?>].length]
-                                    ];
+                    
+                    material_data = [[<?php echo json_encode(get_string('total_accessed_resources', 'block_analytics_graphs'))?>, 
+                                        material_names["accessed"].length],
+                                     [<?php echo json_encode(get_string('total_not_accessed_resources', 'block_analytics_graphs'))?>, 
+                                        material_names["not_accessed"].length]];
+
+                    assign_data = [[ONTIMESTR, assign_status[ONTIMESTR].length],
+                                    [LATESTR, assign_status[LATESTR].length],
+                                    [NOSUBMISSIONSTR, assign_status[NOSUBMISSIONSTR].length],
+                                    [SIMPLYSUBMITSTR, assign_status[SIMPLYSUBMITSTR].length]];
 
                     $("#student_tab_panel-" + panel_id).empty().append("\
                         <div class='res_query'>\
