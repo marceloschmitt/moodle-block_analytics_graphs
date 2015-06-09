@@ -841,7 +841,7 @@ thead th {
                         chart: {
                                 plotBackgroundColor: null,
                                 plotBorderWidth: null,
-                                plotShadow: false.
+                                plotShadow: false,
                                 events: {
                                     load: function(){
                                         this.mytooltip = new Highcharts.Tooltip(this, this.options.tooltip);
