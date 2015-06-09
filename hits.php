@@ -852,7 +852,7 @@ thead th {
                         },
                         tooltip: {
                             enabled: true,
-                            useHTML: true,
+                            backgroundColor: "rgba(255, 255, 255, 1.0)",
                             formatter: function(){
                                 var tooltipStr = "<span style='font-size: 13px'><b>" +
                                     <?php echo json_encode(get_string('submissions_assign', 'block_analytics_graphs'))?> +
@@ -902,8 +902,7 @@ thead th {
                                     style: {
                                         color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black',
                                         width: 100
-                                    },
-                                    useHTML: true
+                                    }
                                 },
                                 colors: ['#7cb5ec', '#434348', '#FF1111', '#2b908f']
                             }
