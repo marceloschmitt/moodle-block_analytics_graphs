@@ -844,7 +844,47 @@ thead th {
                             }
                         },
                         tooltip: {
-                            enabled: false,
+                            enabled: true,
+                            useHTML: true,
+                            formatter: function(){
+                                var tooltipStr = \
+                                    "<span style='font-size: 13px'><b>" + \
+                                    <?php echo json_encode(get_string('submissions_assign', 'block_analytics_graphs'))?> + \
+                                    "</b></span>:<br>";
+                                if(this.point.name == <?php echo json_encode(get_string('on_time', 'block_analytics_graphs'))?>){
+                                    for(var i = 0; i< assign_status[this.point.name].length; i++){
+                                        tooltipStr += assign_status[this.point.name][i];
+                                        if(i+1 < assign_status[this.point.name].length){
+                                            tooltipStr += ",<br>";
+                                        }
+                                    }
+                                }
+                                else if(this.point.name == <?php echo json_encode(get_string('late', 'block_analytics_graphs'))?>){                                         
+                                    for(var i = 0; i< assign_status[this.point.name].length; i++){
+                                        tooltipStr += assign_status[this.point.name][i];
+                                        if(i+1 < assign_status[this.point.name].length){
+                                            tooltipStr += ",<br>";
+                                        }
+                                    }
+                                }
+                                else if(this.point.name == <?php echo json_encode(get_string('no_submission', 'block_analytics_graphs'))?>){
+                                    for(var i = 0; i< assign_status[this.point.name].length; i++){
+                                        tooltipStr += assign_status[this.point.name][i];
+                                        if(i+1 < assign_status[this.point.name].length){
+                                            tooltipStr += ",<br>";
+                                        }
+                                    }
+                                }
+                                else{
+                                    for(var i = 0; i< assign_status[this.point.name].length; i++){
+                                        tooltipStr += assign_status[this.point.name][i];
+                                        if(i+1 < assign_status[this.point.name].length){
+                                            tooltipStr += ",<br>";
+                                        }
+                                    }
+                                }
+                                return tooltipStr;
+                            }
                         },
                         plotOptions: {
                             pie: {
