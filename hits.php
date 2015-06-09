@@ -813,7 +813,7 @@ thead th {
                             }
                         },
                         tooltip: {
-                            enabled: false,
+                            enabled: false
                         },
                         plotOptions: {
                             pie: {
@@ -841,7 +841,12 @@ thead th {
                         chart: {
                                 plotBackgroundColor: null,
                                 plotBorderWidth: null,
-                                plotShadow: false
+                                plotShadow: false.
+                                events: {
+                                    load: function(){
+                                        this.mytooltip = new Highcharts.Tooltip(this, this.options.tooltip);
+                                    }
+                                }
                         },
                         title: {
                             text: <?php echo json_encode(get_string('submissions_assign', 'block_analytics_graphs'))?>,
@@ -851,7 +856,7 @@ thead th {
                             }
                         },
                         tooltip: {
-                            enabled: true,
+                            enabled: false,
                             backgroundColor: "rgba(255, 255, 255, 1.0)",
                             formatter: function(){
                                 var tooltipStr = "<span style='font-size: 13px'><b>" +
@@ -905,6 +910,17 @@ thead th {
                                     }
                                 },
                                 colors: ['#7cb5ec', '#434348', '#FF1111', '#2b908f']
+                            },
+                            series : {
+                                stickyTracking: false,
+                                events: {
+                                    click : function(evt){
+                                        this.chart.mytooltip.refresh(evt.point, evt);
+                                    },
+                                    mouseOut : function(){
+                                        this.chart.mytooltip.hide();
+                                    }
+                                }
                             }
                         },
                         series: [{
