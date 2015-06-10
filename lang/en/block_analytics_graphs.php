@@ -80,7 +80,7 @@ $string['on_time'] = 'On time';
 $string['late'] = 'Late';
 $string['no_submission'] = 'No submission';
 $string['simply_submit'] = 'Submission without time limit';
-
+$string['resources'] = 'Resources';
 
 
 

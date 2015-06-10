@@ -82,5 +82,5 @@ $string['on_time'] = 'Em tempo';
 $string['late'] = 'Atrasado';
 $string['no_submission'] = 'Não enviou';
 $string['simply_submit'] = 'Submissão sem data limite';
-
+$string['resources'] = 'Materiais';
 

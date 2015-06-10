@@ -823,7 +823,7 @@ thead th {
                             backgroundColor: "rgba(255, 255, 255, 1.0)",
                             formatter: function(){
                                 var tooltipStr = "<span style='font-size: 13px'><b>" +
-                                    <?php echo json_encode(get_string('access_to_contents', 'block_analytics_graphs'))?> +
+                                    <?php echo json_encode(get_string('resources', 'block_analytics_graphs'))?> +
                                     "</b></span>:<br>";
                                 if(this.point.name == <?php echo json_encode(get_string('total_accessed_resources', 'block_analytics_graphs'))?>){
                                     for(var i = 0; i< material_names["accessed"].length; i++){
