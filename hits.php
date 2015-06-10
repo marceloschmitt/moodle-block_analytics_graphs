@@ -635,7 +635,7 @@ thead th {
                 val.totalofresources ; 
             studentwithaccess[0] = val;             
             div = 
-                "<div class='div_nomes' id='" + val.userid + "'>" +
+                "<div class='div_nomes' id='" + val.userid + "' title='" + val.nome + "'>" +
                     "<div class='student_tabs'> \
                         <ul> \
                             <li class='navi_tab'><a href='#email_panel-" + val.userid +
