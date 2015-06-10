@@ -810,6 +810,9 @@ thead th {
                                     }
                                 }
                         },
+                        credits: {
+                            enabled: false
+                        },
                         title: {
                             text: <?php echo json_encode(get_string('access_to_contents', 'block_analytics_graphs'))?>,
                             style: {
@@ -886,6 +889,9 @@ thead th {
                                         this.mytooltip = new Highcharts.Tooltip(this, this.options.tooltip);
                                     }
                                 }
+                        },
+                        credits: {
+                            enabled: false
                         },
                         title: {
                             text: <?php echo json_encode(get_string('submissions_assign', 'block_analytics_graphs'))?>,
