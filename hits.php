@@ -803,7 +803,12 @@ thead th {
                         chart: {
                                 plotBackgroundColor: null,
                                 plotBorderWidth: null,
-                                plotShadow: false
+                                plotShadow: false,
+                                events: {
+                                    load: function(){
+                                        this.mytooltip = new Highcharts.Tooltip(this, this.options.tooltip);
+                                    }
+                                }
                         },
                         title: {
                             text: <?php echo json_encode(get_string('access_to_contents', 'block_analytics_graphs'))?>,
@@ -813,7 +818,31 @@ thead th {
                             }
                         },
                         tooltip: {
-                            enabled: false
+                            enabled: false,
+                            enabled: false,
+                            backgroundColor: "rgba(255, 255, 255, 1.0)",
+                            formatter: function(){
+                                var tooltipStr = "<span style='font-size: 13px'><b>" +
+                                    <?php echo json_encode(get_string('access_to_contents', 'block_analytics_graphs'))?> +
+                                    "</b></span>:<br>";
+                                if(this.point.name == <?php echo json_encode(get_string('total_accessed_resources', 'block_analytics_graphs'))?>){
+                                    for(var i = 0; i< material_names["accessed"].length; i++){
+                                        tooltipStr += material_names["accessed"][i];
+                                        if(i+1 < material_names["accessed"].length){
+                                            tooltipStr += ",<br>";
+                                        }
+                                    }
+                                }
+                                else{
+                                    for(var i = 0; i< material_names["not_accessed"].length; i++){
+                                        tooltipStr += material_names["not_accessed"][i];
+                                        if(i+1 < material_names["not_accessed"].length){
+                                            tooltipStr += ",<br>";
+                                        }
+                                    }
+                                }
+                                return tooltipStr;
+                            }
                         },
                         plotOptions: {
                             pie: {
@@ -829,6 +858,17 @@ thead th {
                                     useHTML: true
                                 },
                                 colors: ['#7cb5ec', '#FF1111']
+                            },
+                            series : {
+                                stickyTracking: false,
+                                events: {
+                                    click : function(evt){
+                                        this.chart.mytooltip.refresh(evt.point, evt);
+                                    },
+                                    mouseOut : function(){
+                                        this.chart.mytooltip.hide();
+                                    }
+                                }
                             }
                         },
                         series: [{
