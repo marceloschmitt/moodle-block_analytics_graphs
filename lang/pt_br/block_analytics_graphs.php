@@ -81,6 +81,6 @@ $string['total_not_accessed_resources'] = 'Total de materiais não acessados';
 $string['on_time'] = 'Em tempo';
 $string['late'] = 'Atrasado';
 $string['no_submission'] = 'Não enviou';
-$string['simply_submit'] = 'Submissão sem data limite';
+$string['no_submission_on_time'] = 'Tarefas em aberto';
 $string['resources'] = 'Materiais';
 

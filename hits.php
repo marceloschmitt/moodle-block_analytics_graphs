@@ -722,16 +722,16 @@ thead th {
                     var ONTIMESTR = <?php echo json_encode(get_string('on_time', 'block_analytics_graphs'))?>;
                     var LATESTR = <?php echo json_encode(get_string('late', 'block_analytics_graphs'))?>;
                     var NOSUBMISSIONSTR = <?php echo json_encode(get_string('no_submission', 'block_analytics_graphs'))?>;
-                    var SIMPLYSUBMITSTR = <?php echo json_encode(get_string('simply_submit', 'block_analytics_graphs'))?>;
+                    var NOSUBMISSIONONTIMESTR = <?php echo json_encode(get_string('no_submission_on_time', 'block_analytics_graphs'))?>;
                     var material_names = {
                         "accessed" : [],
                         "not_accessed" : []
                     };
                     var assign_status = {
-                        <?php echo json_encode(get_string('on_time', 'block_analytics_graphs'))?> : [],
-                        <?php echo json_encode(get_string('late', 'block_analytics_graphs'))?> : [],
-                        <?php echo json_encode(get_string('no_submission', 'block_analytics_graphs'))?> : [],
-                        <?php echo json_encode(get_string('simply_submit', 'block_analytics_graphs'))?> : []
+                        "on_time" : [],
+                        "no_submission" : [],
+                        "late" : [],
+                        "no_submission_on_time" : []
                     }
                     var material_data = [];
                     var assign_data = [];
@@ -756,29 +756,40 @@ thead th {
                         }
                     }
                     var student_time, assign_time;
+                    var current_time = new Date().getTime();
                     for(elem in data["assign"]){
                         name = data["assign"][elem]["name"];
                         student_time = data["assign"][elem]["timecreated"];
                         assign_time = data["assign"][elem]["duedate"];
                         if(assign_time === "0"){
                             if(student_time === "0"){
-                                assign_status[NOSUBMISSIONSTR].push(name);
+                                assign_status["no_submission_on_time"].push(name);
                             }
                             else{
-                                assign_status[SIMPLYSUBMITSTR].push(name);
+                                assign_status["on_time"].push(name);
                             }
                         }
                         else if (assign_time !== "0"){
-                            if(parseInt(student_time) <= parseInt(assign_time)){
-                                if(student_time === "0"){
-                                    assign_status[NOSUBMISSIONSTR].push(name);
+                            if(current_time > parseInt(assign_time)){
+                                if(parseInt(student_time) <= parseInt(assign_time)){
+                                    if(student_time === "0"){
+                                        assign_status["no_submission"].push(name);
+                                    }
+                                    else {
+                                        assign_status["on_time"].push(name);
+                                    }
                                 }
-                                else {
-                                    assign_status[ONTIMESTR].push(name);
+                                else if(parseInt(student_time) > parseInt(assign_time)){
+                                    assign_status["late"].push(name);
                                 }
                             }
-                            else if(parseInt(student_time) > parseInt(assign_time)){
-                                assign_status[LATESTR].push(name);
+                            else{
+                                if(student_time === "0"){
+                                    assign_status["no_submission_on_time"].push(name);
+                                }
+                                else {
+                                    assign_status["on_time"].push(name);
+                                }
                             }
                         }
                     }
@@ -788,10 +799,10 @@ thead th {
                                      [<?php echo json_encode(get_string('total_not_accessed_resources', 'block_analytics_graphs'))?>, 
                                         material_names["not_accessed"].length]];
 
-                    assign_data = [[ONTIMESTR, assign_status[ONTIMESTR].length],
-                                    [LATESTR, assign_status[LATESTR].length],
-                                    [NOSUBMISSIONSTR, assign_status[NOSUBMISSIONSTR].length],
-                                    [SIMPLYSUBMITSTR, assign_status[SIMPLYSUBMITSTR].length]];
+                    assign_data = [[ONTIMESTR, assign_status["on_time"].length],
+                                    [LATESTR, assign_status["late"].length],
+                                    [NOSUBMISSIONSTR, assign_status["no_submission"].length],
+                                    [NOSUBMISSIONONTIMESTR, assign_status["no_submission_on_time"].length]];
 
                     $("#student_tab_panel-" + panel_id).empty().append("\
                         <div class='res_query'>\
@@ -907,34 +918,34 @@ thead th {
                                 var tooltipStr = "<span style='font-size: 13px'><b>" +
                                     <?php echo json_encode(get_string('submissions_assign', 'block_analytics_graphs'))?> +
                                     "</b></span>:<br>";
-                                if(this.point.name == <?php echo json_encode(get_string('on_time', 'block_analytics_graphs'))?>){
-                                    for(var i = 0; i< assign_status[this.point.name].length; i++){
-                                        tooltipStr += assign_status[this.point.name][i];
-                                        if(i+1 < assign_status[this.point.name].length){
+                                if(this.point.name == ONTIMESTR){
+                                    for(var i = 0; i< assign_status["on_time"].length; i++){
+                                        tooltipStr += assign_status["on_time"][i];
+                                        if(i+1 < assign_status["on_time"].length){
                                             tooltipStr += ",<br>";
                                         }
                                     }
                                 }
-                                else if(this.point.name == <?php echo json_encode(get_string('late', 'block_analytics_graphs'))?>){                                         
-                                    for(var i = 0; i< assign_status[this.point.name].length; i++){
-                                        tooltipStr += assign_status[this.point.name][i];
-                                        if(i+1 < assign_status[this.point.name].length){
+                                else if(this.point.name == LATESTR){                                         
+                                    for(var i = 0; i< assign_status["late"].length; i++){
+                                        tooltipStr += assign_status["late"][i];
+                                        if(i+1 < assign_status["late"].length){
                                             tooltipStr += ",<br>";
                                         }
                                     }
                                 }
-                                else if(this.point.name == <?php echo json_encode(get_string('no_submission', 'block_analytics_graphs'))?>){
-                                    for(var i = 0; i< assign_status[this.point.name].length; i++){
-                                        tooltipStr += assign_status[this.point.name][i];
-                                        if(i+1 < assign_status[this.point.name].length){
+                                else if(this.point.name == NOSUBMISSIONSTR){
+                                    for(var i = 0; i< assign_status["no_submission"].length; i++){
+                                        tooltipStr += assign_status["no_submission"][i];
+                                        if(i+1 < assign_status["no_submission"].length){
                                             tooltipStr += ",<br>";
                                         }
                                     }
                                 }
                                 else{
-                                    for(var i = 0; i< assign_status[this.point.name].length; i++){
-                                        tooltipStr += assign_status[this.point.name][i];
-                                        if(i+1 < assign_status[this.point.name].length){
+                                    for(var i = 0; i< assign_status["no_submission_on_time"].length; i++){
+                                        tooltipStr += assign_status["no_submission_on_time"][i];
+                                        if(i+1 < assign_status["no_submission_on_time"].length){
                                             tooltipStr += ",<br>";
                                         }
                                     }
