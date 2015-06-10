@@ -854,8 +854,7 @@ thead th {
                                     style: {
                                         color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black',
                                         width: 100
-                                    },
-                                    useHTML: true
+                                    }
                                 },
                                 colors: ['#7cb5ec', '#FF1111']
                             },
