@@ -15,8 +15,6 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 
-
-
 require('../../config.php');
 require('lib.php');
 require('javascriptfunctions.php');
