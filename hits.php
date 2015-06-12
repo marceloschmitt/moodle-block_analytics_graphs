@@ -850,7 +850,7 @@ thead th {
                                     for(var i = 0; i< material_names["accessed"].length; i++){
                                         tooltipStr += material_names["accessed"][i];
                                         if(i+1 < material_names["accessed"].length){
-                                            tooltipStr += ",<br>";
+                                            tooltipStr += "<br>";
                                         }
                                     }
                                 }
@@ -858,7 +858,7 @@ thead th {
                                     for(var i = 0; i< material_names["not_accessed"].length; i++){
                                         tooltipStr += material_names["not_accessed"][i];
                                         if(i+1 < material_names["not_accessed"].length){
-                                            tooltipStr += ",<br>";
+                                            tooltipStr += "<br>";
                                         }
                                     }
                                 }
@@ -929,7 +929,7 @@ thead th {
                                     for(var i = 0; i< assign_status["on_time"].length; i++){
                                         tooltipStr += assign_status["on_time"][i];
                                         if(i+1 < assign_status["on_time"].length){
-                                            tooltipStr += ",<br>";
+                                            tooltipStr += "<br>";
                                         }
                                     }
                                 }
@@ -937,7 +937,7 @@ thead th {
                                     for(var i = 0; i< assign_status["late"].length; i++){
                                         tooltipStr += assign_status["late"][i];
                                         if(i+1 < assign_status["late"].length){
-                                            tooltipStr += ",<br>";
+                                            tooltipStr += "<br>";
                                         }
                                     }
                                 }
@@ -945,7 +945,7 @@ thead th {
                                     for(var i = 0; i< assign_status["no_submission"].length; i++){
                                         tooltipStr += assign_status["no_submission"][i];
                                         if(i+1 < assign_status["no_submission"].length){
-                                            tooltipStr += ",<br>";
+                                            tooltipStr += "<br>";
                                         }
                                     }
                                 }
@@ -953,7 +953,7 @@ thead th {
                                     for(var i = 0; i< assign_status["no_submission_on_time"].length; i++){
                                         tooltipStr += assign_status["no_submission_on_time"][i];
                                         if(i+1 < assign_status["no_submission_on_time"].length){
-                                            tooltipStr += ",<br>";
+                                            tooltipStr += "<br>";
                                         }
                                     }
                                 }
