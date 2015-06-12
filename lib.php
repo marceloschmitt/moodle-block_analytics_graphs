@@ -361,7 +361,7 @@ function block_analytics_graphs_get_user_resource_url_page_access($course, $stud
                         FROM {course_modules} cm
                         LEFT JOIN {logstore_standard_log} log ON log.timecreated >= ?
                             AND log.userid = ? AND action = 'viewed' AND cm.id=log.contextinstanceid
-                        WHERE cm.course = ? AND (cm.module=? OR cm.module=? OR cm.module=?) AND visible = 1
+                        WHERE cm.course = ? AND (cm.module=? OR cm.module=? OR cm.module=?) AND cm.visible = 1
                         GROUP BY cm.id, log.userid
                         ) as temp
                     LEFT JOIN {course_modules} cm ON temp.id = cm.id
@@ -379,8 +379,8 @@ function block_analytics_graphs_get_user_resource_url_page_access($course, $stud
 
 function block_analytics_graphs_get_user_assign_submission($course, $student) {
     global $DB;
-    $assign = $DB->get_record('modules', array('name' => 'assign'), 'id');
-    $params = array($course, $assign, $course, $student);
+    $assignment = $DB->get_record('modules', array('name' => 'assignment'), 'id');
+    $params = array($course, $assignment, $course, $student);
     $sql = "SELECT  a.id, name, COALESCE(duedate, 0) as duedate, COALESCE(s.timecreated,0) as timecreated
                 FROM mdl_assign a
                 LEFT JOIN {assign_submission} s on a.id = s.assignment AND s.status = 'submitted'
