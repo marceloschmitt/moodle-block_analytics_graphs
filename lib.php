@@ -385,7 +385,7 @@ function block_analytics_graphs_get_user_assign_submission($course, $student) {
                 FROM mdl_assign a
                 LEFT JOIN {assign_submission} s on a.id = s.assignment AND s.status = 'submitted'
                 LEFT JOIN {course_modules} cm on cm.course = ? AND cm.module = ? AND cm.instance = a.id
-                WHERE course = ? and nosubmissions = 0 and (s.userid IS NULL OR s.userid = ?) AND cm.visible = 1
+                WHERE a.course = ? and nosubmissions = 0 and (s.userid IS NULL OR s.userid = ?) AND cm.visible = 1
                 ORDER BY duedate, name";
 
      $resultado = $DB->get_records_sql($sql, $params);
