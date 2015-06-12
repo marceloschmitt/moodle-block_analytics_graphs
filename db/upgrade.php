@@ -61,8 +61,8 @@ function xmldb_block_analytics_graphs_upgrade($oldversion, $block) {
         }
     } else if ($oldversion < 2015051302) {
         $table = new xmldb_table('block_analytics_graphs_msg');
-        
-        // Define field courseid to be added to block_analytics_graphs_msg.      
+
+        // Define field courseid to be added to block_analytics_graphs_msg.
         $field = new xmldb_field('courseid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '1', 'message');
         // Conditionally launch add field courseid.
         if (!$dbman->field_exists($table, $field)) {
@@ -70,7 +70,6 @@ function xmldb_block_analytics_graphs_upgrade($oldversion, $block) {
             $key = new xmldb_key('courseid', XMLDB_KEY_FOREIGN, array('courseid'), 'course', array('id'));
             $dbman->add_key($table, $key);
         }
-
 
         // Define field timecreated to be added to block_analytics_graphs_msg.
         $field = new xmldb_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, null, null, '0', 'courseid');
@@ -82,7 +81,6 @@ function xmldb_block_analytics_graphs_upgrade($oldversion, $block) {
                 $dbman->add_index($table, $index);
             }
         }
-        
     }
     // Analytics_graphs savepoint reached.
     upgrade_block_savepoint(true, 2015051302, 'analytics_graphs');

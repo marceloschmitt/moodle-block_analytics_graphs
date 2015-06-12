@@ -352,23 +352,23 @@ function block_analytics_graphs_get_user_resource_url_page_access($course, $stud
     $url = $DB->get_record('modules', array('name' => 'url'), 'id');
     $page = $DB->get_record('modules', array('name' => 'page'), 'id');
     $startdate = $COURSE->startdate;
-    $params = array($startdate,$student, $course, $resource->id, $url->id, $page->id);
-    if(!$legacy) {
+    $params = array($startdate, $student, $course, $resource->id, $url->id, $page->id);
+    if (!$legacy) {
         $sql = "SELECT temp.id, m.name as tipo,
                     r.name as resource, u.name as url, p.name as page, COALESCE(temp.userid,0) as userid,  temp.acessos
                     FROM (
                         SELECT cm.id, log.userid, count(*) as acessos
-                        FROM {course_modules} as cm
-                        LEFT JOIN {logstore_standard_log} as log ON log.timecreated >= ?
+                        FROM {course_modules} cm
+                        LEFT JOIN {logstore_standard_log} log ON log.timecreated >= ?
                             AND log.userid = ? AND action = 'viewed' AND cm.id=log.contextinstanceid
                         WHERE cm.course = ? AND (cm.module=? OR cm.module=? OR cm.module=?)
                         GROUP BY cm.id, log.userid
                         ) as temp
-                    LEFT JOIN {course_modules} as cm ON temp.id = cm.id
-                    LEFT JOIN {modules} as m ON cm.module = m.id
-                    LEFT JOIN {resource} as r ON cm.instance = r.id
-                    LEFT JOIN {url} as u ON cm.instance = u.id
-                    LEFT JOIN {page} as p ON cm.instance = p.id
+                    LEFT JOIN {course_modules} cm ON temp.id = cm.id
+                    LEFT JOIN {modules} m ON cm.module = m.id
+                    LEFT JOIN {resource} r ON cm.instance = r.id
+                    LEFT JOIN {url} u ON cm.instance = u.id
+                    LEFT JOIN {page} p ON cm.instance = p.id
                     ORDER BY m.name, r.name, u.name, p.name";
     }
     $result = $DB->get_records_sql($sql, $params);

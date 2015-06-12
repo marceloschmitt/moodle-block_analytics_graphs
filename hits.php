@@ -511,7 +511,8 @@ thead th {
             $.each(array, function(index, value){
                         if (value){
                             if (nome === value.nome){
-                                    var linha = "<tr id='tr-student-"+value.userid+"'><th><span class='nome_student' style='cursor:hand'\
+                                    var linha = "<tr id='tr-student-"+value.userid+"'><th>
+                                        <span class='nome_student' style='cursor:hand'\
                                      id='linha-"+value.userid+"'>"+value.nome+"</span>"+
                                             "<div class='warnings'>\
                                                 <div class='warning1' id='"+value.userid+"_1'>\
@@ -566,10 +567,14 @@ thead th {
                 <option value="-"><?php  echo json_encode(get_string('all_groups', 'block_analytics_graphs'));?></option>
             <?php foreach ($groupmembers as $key => $value) { ?>
                 <option value="<?php echo $key; ?>"><?php echo $value["name"]; ?></option>
-            <?php  } ?>
+            <?php  
+            }
+            ?>
             </select>
         </div>
-    <?php  } ?>
+    <?php  
+    }
+    ?>
 <center>
 <H2><?php  echo   get_string('hits_distribution', 'block_analytics_graphs');?></H2>
 <H3><?php  echo $coursename;?> </H3>
@@ -722,7 +727,8 @@ thead th {
                     var ONTIMESTR = <?php echo json_encode(get_string('on_time', 'block_analytics_graphs'))?>;
                     var LATESTR = <?php echo json_encode(get_string('late', 'block_analytics_graphs'))?>;
                     var NOSUBMISSIONSTR = <?php echo json_encode(get_string('no_submission', 'block_analytics_graphs'))?>;
-                    var NOSUBMISSIONONTIMESTR = <?php echo json_encode(get_string('no_submission_on_time', 'block_analytics_graphs'))?>;
+                    var NOSUBMISSIONONTIMESTR = <?php echo json_encode(get_string('no_submission_on_time',
+                        'block_analytics_graphs'))?>;
                     var material_names = {
                         "accessed" : [],
                         "not_accessed" : []
@@ -796,7 +802,8 @@ thead th {
                     
                     material_data = [[<?php echo json_encode(get_string('total_accessed_resources', 'block_analytics_graphs'))?>, 
                                         material_names["accessed"].length],
-                                     [<?php echo json_encode(get_string('total_not_accessed_resources', 'block_analytics_graphs'))?>, 
+                                     [<?php echo json_encode(get_string('total_not_accessed_resources',
+                                        'block_analytics_graphs'))?>, 
                                         material_names["not_accessed"].length]];
 
                     assign_data = [[ONTIMESTR, assign_status["on_time"].length],
@@ -839,7 +846,8 @@ thead th {
                                 var tooltipStr = "<span style='font-size: 13px'><b>" +
                                     <?php echo json_encode(get_string('resources', 'block_analytics_graphs'))?> +
                                     "</b></span>:<br>";
-                                if(this.point.name == <?php echo json_encode(get_string('total_accessed_resources', 'block_analytics_graphs'))?>){
+                                if(this.point.name == <?php echo json_encode(get_string('total_accessed_resources',
+                                    'block_analytics_graphs'))?>){
                                     for(var i = 0; i< material_names["accessed"].length; i++){
                                         tooltipStr += material_names["accessed"][i];
                                         if(i+1 < material_names["accessed"].length){
@@ -1067,7 +1075,8 @@ thead th {
                         $(".button-fancy").attr('disabled', 'disabled');
                     }else{
                         $("#studentswithnoaccess").children().remove();
-                        var title = <?php echo json_encode(get_string('no_access', 'block_analytics_graphs'));?> + " - " + coursename;
+                        var title = <?php echo json_encode(get_string('no_access', 'block_analytics_graphs'));?> + 
+                            " - " + coursename;
                         $("#studentswithnoaccess").append(createEmailForm(title , studentswithnoaccessgroup, courseid, 'hits.php'));
                     }
                 }
