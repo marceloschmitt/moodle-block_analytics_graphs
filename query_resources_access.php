@@ -16,7 +16,7 @@
 
 
 require_once('../../config.php');
-include("lib.php");
+require_once("lib.php");
 require_once($CFG->dirroot.'/lib/moodlelib.php');
 
 $studentid = required_param('student_id', PARAM_INT);
