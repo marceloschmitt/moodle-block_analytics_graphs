@@ -380,7 +380,7 @@ function block_analytics_graphs_get_user_resource_url_page_access($course, $stud
 function block_analytics_graphs_get_user_assign_submission($course, $student) {
     global $DB;
     $assignment = $DB->get_record('modules', array('name' => 'assignment'), 'id');
-    $params = array($course, $assignment, $course, $student);
+    $params = array($course, $assignment->id, $course, $student);
     $sql = "SELECT  a.id, name, COALESCE(duedate, 0) as duedate, COALESCE(s.timecreated,0) as timecreated
                 FROM mdl_assign a
                 LEFT JOIN {assign_submission} s on a.id = s.assignment AND s.status = 'submitted'
