@@ -511,8 +511,8 @@ thead th {
             $.each(array, function(index, value){
                         if (value){
                             if (nome === value.nome){
-                                    var linha = "<tr id='tr-student-"+value.userid+"'><th>
-                                        <span class='nome_student' style='cursor:hand'\
+                                    var linha = "<tr id='tr-student-"+value.userid+
+                                        "'><th><span class='nome_student' style='cursor:hand'\
                                      id='linha-"+value.userid+"'>"+value.nome+"</span>"+
                                             "<div class='warnings'>\
                                                 <div class='warning1' id='"+value.userid+"_1'>\
