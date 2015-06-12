@@ -845,7 +845,7 @@ thead th {
                                 var tooltipStr = "<span style='font-size: 13px'><b>" +
                                     this.point.name +
                                     "</b></span>:<br>";
-                                if(this.point.name == <?php echo json_encode(get_string('total_accessed_resources',
+                                if(this.point.name == <?php echo json_encode(get_string('access',
                                     'block_analytics_graphs'))?>){
                                     for(var i = 0; i< material_names["accessed"].length; i++){
                                         tooltipStr += material_names["accessed"][i];
