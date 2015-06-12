@@ -79,7 +79,7 @@ $string['total_not_accessed_resources'] = 'Total not accessed resources';
 $string['on_time'] = 'On time';
 $string['late'] = 'Late';
 $string['no_submission'] = 'No submission';
-$string['no_submission_on_time'] = 'Open tasks';
+$string['no_submission_on_time'] = 'May submit';
 $string['resources'] = 'Resources';
 
 
