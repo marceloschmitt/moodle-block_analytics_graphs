@@ -724,8 +724,8 @@ thead th {
 
             var fill_panel = function(panel_id){
                 return function fill_panel_callback(data){
-                    var ONTIMESTR = <?php echo json_encode(get_string('on_time', 'block_analytics_graphs'))?>;
-                    var LATESTR = <?php echo json_encode(get_string('late', 'block_analytics_graphs'))?>;
+                    var ONTIMESTR = <?php echo json_encode(get_string('in_time_submission', 'block_analytics_graphs'))?>;
+                    var LATESTR = <?php echo json_encode(get_string('late_submission', 'block_analytics_graphs'))?>;
                     var NOSUBMISSIONSTR = <?php echo json_encode(get_string('no_submission', 'block_analytics_graphs'))?>;
                     var NOSUBMISSIONONTIMESTR = <?php echo json_encode(get_string('no_submission_on_time',
                         'block_analytics_graphs'))?>;
@@ -924,7 +924,7 @@ thead th {
                             backgroundColor: "rgba(255, 255, 255, 1.0)",
                             formatter: function(){
                                 var tooltipStr = "<span style='font-size: 13px'><b>" +
-                                    <?php echo json_encode(get_string('submissions_assign', 'block_analytics_graphs'))?> +
+                                   this.point.name +
                                     "</b></span>:<br>";
                                 if(this.point.name == ONTIMESTR){
                                     for(var i = 0; i< assign_status["on_time"].length; i++){
