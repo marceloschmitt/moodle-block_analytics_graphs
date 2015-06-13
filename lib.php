@@ -145,7 +145,7 @@ function block_analytics_graphs_get_assign_submission($course, $students) {
     list($insql, $inparams) = $DB->get_in_or_equal($inclause);
     $params = array_merge(array($course), $inparams);
     $sql = "SELECT a.id+(COALESCE(s.id,1)*1000000)as id, a.id as assignment, name, duedate, cutoffdate,
-                s.userid, usr.firstname, usr.lastname, usr.email, s.timecreated
+                s.userid, usr.firstname, usr.lastname, usr.email, s.timemodified as timecreated
                 FROM {assign} a
                 LEFT JOIN {assign_submission} s on a.id = s.assignment AND s.status = 'submitted'
                 LEFT JOIN {user} usr ON usr.id = s.userid
@@ -380,14 +380,13 @@ function block_analytics_graphs_get_user_resource_url_page_access($course, $stud
 function block_analytics_graphs_get_user_assign_submission($course, $student) {
     global $DB;
     $assignment = $DB->get_record('modules', array('name' => 'assignment'), 'id');
-    $params = array($course, $assignment->id, $course, $student);
-    $sql = "SELECT  a.id, name, COALESCE(duedate, 0) as duedate, COALESCE(s.timecreated,0) as timecreated
+    $params = array($course, $assignment, $course, $student);
+    $sql = "SELECT  a.id, name, COALESCE(duedate, 0) as duedate, COALESCE(s.timemodified,0) as timecreated
                 FROM mdl_assign a
-                LEFT JOIN {assign_submission} s on a.id = s.assignment AND s.status = 'submitted'
-                LEFT JOIN {course_modules} cm on cm.course = ? AND cm.module = ? AND cm.instance = a.id
-                WHERE a.course = ? and nosubmissions = 0 and (s.userid IS NULL OR s.userid = ?) AND cm.visible = 1
+                LEFT JOIN {assign_submission} s on a.id = s.assignment AND s.status = 'submitted' AND s.userid = ?
+                LEFT JOIN {course_modules} cm on cm.instance = a.id AND cm.module = ?
+                WHERE a.course = ? and nosubmissions = 0 AND cm.visible=1
                 ORDER BY duedate, name";
-
      $resultado = $DB->get_records_sql($sql, $params);
      return($resultado);
 }
