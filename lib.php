@@ -374,6 +374,24 @@ function block_analytics_graphs_get_user_resource_url_page_access($course, $stud
                     LEFT JOIN {page} p ON cm.instance = p.id
                     ORDER BY m.name, r.name, u.name, p.name";
     }
+    else {
+        $sql = "SELECT temp.id, m.name as tipo,
+                    r.name as resource, u.name as url, p.name as page, COALESCE(temp.userid,0) as userid,  temp.acessos
+                    FROM (
+                        SELECT cm.id, log.userid, count(*) as acessos
+                        FROM {course_modules} cm
+                        LEFT JOIN {log} as log ON log.time >= ?
+                            AND log.userid =? AND action = 'view' AND cm.id = log.cmid
+                        WHERE cm.course = ? AND (cm.module=? OR cm.module=? OR cm.module=?) AND cm.visible = 1
+                        GROUP BY cm.id, log.userid
+                        ) as temp
+                    LEFT JOIN {course_modules} cm ON temp.id = cm.id
+                    LEFT JOIN {modules} m ON cm.module = m.id
+                    LEFT JOIN {resource} r ON cm.instance = r.id
+                    LEFT JOIN {url} u ON cm.instance = u.id
+                    LEFT JOIN {page} p ON cm.instance = p.id
+                    ORDER BY m.name, r.name, u.name, p.name";                 
+    }
     $result = $DB->get_records_sql($sql, $params);
     return($result);
 
@@ -389,7 +407,7 @@ function block_analytics_graphs_get_user_assign_submission($course, $student) {
                 LEFT JOIN {assign_submission} s on a.id = s.assignment AND s.status = 'submitted' AND s.userid = ?
                 LEFT JOIN {course_modules} cm on cm.instance = a.id AND cm.module = ?
                 WHERE a.course = ? and nosubmissions = 0 AND cm.visible=1
-                ORDER BY duedate, name";
+                ORDER BY name";
      $resultado = $DB->get_records_sql($sql, $params);
      return($resultado);
 }
