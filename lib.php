@@ -410,5 +410,5 @@ function block_analytics_graphs_get_user_assign_submission($course, $student) {
                 ORDER BY name";
      $result = $DB->get_records_sql($sql, $params);
      
-     return($resul);
+     return($result);
 }
