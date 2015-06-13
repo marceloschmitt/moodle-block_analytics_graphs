@@ -143,13 +143,16 @@ function block_analytics_graphs_get_assign_submission($course, $students) {
         $inclause[] = $tuple->id;
     }
     list($insql, $inparams) = $DB->get_in_or_equal($inclause);
-    $params = array_merge(array($course), $inparams);
+    $assign = $DB->get_record('modules', array('name' => 'assign'), 'id');
+    $params = array_merge(array($assign->id, $course), $inparams);
     $sql = "SELECT a.id+(COALESCE(s.id,1)*1000000)as id, a.id as assignment, name, duedate, cutoffdate,
                 s.userid, usr.firstname, usr.lastname, usr.email, s.timemodified as timecreated
                 FROM {assign} a
                 LEFT JOIN {assign_submission} s on a.id = s.assignment AND s.status = 'submitted'
                 LEFT JOIN {user} usr ON usr.id = s.userid
-                WHERE course = ? and nosubmissions = 0 and (s.userid IS NULL OR s.userid $insql)
+                LEFT JOIN {course_modules} cm on cm.instance = a.id AND cm.module = ?
+                WHERE course = ? and nosubmissions = 0 AND (s.userid IS NULL OR s.userid $insql)
+                    AND cm.visible = 1;
                 ORDER BY duedate, name, firstname";
 
      $resultado = $DB->get_records_sql($sql, $params);
