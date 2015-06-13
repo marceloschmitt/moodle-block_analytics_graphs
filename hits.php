@@ -1015,7 +1015,13 @@ thead th {
 
     $(".button-fancy").bind("click", function(){                
         $(".div_nomes").dialog("close");
-                $("#studentswithnoaccess").dialog("open");
+        $("#studentswithnoaccess").dialog("open");
+        $("#studentswithnoaccess").dialog("option", "position", {
+            my:"center top",
+            at:"center top+" + 10,
+            of:window
+        });
+
     });
 
     $(".nome_student").bind("click", function(){                
