@@ -21,13 +21,14 @@ require_once($CFG->dirroot.'/lib/moodlelib.php');
 
 $studentid = required_param('student_id', PARAM_INT);
 $courseid = required_param('course_id', PARAM_INT);
+$legacy = required_param('legacy', PARAM_INT);
 
 /* Access control */
 require_login($courseid);
 $context = context_course::instance($courseid);
 require_capability('block/analytics_graphs:viewpages', $context);
 
-$resourceaccess = block_analytics_graphs_get_user_resource_url_page_access($courseid, $studentid, 0);
+$resourceaccess = block_analytics_graphs_get_user_resource_url_page_access($courseid, $studentid, $legacy);
 $assigninfo = block_analytics_graphs_get_user_assign_submission($courseid, $studentid);
 
 echo json_encode(array("resources" => $resourceaccess, "assign" => $assigninfo));

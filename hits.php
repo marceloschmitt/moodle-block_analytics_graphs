@@ -203,6 +203,7 @@ thead th {
     var numberofresources = <?php echo $numberofresourcesresult; ?>;
     var studentswithnoaccess = <?php echo $studentswithnoaccess; ?>;
     var groups = <?php echo $groupmembersjson; ?>;
+    var legacy = <?php echo json_encode($legacy); ?>;
 
     var nomes = [];
     $.each(geral, function(ind, val){   
@@ -1003,7 +1004,8 @@ thead th {
                 dataType : "JSON",
                 data: {
                     student_id: this.id.split("-")[1],
-                    course_id: this.id.split("-")[2]
+                    course_id: this.id.split("-")[2],
+                    legacy: legacy
                 },
                 success: fill_panel(this.id.split("-")[1])
             });

@@ -408,6 +408,7 @@ function block_analytics_graphs_get_user_assign_submission($course, $student) {
                 LEFT JOIN {course_modules} cm on cm.instance = a.id AND cm.module = ?
                 WHERE a.course = ? and nosubmissions = 0 AND cm.visible=1
                 ORDER BY name";
-     $resultado = $DB->get_records_sql($sql, $params);
-     return($resultado);
+     $result = $DB->get_records_sql($sql, $params);
+     
+     return($resul);
 }
