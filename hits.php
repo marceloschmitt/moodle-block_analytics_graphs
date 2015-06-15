@@ -191,6 +191,9 @@ thead th {
         border-radius: 3px;
         box-shadow: 1px 1px 2px #888;
         padding: 8px;
+        height: 150px;
+        width: auto;
+        overflow: auto;
 }
 </style>
 
@@ -838,7 +841,7 @@ thead th {
                         },
                         tooltip: {
                             enabled: false,
-                            enabled: false,
+                            useHTML: true,
                             backgroundColor: "rgba(255, 255, 255, 1.0)",
                             formatter: function(){
                                 var tooltipStr = "<span style='font-size: 13px'><b>" +
@@ -919,6 +922,7 @@ thead th {
                         },
                         tooltip: {
                             enabled: false,
+                            useHTML: true,
                             backgroundColor: "rgba(255, 255, 255, 1.0)",
                             formatter: function(){
                                 var tooltipStr = "<span style='font-size: 13px'><b>" +
