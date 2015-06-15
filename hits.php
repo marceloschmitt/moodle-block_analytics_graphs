@@ -186,14 +186,14 @@ thead th {
     border-bottom: 2px solid gray;
 }
 .highcharts-tooltip>span {
-        background: white;
-        border: 1px solid silver;
-        border-radius: 3px;
-        box-shadow: 1px 1px 2px #888;
-        padding: 8px;
-        height: 150px;
-        width: auto;
-        overflow: auto;
+    background: white;
+    border: 1px solid silver;
+    border-radius: 3px;
+    box-shadow: 1px 1px 2px #888;
+    padding: 8px;
+    max-height: 150px;
+    width: auto;
+    overflow: auto;
 }
 </style>
 
