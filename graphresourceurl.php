@@ -43,7 +43,7 @@ foreach ($students as $tuple) {
 /* Get accesses to resources and urls */
 $result = block_analytics_graphs_get_resource_url_access($course, $students, $legacy);
 $numberofresources = count($result);
-if($numberofresources == 0) {
+if ($numberofresources == 0) {
     error(get_string('no_graph', 'block_analytics_graphs'));
 }
 
