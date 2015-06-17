@@ -31,10 +31,18 @@ if ($numberofstudents == 0) {
     error(get_string('no_students', 'block_analytics_graphs'));
 }
 $result = block_analytics_graphs_get_hotpot_submission($course, $students);
+$numberoftasks = count($result);
+if($numberoftasks == 0) {
+    error(get_string('no_graph', 'block_analytics_graphs'));
+}
 $submissionsgraphoptions = $submissionsgraph->create_graph($result, $students);
 
 /* Discover groups and members */
 $groupmembers = block_analytics_graphs_get_course_group_members($course);
+$numberoftasks = count($result);
+if($numberoftasks == 0) {
+    error(get_string('no_graph', 'block_analytics_graphs'));
+}
 $groupmembersjson = json_encode($groupmembers);
 
 $studentsjson = json_encode($students);

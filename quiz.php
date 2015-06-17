@@ -31,6 +31,10 @@ if ($numberofstudents == 0) {
     error(get_string('no_students', 'block_analytics_graphs'));
 }
 $result = block_analytics_graphs_get_quiz_submission($course, $students);
+$numberoftasks = count($result);
+if($numberoftasks == 0) {
+    error(get_string('no_graph', 'block_analytics_graphs'));
+}
 $submissionsgraphoptions = $submissionsgraph->create_graph($result, $students);
 
 /* Discover groups and members */

@@ -44,6 +44,7 @@ $string['mailcopyalert'] = 'Copy of Analytics Graphs message!  ---- ';
 $string['message_text'] = "Message Text";
 $string['new_message'] = 'New message';
 $string['no_access'] = 'No access';
+$string['no_graph'] = 'No data to generate graph';
 $string['no_deadline'] = 'No deadline';
 $string['no_messages'] = "This student has no messages";
 $string['no_students'] = 'There are no students in the course';

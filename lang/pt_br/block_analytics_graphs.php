@@ -46,6 +46,7 @@ $string['mailcopyalert'] = 'Esta é uma cópia de uma mensagem enviada por um pr
 $string['message_text'] = "Texto da Mensagem";
 $string['new_message'] = 'Nova mensagem';
 $string['no_access'] = 'Não acessaram';
+$string['no_graph'] = 'Não há dados para gerar os gráficos';
 $string['no_deadline'] = 'Sem limite';
 $string['no_messages'] = "Nenhuma mensagem para este aluno";
 $string['no_students'] = 'Não há estudantes no curso';
