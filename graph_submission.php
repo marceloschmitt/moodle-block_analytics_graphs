@@ -109,21 +109,24 @@ class graph_submission {
                     $this->statistics[$counter]['numberoflatesubmissions'] = $numberoflatesubmissions;
                     $this->statistics[$counter]['numberofnosubmissions'] =
                             $numberofstudents - $numberofintimesubmissions - $numberoflatesubmissions;
-                    if ($this->statistics[$counter]['numberofnosubmissions'] == $numberofstudents) {
-                        $this->statistics[$counter]['no_submissions'] = $arrayofstudents;
-                    } else if ($numberoflatesubmissions == 0) {
-                        $this->statistics[$counter]['no_submissions'] =
-                            block_analytics_graphs_subtract_student_arrays($arrayofstudents,
+                    if ($this->statistics[$counter]['numberofnosubmissions'] > 0) {
+                        if ($this->statistics[$counter]['numberofnosubmissions'] == $numberofstudents) {
+                            $this->statistics[$counter]['no_submissions'] = $arrayofstudents;
+                        } else if ($numberoflatesubmissions == 0) {
+                            $this->statistics[$counter]['no_submissions'] =
+                                block_analytics_graphs_subtract_student_arrays($arrayofstudents,
                                 $this->statistics[$counter]['in_time_submissions']);
-                    } else if ($numberofintimesubmissions == 0) {
-                        $this->statistics[$counter]['no_submissions'] =
-                            block_analytics_graphs_subtract_student_arrays($arrayofstudents,
+                        } else if ($numberofintimesubmissions == 0) {
+                            $this->statistics[$counter]['no_submissions'] =
+                                block_analytics_graphs_subtract_student_arrays($arrayofstudents,
                                 $this->statistics[$counter]['latesubmissions']);
-                    } else {
-                        $this->statistics[$counter]['no_submissions'] = block_analytics_graphs_subtract_student_arrays(
-                            block_analytics_graphs_subtract_student_arrays($arrayofstudents,
-                                $this->statistics[$counter]['in_time_submissions']),
+                        } else {
+                            $this->statistics[$counter]['no_submissions'] = 
+                                block_analytics_graphs_subtract_student_arrays(
+                                block_analytics_graphs_subtract_student_arrays($arrayofstudents,
+                                    $this->statistics[$counter]['in_time_submissions']),
                                 $this->statistics[$counter]['latesubmissions']);
+                        }
                     }
                     $counter++;
                     $numberofintimesubmissions = 0;
@@ -154,20 +157,24 @@ class graph_submission {
         $this->statistics[$counter]['numberoflatesubmissions'] = $numberoflatesubmissions;
         $this->statistics[$counter]['numberofnosubmissions'] = $numberofstudents - $numberofintimesubmissions -
             $numberoflatesubmissions;
-
-        if ($this->statistics[$counter]['numberofnosubmissions'] == $numberofstudents) {
-            $this->statistics[$counter]['no_submissions'] = $arrayofstudents;
-        } else if ($numberoflatesubmissions == 0) {
-            $this->statistics[$counter]['no_submissions'] = block_analytics_graphs_subtract_student_arrays($arrayofstudents,
+        if ($this->statistics[$counter]['numberofnosubmissions'] > 0) {
+            if ($this->statistics[$counter]['numberofnosubmissions'] == $numberofstudents) {
+                $this->statistics[$counter]['no_submissions'] = $arrayofstudents;
+            } else if ($numberoflatesubmissions == 0) {
+                $this->statistics[$counter]['no_submissions'] = 
+                    block_analytics_graphs_subtract_student_arrays($arrayofstudents,
                     $this->statistics[$counter]['in_time_submissions']);
-        } else if ($numberofintimesubmissions == 0) {
-            $this->statistics[$counter]['no_submissions'] = block_analytics_graphs_subtract_student_arrays($arrayofstudents,
+            } else if ($numberofintimesubmissions == 0) {
+                $this->statistics[$counter]['no_submissions'] = 
+                    block_analytics_graphs_subtract_student_arrays($arrayofstudents,
                     $this->statistics[$counter]['latesubmissions']);
-        } else {
-            $this->statistics[$counter]['no_submissions'] =
-                block_analytics_graphs_subtract_student_arrays(block_analytics_graphs_subtract_student_arrays(
-                    $arrayofstudents,
-                    $this->statistics[$counter]['in_time_submissions']), $this->statistics[$counter]['latesubmissions']);
+            } else {
+                $this->statistics[$counter]['no_submissions'] =
+                    block_analytics_graphs_subtract_student_arrays(
+                    block_analytics_graphs_subtract_student_arrays($arrayofstudents,
+                        $this->statistics[$counter]['in_time_submissions']), 
+                    $this->statistics[$counter]['latesubmissions']);
+            }
         }
 
         foreach ($this->statistics as $tuple) {
