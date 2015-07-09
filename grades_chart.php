@@ -50,7 +50,7 @@ $result = $DB->get_records_sql($sql, array($course_id));
 						"form_data": form_data,
 						"course_id": <?php echo json_encode($course_id); ?>
 					},
-					success: display_chart('chart_div');
+					success: display_chart('chart_div')
 				});
 				return false;
 			});
@@ -65,8 +65,8 @@ $result = $DB->get_records_sql($sql, array($course_id));
 						std_dev: 0.0
 					};
 					for(elem in data){
-						grades.push(data[elem].grade);
-						statistics['mean'] += grades[i]
+						grades.push(data[elem]['grade']);
+						statistics['mean'] += grades[i];
 					}
 					statistics['mean'] = statistics['mean']/num_grades;
 					for(var i=0; i<num_grades; i++){
@@ -137,7 +137,7 @@ $result = $DB->get_records_sql($sql, array($course_id));
 					    		}
 					    		tooltipStr += smaller_grades_str + "<br>" + larger_grades_str;
 					    		return tooltipStr;
-								}
+							}
 					    },
 					    plotOptions:{
 					    	area:{
