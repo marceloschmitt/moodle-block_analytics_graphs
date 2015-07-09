@@ -32,7 +32,7 @@ $result = $DB->get_records_sql($sql, array($course_id));
 		<div id='chart_div'></div>
 		<script>
 			var tasks = <?php echo json_encode($result); ?>;
-			for(elem in taks){
+			for(elem in tasks){
 				$("#tasks_form").append("<input type='checkbox' name='" + 
 										tasks[elem]['id'] + "'>" +
 										tasks[elem]['itemname'] + 
