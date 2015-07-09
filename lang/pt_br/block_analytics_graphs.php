@@ -35,6 +35,7 @@ $string['days_by_week'] = 'Dias acessados na semana';
 $string['days_with_access'] = 'Dias acessados';
 $string['event_view_graph'] = 'LA - View graph';
 $string['event_send_email'] = 'LA - Send email';
+$string['grades_chart'] = 'Gráfico de Notas';
 $string['graphs'] = 'Gráficos';
 $string['hits'] = 'Hits no curso';
 $string['hits_distribution'] = 'Visualizacoes';

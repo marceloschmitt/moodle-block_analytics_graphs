@@ -38,6 +38,8 @@ class block_analytics_graphs extends block_base {
         $this->content = new stdClass;
         if (floatval($CFG->release) >= 2.7) {
             $this->content->text = get_string('graphs', 'block_analytics_graphs')
+                . "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/grades_chart.php?id={$course->id}
+                              target=_blank>" . get_string('grades_chart', 'block_analytics_graphs') . "</a>"
                 . "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/graphresourceurl.php?id={$course->id}&legacy=0
                               target=_blank>" . get_string('access_to_contents', 'block_analytics_graphs') . "</a>"
                     . " --- <a href= {$CFG->wwwroot}/blocks/analytics_graphs/graphresourceurl.php?id={$course->id}&legacy=1

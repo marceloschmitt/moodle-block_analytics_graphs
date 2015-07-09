@@ -20,7 +20,7 @@ $result = $DB->get_records_sql($sql, $params);
 <html>
 	<head>
 		<meta charset=utf-8>
-		<title>Grades distribution</title>
+		<title><?php echo get_string('grades_chart', 'block_analytics_graphs'); ?></title>
 		<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
 		<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
 		<script src="http://code.highcharts.com/highcharts.js"></script>

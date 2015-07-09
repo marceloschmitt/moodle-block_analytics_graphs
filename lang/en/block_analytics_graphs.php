@@ -34,6 +34,7 @@ $string['days_with_access'] = 'Days with access';
 $string['event_view_graph'] = 'LA - View graph';
 $string['event_send_email'] = 'LA - Send email';
 $string['graphs'] = 'Graphs';
+$string['grades_chart'] = 'Grades chart';
 $string['hits'] = 'Course hits';
 $string['hits_distribution'] = 'Hits distribution';
 $string['in_time_ratio'] = 'On time ration';
