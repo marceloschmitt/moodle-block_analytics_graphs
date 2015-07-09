@@ -14,7 +14,7 @@ $sql = "SELECT gi.id, categoryid, fullname, itemname, gradetype, grademax, grade
 		WHERE gc.courseid = ? AND gc.depth > 1
 		ORDER BY fullname, itemname";
 
-$result = $DB->get_records_sql($sql, $course_id);
+$result = $DB->get_records_sql($sql, array($course_id));
 ?>
 
 <html>

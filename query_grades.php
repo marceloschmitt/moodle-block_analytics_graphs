@@ -16,7 +16,7 @@ $sql = "SELECT userid AS id, rawgrade/(rawgrademax-rawgrademin) AS grade
 		FROM {grade_grades}
 		WHERE itemid $insql";
 
-$result = $DB->get_records_sql($sql, $insql);
+$result = $DB->get_records_sql($sql, $inparams);
 
 echo json_encode($result);
 ?>
