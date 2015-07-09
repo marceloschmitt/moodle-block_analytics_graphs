@@ -9,8 +9,8 @@ $context = context_course::instance($course_id);
 require_capability('block/analytics_graphs:viewpages', $context);
 
 $sql = "SELECT gi.id, categoryid, fullname, itemname, gradetype, grademax, grademin
-		FROM {mdl_grade_categories} gc
-		LEFT JOIN {mdl_grade_items} AS gi ON gc.courseid = gi.courseid AND gc.id = gi.categoryid
+		FROM {grade_categories} gc
+		LEFT JOIN {grade_items} AS gi ON gc.courseid = gi.courseid AND gc.id = gi.categoryid
 		WHERE gc.courseid = course_id AND depth > 1
 		ORDER BY fullname, itemname";
 

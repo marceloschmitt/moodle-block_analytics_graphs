@@ -13,7 +13,7 @@ $inclause[] = $form_data;
 list($insql, $inparams) = $DB->get_in_or_equal($inclause);
 
 $sql = "SELECT userid AS id, rawgrade/(rawgrademax-rawgrademin) AS grade 
-		FROM {mdl_grade_grades}
+		FROM {grade_grades}
 		WHERE itemid $insql";
 
 $result = $DB->get_records_sql($sql, $insql);
