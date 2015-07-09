@@ -43,7 +43,7 @@ $result = $DB->get_records_sql($sql, array($course_id));
 			
 			$('#tasks_form').submit(function(){
 				var form_data = $(this).serialize();
-				jQuery.ajax({
+				$.ajax({
 					type: "POST",
 					url: "query_grades.php",
 					data: {
@@ -56,7 +56,7 @@ $result = $DB->get_records_sql($sql, array($course_id));
 			});
 
 			var display_chart = function(div_id){
-				return function(display_chart_callback(data)){
+				return function display_chart_callback(data){
 					var grades = [];
 					var num_grades = data.length;
 					var statistics = {
