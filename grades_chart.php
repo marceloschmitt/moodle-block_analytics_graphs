@@ -42,12 +42,17 @@ $result = $DB->get_records_sql($sql, array($course_id));
 										"See grades chart with selected tasks" + "'>");			
 			
 			$('#tasks_form').submit(function(){
-				var form_data = $(this).serialize();
+				var form_data_raw = $(this).serializeArray();
+				var form_data_clean = [];
+				for(field_name in form_data_raw){
+					form_data_clean.push(form_data_raw[field_name]['name']);
+				}
 				$.ajax({
 					type: "POST",
+					dataType: "JSON",
 					url: "query_grades.php",
 					data: {
-						"form_data": form_data,
+						"form_data": form_data_clean,
 						"course_id": <?php echo json_encode($course_id); ?>
 					},
 					success: display_chart('chart_div')
@@ -90,7 +95,7 @@ $result = $DB->get_records_sql($sql, array($course_id));
 						data.push([point, p/(statistics['std_dev'] * Math.sqrt(2.0 * Math.PI))]);
 						point += point_incr;
 					}
-					$("#container").empty().highcharts({
+					$("#" + div_id).empty().highcharts({
 						chart: {
 					        type: 'area',
 					        events: {
