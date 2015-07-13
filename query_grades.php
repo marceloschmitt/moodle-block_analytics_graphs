@@ -9,8 +9,8 @@ require_login($course_id);
 $context = context_course::instance($course_id);
 require_capability('block/analytics_graphs:viewpages', $context);
 
-$inclause[] = $form_data;
-list($insql, $inparams) = $DB->get_in_or_equal($inclause);
+// $inclause[] = $form_data;
+list($insql, $inparams) = $DB->get_in_or_equal($form_data);
 
 $sql = "SELECT userid AS id, rawgrade/(rawgrademax-rawgrademin) AS grade 
 		FROM {grade_grades}
