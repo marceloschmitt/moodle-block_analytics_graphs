@@ -80,7 +80,7 @@ $result = $DB->get_records_sql($sql, array($course_id));
 					for(var i=0; i<num_grades; i++){
 						statistics['variance'] += Math.pow(grades[i] - statistics['mean'], 2);
 					}
-					statistics['variance'] = statistics['variance']/(num_grades-1.0);
+					statistics['variance'] = statistics['variance']/num_grades;
 					statistics['std_dev'] = Math.sqrt(statistics['variance']);
 
 					var min_limit = Math.max(statistics['mean'] - 3*statistics['std_dev'], 0.0);
