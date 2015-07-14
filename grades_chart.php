@@ -63,16 +63,16 @@ $result = $DB->get_records_sql($sql, array($course_id));
 			var display_chart = function(div_id){
 				return function display_chart_callback(data){
 					var grades = [];
-					var plotData = [];
-					var num_grades = data.length;
+					var plotData = [];					
 					var statistics = {
 						mean : 0.0, 
 						variance : 0.0,
 						std_dev: 0.0
 					};
 					for(elem in data){
-						grades.push(parseFloat(data[elem]['avg_grade']));						
+						grades.push(parseFloat(data[elem]['avg_grade']));
 					}
+					var num_grades = grades.length;
 					for(var i=0; i<grades.length; i++){
 						statistics['mean'] += grades[i];
 					}
