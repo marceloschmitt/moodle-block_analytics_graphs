@@ -11,10 +11,9 @@ require_capability('block/analytics_graphs:viewpages', $context);
 
 list($insql, $inparams) = $DB->get_in_or_equal($form_data);
 
-$sql = "SELECT userid, avg(grade) as avg_grade
+$sql = "SELECT userid, avg(grade) as avg_grade FROM
 		(SELECT userid AS id, userid, itemid, rawgrade/(rawgrademax-rawgrademin) AS grade 
-		FROM {grade_grades}
-		WHERE itemid $insql AND rawgrade IS NOT NULL) AS temp
+		FROM {grade_grades} WHERE itemid $insql AND rawgrade IS NOT NULL) AS temp
 		GROUP BY userid";
 
 $result = $DB->get_records_sql($sql, $inparams);
