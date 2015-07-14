@@ -63,6 +63,7 @@ $result = $DB->get_records_sql($sql, array($course_id));
 			var display_chart = function(div_id){
 				return function display_chart_callback(data){
 					var grades = [];
+					var plotData = [];
 					var num_grades = data.length;
 					var statistics = {
 						mean : 0.0, 
@@ -93,12 +94,12 @@ $result = $DB->get_records_sql($sql, array($course_id));
 							}
 							p = Math.exp(-Math.pow(point - statistics['mean'], 2));
 							p /= (2.0 * statistics['variance']);
-							data.push([point, p/(statistics['std_dev'] * Math.sqrt(2.0 * Math.PI))]);
+							plotData.push([point, p/(statistics['std_dev'] * Math.sqrt(2.0 * Math.PI))]);
 							point += point_incr;
 						}
 					}
 					else{
-						data.push([statistics['mean'], 1.0]);
+						plotData.push([statistics['mean'], 1.0]);
 					}
 					$("#" + div_id).empty().highcharts({
 						chart: {
@@ -247,7 +248,7 @@ $result = $DB->get_records_sql($sql, array($course_id));
 					    },
 					    series: [{
 					    	name: "Grades",
-					        data: data
+					        data: plotData
 					    }]
 					});
 				};
