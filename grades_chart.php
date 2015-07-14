@@ -70,7 +70,7 @@ $result = $DB->get_records_sql($sql, array($course_id));
 						std_dev: 0.0
 					};
 					for(elem in data){
-						grades.push(data[elem]['grade']);
+						grades.push(data[elem]['avg_grade']);
 						statistics['mean'] += grades[i];
 					}
 					statistics['mean'] = statistics['mean']/num_grades;
@@ -86,14 +86,19 @@ $result = $DB->get_records_sql($sql, array($course_id));
 					var point_incr = (max_limit - min_limit)/num_points;
 					var point = min_limit;
 					var p = null;
-					while(point <= max_limit){
-						if(Math.abs(point - statistics['mean']) < 1e-3){
-							point = statistics['mean'];
+					if(num_grades > 1){
+						while(point <= max_limit){
+							if(Math.abs(point - statistics['mean']) < 1e-3){
+								point = statistics['mean'];
+							}
+							p = Math.exp(-Math.pow(point - statistics['mean'], 2));
+							p /= (2.0 * statistics['variance']);
+							data.push([point, p/(statistics['std_dev'] * Math.sqrt(2.0 * Math.PI))]);
+							point += point_incr;
 						}
-						p = Math.exp(-Math.pow(point - statistics['mean'], 2));
-						p /= (2.0 * statistics['variance']);
-						data.push([point, p/(statistics['std_dev'] * Math.sqrt(2.0 * Math.PI))]);
-						point += point_incr;
+					}
+					else{
+						data.push([statistics['mean'], 1.0]);
 					}
 					$("#" + div_id).empty().highcharts({
 						chart: {

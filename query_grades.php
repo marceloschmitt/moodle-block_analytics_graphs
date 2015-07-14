@@ -9,12 +9,13 @@ require_login($course_id);
 $context = context_course::instance($course_id);
 require_capability('block/analytics_graphs:viewpages', $context);
 
-// $inclause[] = $form_data;
 list($insql, $inparams) = $DB->get_in_or_equal($form_data);
 
-$sql = "SELECT userid AS id, rawgrade/(rawgrademax-rawgrademin) AS grade 
+$sql = "SELECT userid, avg(grade) as avg_grade
+		(SELECT userid AS id, userid, itemid, rawgrade/(rawgrademax-rawgrademin) AS grade 
 		FROM {grade_grades}
-		WHERE itemid $insql";
+		WHERE itemid $insql AND rawgrade IS NOT NULL) AS temp
+		GROUP BY userid";
 
 $result = $DB->get_records_sql($sql, $inparams);
 
