@@ -71,7 +71,9 @@ $result = $DB->get_records_sql($sql, array($course_id));
 						std_dev: 0.0
 					};
 					for(elem in data){
-						grades.push(parseFloat(data[elem]['avg_grade']));
+						grades.push(parseFloat(data[elem]['avg_grade']));						
+					}
+					for(var i=0; i<grades.length; i++){
 						statistics['mean'] += grades[i];
 					}
 					statistics['mean'] = statistics['mean']/num_grades;
