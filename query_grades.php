@@ -11,12 +11,18 @@ require_capability('block/analytics_graphs:viewpages', $context);
 
 list($insql, $inparams) = $DB->get_in_or_equal($form_data);
 
-$sql = "SELECT userid, avg(grade) as avg_grade FROM
-		(SELECT userid AS id, userid, itemid, rawgrade/(rawgrademax-rawgrademin) AS grade 
-		FROM {grade_grades} WHERE itemid $insql AND rawgrade IS NOT NULL) AS temp
-		GROUP BY userid";
+$sql = "SELECT itemid, userid, rawgrade/(rawgrademax-rawgrademin) AS grade 
+		FROM {grade_grades} WHERE itemid $insql AND rawgrade IS NOT NULL
+		GROUP BY itemid";
 
 $result = $DB->get_records_sql($sql, $inparams);
 
-echo json_encode($result);
+$task_grades = array();
+foreach($result as $task => $task_attrs){
+	$task_grades[$task] = array("userids" => array(), "grades" => array());
+	$task_grades[$task]["userids"][] = $task_attrs["userid"];
+	$task_grades[$task]["grades"][] = floatval($task_attrs["grade"]);
+}
+
+echo json_encode($task_grades);
 ?>
