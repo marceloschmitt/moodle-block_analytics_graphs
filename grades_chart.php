@@ -26,26 +26,106 @@ $result = $DB->get_records_sql($sql, array($course_id));
 		<script src="http://code.highcharts.com/highcharts.js"></script>
 	</head>
 	<body>
-		<h1>Choose which task(s) to use to build a grades distribution chart</h1>
-		<div id="tasks"></div>
 		<form id="tasks_form"></form>
 		<div id='chart_div'></div>
 		<script>
+			var base_chart_options = {
+		        chart: {
+		            type: 'boxplot'
+		        },
+
+		        title: {
+		            text: 'Grades distribution'
+		        },
+
+		        legend: {
+		            enabled: false
+		        },
+
+		        credits: {
+		        	enabled: false
+		        },
+
+		        lang: {
+		        	noData: "Select at least one task and click on 'Submit' to see its grade distribution"
+		        },
+
+		        xAxis: {
+		        	categories: [],
+		            title: {
+		                text: 'Task name',
+		                style: {
+		                	fontWeight: 'bold',
+		                	fontSize: 12
+		                }
+		            },
+		            labels: {
+		            	style:{
+		            		fontSize: 12,
+		            	}
+		            }
+		        },
+
+		        yAxis: {
+		        	min: 0,
+		        	max: 100,
+		            title: {
+		                text: 'Grades',
+		                style: {
+		                	fontWeight: 'bold',
+		                	fontSize: 12
+		                }
+		            }		        
+		        },
+
+		        tooltip:{
+		        	backgroundColor: "rgba(255,255,255,1.0)",
+		        	formatter: function(){
+		        		var str = "";
+		        		str += "<b>Task " + this.point.category + "</b><br/>";
+		        		str += "Total grades: " + this.point.num_grades + "<br/>";
+		        		str += "Lowest grade: " + this.point.low.toFixed(2) + "<br/>";
+		        		str += "Largest grade: " + this.point.high.toFixed(2) + "<br/>";
+		        		str += "75% of all grades are greater than " + this.point.q1.toFixed(2) + "<br/>";
+		        		str += "50% of all grades are greater than " + this.point.median.toFixed(2) + "<br/>";
+		        		str += "25% of all grades are greater than " + this.point.q3.toFixed(2) + "<br/>";
+		        		return str;
+		        	}
+		        },
+
+		        plotOptions: {
+		            boxplot: {
+		            	pointWidth: 50,
+		                fillColor: '#F0F0E0',
+		                lineWidth: 2,
+		                medianColor: '#3333FF',
+		                medianWidth: 4,
+		                stemColor: '#434348',
+		                stemDashStyle: 'dot',
+		                stemWidth: 1.5,
+		                whiskerColor: '#669999',
+		                whiskerLength: '20%',
+		                whiskerWidth: 3
+		            }
+		        },
+
+		        series: [{
+		        }]
+		    };
 			var tasks = <?php echo json_encode($result); ?>;
 			for(elem in tasks){
-				$("#tasks_form").append("<input type='checkbox' name='" + 
-										tasks[elem]['id'] + "'>" +
-										tasks[elem]['itemname'] + 
-										"<br>");
+				$("#tasks_form").append("<input type='checkbox' name='" + tasks[elem]['id'] + "'>" +
+										tasks[elem]['itemname'] + "<br>");
 			}
-			$("#tasks_form").append("<input type='submit' value='" + 
-										"See grades chart with selected tasks" + "'>");			
-			
+			$("#tasks_form").append("<input type='submit' value='Submit'>");
+			$("#chart_div").highcharts(base_chart_options);
 			$('#tasks_form').submit(function(){
 				var form_data_raw = $(this).serializeArray();
 				var form_data_clean = [];
-				for(field_name in form_data_raw){
-					form_data_clean.push(form_data_raw[field_name]['name']);
+				$('#chart_div').highcharts().xAxis[0].categories = [];
+				for(var field in form_data_raw){
+					form_data_clean.push(form_data_raw[field]['name']);
+					$('#chart_div').highcharts().xAxis[0].categories.push(form_data_raw[field]['name']);
 				}
 				$.ajax({
 					type: "POST",
@@ -55,206 +135,39 @@ $result = $DB->get_records_sql($sql, array($course_id));
 						"form_data": form_data_clean,
 						"course_id": <?php echo json_encode($course_id); ?>
 					},
-					success: display_chart('chart_div')
+					success: function(grades_info){
+						var grades_stats = [];
+						var sort_func = function(a, b){
+							return a - b;
+						};
+						for(var task_i in grades_info){
+							grades_info[task_i].sort(sort_func);
+							var num_grades = grades_info[task_i].length;
+							var min_grade = Math.min.apply(null, grades_info[task_i]);
+							var max_grade = Math.max.apply(null, grades_info[task_i]);
+							var median_grade = null;
+							if(num_grades % 2 != 0){
+								median_grade = grades_info[task_i][Math.ceil(num_grades/2)];
+							}
+							else{
+								median_grade = 0.5 * (grades_info[task_i][Math.floor(num_grades/2)] + grades_info[task_i][Math.ceil(num_grades/2)]);
+							}
+							var task_data = {
+							    low: min_grade,
+							    q1: grades_info[task_i][Math.round(0.25 * (num_grades + 1))],
+							    median: median_grade,
+							    q3: grades_info[task_i][Math.round(0.75 * (num_grades + 1))],
+							    high: max_grade,
+							    name: task_i,
+							    num_grades: grades_info[task_i].length
+							};
+							grades_stats.push(task_data);
+						}
+						$('#chart_div').highcharts().series[0].setData(grades_stats);
+					}
 				});
 				return false;
-			});
-
-			var display_chart = function(div_id){
-				return function display_chart_callback(data){
-					var grades = [];
-					var plotData = [];					
-					var statistics = {
-						mean : 0.0, 
-						variance : 0.0,
-						std_dev: 0.0
-					};
-					for(elem in data){
-						grades.push(parseFloat(data[elem]['avg_grade']));
-					}
-					var num_grades = grades.length;
-					for(var i=0; i<grades.length; i++){
-						statistics['mean'] += grades[i];
-					}
-					statistics['mean'] = statistics['mean']/num_grades;
-					for(var i=0; i<num_grades; i++){
-						statistics['variance'] += Math.pow(grades[i] - statistics['mean'], 2);
-					}
-					statistics['variance'] = statistics['variance']/num_grades;
-					statistics['std_dev'] = Math.sqrt(statistics['variance']);
-
-					var min_limit = Math.max(statistics['mean'] - 3*statistics['std_dev'], 0.0);
-					var max_limit = statistics['mean'] + 3*statistics['std_dev'];
-					var num_points = Math.max(num_grades, 50);
-					var point_incr = (max_limit - min_limit)/num_points;
-					var point = min_limit;
-					var p = null;
-					if(num_grades > 1){
-						while(point <= max_limit){
-							if(Math.abs(point - statistics['mean']) < 1e-3){
-								point = statistics['mean'];
-							}
-							p = Math.exp(-Math.pow(point - statistics['mean'], 2));
-							p /= (2.0 * statistics['variance']);
-							plotData.push([point, p/(statistics['std_dev'] * Math.sqrt(2.0 * Math.PI))]);
-							point += point_incr;
-						}
-					}
-					else{
-						plotData.push([statistics['mean'], 1.0]);
-					}
-					$("#" + div_id).empty().highcharts({
-						chart: {
-					        type: 'area',
-					        events: {
-					        	load: function(){
-					        		this.mytooltip = new Highcharts.Tooltip(this, this.options.tooltip);
-					        	}
-					        }
-					    },
-					    credits: {
-					    	enabled: false
-					    },
-					    title: {
-					        text: 'Grades Distribution'
-					    },
-					    tooltip:{
-					    	enabled:false,
-					    	useHTML:true,
-					    	backgroundColor: "rgba(255, 255, 255, 1.0)",
-					    	hideDelay: 250,
-					    	formatter: function(){
-					    		var tooltipStr = "<span style='font-size: 13px'><b>This grade</b></span>: <b>" + 
-					    								this.point.x.toFixed(2) + "</b><br>" + 
-					    								"<b>Probability: " + 
-					    								this.point.y.toExponential(4) + "</b><br><br>";
-					    		var smaller_grades_str = "<b>Grades smaller than this:</b><br>";
-					    		var larger_grades_str = "<b>Grades larger than this:</b><br>";
-					    		var smaller_grades = [];
-					    		var larger_grades = [];
-					    		for(var i=0; i<grades.length; i++){
-					    			if(grades[i] < this.point.x){
-					    				smaller_grades.push(grades[i]);
-					    				smaller_grades_str += grades[i].toFixed(2).toString() + "<br>";
-					    			}
-					    			else{
-					    				larger_grades.push(grades[i]);
-					    				larger_grades_str += grades[i].toFixed(2).toString() + "<br>";
-					    			}
-					    		}
-					    		if(larger_grades.length == 0){
-					    			larger_grades_str += "There is no grade larger than this<br>";
-					    		}
-					    		if(smaller_grades.length == 0){
-					    			smaller_grades_str += "There is no grade smaller than this<br>";
-					    		}
-					    		tooltipStr += smaller_grades_str + "<br>" + larger_grades_str;
-					    		return tooltipStr;
-							}
-					    },
-					    plotOptions:{
-					    	area:{
-					    		cursor: "pointer",
-					    		allowPointSelect: true
-					        },
-					        series : {
-					        	events: {
-					        		click : function(evt){
-					        			this.chart.mytooltip.refresh(evt.point, evt);
-					        		},
-					        		mouseOut : function(){
-					        			this.chart.mytooltip.hide();
-					        		}
-					        	}
-					        }
-					    },
-					    xAxis:{
-					    	min: min_limit,
-					    	endOnTick: false,
-					    	allowDecimals: true,
-					    	plotLines: [{
-					    		value: statistics['mean'],
-					    		color: '#434348',
-					    		width: 1,
-					    		dashStyle: "ShortDash",
-					    		label:{
-					    			text: "Average grade: " + statistics['mean'].toFixed(2),
-					    			rotation:0,
-					    			style:{
-					    				fontWeight: "bold",
-					    				fontSize: "13px"
-					    			}
-					    		}
-					    	},
-					    	{
-					    		value: statistics['mean'] + statistics['std_dev'],
-					    		color: '#434348',
-					    		width: 1,
-					    		dashStyle: "ShortDash",
-					    		label:{
-					    			text: "1 Std",
-					    			rotation:0,
-					    			style:{
-					    				fontWeight: "bold",
-					    				fontSize: "12px"
-					    			}
-								}
-							},
-					    	{
-					    		value: statistics['mean'] + 2*statistics['std_dev'],
-					    		color: '#434348',
-					    		width: 1,
-					    		dashStyle: "ShortDash",
-					    		label:{
-					    			text: "2 Std",
-					    			rotation:0,
-					    			style:{
-					    				fontWeight: "bold",
-					    				fontSize: "12px"
-					    			}
-								}
-					    	},
-					    	{
-					    		value: statistics['mean'] - statistics['std_dev'],
-					    		color: '#434348',
-					    		width: 1,
-					    		dashStyle: "ShortDash",
-					    		label:{
-					    			text: "1 Std",
-					    			rotation:0,
-					    			style:{
-					    				fontWeight: "bold",
-					    				fontSize: "12px"
-					    			}
-								}
-					    	},
-					    	{
-					    		value: statistics['mean'] - 2*statistics['std_dev'],
-					    		color: '#434348',
-					    		width: 1,
-					    		dashStyle: "ShortDash",
-					    		label:{
-					    			text: "2 Std",
-					    			rotation:0,
-					    			style:{
-					    				fontWeight: "bold",
-					    				fontSize: "12px"
-					    			}
-								}
-					    	}]
-					    },
-					    yAxis: {
-					        title: {
-					            text: 'Grade probability'
-					        }
-					    },
-					    series: [{
-					    	name: "Grades",
-					        data: plotData
-					    }]
-					});
-				};
-			};			
+			});			
 		</script>
 	</body>
 </html>
