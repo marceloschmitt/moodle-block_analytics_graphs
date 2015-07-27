@@ -24,6 +24,8 @@ $result = $DB->get_records_sql($sql, array($course_id));
 		<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
 		<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
 		<script src="http://code.highcharts.com/highcharts.js"></script>
+		<script src="http://code.highcharts.com/highcharts-more.js"></script>
+		<script src="http://code.highcharts.com/modules/no-data-to-display.js"></script>
 	</head>
 	<body>
 		<form id="tasks_form"></form>
