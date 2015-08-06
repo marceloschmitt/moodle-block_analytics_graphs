@@ -13,15 +13,17 @@ list($insql, $inparams) = $DB->get_in_or_equal($form_data);
 
 $sql = "SELECT itemid, userid, rawgrade/(rawgrademax-rawgrademin) AS grade 
 		FROM {grade_grades} WHERE itemid $insql AND rawgrade IS NOT NULL
-		GROUP BY itemid";
+		ORDER BY itemid";
 
 $result = $DB->get_records_sql($sql, $inparams);
 
 $task_grades = array();
 foreach($result as $task => $task_attrs){
-	$task_grades[$task] = array("userids" => array(), "grades" => array());
-	$task_grades[$task]["userids"][] = $task_attrs["userid"];
-	$task_grades[$task]["grades"][] = floatval($task_attrs["grade"]);
+	if(!property_exists($task_grades, $task)){
+		$task_grades[$task] = array("userids" => array(), "grades" => array());
+	}
+	$task_grades[$task]["userids"][] = $task_attrs->userid;
+	$task_grades[$task]["grades"][] = floatval($task_attrs->grade);
 }
 
 echo json_encode($task_grades);

@@ -9,10 +9,13 @@ $context = context_course::instance($course_id);
 require_capability('block/analytics_graphs:viewpages', $context);
 
 $sql = "SELECT gi.id, categoryid, fullname, itemname, gradetype, grademax, grademin
-		FROM {grade_categories} AS gc
-		LEFT JOIN {grade_items} AS gi ON gc.courseid = gi.courseid AND gc.id = gi.categoryid
-		WHERE gc.courseid = ? AND categoryid IS NOT NULL
-		ORDER BY fullname, itemname";
+	        FROM {grade_categories} AS gc
+	        LEFT JOIN {grade_items} AS gi ON gc.courseid = gi.courseid AND gc.id = gi.categoryid
+	        WHERE gc.courseid = ? AND categoryid IS NOT NULL AND EXISTS (
+                SELECT * 
+	                FROM mdl_grade_grades AS gg
+	                WHERE gg.itemid = gi.id AND gg.rawgrade IS NOT NULL )
+        ORDER BY fullname, itemname";
 
 $result = $DB->get_records_sql($sql, array($course_id));
 ?>
@@ -127,7 +130,7 @@ $result = $DB->get_records_sql($sql, array($course_id));
 				$('#chart_div').highcharts().xAxis[0].categories = [];
 				for(var field in form_data_raw){
 					form_data_clean.push(form_data_raw[field]['name']);
-					$('#chart_div').highcharts().xAxis[0].categories.push(form_data_raw[field]['name']);
+					$('#chart_div').highcharts().xAxis[0].categories.push(tasks[form_data_raw[field]['name']]['itemname']);
 				}
 				$.ajax({
 					type: "POST",
