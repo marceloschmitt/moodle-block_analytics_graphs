@@ -145,27 +145,41 @@ $result = $DB->get_records_sql($sql, array($course_id));
 						var sort_func = function(a, b){
 							return a - b;
 						};
-						for(var task_i in grades_info){
-							grades_info[task_i]['grades'].sort(sort_func);
-							var num_grades = grades_info[task_i]['grades'].length;
-							var min_grade = Math.min.apply(null, grades_info[task_i]['grades']);
-							var max_grade = Math.max.apply(null, grades_info[task_i]['grades']);
-							var median_grade = null;
-							if(num_grades % 2 != 0){
-								median_grade = grades_info[task_i]['grades'][Math.ceil(num_grades/2)];
+						for(var task_i in grades_info){							
+							var num_grades = grades_info[task_i]['grades'].length;							
+							var task_data;
+							if(num_grades > 1){
+								grades_info[task_i]['grades'].sort(sort_func);
+								var min_grade = Math.min.apply(null, grades_info[task_i]['grades']);
+								var max_grade = Math.max.apply(null, grades_info[task_i]['grades']);
+								var median_grade = null;
+								if(num_grades % 2 != 0){
+									median_grade = grades_info[task_i]['grades'][Math.ceil(num_grades/2)];
+								}
+								else{
+									median_grade = 0.5 * (grades_info[task_i]['grades'][Math.floor(num_grades/2)] + grades_info[task_i]['grades'][Math.ceil(num_grades/2)]);
+								}
+								task_data = {
+								    low: min_grade,
+								    q1: grades_info[task_i]['grades'][Math.round(0.25 * (num_grades + 1))],
+								    median: median_grade,
+								    q3: grades_info[task_i]['grades'][Math.round(0.75 * (num_grades + 1))],
+								    high: max_grade,
+								    name: task_i,
+								    num_grades: grades_info[task_i]['grades'].length
+								};
 							}
 							else{
-								median_grade = 0.5 * (grades_info[task_i]['grades'][Math.floor(num_grades/2)] + grades_info[task_i]['grades'][Math.ceil(num_grades/2)]);
+								task_data = {
+									low: grades_info[task_i]['grades'][0],
+								    q1: grades_info[task_i]['grades'][0],
+								    median: grades_info[task_i]['grades'][0],
+								    q3: grades_info[task_i]['grades'][0],
+								    high: grades_info[task_i]['grades'][0],
+								    name: task_i,
+								    num_grades: num_grades
+								};
 							}
-							var task_data = {
-							    low: min_grade,
-							    q1: grades_info[task_i]['grades'][Math.round(0.25 * (num_grades + 1))],
-							    median: median_grade,
-							    q3: grades_info[task_i]['grades'][Math.round(0.75 * (num_grades + 1))],
-							    high: max_grade,
-							    name: task_i,
-							    num_grades: grades_info[task_i]['grades'].length
-							};
 							grades_stats.push(task_data);
 						}
 						$('#chart_div').highcharts().series[0].setData(grades_stats);
