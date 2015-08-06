@@ -19,7 +19,7 @@ $result = $DB->get_records_sql($sql, $inparams);
 
 $task_grades = array();
 foreach($result as $task => $task_attrs){
-	if(!property_exists($task_grades, $task)){
+	if(!array_key_exists($task, $task_grades)){
 		$task_grades[$task] = array("userids" => array(), "grades" => array());
 	}
 	$task_grades[$task]["userids"][] = $task_attrs->userid;
