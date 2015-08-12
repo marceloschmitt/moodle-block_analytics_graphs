@@ -73,7 +73,7 @@ $result = $DB->get_records_sql($sql, array($course_id));
 
 		        yAxis: {
 		        	min: 0,
-		        	max: 100,
+		        	max: 1,
 		            title: {
 		                text: 'Grades',
 		                style: {
@@ -145,41 +145,39 @@ $result = $DB->get_records_sql($sql, array($course_id));
 						var sort_func = function(a, b){
 							return a - b;
 						};
-						for(var task_i in grades_info){							
-							var num_grades = grades_info[task_i]['grades'].length;							
-							var task_data;
-							if(num_grades > 1){
-								grades_info[task_i]['grades'].sort(sort_func);
-								var min_grade = Math.min.apply(null, grades_info[task_i]['grades']);
-								var max_grade = Math.max.apply(null, grades_info[task_i]['grades']);
-								var median_grade = null;
-								if(num_grades % 2 != 0){
-									median_grade = grades_info[task_i]['grades'][Math.ceil(num_grades/2)];
-								}
-								else{
-									median_grade = 0.5 * (grades_info[task_i]['grades'][Math.floor(num_grades/2)] + grades_info[task_i]['grades'][Math.ceil(num_grades/2)]);
-								}
-								task_data = {
-								    low: min_grade,
-								    q1: grades_info[task_i]['grades'][Math.round(0.25 * (num_grades + 1))],
-								    median: median_grade,
-								    q3: grades_info[task_i]['grades'][Math.round(0.75 * (num_grades + 1))],
-								    high: max_grade,
-								    name: task_i,
-								    num_grades: grades_info[task_i]['grades'].length
-								};
+						var median_func = function(data){
+							var median_grade = null;
+							if(num_grades % 2){
+								return data[Math.floor(num_grades/2)];
 							}
 							else{
-								task_data = {
-									low: grades_info[task_i]['grades'][0],
-								    q1: grades_info[task_i]['grades'][0],
-								    median: grades_info[task_i]['grades'][0],
-								    q3: grades_info[task_i]['grades'][0],
-								    high: grades_info[task_i]['grades'][0],
-								    name: task_i,
-								    num_grades: num_grades
-								};
+								return 0.5 * (data[num_grades/2] + data[num_grades/2 - 1]);
 							}
+						};
+						for(var task_i in grades_info){
+							var num_grades = grades_info[task_i]['grades'].length;
+							var task_data = null;
+							var min_grade = Math.min.apply(null, grades_info[task_i]['grades']);
+							var max_grade = Math.max.apply(null, grades_info[task_i]['grades']);
+							var median_grade = median_func(grades_info[task_i]['grades']);
+							var q1_grade = null, q3_grade = null;
+							if(num_grades%2){
+								q1_grade = median_func(grades_info[task_i]['grades'].slice(0,Math.max(Math.floor(num_grades/2), 1)));
+								q3_grade = median_func(grades_info[task_i]['grades'].slice(Math.min(Math.floor(num_grades/2) + 1, num_grades-1), Math.max(num_grades, Math.floor(num_grades/2) + 1)));
+							}
+							else{
+								q1_grade = median_func(grades_info[task_i]['grades'].slice(0,num_grades/2));
+								q3_grade = median_func(grades_info[task_i]['grades'].slice(num_grades/2, num_grades));
+							}
+							task_data = {
+							    low: min_grade,
+							    q1: q1_grade,
+							    median: median_grade,
+							    q3: q3_grade,
+							    high: max_grade,
+							    name: task_i,
+							    num_grades: num_grades
+							};
 							grades_stats.push(task_data);
 						}
 						$('#chart_div').highcharts().series[0].setData(grades_stats);
