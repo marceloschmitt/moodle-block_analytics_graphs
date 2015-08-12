@@ -146,12 +146,12 @@ $result = $DB->get_records_sql($sql, array($course_id));
 							return a - b;
 						};
 						var median_func = function(data){
-							var median_grade = null;
-							if(num_grades % 2){
-								return data[Math.floor(num_grades/2)];
+							var data_size = data.length;
+							if(data_size % 2){
+								return data[Math.floor(data_size/2)];
 							}
 							else{
-								return 0.5 * (data[num_grades/2] + data[num_grades/2 - 1]);
+								return 0.5 * (data[data_size/2] + data[data_size/2 - 1]);
 							}
 						};
 						for(var task_i in grades_info){
