@@ -120,12 +120,14 @@ $result = $DB->get_records_sql($sql, array($course_id));
 			var tasks = <?php echo json_encode($result); ?>;
 			var totaltasks = tasks.length;
 			var tasks_toggle = {};
+			var taskidname = {};
 			var active_tasks = 0;
 			for(elem in tasks){
-				$("#tasks_div").append("<div class='individual_task_divs' id='div_task_" + tasks[elem]['task_id'] + "'>" + 
-										"<button type='button' class=task_button id='" +  tasks[elem]['task_id'] + "'>task" + 
+				$("#tasks_div").append("<div class='individual_task_divs' id='div_task_" + tasks[elem]['id'] + "'>" + 
+										"<button type='button' class=task_button id='" +  tasks[elem]['id'] + "'>" + 
 										tasks[elem]['itemname'] + "</button></div>");
-				tasks_toggle[tasks[elem]['task_id']] = false;
+				tasks_toggle[tasks[elem]['id']] = false;
+				taskidname[tasks[elem]['id']] = tasks[elem]['itemname'];
 			}
 			$("#chart_div").highcharts(base_chart_options);
 			$('.task_button').click(function(){
@@ -144,7 +146,7 @@ $result = $DB->get_records_sql($sql, array($course_id));
 					for(var field in tasks_toggle){
 						if(tasks_toggle[field] === true){
 							send_data.push(field.toString());
-							$('#chart_div').highcharts().xAxis[0].categories.push(field.toString());
+							$('#chart_div').highcharts().xAxis[0].categories.push(taskidname[field.toString()]);
 						}
 					}
 					$.ajax({
