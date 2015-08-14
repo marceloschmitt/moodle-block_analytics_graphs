@@ -140,7 +140,7 @@ $result = $DB->get_records_sql($sql, array($course_id));
 					active_tasks ++;
 				}
 				$('#chart_div').highcharts().xAxis[0].categories = [];
-				if(active_tasks > 0)
+				if(active_tasks > 0){
 					for(var field in tasks_toggle){
 						if(tasks_toggle[field] === true){
 							send_data.push(field.toString());
