@@ -31,7 +31,7 @@ $result = $DB->get_records_sql($sql, array($course_id));
 		<script src="http://code.highcharts.com/modules/no-data-to-display.js"></script>
 	</head>
 	<body>
-		<form id="tasks_form"></form>
+		<div id="tasks_div"></div>
 		<div id='chart_div'></div>
 		<script>
 			var base_chart_options = {
@@ -52,7 +52,7 @@ $result = $DB->get_records_sql($sql, array($course_id));
 		        },
 
 		        lang: {
-		        	noData: "Select at least one task and click on 'Submit' to see its grade distribution"
+		        	noData: "Toggle the grades displayed on the chart using the buttons above"
 		        },
 
 		        xAxis: {
@@ -118,71 +118,90 @@ $result = $DB->get_records_sql($sql, array($course_id));
 		        }]
 		    };
 			var tasks = <?php echo json_encode($result); ?>;
+			var totaltasks = tasks.length;
+			var tasks_toggle = {};
+			var active_tasks = 0;
 			for(elem in tasks){
-				$("#tasks_form").append("<input type='checkbox' name='" + tasks[elem]['id'] + "'>" +
-										tasks[elem]['itemname'] + "<br>");
+				$("#tasks_div").append("<div class='individual_task_divs' id='div_task_" + tasks[elem]['task_id'] + "'>" + 
+										"<button type='button' class=task_button id='" +  tasks[elem]['task_id'] + "'>task" + 
+										tasks[elem]['itemname'] + "</button></div>");
+				tasks_toggle[tasks[elem]['task_id']] = false;
 			}
-			$("#tasks_form").append("<input type='submit' value='Submit'>");
 			$("#chart_div").highcharts(base_chart_options);
-			$('#tasks_form').submit(function(){
-				var form_data_raw = $(this).serializeArray();
-				var form_data_clean = [];
-				$('#chart_div').highcharts().xAxis[0].categories = [];
-				for(var field in form_data_raw){
-					form_data_clean.push(form_data_raw[field]['name']);
-					$('#chart_div').highcharts().xAxis[0].categories.push(tasks[form_data_raw[field]['name']]['itemname']);
+			$('.task_button').click(function(){
+				var task_name = this.id;
+				var send_data = [];
+				if(tasks_toggle[task_name] === true){
+					tasks_toggle[task_name] = false;
+					active_tasks--;
 				}
-				$.ajax({
-					type: "POST",
-					dataType: "JSON",
-					url: "query_grades.php",
-					data: {
-						"form_data": form_data_clean,
-						"course_id": <?php echo json_encode($course_id); ?>
-					},
-					success: function(grades_info){
-						var grades_stats = [];
-						var sort_func = function(a, b){
-							return a - b;
-						};
-						var median_func = function(data){
-							var data_size = data.length;
-							if(data_size % 2){
-								return data[Math.floor(data_size/2)];
-							}
-							else{
-								return 0.5 * (data[data_size/2] + data[data_size/2 - 1]);
-							}
-						};
-						for(var task_i in grades_info){
-							var num_grades = grades_info[task_i]['grades'].length;
-							var task_data = null;
-							var min_grade = Math.min.apply(null, grades_info[task_i]['grades']);
-							var max_grade = Math.max.apply(null, grades_info[task_i]['grades']);
-							var median_grade = median_func(grades_info[task_i]['grades']);
-							var q1_grade = null, q3_grade = null;
-							if(num_grades%2){
-								q1_grade = median_func(grades_info[task_i]['grades'].slice(0,Math.max(Math.floor(num_grades/2), 1)));
-								q3_grade = median_func(grades_info[task_i]['grades'].slice(Math.min(Math.floor(num_grades/2) + 1, num_grades-1), Math.max(num_grades, Math.floor(num_grades/2) + 1)));
-							}
-							else{
-								q1_grade = median_func(grades_info[task_i]['grades'].slice(0,num_grades/2));
-								q3_grade = median_func(grades_info[task_i]['grades'].slice(num_grades/2, num_grades));
-							}
-							task_data = {
-							    low: min_grade,
-							    q1: q1_grade,
-							    median: median_grade,
-							    q3: q3_grade,
-							    high: max_grade,
-							    name: task_i,
-							    num_grades: num_grades
-							};
-							grades_stats.push(task_data);
+				else{
+					tasks_toggle[task_name] = true;
+					active_tasks ++;
+				}
+				$('#chart_div').highcharts().xAxis[0].categories = [];
+				if(active_tasks > 0)
+					for(var field in tasks_toggle){
+						if(tasks_toggle[field] === true){
+							send_data.push(field.toString());
+							$('#chart_div').highcharts().xAxis[0].categories.push(field.toString());
 						}
-						$('#chart_div').highcharts().series[0].setData(grades_stats);
 					}
-				});
+					$.ajax({
+						type: "POST",
+						dataType: "JSON",
+						url: "query_grades.php",
+						data: {
+							"form_data": send_data,
+							"course_id": <?php echo json_encode($course_id); ?>
+						},
+						success: function(grades_info){
+							var grades_stats = [];
+							var sort_func = function(a, b){
+								return a - b;
+							};
+							var median_func = function(data){
+								var data_size = data.length;
+								if(data_size % 2){
+									return data[Math.floor(data_size/2)];
+								}
+								else{
+									return 0.5 * (data[data_size/2] + data[data_size/2 - 1]);
+								}
+							};
+							for(var task_i in grades_info){
+								var num_grades = grades_info[task_i]['grades'].length;
+								var task_data = null;
+								var min_grade = Math.min.apply(null, grades_info[task_i]['grades']);
+								var max_grade = Math.max.apply(null, grades_info[task_i]['grades']);
+								var median_grade = median_func(grades_info[task_i]['grades']);
+								var q1_grade = null, q3_grade = null;
+								if(num_grades%2){
+									q1_grade = median_func(grades_info[task_i]['grades'].slice(0,Math.max(Math.floor(num_grades/2), 1)));
+									q3_grade = median_func(grades_info[task_i]['grades'].slice(Math.min(Math.floor(num_grades/2) + 1, num_grades-1), Math.max(num_grades, Math.floor(num_grades/2) + 1)));
+								}
+								else{
+									q1_grade = median_func(grades_info[task_i]['grades'].slice(0,num_grades/2));
+									q3_grade = median_func(grades_info[task_i]['grades'].slice(num_grades/2, num_grades));
+								}
+								task_data = {
+								    low: min_grade,
+								    q1: q1_grade,
+								    median: median_grade,
+								    q3: q3_grade,
+								    high: max_grade,
+								    name: task_i,
+								    num_grades: num_grades
+								};
+								grades_stats.push(task_data);
+							}
+							$('#chart_div').highcharts().series[0].setData(grades_stats);
+						}
+					});
+				}
+				else{
+					$('#chart_div').highcharts().series[0].setData([]);
+				}
 				return false;
 			});			
 		</script>
