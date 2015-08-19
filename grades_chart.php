@@ -29,10 +29,64 @@ $result = $DB->get_records_sql($sql, array($course_id));
 		<script src="http://code.highcharts.com/highcharts.js"></script>
 		<script src="http://code.highcharts.com/highcharts-more.js"></script>
 		<script src="http://code.highcharts.com/modules/no-data-to-display.js"></script>
+
+		<style>
+			#chart_div {
+			    width: 100%;
+			    margin-left: auto;
+			    margin-right: auto;
+			}
+
+			#chart_outerdiv {
+			    width: 95%;
+			    margin-left: auto;
+			    margin-right: auto;
+			    margin-bottom: 5px;
+			}
+
+			#tasklist_div {
+			    width: 95%;
+			    margin: 0px auto 0px auto;
+			}
+
+			.individual_task_div {
+			    flex-grow: 1;
+			    margin: 5px;
+			}
+
+			.task_button{
+			    width: 100%;
+			}
+
+			#taskbuttons_outerdiv{
+			    margin-left: auto;
+			    margin-right: auto;
+			    margin-top: 5px;
+			    margin-bottom: 5px;
+			    width: 95%;
+			}
+
+			#taskbuttons_div {
+			    width: 100%;
+			    margin-left: auto;
+			    margin-right: auto;
+			    display: inline-flex;
+			    flex-direction: row;
+			    flex-wrap: wrap;
+			    justify-content: flex-start;
+			    align-content: center;
+			}
+		</style>
 	</head>
 	<body>
 		<div id="tasks_div"></div>
-		<div id='chart_div'></div>
+		<div id='chart_outerdiv'>
+			<h1>Grades chart</h1>
+			<div id='chart_div'></div>
+		</div>
+		<div id='taskbuttons_outerdiv'>
+			<div id="taskbuttons_div"></div>
+		</div>
 		<script>
 			var base_chart_options = {
 		        chart: {
@@ -52,7 +106,7 @@ $result = $DB->get_records_sql($sql, array($course_id));
 		        },
 
 		        lang: {
-		        	noData: "Toggle the grades displayed on the chart using the buttons above"
+		        	noData: "Use the buttons below to toggle the tasks displayed on the chart"
 		        },
 
 		        xAxis: {
@@ -122,12 +176,15 @@ $result = $DB->get_records_sql($sql, array($course_id));
 			var tasks_toggle = {};
 			var taskidname = {};
 			var active_tasks = 0;
+			var cont = 1;
+			$("#tasklist_div").empty().append("<h1>Task list:<h1>");
 			for(elem in tasks){
-				$("#tasks_div").append("<div class='individual_task_divs' id='div_task_" + tasks[elem]['id'] + "'>" + 
-										"<button type='button' class=task_button id='" +  tasks[elem]['id'] + "'>" + 
+				$("#tasks_div").append("<div class='individual_task_div' id='div_task_" + tasks[elem]['id'] + "'>" + 
+										"<button type='button' class=task_button id='task_button_" +  tasks[elem]['id'] + "'>" + 
 										tasks[elem]['itemname'] + "</button></div>");
 				tasks_toggle[tasks[elem]['id']] = false;
 				taskidname[tasks[elem]['id']] = tasks[elem]['itemname'];
+				cont++;
 			}
 			$("#chart_div").highcharts(base_chart_options);
 			$('.task_button').click(function(){
