@@ -181,8 +181,8 @@ $result = $DB->get_records_sql($sql, array($course_id));
 			for(elem in tasks){
 				$("#tasklist_div").append(cont + " - " + tasks[elem]['itemname'] + "<br/>");
 				$("#taskbuttons_div").append("<div class='individual_task_div' id='div_task_" + tasks[elem]['id'] + "'>" + 
-										"<button type='button' class=task_button id='task_button_" +  tasks[elem]['id'] + "'>" + 
-										tasks[elem]['itemname'] + "</button></div>");
+										"<button type='button' class=task_button id='" +  tasks[elem]['id'] + "'>" + 
+										cont + "</button></div>");
 				tasks_toggle[tasks[elem]['id']] = false;
 				taskidname[tasks[elem]['id']] = tasks[elem]['itemname'];
 				cont++;
