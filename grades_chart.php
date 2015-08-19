@@ -79,7 +79,7 @@ $result = $DB->get_records_sql($sql, array($course_id));
 		</style>
 	</head>
 	<body>
-		<div id="tasks_div"></div>
+		<div id="tasklist_div"></div>
 		<div id='chart_outerdiv'>
 			<h1>Grades chart</h1>
 			<div id='chart_div'></div>
