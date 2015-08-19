@@ -179,7 +179,7 @@ $result = $DB->get_records_sql($sql, array($course_id));
 			var cont = 1;
 			$("#tasklist_div").empty().append("<h1>Task list:<h1>");
 			for(elem in tasks){
-				$("#tasks_div").append("<div class='individual_task_div' id='div_task_" + tasks[elem]['id'] + "'>" + 
+				$("#tasklist_div").append("<div class='individual_task_div' id='div_task_" + tasks[elem]['id'] + "'>" + 
 										"<button type='button' class=task_button id='task_button_" +  tasks[elem]['id'] + "'>" + 
 										tasks[elem]['itemname'] + "</button></div>");
 				tasks_toggle[tasks[elem]['id']] = false;
