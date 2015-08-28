@@ -1,5 +1,6 @@
 <?php
 require_once("../../config.php");
+require('javascriptfunctions.php');
 global $DB;
 require_once($CFG->dirroot.'/lib/moodlelib.php');
 
@@ -27,6 +28,7 @@ $result = $DB->get_records_sql($sql, array($course_id));
 		<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
 		<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
 		<script src="http://code.highcharts.com/highcharts.js"></script>
+		<script src="http://code.highcharts.com/modules/exporting.js"></script>
 		<script src="http://code.highcharts.com/highcharts-more.js"></script>
 		<script src="http://code.highcharts.com/modules/no-data-to-display.js"></script>
 
@@ -87,10 +89,78 @@ $result = $DB->get_records_sql($sql, array($course_id));
 		<div id='taskbuttons_outerdiv'>
 			<div id="taskbuttons_div"></div>
 		</div>
-		<script>
+		<script>			
+			var mail_dialog = function(task_name, quartile, data_point){
+				quartile = parseInt(quartile);
+				$("#" + tasknameid[task_name] + ".mail_dialog").dialog("open");
+				$("#" + tasknameid[task_name] + ".mail_dialog").dialog("option", "position", {
+		            my:"center top",
+		            at:"center top+" + 10,
+		            of:window
+		        });
+		        $("#" + tasknameid[task_name] + ".mail_dialog").dialog("option", "width", 1000);
+		        $("#" + tasknameid[task_name] + ".mail_dialog").dialog("option", "height", 600);
+		        var index;
+		        if(quartile == 25){
+		        	index = "q1_index";
+		        }
+		        else if(quartile == 50){
+		        	index = "median";
+		        }
+		        else{
+		        	index = "q3_index";
+		        }
+		        var title = "Students with grades smaller than " + data_point[index];
+		        var students;
+		        if(quartile == 25){
+		        	students = data_point.grades.slice(0, data_point.grades_stats.q1_index+1);
+		        }
+		        else if(quartile == 50){
+		        	students = data_point.grades.slice(0, data_point.grades_stats.median_index+1);
+		        }
+		        else{
+		        	students = data_point.grades.slice(0, data_point.grades_stats.q3_index+1);
+		        }
+		        for(var s=0; s<students.length; s++){
+		        	students[s]['nome'] = students[s].name;
+		        }
+		        $("#" + tasknameid[task_name] + ".mail_dialog").append(createEmailForm(title, students, <?php echo json_encode($courseid); ?>, 'hits.php'));
+		        $("form").submit(function( event ) {
+                    event.preventDefault();
+                    var $form = this;
+                    var otherval = $form.find( "input[name='other']" ).val();
+                    var idsval = $form.find( "input[name='ids[]']" ).val();
+                    var subjectval = $form.find( "input[name='subject']" ).val();
+                    var textoval = $form.find( "textarea[name='texto']" ).val();
+                    var url = $form.attr( "action" );
+
+                    var posting = $.post( url, {
+                    						other: otherval,
+                    						ids: idsval,
+                    						subject: subjectval,
+                    						texto: textoval});
+
+                    posting.done(function( data ){
+	                    if(data){
+	                        $("#" + tasknameid[task_name] + ".mail_dialog").dialog("close");
+	                        alert("<?php echo get_string('sent_message', 'block_analytics_graphs');?>");
+	                    }
+	                    else {
+	                        alert("<?php echo get_string('not_sent_message', 'block_analytics_graphs');?>");
+	                    }
+                	});
+            	});
+			};
+
 			var base_chart_options = {
 		        chart: {
-		            type: 'boxplot'
+		            type: 'boxplot',
+		            borderWidth: 1,
+		            events: {
+                        load: function(){
+                            this.mytooltip = new Highcharts.Tooltip(this, this.options.tooltip);
+                        }
+                    }
 		        },
 
 		        title: {
@@ -138,6 +208,8 @@ $result = $DB->get_records_sql($sql, array($course_id));
 		        },
 
 		        tooltip:{
+		        	enabled: false,
+		        	useHTML: true,
 		        	backgroundColor: "rgba(255,255,255,1.0)",
 		        	formatter: function(){
 		        		var str = "";
@@ -145,9 +217,23 @@ $result = $DB->get_records_sql($sql, array($course_id));
 		        		str += "Total grades: " + this.point.num_grades + "<br/>";
 		        		str += "Lowest grade: " + this.point.low.toFixed(2) + "<br/>";
 		        		str += "Largest grade: " + this.point.high.toFixed(2) + "<br/>";
-		        		str += "75% of all grades are greater than " + this.point.q1.toFixed(2) + "<br/>";
-		        		str += "50% of all grades are greater than " + this.point.median.toFixed(2) + "<br/>";
-		        		str += "25% of all grades are greater than " + this.point.q3.toFixed(2) + "<br/>";
+		        		str += "75% of all \
+		        			<a class='mail_link' \
+		        				id='" + this.point.category + "-75' \
+		        				href='#' onclick='mail_dialog(" + this.point.category + ", 25," + this.point + "); return false;'>students</a> \
+		        				achieved grades larger than " + this.point.q1.toFixed(2) + "<br/>";
+		        		
+		        		str += "50% of all \
+		        			<a class='mail_link' \
+		        				id='" + this.point.category + "-50' \
+		        				href='#' onclick='mail_dialog(" + this.point.category + ", 50," + this.point + "); return false;'>students</a> \
+		        				achieved grades larger than " + this.point.median.toFixed(2) + "<br/>";
+		        		
+		        		str += "25% of all \
+		        			<a class='mail_link' \
+		        				id='" + this.point.category + "-25' \
+		        				href='#' onclick='mail_dialog(" + this.point.category + ", 75," + this.point + "); return false;'>students</a> \
+		        				achieved grades larger than " + this.point.q3.toFixed(2) + "<br/>";
 		        		return str;
 		        	}
 		        },
@@ -165,7 +251,19 @@ $result = $DB->get_records_sql($sql, array($course_id));
 		                whiskerColor: '#669999',
 		                whiskerLength: '20%',
 		                whiskerWidth: 3
-		            }
+		            },
+
+		            series : {
+	                    stickyTracking: false,
+	                    events: {
+	                        click : function(evt){
+	                            this.chart.mytooltip.refresh(evt.point, evt);
+	                        },
+	                        mouseOut : function(){
+	                            this.chart.mytooltip.hide();
+	                        }
+	                    }
+	                }
 		        },
 
 		        series: [{
@@ -175,16 +273,19 @@ $result = $DB->get_records_sql($sql, array($course_id));
 			var totaltasks = tasks.length;
 			var tasks_toggle = {};
 			var taskidname = {};
+			var tasknameid = {};
 			var active_tasks = 0;
-			var cont = 1;
+			var cont = 1;			
 			$("#tasklist_div").empty().append("<h1>Task list:<h1>");
 			for(elem in tasks){
 				$("#tasklist_div").append(cont + " - " + tasks[elem]['itemname'] + "<br/>");
 				$("#taskbuttons_div").append("<div class='individual_task_div' id='div_task_" + tasks[elem]['id'] + "'>" + 
 										"<button type='button' class=task_button id='" +  tasks[elem]['id'] + "'>" + 
 										cont + "</button></div>");
+				document.write("<div id='" + tasks[elem]['id'] + "' class='mail_dialog' title='" + tasks[elem]['itemname'] + "'></div>");
 				tasks_toggle[tasks[elem]['id']] = false;
 				taskidname[tasks[elem]['id']] = tasks[elem]['itemname'];
+				tasknameid[tasks[elem]['itemname']] = tasks[elem]['id'];
 				cont++;
 			}
 			$("#chart_div").highcharts(base_chart_options);
@@ -218,31 +319,49 @@ $result = $DB->get_records_sql($sql, array($course_id));
 						success: function(grades_info){
 							var grades_stats = [];
 							var sort_func = function(a, b){
-								return a - b;
+								return a['grade'] - b['grade'];
 							};
 							var median_func = function(data){
 								var data_size = data.length;
 								if(data_size % 2){
-									return data[Math.floor(data_size/2)];
+									return {
+										idx: Math.floor(data_size/2),
+										val: data[Math.floor(data_size/2)]['grade']
+									};
 								}
 								else{
-									return 0.5 * (data[data_size/2] + data[data_size/2 - 1]);
+									return {
+										idx: data_size/2,
+										val: 0.5 * (data[data_size/2]['grade'] + data[data_size/2 - 1]['grade'])
+									};
 								}
 							};
 							for(var task_i in grades_info){
-								var num_grades = grades_info[task_i]['grades'].length;
+								grades_info[task_i].sort(sort_func);
+								var num_grades = grades_info[task_i].length;
 								var task_data = null;
-								var min_grade = Math.min.apply(null, grades_info[task_i]['grades']);
-								var max_grade = Math.max.apply(null, grades_info[task_i]['grades']);
-								var median_grade = median_func(grades_info[task_i]['grades']);
+								var min_grade = grades_info[task_i][0]['grade'];
+								var max_grade = grades_info[task_i][num_grades-1]['grade'];
+								var stats = median_func(grades_info[task_i]);
+								var median_grade = stats.val;
+								var median_idx = stats.idx;
 								var q1_grade = null, q3_grade = null;
+								var q1_index, q3_index;
 								if(num_grades%2){
-									q1_grade = median_func(grades_info[task_i]['grades'].slice(0,Math.max(Math.floor(num_grades/2), 1)));
-									q3_grade = median_func(grades_info[task_i]['grades'].slice(Math.min(Math.floor(num_grades/2) + 1, num_grades-1), Math.max(num_grades, Math.floor(num_grades/2) + 1)));
+									stats = median_func(grades_info[task_i].slice(0,Math.max(Math.floor(num_grades/2), 1)));
+									q1_grade = stats.val;
+									q1_index = stats.idx;
+									stats = median_func(grades_info[task_i].slice(Math.min(Math.floor(num_grades/2) + 1, num_grades-1), Math.max(num_grades, Math.floor(num_grades/2) + 1)));
+									q3_grade = stats.val;
+									q3_index = stats.idx + Math.min(Math.floor(num_grades/2) + 1, num_grades-1);
 								}
 								else{
-									q1_grade = median_func(grades_info[task_i]['grades'].slice(0,num_grades/2));
-									q3_grade = median_func(grades_info[task_i]['grades'].slice(num_grades/2, num_grades));
+									stats = median_func(grades_info[task_i].slice(0,num_grades/2));
+									q1_grade = stats.val;
+									q1_index = stats.idx;
+									stats = median_func(grades_info[task_i].slice(num_grades/2, num_grades));
+									q3_grade = stats.val;
+									q3_index = stats.idx + num_grades/2;
 								}
 								task_data = {
 								    low: min_grade,
@@ -251,7 +370,13 @@ $result = $DB->get_records_sql($sql, array($course_id));
 								    q3: q3_grade,
 								    high: max_grade,
 								    name: task_i,
-								    num_grades: num_grades
+								    num_grades: num_grades,
+								    grades_stats : {
+								    	median_index : median_idx,
+								    	q1_index : q1_index,
+								    	q3_index : q3_index,
+								    	grades: grades_info[task_i]
+								    }
 								};
 								grades_stats.push(task_data);
 							}
