@@ -12,8 +12,9 @@ require_capability('block/analytics_graphs:viewpages', $context);
 list($insql, $inparams) = $DB->get_in_or_equal($form_data);
 
 $sql = "SELECT itemid + (userid*1000000) as id, itemid, userid, usr.firstname, usr.lastname, usr.email, rawgrade/(rawgrademax-rawgrademin) AS grade
-            FROM {grade_grades} WHERE itemid $insql AND rawgrade IS NOT NULL
+            FROM {grade_grades}
             LEFT JOIN {user} usr ON usr.id = userid
+            WHERE itemid $insql AND rawgrade IS NOT NULL
             ORDER BY id";
 
 $result = $DB->get_records_sql($sql, $inparams);
@@ -26,7 +27,7 @@ foreach($result as $id => $task_attrs){
     $record->email = $task_attrs->email;
     $record->name = $task_attrs->firstname . " " . $task_attrs->lastname;
     if(!property_exists($task_grades, $itemid)){
-        $task_grades->{$itemid} = new array();
+        $task_grades->{$itemid} = array();
         // $task_grades->{$itemid}->userids = array();
         // $task_grades->{$itemid}->grades = array();
     }
