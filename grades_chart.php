@@ -90,7 +90,7 @@ $result = $DB->get_records_sql($sql, array($course_id));
 			<div id="taskbuttons_div"></div>
 		</div>
 		<script>			
-			var mail_dialog = function(task_name, quartile, data_point){
+			function mail_dialog(task_name, quartile, data_point){
 				quartile = parseInt(quartile);
 				$("#" + tasknameid[task_name] + ".mail_dialog").dialog("open");
 				$("#" + tasknameid[task_name] + ".mail_dialog").dialog("option", "position", {
@@ -318,10 +318,10 @@ $result = $DB->get_records_sql($sql, array($course_id));
 						},
 						success: function(grades_info){
 							var grades_stats = [];
-							var sort_func = function(a, b){
+							function sort_func(a, b){
 								return a['grade'] - b['grade'];
 							};
-							var median_func = function(data){
+							function median_func(data){
 								var data_size = data.length;
 								if(data_size % 2){
 									return {
