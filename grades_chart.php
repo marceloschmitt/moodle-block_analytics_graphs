@@ -124,8 +124,8 @@ $result = $DB->get_records_sql($sql, array($course_id));
 		        for(var s=0; s<students.length; s++){
 		        	students[s]['nome'] = students[s].name;
 		        }
-		        $("#" + tasknameid[task_name] + ".mail_dialog").append(createEmailForm(title, students, <?php echo json_encode($course_id); ?>, 'hits.php'));
-		        $("form").submit(function( event ) {
+		        $("#" + tasknameid[task_name] + ".mail_dialog").append(createEmailForm(title, students, <?php echo json_encode($course_id); ?>, 'grades_chart.php'));
+		        $("#" + tasknameid[task_name] + ".mail_dialog form").submit(function(event){
                     event.preventDefault();
                     var $form = this;
                     var otherval = $form.find( "input[name='other']" ).val();
