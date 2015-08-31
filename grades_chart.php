@@ -27,6 +27,7 @@ $result = $DB->get_records_sql($sql, array($course_id));
 		<title><?php echo get_string('grades_chart', 'block_analytics_graphs'); ?></title>
 		<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
 		<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+		<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">		
 		<script src="http://code.highcharts.com/highcharts.js"></script>
 		<script src="http://code.highcharts.com/modules/exporting.js"></script>
 		<script src="http://code.highcharts.com/highcharts-more.js"></script>
@@ -92,15 +93,7 @@ $result = $DB->get_records_sql($sql, array($course_id));
 		<script>			
 			function mail_dialog(task_name, quartile){
 				var taskgrades = tasksinfo[tasknameid[task_name]];
-				quartile = parseInt(quartile);
-				$("#" + tasknameid[task_name] + ".mail_dialog").dialog("open");
-				$("#" + tasknameid[task_name] + ".mail_dialog").dialog("option", "position", {
-		            my:"center top",
-		            at:"center top+" + 10,
-		            of:window
-		        });
-		        $("#" + tasknameid[task_name] + ".mail_dialog").dialog("option", "width", 1000);
-		        $("#" + tasknameid[task_name] + ".mail_dialog").dialog("option", "height", 600);
+				quartile = parseInt(quartile);				
 		        var index;
 		        if(quartile == 25){
 		        	index = "q1_index";
@@ -125,7 +118,7 @@ $result = $DB->get_records_sql($sql, array($course_id));
 		        for(var s=0; s<students.length; s++){
 		        	students[s]['nome'] = students[s].name;
 		        }
-		        $("#" + tasknameid[task_name] + ".mail_dialog").append(createEmailForm(title, students, <?php echo json_encode($course_id); ?>, 'grades_chart.php'));
+		        $("#" + tasknameid[task_name] + ".mail_dialog").empty().append(createEmailForm(title, students, <?php echo json_encode($course_id); ?>, 'grades_chart.php'));
 		        $("#" + tasknameid[task_name] + ".mail_dialog form").submit(function(event){
                     event.preventDefault();
                     var $form = this;
@@ -290,6 +283,14 @@ $result = $DB->get_records_sql($sql, array($course_id));
 	                modal: true,
 	                autoOpen: false
             	});
+            	$("#" + tasks[elem]['id'] + ".mail_dialog").dialog("open");
+				$("#" + tasks[elem]['id'] + ".mail_dialog").dialog("option", "position", {
+		            my:"center top",
+		            at:"center top+" + 10,
+		            of:window
+		        });
+		        $("#" + tasks[elem]['id'] + ".mail_dialog").dialog("option", "width", 1000);
+		        $("#" + tasks[elem]['id'] + ".mail_dialog").dialog("option", "height", 600);
 				tasks_toggle[tasks[elem]['id']] = false;
 				taskidname[tasks[elem]['id']] = tasks[elem]['itemname'];
 				tasknameid[tasks[elem]['itemname']] = tasks[elem]['id'];
