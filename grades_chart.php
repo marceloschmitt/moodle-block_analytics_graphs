@@ -221,19 +221,19 @@ $result = $DB->get_records_sql($sql, array($course_id));
 		        		str += "75% of all \
 		        			<a class='mail_link' \
 		        				id='" + this.point.category + "-75' \
-		        				href='#' onclick='mail_dialog('" + this.point.category + "', 25); return false;'>students</a> \
+		        				href='#' onclick='mail_dialog(\"" + this.point.category + "\", 25); return false;'>students</a> \
 		        				achieved grades larger than " + this.point.q1.toFixed(2) + "<br/>";
 		        		
 		        		str += "50% of all \
 		        			<a class='mail_link' \
 		        				id='" + this.point.category + "-50' \
-		        				href='#' onclick='mail_dialog('" + this.point.category + "', 50); return false;'>students</a> \
+		        				href='#' onclick='mail_dialog(\"" + this.point.category + "\", 50); return false;'>students</a> \
 		        				achieved grades larger than " + this.point.median.toFixed(2) + "<br/>";
 		        		
 		        		str += "25% of all \
 		        			<a class='mail_link' \
 		        				id='" + this.point.category + "-25' \
-		        				href='#' onclick='mail_dialog('" + this.point.category + "', 75); return false;'>students</a> \
+		        				href='#' onclick='mail_dialog(\"" + this.point.category + "\", 75); return false;'>students</a> \
 		        				achieved grades larger than " + this.point.q3.toFixed(2) + "<br/>";
 		        		return str;
 		        	}
