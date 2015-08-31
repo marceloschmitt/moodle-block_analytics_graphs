@@ -90,7 +90,8 @@ $result = $DB->get_records_sql($sql, array($course_id));
 			<div id="taskbuttons_div"></div>
 		</div>
 		<script>			
-			function mail_dialog(task_name, quartile, data_point){
+			function mail_dialog(task_name, quartile){
+				var taskgrades = tasksinfo[tasknameid[task_name]];
 				quartile = parseInt(quartile);
 				$("#" + tasknameid[task_name] + ".mail_dialog").dialog("open");
 				$("#" + tasknameid[task_name] + ".mail_dialog").dialog("option", "position", {
@@ -110,16 +111,16 @@ $result = $DB->get_records_sql($sql, array($course_id));
 		        else{
 		        	index = "q3_index";
 		        }
-		        var title = "Students with grades smaller than " + data_point[index];
+		        var title = "Students with grades smaller than " + taskgrades.grades[index];
 		        var students;
 		        if(quartile == 25){
-		        	students = data_point.grades.slice(0, data_point.grades_stats.q1_index+1);
+		        	students = taskgrades.grades.slice(0, taskgrades.q1_index+1);
 		        }
 		        else if(quartile == 50){
-		        	students = data_point.grades.slice(0, data_point.grades_stats.median_index+1);
+		        	students = taskgrades.grades.slice(0, taskgrades.median_index+1);
 		        }
 		        else{
-		        	students = data_point.grades.slice(0, data_point.grades_stats.q3_index+1);
+		        	students = taskgrades.grades.slice(0, taskgrades.q3_index+1);
 		        }
 		        for(var s=0; s<students.length; s++){
 		        	students[s]['nome'] = students[s].name;
@@ -220,19 +221,19 @@ $result = $DB->get_records_sql($sql, array($course_id));
 		        		str += "75% of all \
 		        			<a class='mail_link' \
 		        				id='" + this.point.category + "-75' \
-		        				href='#' onclick='mail_dialog(" + this.point.category + ", 25," + this.point + "); return false;'>students</a> \
+		        				href='#' onclick='mail_dialog('" + this.point.category + "', 25); return false;'>students</a> \
 		        				achieved grades larger than " + this.point.q1.toFixed(2) + "<br/>";
 		        		
 		        		str += "50% of all \
 		        			<a class='mail_link' \
 		        				id='" + this.point.category + "-50' \
-		        				href='#' onclick='mail_dialog(" + this.point.category + ", 50," + this.point + "); return false;'>students</a> \
+		        				href='#' onclick='mail_dialog('" + this.point.category + "', 50); return false;'>students</a> \
 		        				achieved grades larger than " + this.point.median.toFixed(2) + "<br/>";
 		        		
 		        		str += "25% of all \
 		        			<a class='mail_link' \
 		        				id='" + this.point.category + "-25' \
-		        				href='#' onclick='mail_dialog(" + this.point.category + ", 75," + this.point + "); return false;'>students</a> \
+		        				href='#' onclick='mail_dialog('" + this.point.category + "', 75); return false;'>students</a> \
 		        				achieved grades larger than " + this.point.q3.toFixed(2) + "<br/>";
 		        		return str;
 		        	}
@@ -269,7 +270,9 @@ $result = $DB->get_records_sql($sql, array($course_id));
 		        series: [{
 		        }]
 		    };
+		    
 			var tasks = <?php echo json_encode($result); ?>;
+			var tasksinfo = {};
 			var totaltasks = tasks.length;
 			var tasks_toggle = {};
 			var taskidname = {};
@@ -377,6 +380,12 @@ $result = $DB->get_records_sql($sql, array($course_id));
 								    	q3_index : q3_index,
 								    	grades: grades_info[task_i]
 								    }
+								};
+								tasksinfo[task_i] = {
+									median_index : median_idx,
+							    	q1_index : q1_index,
+							    	q3_index : q3_index,
+							    	grades: grades_info[task_i]
 								};
 								grades_stats.push(task_data);
 							}
