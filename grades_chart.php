@@ -93,7 +93,15 @@ $result = $DB->get_records_sql($sql, array($course_id));
 		<script>			
 			function mail_dialog(task_name, quartile){
 				var taskgrades = tasksinfo[tasknameid[task_name]];
-				quartile = parseInt(quartile);				
+				quartile = parseInt(quartile);
+				$("#" + tasknameid[task_name] + ".mail_dialog").dialog("open");
+				$("#" + tasknameid[task_name] + ".mail_dialog").dialog("option", "position", {
+		            my:"center top",
+		            at:"center top+" + 10,
+		            of:window
+		        });
+		        $("#" + tasknameid[task_name] + ".mail_dialog").dialog("option", "width", 1000);
+		        $("#" + tasknameid[task_name] + ".mail_dialog").dialog("option", "height", 600);
 		        var index;
 		        if(quartile == 25){
 		        	index = "q1_index";
@@ -282,15 +290,7 @@ $result = $DB->get_records_sql($sql, array($course_id));
 				$("#" + tasks[elem]['id'] + ".mail_dialog").dialog({
 	                modal: true,
 	                autoOpen: false
-            	});
-            	$("#" + tasks[elem]['id'] + ".mail_dialog").dialog("open");
-				$("#" + tasks[elem]['id'] + ".mail_dialog").dialog("option", "position", {
-		            my:"center top",
-		            at:"center top+" + 10,
-		            of:window
-		        });
-		        $("#" + tasks[elem]['id'] + ".mail_dialog").dialog("option", "width", 1000);
-		        $("#" + tasks[elem]['id'] + ".mail_dialog").dialog("option", "height", 600);
+            	});            	
 				tasks_toggle[tasks[elem]['id']] = false;
 				taskidname[tasks[elem]['id']] = tasks[elem]['itemname'];
 				tasknameid[tasks[elem]['itemname']] = tasks[elem]['id'];
