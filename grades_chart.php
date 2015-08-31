@@ -100,8 +100,8 @@ $result = $DB->get_records_sql($sql, array($course_id));
 		            at:"center top+" + 10,
 		            of:window
 		        });
-		        $("#" + tasknameid[task_name] + ".mail_dialog").dialog("option", "width", 1000);
-		        $("#" + tasknameid[task_name] + ".mail_dialog").dialog("option", "height", 600);
+		        $("#" + tasknameid[task_name] + ".mail_dialog").dialog("option", "width", 800);
+		        $("#" + tasknameid[task_name] + ".mail_dialog").dialog("option", "height", 500);
 		        var index;
 		        if(quartile == 25){
 		        	index = "q1_index";
@@ -112,7 +112,13 @@ $result = $DB->get_records_sql($sql, array($course_id));
 		        else{
 		        	index = "q3_index";
 		        }
-		        var title = "Students with grades smaller than " + taskgrades.grades[index];
+		        var title;
+		        if(taskgrades[index] instanceof Array){
+		        	title = "Students with grades smaller than " + (0.5 * taskgrades.grades[taskgrades[index][0]].grade + taskgrades.grades[taskgrades[index][1]].grade);
+		        }
+		        else{
+			        title = "Students with grades smaller than " + taskgrades.grades[taskgrades[index]].grade;	
+		        }
 		        var students;
 		        if(quartile == 25){
 		        	students = taskgrades.grades.slice(0, taskgrades.q1_index+1);
@@ -339,7 +345,7 @@ $result = $DB->get_records_sql($sql, array($course_id));
 								}
 								else{
 									return {
-										idx: data_size/2,
+										idx: [data_size/2, data_size/2 - 1],
 										val: 0.5 * (data[data_size/2]['grade'] + data[data_size/2 - 1]['grade'])
 									};
 								}
