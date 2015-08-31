@@ -270,7 +270,7 @@ $result = $DB->get_records_sql($sql, array($course_id));
 		        series: [{
 		        }]
 		    };
-		    
+
 			var tasks = <?php echo json_encode($result); ?>;
 			var tasksinfo = {};
 			var totaltasks = tasks.length;
@@ -286,6 +286,10 @@ $result = $DB->get_records_sql($sql, array($course_id));
 										"<button type='button' class=task_button id='" +  tasks[elem]['id'] + "'>" + 
 										cont + "</button></div>");
 				document.write("<div id='" + tasks[elem]['id'] + "' class='mail_dialog' title='" + tasks[elem]['itemname'] + "'></div>");
+				$("#" + tasks[elem]['id'] + ".mail_dialog").dialog({
+	                modal: true,
+	                autoOpen: false
+            	});
 				tasks_toggle[tasks[elem]['id']] = false;
 				taskidname[tasks[elem]['id']] = tasks[elem]['itemname'];
 				tasknameid[tasks[elem]['itemname']] = tasks[elem]['id'];
