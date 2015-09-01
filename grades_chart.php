@@ -94,7 +94,7 @@ $result = $DB->get_records_sql($sql, array($course_id));
 			function mail_dialog(task_name, quartile){
 				var taskgrades = tasksinfo[tasknameid[task_name]];
 		        var index;
-		        var title = "Students with grades smaller than ";
+		        var title = "Students with grades smaller than or equal to ";
 		        var students;
 				
 				quartile = parseInt(quartile);
@@ -339,7 +339,7 @@ $result = $DB->get_records_sql($sql, array($course_id));
 								}
 								else{
 									return {
-										idx: data_size/2,
+										idx: (data_size-1)/2,
 										val: 0.5 * (data[data_size/2]['grade'] + data[data_size/2 - 1]['grade'])
 									};
 								}
