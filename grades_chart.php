@@ -26,8 +26,8 @@ $result = $DB->get_records_sql($sql, array($course_id));
 		<meta charset=utf-8>
 		<title><?php echo get_string('grades_chart', 'block_analytics_graphs'); ?></title>
 		<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+		<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 		<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
-		<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">		
 		<script src="http://code.highcharts.com/highcharts.js"></script>
 		<script src="http://code.highcharts.com/modules/exporting.js"></script>
 		<script src="http://code.highcharts.com/highcharts-more.js"></script>
@@ -93,6 +93,10 @@ $result = $DB->get_records_sql($sql, array($course_id));
 		<script>			
 			function mail_dialog(task_name, quartile){
 				var taskgrades = tasksinfo[tasknameid[task_name]];
+		        var index;
+		        var title = "Students with grades smaller than ";
+		        var students;
+				
 				quartile = parseInt(quartile);
 				$("#" + tasknameid[task_name] + ".mail_dialog").dialog("open");
 				$("#" + tasknameid[task_name] + ".mail_dialog").dialog("option", "position", {
@@ -101,37 +105,27 @@ $result = $DB->get_records_sql($sql, array($course_id));
 		            of:window
 		        });
 		        $("#" + tasknameid[task_name] + ".mail_dialog").dialog("option", "width", 800);
-		        $("#" + tasknameid[task_name] + ".mail_dialog").dialog("option", "height", 500);
-		        var index;
+		        $("#" + tasknameid[task_name] + ".mail_dialog").dialog("option", "height", 700);
+		        
 		        if(quartile == 25){
-		        	index = "q1_index";
+		        	index = taskgrades.q1_index;
+		        	title += taskgrades.q1_grade;
 		        }
 		        else if(quartile == 50){
-		        	index = "median";
+		        	index = taskgrades.median_index;
+		        	title += taskgrades.median_grade;
 		        }
 		        else{
-		        	index = "q3_index";
+		        	index = task_grades.q3_index;
+		        	title += taskgrades.q3_grade;
 		        }
-		        var title;
-		        if(taskgrades[index] instanceof Array){
-		        	title = "Students with grades smaller than " + (0.5 * taskgrades.grades[taskgrades[index][0]].grade + taskgrades.grades[taskgrades[index][1]].grade);
-		        }
-		        else{
-			        title = "Students with grades smaller than " + taskgrades.grades[taskgrades[index]].grade;	
-		        }
-		        var students;
-		        if(quartile == 25){
-		        	students = taskgrades.grades.slice(0, taskgrades.q1_index+1);
-		        }
-		        else if(quartile == 50){
-		        	students = taskgrades.grades.slice(0, taskgrades.median_index+1);
-		        }
-		        else{
-		        	students = taskgrades.grades.slice(0, taskgrades.q3_index+1);
-		        }
+
+		        students = taskgrades.grades.slice(0, parseInt(index)+1);		        
+
 		        for(var s=0; s<students.length; s++){
 		        	students[s]['nome'] = students[s].name;
 		        }
+
 		        $("#" + tasknameid[task_name] + ".mail_dialog").empty().append(createEmailForm(title, students, <?php echo json_encode($course_id); ?>, 'grades_chart.php'));
 		        $("#" + tasknameid[task_name] + ".mail_dialog form").submit(function(event){
                     event.preventDefault();
@@ -345,7 +339,7 @@ $result = $DB->get_records_sql($sql, array($course_id));
 								}
 								else{
 									return {
-										idx: [data_size/2, data_size/2 - 1],
+										idx: data_size/2,
 										val: 0.5 * (data[data_size/2]['grade'] + data[data_size/2 - 1]['grade'])
 									};
 								}
@@ -353,7 +347,6 @@ $result = $DB->get_records_sql($sql, array($course_id));
 							for(var task_i in grades_info){
 								grades_info[task_i].sort(sort_func);
 								var num_grades = grades_info[task_i].length;
-								var task_data = null;
 								var min_grade = grades_info[task_i][0]['grade'];
 								var max_grade = grades_info[task_i][num_grades-1]['grade'];
 								var stats = median_func(grades_info[task_i]);
@@ -377,28 +370,24 @@ $result = $DB->get_records_sql($sql, array($course_id));
 									q3_grade = stats.val;
 									q3_index = stats.idx + num_grades/2;
 								}
-								task_data = {
+								tasksinfo[task_i] = {
+									median_index : median_idx,
+									median_grade : median_grade,
+							    	q1_index : q1_index,
+							    	q1_grade : q1_grade,
+							    	q3_index : q3_index,
+							    	q3_grade : q3_grade,
+							    	grades: grades_info[task_i]
+								};
+								grades_stats.push({
 								    low: min_grade,
 								    q1: q1_grade,
 								    median: median_grade,
 								    q3: q3_grade,
 								    high: max_grade,
 								    name: task_i,
-								    num_grades: num_grades,
-								    grades_stats : {
-								    	median_index : median_idx,
-								    	q1_index : q1_index,
-								    	q3_index : q3_index,
-								    	grades: grades_info[task_i]
-								    }
-								};
-								tasksinfo[task_i] = {
-									median_index : median_idx,
-							    	q1_index : q1_index,
-							    	q3_index : q3_index,
-							    	grades: grades_info[task_i]
-								};
-								grades_stats.push(task_data);
+								    num_grades: num_grades
+								});
 							}
 							$('#chart_div').highcharts().series[0].setData(grades_stats);
 						}
