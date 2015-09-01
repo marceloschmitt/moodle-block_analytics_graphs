@@ -104,20 +104,20 @@ $result = $DB->get_records_sql($sql, array($course_id));
 		            at:"center top+" + 10,
 		            of:window
 		        });
-		        $("#" + tasknameid[task_name] + ".mail_dialog").dialog("option", "width", 800);
+		        $("#" + tasknameid[task_name] + ".mail_dialog").dialog("option", "width", 900);
 		        $("#" + tasknameid[task_name] + ".mail_dialog").dialog("option", "height", 700);
 		        
 		        if(quartile == 25){
 		        	index = taskgrades.q1_index;
-		        	title += taskgrades.q1_grade;
+		        	title += taskgrades.q1_grade.toFixed(2);
 		        }
 		        else if(quartile == 50){
 		        	index = taskgrades.median_index;
-		        	title += taskgrades.median_grade;
+		        	title += taskgrades.median_grade.toFixed(2);
 		        }
 		        else{
-		        	index = task_grades.q3_index;
-		        	title += taskgrades.q3_grade;
+		        	index = taskgrades.q3_index;
+		        	title += taskgrades.q3_grade.toFixed(2);
 		        }
 
 		        students = taskgrades.grades.slice(0, parseInt(index)+1);		        
@@ -219,23 +219,23 @@ $result = $DB->get_records_sql($sql, array($course_id));
 		        		str += "Total grades: " + this.point.num_grades + "<br/>";
 		        		str += "Lowest grade: " + this.point.low.toFixed(2) + "<br/>";
 		        		str += "Largest grade: " + this.point.high.toFixed(2) + "<br/>";
-		        		str += "75% of all \
+		        		str += "25% of all \
 		        			<a class='mail_link' \
 		        				id='" + this.point.category + "-75' \
 		        				href='#' onclick='mail_dialog(\"" + this.point.category + "\", 25); return false;'>students</a> \
-		        				achieved grades larger than " + this.point.q1.toFixed(2) + "<br/>";
+		        				achieved grades smaller than or equal to " + this.point.q1.toFixed(2) + "<br/>";
 		        		
 		        		str += "50% of all \
 		        			<a class='mail_link' \
 		        				id='" + this.point.category + "-50' \
 		        				href='#' onclick='mail_dialog(\"" + this.point.category + "\", 50); return false;'>students</a> \
-		        				achieved grades larger than " + this.point.median.toFixed(2) + "<br/>";
+		        				achieved grades smaller than or equal to " + this.point.median.toFixed(2) + "<br/>";
 		        		
-		        		str += "25% of all \
+		        		str += "75% of all \
 		        			<a class='mail_link' \
 		        				id='" + this.point.category + "-25' \
 		        				href='#' onclick='mail_dialog(\"" + this.point.category + "\", 75); return false;'>students</a> \
-		        				achieved grades larger than " + this.point.q3.toFixed(2) + "<br/>";
+		        				achieved grades smaller than or equal to " + this.point.q3.toFixed(2) + "<br/>";
 		        		return str;
 		        	}
 		        },
