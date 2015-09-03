@@ -83,7 +83,7 @@ $result = $DB->get_records_sql($sql, array($course_id));
 	</head>
 	<body>
 		<div id='chart_outerdiv'>
-			<h1>Grades chart</h1>
+			<h1><?php echo json_encode(get_string('grades_chart', 'block_analytics_graphs')); ?></h1>
 			<div id='chart_div'></div>
 		</div>
 		<div id="tasklist_div"></div>
@@ -94,7 +94,7 @@ $result = $DB->get_records_sql($sql, array($course_id));
 			function mail_dialog(task_name, quartile){
 				var taskgrades = tasksinfo[tasknameid[task_name]];
 		        var index;
-		        var title = "Students with grades smaller than or equal to ";
+		        var title = <?php echo json_encode(get_string('grades_mail_dialog_title', 'block_analytics_graphs')); ?> + ": ";
 		        var students;
 				
 				quartile = parseInt(quartile);
@@ -166,7 +166,7 @@ $result = $DB->get_records_sql($sql, array($course_id));
 		        },
 
 		        title: {
-		            text: 'Grades distribution'
+		            text: <?php echo json_encode(get_string('grades_distribution', 'block_analytics_graphs')); ?>
 		        },
 
 		        legend: {
@@ -178,13 +178,13 @@ $result = $DB->get_records_sql($sql, array($course_id));
 		        },
 
 		        lang: {
-		        	noData: "Use the buttons below to toggle the tasks displayed on the chart"
+		        	noData: <?php echo json_encode(get_string('grades_chart_no_data', 'block_analytics_graphs')); ?>
 		        },
 
 		        xAxis: {
 		        	categories: [],
 		            title: {
-		                text: 'Task name',
+		                text: <?php echo json_encode(get_string('task_name', 'block_analytics_graphs')); ?>,
 		                style: {
 		                	fontWeight: 'bold',
 		                	fontSize: 12
@@ -201,7 +201,7 @@ $result = $DB->get_records_sql($sql, array($course_id));
 		        	min: 0,
 		        	max: 1,
 		            title: {
-		                text: 'Grades',
+		                text: <?php echo json_encode(get_string('grades', 'block_analytics_graphs')); ?>,
 		                style: {
 		                	fontWeight: 'bold',
 		                	fontSize: 12
@@ -215,28 +215,31 @@ $result = $DB->get_records_sql($sql, array($course_id));
 		        	backgroundColor: "rgba(255,255,255,1.0)",
 		        	formatter: function(){
 		        		var str = "";
-		        		str += "<b>Task " + this.point.category + "</b><br/>";
-		        		str += "Total grades: " + this.point.num_grades + "<br/>";
-		        		str += "Lowest grade: " + this.point.low.toFixed(2) + "<br/>";
-		        		str += "Largest grade: " + this.point.high.toFixed(2) + "<br/>";
-		        		if(this.point.num_grades > 5){
-			        		str += "25% of all \
-			        			<a class='mail_link' \
-			        				id='" + this.point.category + "-75' \
-			        				href='#' onclick='mail_dialog(\"" + this.point.category + "\", 25); return false;'>students</a> \
-			        				achieved grades smaller than or equal to " + this.point.q1.toFixed(2) + "<br/>";
-			        		
-			        		str += "50% of all \
-			        			<a class='mail_link' \
-			        				id='" + this.point.category + "-50' \
-			        				href='#' onclick='mail_dialog(\"" + this.point.category + "\", 50); return false;'>students</a> \
-			        				achieved grades smaller than or equal to " + this.point.median.toFixed(2) + "<br/>";
-			        		
-			        		str += "75% of all \
-			        			<a class='mail_link' \
-			        				id='" + this.point.category + "-25' \
-			        				href='#' onclick='mail_dialog(\"" + this.point.category + "\", 75); return false;'>students</a> \
-			        				achieved grades smaller than or equal to " + this.point.q3.toFixed(2) + "<br/>";
+		        		str += "<b>" + this.point.category + "</b><br/>";
+		        		str += <?php echo json_encode(get_string('total_grades', 'block_analytics_graphs')); ?> + ": " + this.point.num_grades + "<br/>";
+		        		str += <?php echo json_encode(get_string('lowest_grade', 'block_analytics_graphs')); ?> + ": " + this.point.low.toFixed(2) + "<br/>";
+		        		str += <?php echo json_encode(get_string('largest_grade', 'block_analytics_graphs')); ?> + ": " + this.point.high.toFixed(2) + "<br/>";
+		        		if(this.point.num_grades >= 5){
+			        		str += <?php echo json_encode(get_string('tooltip_percentage', 'block_analytics_graphs', 25)); ?> +
+			        			"<a class='mail_link' id='" + this.point.category + "-25' \
+			        				href='#' onclick='mail_dialog(\"" + this.point.category + "\", 25); return false;'>" +
+			        				<?php echo json_encode(get_string('students', 'block_analytics_graphs')); ?> + "</a> " +
+			        				<?php echo json_encode(get_string('tooltip_grade_achievement', 'block_analytics_graphs')); ?> + ": " +
+			        				this.point.q1.toFixed(2) + "<br/>";
+
+			        		str += <?php echo json_encode(get_string('tooltip_percentage', 'block_analytics_graphs', 50)); ?> +
+			        			"<a class='mail_link' id='" + this.point.category + "-50' \
+			        				href='#' onclick='mail_dialog(\"" + this.point.category + "\", 50); return false;'>" +
+			        				<?php echo json_encode(get_string('students', 'block_analytics_graphs')); ?> + "</a> " +
+			        				<?php echo json_encode(get_string('tooltip_grade_achievement', 'block_analytics_graphs')); ?> + ": " +
+			        				this.point.median.toFixed(2) + "<br/>";
+
+			        		str += <?php echo json_encode(get_string('tooltip_percentage', 'block_analytics_graphs', 75)); ?> +
+			        			"<a class='mail_link' id='" + this.point.category + "-75' \
+			        				href='#' onclick='mail_dialog(\"" + this.point.category + "\", 75); return false;'>" +
+			        				<?php echo json_encode(get_string('students', 'block_analytics_graphs')); ?> + "</a> " +
+			        				<?php echo json_encode(get_string('tooltip_grade_achievement', 'block_analytics_graphs')); ?> + ": " +
+			        				this.point.q3.toFixed(2) + "<br/>";
 	        			}
 		        		return str;
 		        	}
@@ -282,7 +285,7 @@ $result = $DB->get_records_sql($sql, array($course_id));
 			var tasknameid = {};
 			var active_tasks = 0;
 			var cont = 1;			
-			$("#tasklist_div").empty().append("<h1>Task list:<h1>");
+			$("#tasklist_div").empty().append("<h1>" + <?php echo json_encode(get_string('task_list', 'block_analytics_graphs')); ?> + ":<h1>");
 			for(elem in tasks){
 				$("#tasklist_div").append(cont + " - " + tasks[elem]['itemname'] + "<br/>");
 				$("#taskbuttons_div").append("<div class='individual_task_div' id='div_task_" + tasks[elem]['id'] + "'>" + 

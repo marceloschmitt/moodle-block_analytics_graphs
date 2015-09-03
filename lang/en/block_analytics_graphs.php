@@ -83,6 +83,14 @@ $string['late'] = 'Late';
 $string['no_submission'] = 'No submission';
 $string['no_submission_on_time'] = 'May submit';
 $string['resources'] = 'Resources';
-
-
-
+$string['task_list'] = "Task list";
+$string['grades_distribution'] = "Grades distribution";
+$string['grades_mail_dialog_title'] = "Students with grades smaller than or equal to";
+$string['grades_chart_no_data'] = "Use the buttons below to toggle the tasks displayed on the chart";
+$string['task_name'] = "Task name";
+$string['grades'] = "Grades";
+$string['total_grades'] = "Total grades";
+$string['lowest_grade'] = "Lowest grade";
+$string['largest_grade'] = "Largest grade";
+$string['tooltip_percentage'] = "{$a}% of all";
+$string['tooltip_grade_achievement'] = "achieved grades smaller than or equal to";

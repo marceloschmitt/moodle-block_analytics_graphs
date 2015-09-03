@@ -85,4 +85,14 @@ $string['late'] = 'Atrasado';
 $string['no_submission'] = 'Não enviou';
 $string['no_submission_on_time'] = 'Aberto para envio';
 $string['resources'] = 'Materiais';
-
+$string['grades_distribution'] = "Distribuição de notas";
+$string['task_list'] = "Lista de tarefas";
+$string['grades_mail_dialog_title'] = "Estudantes com notas menores ou iguais a";
+$string['grades_chart_no_data'] = "Use os botões abaixo para alternar quais tarefas são apresentadas no gráfico";
+$string['task_name'] = "Nome da tarefa";
+$string['grades'] = "Notas";
+$string['total_grades'] = "Total de notas";
+$string['lowest_grade'] = "Nota mais baixa";
+$string['largest_grade'] = "Nota mais alta";
+$string['tooltip_percentage'] = "{$a}% de todos os";
+$string['tooltip_grade_achievement'] = "obtiveram notas menores que ou iguais a";
