@@ -83,7 +83,7 @@ $result = $DB->get_records_sql($sql, array($course_id));
 	</head>
 	<body>
 		<div id='chart_outerdiv'>
-			<h1><?php echo json_encode(get_string('grades_chart', 'block_analytics_graphs')); ?></h1>
+			<h1><?php echo get_string('grades_chart', 'block_analytics_graphs'); ?></h1>
 			<div id='chart_div'></div>
 		</div>
 		<div id="tasklist_div"></div>
@@ -220,22 +220,22 @@ $result = $DB->get_records_sql($sql, array($course_id));
 		        		str += <?php echo json_encode(get_string('lowest_grade', 'block_analytics_graphs')); ?> + ": " + this.point.low.toFixed(2) + "<br/>";
 		        		str += <?php echo json_encode(get_string('largest_grade', 'block_analytics_graphs')); ?> + ": " + this.point.high.toFixed(2) + "<br/>";
 		        		if(this.point.num_grades >= 5){
-			        		str += <?php echo json_encode(get_string('tooltip_percentage', 'block_analytics_graphs', 25)); ?> +
-			        			"<a class='mail_link' id='" + this.point.category + "-25' \
+			        		str += <?php echo json_encode(get_string('tooltip_percentage', 'block_analytics_graphs', "25")); ?> +
+			        			" <a class='mail_link' id='" + this.point.category + "-25' \
 			        				href='#' onclick='mail_dialog(\"" + this.point.category + "\", 25); return false;'>" +
 			        				<?php echo json_encode(get_string('students', 'block_analytics_graphs')); ?> + "</a> " +
 			        				<?php echo json_encode(get_string('tooltip_grade_achievement', 'block_analytics_graphs')); ?> + ": " +
 			        				this.point.q1.toFixed(2) + "<br/>";
 
-			        		str += <?php echo json_encode(get_string('tooltip_percentage', 'block_analytics_graphs', 50)); ?> +
-			        			"<a class='mail_link' id='" + this.point.category + "-50' \
+			        		str += <?php echo json_encode(get_string('tooltip_percentage', 'block_analytics_graphs', "50")); ?> +
+			        			" <a class='mail_link' id='" + this.point.category + "-50' \
 			        				href='#' onclick='mail_dialog(\"" + this.point.category + "\", 50); return false;'>" +
 			        				<?php echo json_encode(get_string('students', 'block_analytics_graphs')); ?> + "</a> " +
 			        				<?php echo json_encode(get_string('tooltip_grade_achievement', 'block_analytics_graphs')); ?> + ": " +
 			        				this.point.median.toFixed(2) + "<br/>";
 
-			        		str += <?php echo json_encode(get_string('tooltip_percentage', 'block_analytics_graphs', 75)); ?> +
-			        			"<a class='mail_link' id='" + this.point.category + "-75' \
+			        		str += <?php echo json_encode(get_string('tooltip_percentage', 'block_analytics_graphs', "75")); ?> +
+			        			" <a class='mail_link' id='" + this.point.category + "-75' \
 			        				href='#' onclick='mail_dialog(\"" + this.point.category + "\", 75); return false;'>" +
 			        				<?php echo json_encode(get_string('students', 'block_analytics_graphs')); ?> + "</a> " +
 			        				<?php echo json_encode(get_string('tooltip_grade_achievement', 'block_analytics_graphs')); ?> + ": " +

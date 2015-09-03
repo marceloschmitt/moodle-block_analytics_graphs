@@ -92,5 +92,5 @@ $string['grades'] = "Grades";
 $string['total_grades'] = "Total grades";
 $string['lowest_grade'] = "Lowest grade";
 $string['largest_grade'] = "Largest grade";
-$string['tooltip_percentage'] = "{$a}% of all";
+$string['tooltip_percentage'] = "{$a}%% of all";
 $string['tooltip_grade_achievement'] = "achieved grades smaller than or equal to";
