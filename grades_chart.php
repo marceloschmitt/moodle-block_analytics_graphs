@@ -54,6 +54,7 @@ $result = $DB->get_records_sql($sql, array($course_id));
 
 			.individual_task_div {
 			    flex-grow: 1;
+			    -webkit-flex-grow: 1;
 			    margin: 5px;
 			}
 
@@ -74,9 +75,13 @@ $result = $DB->get_records_sql($sql, array($course_id));
 			    margin-left: auto;
 			    margin-right: auto;
 			    display: inline-flex;
+			    display: -webkit-inline-flex;
 			    flex-direction: row;
+			    -webkit-flex-direction: row;
 			    flex-wrap: wrap;
+			    -webkit-flex-wrap: wrap;
 			    justify-content: flex-start;
+			    -webkit-justify-content: flex-start;
 			    align-content: center;
 			}
 		</style>
@@ -220,26 +225,26 @@ $result = $DB->get_records_sql($sql, array($course_id));
 		        		str += <?php echo json_encode(get_string('lowest_grade', 'block_analytics_graphs')); ?> + ": " + this.point.low.toFixed(2) + "<br/>";
 		        		str += <?php echo json_encode(get_string('largest_grade', 'block_analytics_graphs')); ?> + ": " + this.point.high.toFixed(2) + "<br/>";
 		        		if(this.point.num_grades >= 5){
-			        		str += <?php echo json_encode(get_string('tooltip_percentage_25', 'block_analytics_graphs')); ?> +
-			        			" <a class='mail_link' id='" + this.point.category + "-25' \
+		        			str += "<a class='mail_link' id='" + this.point.category + "-25' \
 			        				href='#' onclick='mail_dialog(\"" + this.point.category + "\", 25); return false;'>" +
+			        				parseInt(tasksinfo[tasknameid[this.point.category]].q1_index + 1) + " " +
 			        				<?php echo json_encode(get_string('students', 'block_analytics_graphs')); ?> + "</a> " +
-			        				<?php echo json_encode(get_string('tooltip_grade_achievement', 'block_analytics_graphs')); ?> + ": " +
-			        				this.point.q1.toFixed(2) + "<br/>";
+			        				<?php echo json_encode(get_string('tooltip_grade_achievement', 'block_analytics_graphs')); ?> + " " +
+			        				this.point.q1.toFixed(2) + " (25%)<br/>";
 
-			        		str += <?php echo json_encode(get_string('tooltip_percentage_50', 'block_analytics_graphs')); ?> +
-			        			" <a class='mail_link' id='" + this.point.category + "-50' \
+			        		str += "<a class='mail_link' id='" + this.point.category + "-50' \
 			        				href='#' onclick='mail_dialog(\"" + this.point.category + "\", 50); return false;'>" +
+			        				parseInt(tasksinfo[tasknameid[this.point.category]].median_index + 1) + " " +
 			        				<?php echo json_encode(get_string('students', 'block_analytics_graphs')); ?> + "</a> " +
-			        				<?php echo json_encode(get_string('tooltip_grade_achievement', 'block_analytics_graphs')); ?> + ": " +
-			        				this.point.median.toFixed(2) + "<br/>";
+			        				<?php echo json_encode(get_string('tooltip_grade_achievement', 'block_analytics_graphs')); ?> + " " +
+			        				this.point.median.toFixed(2) + " (50%)<br/>";
 
-			        		str += <?php echo json_encode(get_string('tooltip_percentage_75', 'block_analytics_graphs')); ?> +
-			        			" <a class='mail_link' id='" + this.point.category + "-75' \
+							str += "<a class='mail_link' id='" + this.point.category + "-75' \
 			        				href='#' onclick='mail_dialog(\"" + this.point.category + "\", 75); return false;'>" +
+			        				parseInt(tasksinfo[tasknameid[this.point.category]].q3_index + 1) + " " +
 			        				<?php echo json_encode(get_string('students', 'block_analytics_graphs')); ?> + "</a> " +
-			        				<?php echo json_encode(get_string('tooltip_grade_achievement', 'block_analytics_graphs')); ?> + ": " +
-			        				this.point.q3.toFixed(2) + "<br/>";
+			        				<?php echo json_encode(get_string('tooltip_grade_achievement', 'block_analytics_graphs')); ?> + " " +
+			        				this.point.q3.toFixed(2) + " (75%)<br/>";
 	        			}
 		        		return str;
 		        	}

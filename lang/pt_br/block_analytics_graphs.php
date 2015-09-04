@@ -94,7 +94,4 @@ $string['grades'] = "Notas";
 $string['total_grades'] = "Total de notas";
 $string['lowest_grade'] = "Nota mais baixa";
 $string['largest_grade'] = "Nota mais alta";
-$string['tooltip_percentage_25'] = "25% de todos os";
-$string['tooltip_percentage_50'] = "50% de todos os";
-$string['tooltip_percentage_75'] = "75% de todos os";
 $string['tooltip_grade_achievement'] = "obtiveram notas menores que ou iguais a";
