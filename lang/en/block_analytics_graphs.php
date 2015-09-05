@@ -93,3 +93,5 @@ $string['total_grades'] = "Total grades";
 $string['lowest_grade'] = "Lowest grade";
 $string['largest_grade'] = "Largest grade";
 $string['tooltip_grade_achievement'] = "achieved grades smaller than or equal to";
+$string['add_task'] = "Add task to chart";
+$string['remove_task'] = "Remove task from chart";

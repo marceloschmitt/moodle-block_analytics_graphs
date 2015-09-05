@@ -115,7 +115,7 @@ $result = $DB->get_records_sql($sql, array($course_id));
 			function mail_dialog(task_name, quartile){
 				var taskgrades = tasksinfo[tasknameid[task_name]];
 		        var index;
-		        var title = <?php echo json_encode(get_string('grades_mail_dialog_title', 'block_analytics_graphs')); ?> + ": ";
+		        var title = <?php echo json_encode(get_string('grades_mail_dialog_title', 'block_analytics_graphs')); ?> + " ";
 		        var students;
 				
 				quartile = parseInt(quartile);
@@ -321,7 +321,7 @@ $result = $DB->get_records_sql($sql, array($course_id));
 				tasknameid[tasks[elem]['itemname']] = tasks[elem]['id'];
 				cont++;
 			}
-			$(".deactivated").empty().append("Add task to chart");
+			$(".deactivated").empty().append(<?php echo json_encode(get_string('add_task', 'block_analytics_graphs')); ?>);
 			$("#chart_div").highcharts(base_chart_options);
 			$('.task_button').click(function(){
 				var task_name = this.id;
@@ -330,14 +330,14 @@ $result = $DB->get_records_sql($sql, array($course_id));
 					tasks_toggle[task_name] = false;
 					$(this).removeClass("activated");
 					$(this).addClass("deactivated");
-					$(this).empty().append("Add task to chart");
+					$(this).empty().append(<?php echo json_encode(get_string('add_task', 'block_analytics_graphs')); ?>);
 					active_tasks--;
 				}
 				else{
 					tasks_toggle[task_name] = true;
 					$(this).removeClass("deactivated");
 					$(this).addClass("activated");
-					$(this).empty().append("Remove task from chart");
+					$(this).empty().append(<?php echo json_encode(get_string('remove_task', 'block_analytics_graphs')); ?>);
 					active_tasks ++;
 				}
 				$('#chart_div').highcharts().xAxis[0].categories = [];

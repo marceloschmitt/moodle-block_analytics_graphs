@@ -95,3 +95,5 @@ $string['total_grades'] = "Total de notas";
 $string['lowest_grade'] = "Nota mais baixa";
 $string['largest_grade'] = "Nota mais alta";
 $string['tooltip_grade_achievement'] = "obtiveram notas menores que ou iguais a";
+$string['add_task'] = "Adicionar tarefa ao gráfico";
+$string['remove_task'] = "Remover tarefa do gráfico";
