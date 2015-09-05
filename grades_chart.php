@@ -108,7 +108,7 @@ $result = $DB->get_records_sql($sql, array($course_id));
 			<div id='chart_div'></div>
 		</div>
 		<div id="tasklist_outerdiv">
-			<span id='tasklist_text'><h2><?php echo json_encode(get_string('task_list', 'block_analytics_graphs')); ?></h2></span>
+			<span id='tasklist_text'><h2><?php echo get_string('task_list', 'block_analytics_graphs'); ?></h2></span>
 			<div id="tasklist_div"></div>
 		</div>
 		<script>			
