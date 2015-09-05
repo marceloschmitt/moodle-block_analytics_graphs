@@ -34,66 +34,82 @@ $result = $DB->get_records_sql($sql, array($course_id));
 		<script src="http://code.highcharts.com/modules/no-data-to-display.js"></script>
 
 		<style>
-			#chart_div {
-			    width: 100%;
-			    margin-left: auto;
-			    margin-right: auto;
+			body {
+				height: 90%;
 			}
 
 			#chart_outerdiv {
-			    width: 95%;
-			    margin-left: auto;
-			    margin-right: auto;
-			    margin-bottom: 5px;
+			    width: 90%;
+			    height: 50vh;
+			    margin: 0px auto 0px auto;
+			}
+
+			#grades_chart_text, #tasklist_text {
+				display: block;
+			}
+
+			#chart_div {
+			    width: 100%;
+			    height: 85%;
+			    margin: 0px auto 0px auto;
+			}
+
+			#tasklist_outerdiv {
+			    height: 40vh;
+			    width: 90%;
+			    margin: 0px auto 0px auto;
 			}
 
 			#tasklist_div {
-			    width: 95%;
+			    height: 85%;
+			    width: 100%;
+			    overflow: auto;
 			    margin: 0px auto 0px auto;
 			}
 
 			.individual_task_div {
-			    flex-grow: 1;
-			    -webkit-flex-grow: 1;
-			    margin: 5px;
+			    margin: 10px 5px 10px 5px;
+			    height: 40px;
+			    background-color: #f3f3f3;
+			    display: -webkit-box;
+			    display: -webkit-flex;
+			    display: flex;
+			    flex-direction: row;
+			    -webkit-flex-direction: row;
+			    -webkit-box-direction: row;
+			    align-items: center;
 			}
 
 			.task_button{
-			    width: 100%;
+			    flex: 1;
+			    -webkit-box-flex: 1;
+			    height: 100%;
+			    border: 0px;
 			}
 
-			#taskbuttons_outerdiv{
-			    margin-left: auto;
-			    margin-right: auto;
-			    margin-top: 5px;
-			    margin-bottom: 5px;
-			    width: 95%;
+			.task_name {
+			    margin: auto 0px auto 5px;
+			    flex: 5;
+			    -webkit-box-flex: 5;
 			}
 
-			#taskbuttons_div {
-			    width: 100%;
-			    margin-left: auto;
-			    margin-right: auto;
-			    display: inline-flex;
-			    display: -webkit-inline-flex;
-			    flex-direction: row;
-			    -webkit-flex-direction: row;
-			    flex-wrap: wrap;
-			    -webkit-flex-wrap: wrap;
-			    justify-content: flex-start;
-			    -webkit-justify-content: flex-start;
-			    align-content: center;
+			.deactivated {
+			    background-color: #9EFFAC;
+			}
+
+			.activated {
+			    background-color: #FCD7D7;
 			}
 		</style>
 	</head>
 	<body>
 		<div id='chart_outerdiv'>
-			<h1><?php echo get_string('grades_chart', 'block_analytics_graphs'); ?></h1>
+			<span id='grades_chart_text'><h2><?php echo get_string('grades_chart', 'block_analytics_graphs'); ?></h2></span>
 			<div id='chart_div'></div>
 		</div>
-		<div id="tasklist_div"></div>
-		<div id='taskbuttons_outerdiv'>
-			<div id="taskbuttons_div"></div>
+		<div id="tasklist_outerdiv">
+			<span id='tasklist_text'><h2><?php echo json_encode(get_string('task_list', 'block_analytics_graphs')); ?></h2></span>
+			<div id="tasklist_div"></div>
 		</div>
 		<script>			
 			function mail_dialog(task_name, quartile){
@@ -289,12 +305,11 @@ $result = $DB->get_records_sql($sql, array($course_id));
 			var taskidname = {};
 			var tasknameid = {};
 			var active_tasks = 0;
-			var cont = 1;			
-			$("#tasklist_div").empty().append("<h1>" + <?php echo json_encode(get_string('task_list', 'block_analytics_graphs')); ?> + ":<h1>");
+			var cont = 1;
 			for(elem in tasks){
-				$("#tasklist_div").append(cont + " - " + tasks[elem]['itemname'] + "<br/>");
-				$("#taskbuttons_div").append("<div class='individual_task_div' id='div_task_" + tasks[elem]['id'] + "'>" + 
-										"<button type='button' class=task_button id='" +  tasks[elem]['id'] + "'>" + 
+				$("#tasklist_div").append("<div class='individual_task_div' id='div_task_" + tasks[elem]['id'] + "'>" + 
+										"<span class='task_name'>" + cont + " - " + tasks[elem]['itemname'] + "</span>" +
+										"<button type='button' class='task_button deactivated' id='" +  tasks[elem]['id'] + "'>" + 
 										cont + "</button></div>");
 				document.write("<div id='" + tasks[elem]['id'] + "' class='mail_dialog' title='" + tasks[elem]['itemname'] + "'></div>");
 				$("#" + tasks[elem]['id'] + ".mail_dialog").dialog({
@@ -306,16 +321,23 @@ $result = $DB->get_records_sql($sql, array($course_id));
 				tasknameid[tasks[elem]['itemname']] = tasks[elem]['id'];
 				cont++;
 			}
+			$(".deactivated").empty().append("Add task to chart");
 			$("#chart_div").highcharts(base_chart_options);
 			$('.task_button').click(function(){
 				var task_name = this.id;
 				var send_data = [];
 				if(tasks_toggle[task_name] === true){
 					tasks_toggle[task_name] = false;
+					$(this).removeClass("activated");
+					$(this).addClass("deactivated");
+					$(this).empty().append("Add task to chart");
 					active_tasks--;
 				}
 				else{
 					tasks_toggle[task_name] = true;
+					$(this).removeClass("deactivated");
+					$(this).addClass("activated");
+					$(this).empty().append("Remove task from chart");
 					active_tasks ++;
 				}
 				$('#chart_div').highcharts().xAxis[0].categories = [];
