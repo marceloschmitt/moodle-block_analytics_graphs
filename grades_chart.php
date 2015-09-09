@@ -1,24 +1,41 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+
+
 require_once("../../config.php");
 require('javascriptfunctions.php');
 global $DB;
 require_once($CFG->dirroot.'/lib/moodlelib.php');
 
-$course_id = required_param('id', PARAM_INT);
-require_login($course_id);
-$context = context_course::instance($course_id);
+$courseid = required_param('id', PARAM_INT);
+require_login($courseid);
+$context = context_course::instance($courseid);
 require_capability('block/analytics_graphs:viewpages', $context);
 
 $sql = "SELECT gi.id, categoryid, fullname, itemname, gradetype, grademax, grademin
-	        FROM {grade_categories} AS gc
-	        LEFT JOIN {grade_items} AS gi ON gc.courseid = gi.courseid AND gc.id = gi.categoryid
-	        WHERE gc.courseid = ? AND categoryid IS NOT NULL AND EXISTS (
-                SELECT * 
-	                FROM mdl_grade_grades AS gg
-	                WHERE gg.itemid = gi.id AND gg.rawgrade IS NOT NULL )
+			FROM {grade_categories} AS gc
+			LEFT JOIN {grade_items} AS gi ON gc.courseid = gi.courseid AND gc.id = gi.categoryid
+			WHERE gc.courseid = ? AND categoryid IS NOT NULL AND EXISTS (
+			    SELECT * 
+			        FROM mdl_grade_grades AS gg
+			        WHERE gg.itemid = gi.id AND gg.rawgrade IS NOT NULL )
         ORDER BY fullname, itemname";
 
-$result = $DB->get_records_sql($sql, array($course_id));
+$result = $DB->get_records_sql($sql, array($courseid));
 ?>
 
 <html>
@@ -147,7 +164,8 @@ $result = $DB->get_records_sql($sql, array($course_id));
 		        	students[s]['nome'] = students[s].name;
 		        }
 
-		        $("#" + tasknameid[task_name] + ".mail_dialog").empty().append(createEmailForm(title, students, <?php echo json_encode($course_id); ?>, 'grades_chart.php'));
+		        $("#" + tasknameid[task_name] + ".mail_dialog").empty().append(
+		        	createEmailForm(title, students, <?php echo json_encode($courseid); ?>, 'grades_chart.php'));
 		        $("#" + tasknameid[task_name] + ".mail_dialog form").submit(function(event){
                     event.preventDefault();
                     var $form = this;
@@ -237,30 +255,33 @@ $result = $DB->get_records_sql($sql, array($course_id));
 		        	formatter: function(){
 		        		var str = "";
 		        		str += "<b>" + this.point.category + "</b><br/>";
-		        		str += <?php echo json_encode(get_string('total_grades', 'block_analytics_graphs')); ?> + ": " + this.point.num_grades + "<br/>";
-		        		str += <?php echo json_encode(get_string('lowest_grade', 'block_analytics_graphs')); ?> + ": " + this.point.low.toFixed(2) + "<br/>";
-		        		str += <?php echo json_encode(get_string('largest_grade', 'block_analytics_graphs')); ?> + ": " + this.point.high.toFixed(2) + "<br/>";
+		        		str += <?php echo json_encode(get_string('total_grades', 'block_analytics_graphs')); ?> +
+		        				": " + this.point.num_grades + "<br/>";
+		        		str += <?php echo json_encode(get_string('lowest_grade', 'block_analytics_graphs')); ?> +
+		        				": " + this.point.low.toFixed(2) + "<br/>";
+		        		str += <?php echo json_encode(get_string('largest_grade', 'block_analytics_graphs')); ?> +
+		        				": " + this.point.high.toFixed(2) + "<br/>";
 		        		if(this.point.num_grades >= 5){
 		        			str += "<a class='mail_link' id='" + this.point.category + "-25' \
 			        				href='#' onclick='mail_dialog(\"" + this.point.category + "\", 25); return false;'>" +
 			        				parseInt(tasksinfo[tasknameid[this.point.category]].q1_index + 1) + " " +
 			        				<?php echo json_encode(get_string('students', 'block_analytics_graphs')); ?> + "</a> " +
-			        				<?php echo json_encode(get_string('tooltip_grade_achievement', 'block_analytics_graphs')); ?> + " " +
-			        				this.point.q1.toFixed(2) + " (25%)<br/>";
+			        				<?php echo json_encode(get_string('tooltip_grade_achievement', 'block_analytics_graphs')); ?> +
+			        				" " + this.point.q1.toFixed(2) + " (25%)<br/>";
 
 			        		str += "<a class='mail_link' id='" + this.point.category + "-50' \
 			        				href='#' onclick='mail_dialog(\"" + this.point.category + "\", 50); return false;'>" +
 			        				parseInt(tasksinfo[tasknameid[this.point.category]].median_index + 1) + " " +
 			        				<?php echo json_encode(get_string('students', 'block_analytics_graphs')); ?> + "</a> " +
-			        				<?php echo json_encode(get_string('tooltip_grade_achievement', 'block_analytics_graphs')); ?> + " " +
-			        				this.point.median.toFixed(2) + " (50%)<br/>";
+			        				<?php echo json_encode(get_string('tooltip_grade_achievement', 'block_analytics_graphs')); ?> +
+			        				" " + this.point.median.toFixed(2) + " (50%)<br/>";
 
 							str += "<a class='mail_link' id='" + this.point.category + "-75' \
 			        				href='#' onclick='mail_dialog(\"" + this.point.category + "\", 75); return false;'>" +
 			        				parseInt(tasksinfo[tasknameid[this.point.category]].q3_index + 1) + " " +
 			        				<?php echo json_encode(get_string('students', 'block_analytics_graphs')); ?> + "</a> " +
-			        				<?php echo json_encode(get_string('tooltip_grade_achievement', 'block_analytics_graphs')); ?> + " " +
-			        				this.point.q3.toFixed(2) + " (75%)<br/>";
+			        				<?php echo json_encode(get_string('tooltip_grade_achievement', 'block_analytics_graphs')); ?> +
+			        				" " + this.point.q3.toFixed(2) + " (75%)<br/>";
 	        			}
 		        		return str;
 		        	}
@@ -354,7 +375,7 @@ $result = $DB->get_records_sql($sql, array($course_id));
 						url: "query_grades.php",
 						data: {
 							"form_data": send_data,
-							"course_id": <?php echo json_encode($course_id); ?>
+							"course_id": <?php echo json_encode($courseid); ?>
 						},
 						success: function(grades_info){
 							var grades_stats = [];
@@ -390,7 +411,8 @@ $result = $DB->get_records_sql($sql, array($course_id));
 									stats = median_func(grades_info[task_i].slice(0,Math.max(Math.floor(num_grades/2), 1)));
 									q1_grade = stats.val;
 									q1_index = stats.idx;
-									stats = median_func(grades_info[task_i].slice(Math.min(Math.floor(num_grades/2) + 1, num_grades-1), Math.max(num_grades, Math.floor(num_grades/2) + 1)));
+									stats = median_func(grades_info[task_i].slice(Math.min(Math.floor(num_grades/2) + 1, num_grades-1),
+															Math.max(num_grades, Math.floor(num_grades/2) + 1)));
 									q3_grade = stats.val;
 									q3_index = stats.idx + Math.min(Math.floor(num_grades/2) + 1, num_grades-1);
 								}

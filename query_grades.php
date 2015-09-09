@@ -1,40 +1,52 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+
+
 require_once("../../config.php");
 global $DB;
 require_once($CFG->dirroot.'/lib/moodlelib.php');
 
-$course_id = required_param('course_id', PARAM_INT);
-$form_data = required_param_array('form_data', PARAM_INT);
-require_login($course_id);
-$context = context_course::instance($course_id);
+$courseid = required_param('course_id', PARAM_INT);
+$formdata = required_param_array('form_data', PARAM_INT);
+require_login($courseid);
+$context = context_course::instance($courseid);
 require_capability('block/analytics_graphs:viewpages', $context);
 
-list($insql, $inparams) = $DB->get_in_or_equal($form_data);
+list($insql, $inparams) = $DB->get_in_or_equal($formdata);
 
-$sql = "SELECT itemid + (userid*1000000) as id, itemid, userid, usr.firstname, usr.lastname, usr.email, rawgrade/(rawgrademax-rawgrademin) AS grade
+$sql = "SELECT itemid + (userid*1000000) AS id, itemid, userid, usr.firstname, usr.lastname, usr.email, rawgrade/(rawgrademax-rawgrademin) AS grade
             FROM {grade_grades}
             LEFT JOIN {user} usr ON usr.id = userid
             WHERE itemid $insql AND rawgrade IS NOT NULL
             ORDER BY id";
 
 $result = $DB->get_records_sql($sql, $inparams);
-$task_grades = new stdClass();
-foreach($result as $id => $task_attrs){
-    $itemid = $task_attrs->itemid;
+$taskgrades = new stdClass();
+foreach ($result as $id => $taskattrs) {
+    $itemid = $taskattrs->itemid;
     $record = new stdClass();
-    $record->userid = $task_attrs->userid;
-    $record->grade = floatval($task_attrs->grade);
-    $record->email = $task_attrs->email;
-    $record->name = $task_attrs->firstname . " " . $task_attrs->lastname;
-    if(!property_exists($task_grades, $itemid)){
-        $task_grades->{$itemid} = array();
-        // $task_grades->{$itemid}->userids = array();
-        // $task_grades->{$itemid}->grades = array();
+    $record->userid = $taskattrs->userid;
+    $record->grade = floatval($taskattrs->grade);
+    $record->email = $taskattrs->email;
+    $record->name = $taskattrs->firstname . " " . $taskattrs->lastname;
+    if (!property_exists($taskgrades, $itemid)) {
+        $taskgrades->{$itemid} = array();
     }
-    $task_grades->{$itemid}[] = $record;
-    // $task_grades->{$itemid}->userids[] = $task_attrs->userid;
-    // $task_grades->{$itemid}->grades[] = floatval($task_attrs->grade);
+    $taskgrades->{$itemid}[] = $record;
 }
 
-echo json_encode($task_grades);
-?>
+echo json_encode($taskgrades);
