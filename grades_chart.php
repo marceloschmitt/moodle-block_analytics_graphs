@@ -167,7 +167,7 @@ $result = $DB->get_records_sql($sql, array($courseid));
 		        	createEmailForm(title, students, <?php echo json_encode($courseid); ?>, 'grades_chart.php'));
 		        $("#" + tasknameid[task_name] + ".mail_dialog form").submit(function(event){
                     event.preventDefault();
-                    var $form = this;
+                    var $form = $(this);
                     var otherval = $form.find( "input[name='other']" ).val();
                     var idsval = $form.find( "input[name='ids[]']" ).val();
                     var subjectval = $form.find( "input[name='subject']" ).val();
