@@ -121,7 +121,6 @@ $result = $DB->get_records_sql($sql, array($courseid));
 	</head>
 	<body>
 		<div id='chart_outerdiv'>
-			<span id='grades_chart_text'><h2><?php echo get_string('grades_chart', 'block_analytics_graphs'); ?></h2></span>
 			<div id='chart_div'></div>
 		</div>
 		<div id="tasklist_outerdiv">
