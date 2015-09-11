@@ -85,11 +85,11 @@ $string['late'] = 'Late';
 $string['no_submission'] = 'No submission';
 $string['no_submission_on_time'] = 'May submit';
 $string['resources'] = 'Resources';
-$string['task_list'] = "Task list";
+$string['task_list'] = "Assessment list";
 
 
 $string['grades_chart_no_data'] = "Use the buttons below to toggle the tasks displayed on the chart";
-$string['task_name'] = "Select which assessments you want to view:";
+$string['task_name'] = "Assessments";
 $string['grades'] = "Grades";
 $string['total_grades'] = "Number of grades";
 $string['lowest_grade'] = "Lowest grade";
