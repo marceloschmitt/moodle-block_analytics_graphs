@@ -28,7 +28,7 @@ require_capability('block/analytics_graphs:viewpages', $context);
 
 list($insql, $inparams) = $DB->get_in_or_equal($formdata);
 
-$sql = "SELECT itemid + (userid*1000000) AS id, itemid, userid, usr.firstname, 
+$sql = "SELECT itemid + (userid*1000000) AS id, itemid, userid, usr.firstname,
         usr.lastname, usr.email, rawgrade/(rawgrademax-rawgrademin) AS grade
             FROM {grade_grades}
             LEFT JOIN {user} usr ON usr.id = userid
