@@ -94,6 +94,6 @@ $string['grades'] = "Grades";
 $string['total_grades'] = "Number of grades";
 $string['lowest_grade'] = "Lowest grade";
 $string['largest_grade'] = "Highest grade";
-$string['tooltip_grade_achievement'] = "achieved grades inferior or equal to";
+$string['tooltip_grade_achievement'] = "with grades inferior or equal to";
 $string['add_task'] = "Add assessment to chart";
 $string['remove_task'] = "Remove assessment from chart";
