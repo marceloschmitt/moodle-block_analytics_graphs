@@ -130,10 +130,10 @@ $groupmembersjson = json_encode($groupmembers);
 			}
 
 			.no_student_img {
-			    width: 25px;
-			    height: 20px;
+			    width: 20px;
+			    height: 18px;
 			    vertical-align: middle;
-			    margin: 0px 0px 10px 0px;
+			    margin: 0px 0px 0px 10px;
 			}
 		</style>
 	</head>
@@ -484,9 +484,9 @@ $groupmembersjson = json_encode($groupmembers);
 			for(elem in tasks){
 				$("#tasklist_div").append("<div class='individual_task_div' id='div_task_" + tasks[elem]['id'] + "'>" + 
 										"<span class='task_name'>" + cont + " - " + tasks[elem]['itemname'] +
-										"<img src='images/exclamation_sign.png' alt='" + 
+										"<img src='images/exclamation_sign.png' title='" + 
 										<?php echo json_encode(get_string('no_student_task', 'block_analytics_graphs')); ?> +
-										"' class='no_student_img' id'img-" + tasks[elem]['id'] + "'></span>" +
+										"' class='no_student_img' id='img-" + tasks[elem]['id'] + "'></span>" +
 										"<button type='button' class='task_button deactivated' id='" +  tasks[elem]['id'] + "'>" + 
 										cont + "</button></div>");
 				document.write("<div id='" + tasks[elem]['id'] + "' class='mail_dialog' title='" + tasks[elem]['itemname'] + "'></div>");
