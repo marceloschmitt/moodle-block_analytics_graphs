@@ -481,7 +481,7 @@ $groupmembersjson = json_encode($groupmembers);
 			var active_tasks = 0;
 			var cont = 1;
 			var current_group = "-";
-			for(elem in tasks){
+			for(var elem in tasks){
 				$("#tasklist_div").append("<div class='individual_task_div' id='div_task_" + tasks[elem]['id'] + "'>" + 
 										"<span class='task_name'>" + cont + " - " + tasks[elem]['itemname'] +
 										"<img src='images/exclamation_sign.png' title='" + 
@@ -506,6 +506,11 @@ $groupmembersjson = json_encode($groupmembers);
 				var group = $(this).val();
 				if(group != current_group){
 					current_group = group;
+					for(var tid in tasks_toggle){
+						if(tasks_toggle[tid] === false){
+							$("#img-" + tid).hide();
+						}
+					}
 					make_grades_query();
 				}
 			});
