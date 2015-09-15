@@ -97,3 +97,4 @@ $string['largest_grade'] = "Highest grade";
 $string['tooltip_grade_achievement'] = "with grades inferior or equal to";
 $string['add_task'] = "Add assessment to chart";
 $string['remove_task'] = "Remove assessment from chart";
+$string['no_student_task'] = "This assessment does not have students in the selected group";

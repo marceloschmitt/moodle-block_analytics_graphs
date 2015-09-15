@@ -109,7 +109,7 @@ $groupmembersjson = json_encode($groupmembers);
 			}
 
 			.task_button{
-			    flex: 1;
+			    flex: 1.5;
 			    -webkit-box-flex: 1;
 			    height: 100%;
 			    border: 0px;
@@ -127,6 +127,13 @@ $groupmembersjson = json_encode($groupmembers);
 
 			.activated {
 			    background-color: #FCD7D7;
+			}
+
+			.no_student_img {
+			    width: 25px;
+			    height: 20px;
+			    vertical-align: middle;
+			    margin: 0px 0px 10px 0px;
 			}
 		</style>
 	</head>
@@ -252,49 +259,63 @@ $groupmembersjson = json_encode($groupmembers);
 				for(var task_i in grades_info){
 					grades_info[task_i].sort(sort_func);
 					var group_grades = current_group === "-"? grades_info[task_i] : get_group_grades(groups, grades_info[task_i]);
-					var num_grades = group_grades.length;
-					var min_grade = group_grades[0]['grade'];
-					var max_grade = group_grades[num_grades-1]['grade'];
-					var stats = median_func(group_grades);
-					var median_grade = stats.val;
-					var median_idx = stats.idx;
-					var q1_grade = null, q3_grade = null;
-					var q1_index, q3_index;
-					if(num_grades%2){
-						stats = median_func(group_grades.slice(0,Math.max(Math.floor(num_grades/2), 1)));
-						q1_grade = stats.val;
-						q1_index = stats.idx;
-						stats = median_func(group_grades.slice(Math.min(Math.floor(num_grades/2) + 1, num_grades-1),
-												Math.max(num_grades, Math.floor(num_grades/2) + 1)));
-						q3_grade = stats.val;
-						q3_index = stats.idx + Math.min(Math.floor(num_grades/2) + 1, num_grades-1);
+					if(group_grades.length > 0){
+						$('#chart_div').highcharts().xAxis[0].categories.push(taskidname[task_i]);
+						var num_grades = group_grades.length;
+						var min_grade = group_grades[0]['grade'];
+						var max_grade = group_grades[num_grades-1]['grade'];
+						var stats = median_func(group_grades);
+						var median_grade = stats.val;
+						var median_idx = stats.idx;
+						var q1_grade = null, q3_grade = null;
+						var q1_index, q3_index;
+						if(num_grades%2){
+							stats = median_func(group_grades.slice(0,Math.max(Math.floor(num_grades/2), 1)));
+							q1_grade = stats.val;
+							q1_index = stats.idx;
+							stats = median_func(group_grades.slice(Math.min(Math.floor(num_grades/2) + 1, num_grades-1),
+													Math.max(num_grades, Math.floor(num_grades/2) + 1)));
+							q3_grade = stats.val;
+							q3_index = stats.idx + Math.min(Math.floor(num_grades/2) + 1, num_grades-1);
+						}
+						else{
+							stats = median_func(group_grades.slice(0,num_grades/2));
+							q1_grade = stats.val;
+							q1_index = stats.idx;
+							stats = median_func(group_grades.slice(num_grades/2, num_grades));
+							q3_grade = stats.val;
+							q3_index = stats.idx + num_grades/2;
+						}
+						tasksinfo[task_i] = {
+							median_index : median_idx,
+							median_grade : median_grade,
+					    	q1_index : q1_index,
+					    	q1_grade : q1_grade,
+					    	q3_index : q3_index,
+					    	q3_grade : q3_grade,
+					    	grades: group_grades
+						};
+						grades_stats.push({
+						    low: min_grade,
+						    q1: q1_grade,
+						    median: median_grade,
+						    q3: q3_grade,
+						    high: max_grade,
+						    name: task_i,
+						    num_grades: num_grades
+						});
+						$("#img-" + task_i).hide();
 					}
 					else{
-						stats = median_func(group_grades.slice(0,num_grades/2));
-						q1_grade = stats.val;
-						q1_index = stats.idx;
-						stats = median_func(group_grades.slice(num_grades/2, num_grades));
-						q3_grade = stats.val;
-						q3_index = stats.idx + num_grades/2;
+						$("#" + task_i + ".task_button")
+							.removeClass("activated")
+							.addClass("deactivated")
+							.empty()
+							.append(<?php echo json_encode(get_string('add_task', 'block_analytics_graphs')); ?>);
+						$("#img-" + task_i).show();
+						active_tasks--;
+						tasks_toggle[task_i] = false;
 					}
-					tasksinfo[task_i] = {
-						median_index : median_idx,
-						median_grade : median_grade,
-				    	q1_index : q1_index,
-				    	q1_grade : q1_grade,
-				    	q3_index : q3_index,
-				    	q3_grade : q3_grade,
-				    	grades: group_grades
-					};
-					grades_stats.push({
-					    low: min_grade,
-					    q1: q1_grade,
-					    median: median_grade,
-					    q3: q3_grade,
-					    high: max_grade,
-					    name: task_i,
-					    num_grades: num_grades
-					});
 				}
 				$('#chart_div').highcharts().series[0].setData(grades_stats);
 			};
@@ -306,7 +327,6 @@ $groupmembersjson = json_encode($groupmembers);
 					for(var field in tasks_toggle){
 						if(tasks_toggle[field] === true){
 							send_data.push(field.toString());
-							$('#chart_div').highcharts().xAxis[0].categories.push(taskidname[field.toString()]);
 						}
 					}
 					$.ajax({
@@ -463,7 +483,10 @@ $groupmembersjson = json_encode($groupmembers);
 			var current_group = "-";
 			for(elem in tasks){
 				$("#tasklist_div").append("<div class='individual_task_div' id='div_task_" + tasks[elem]['id'] + "'>" + 
-										"<span class='task_name'>" + cont + " - " + tasks[elem]['itemname'] + "</span>" +
+										"<span class='task_name'>" + cont + " - " + tasks[elem]['itemname'] +
+										"<img src='images/exclamation_sign.png' alt='" + 
+										<?php echo json_encode(get_string('no_student_task', 'block_analytics_graphs')); ?> +
+										"' class='no_student_img' id'img-" + tasks[elem]['id'] + "'></span>" +
 										"<button type='button' class='task_button deactivated' id='" +  tasks[elem]['id'] + "'>" + 
 										cont + "</button></div>");
 				document.write("<div id='" + tasks[elem]['id'] + "' class='mail_dialog' title='" + tasks[elem]['itemname'] + "'></div>");
@@ -477,6 +500,7 @@ $groupmembersjson = json_encode($groupmembers);
 				cont++;
 			}
 			$(".deactivated").empty().append(<?php echo json_encode(get_string('add_task', 'block_analytics_graphs')); ?>);
+			$(".no_student_img").hide();
 			$("#chart_div").highcharts(base_chart_options);
 			$("#group_select").change(function(){
 				var group = $(this).val();

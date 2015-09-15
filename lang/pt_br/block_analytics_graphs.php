@@ -99,3 +99,4 @@ $string['largest_grade'] = "Nota mais alta";
 $string['tooltip_grade_achievement'] = "obtiveram notas menores que ou iguais a";
 $string['add_task'] = "Adicionar avaliação ao gráfico";
 $string['remove_task'] = "Remover avaliação do gráfico";
+$string['no_student_task'] = "Esta avaliação não possui estudantes no grupo selecionado";
