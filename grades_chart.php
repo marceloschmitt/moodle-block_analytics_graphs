@@ -221,8 +221,8 @@ $groupmembersjson = json_encode($groupmembers);
 				var grades_stats = [];
 				function get_group_grades(groups, students){
 					var group_grades = [];
-					for(int student_i=0, len = students.length; student_i<len; student_i++){
-						for(int member_i=0, len = groups[current_group].members.length; member_i < len; member_i++){
+					for(var student_i=0, students_len = students.length; student_i<students_len; student_i++){
+						for(var member_i=0, members_len = groups[current_group].members.length; member_i < members_len; member_i++){
 							if(students[student_i].id === groups[current_group].members[member_i]){
 								group_grades.push(students[student_i]);
 								break;
