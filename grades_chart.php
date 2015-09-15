@@ -17,6 +17,7 @@
 
 
 require_once("../../config.php");
+require("lib.php");
 require('javascriptfunctions.php');
 global $DB;
 require_once($CFG->dirroot.'/lib/moodlelib.php');
@@ -43,6 +44,9 @@ $sql = "SELECT gi.id, categoryid, fullname, itemname, gradetype, grademax, grade
         ORDER BY fullname, itemname";
 
 $result = $DB->get_records_sql($sql, array($courseid));
+
+$groupmembers = block_analytics_graphs_get_course_group_members($courseid);
+$groupmembersjson = json_encode($groupmembers);
 ?>
 
 <html>
@@ -127,6 +131,20 @@ $result = $DB->get_records_sql($sql, array($courseid));
 		</style>
 	</head>
 	<body>
+	    <?php if (count($groupmembers) > 0) : ?>
+		    <div style="margin: 20px;">
+		        <select id="group_select">
+		            <option value="-">
+		            	<?php echo json_encode(get_string('all_groups', 'block_analytics_graphs')); ?>
+		            </option>
+		        	<?php foreach ($groupmembers as $key => $value) : ?>
+		            	<option value="<?php echo $key; ?>">
+		            		<?php echo $value["name"]; ?>
+		            	</option>
+					<?php endforeach; ?>
+		        </select>
+		    </div>
+		<?php endif; ?>
 		<div id='chart_outerdiv'>
 			<div id='chart_div'></div>
 		</div>
@@ -134,7 +152,7 @@ $result = $DB->get_records_sql($sql, array($courseid));
 			<span id='tasklist_text'><h2><?php echo get_string('task_list', 'block_analytics_graphs'); ?></h2></span>
 			<div id="tasklist_div"></div>
 		</div>
-		<script>			
+		<script>
 			function mail_dialog(task_name, quartile){
 				var taskgrades = tasksinfo[tasknameid[task_name]];
 		        var index;
@@ -197,6 +215,119 @@ $result = $DB->get_records_sql($sql, array($courseid));
 	                    }
                 	});
             	});
+			};
+
+			function update_chart(grades_info){
+				var grades_stats = [];
+				function get_group_grades(groups, students){
+					var group_grades = [];
+					for(int student_i=0, len = students.length; student_i<len; student_i++){
+						for(int member_i=0, len = groups[current_group].members.length; member_i < len; member_i++){
+							if(students[student_i].id === groups[current_group].members[member_i]){
+								group_grades.push(students[student_i]);
+								break;
+							}
+						}
+					}
+					return group_grades;
+				};
+				function sort_func(a, b){
+					return a['grade'] - b['grade'];
+				};
+				function median_func(data){
+					var data_size = data.length;
+					if(data_size % 2){
+						return {
+							idx: Math.floor(data_size/2),
+							val: data[Math.floor(data_size/2)]['grade']
+						};
+					}
+					else{
+						return {
+							idx: (data_size-1)/2,
+							val: 0.5 * (data[data_size/2]['grade'] + data[data_size/2 - 1]['grade'])
+						};
+					}
+				};
+				for(var task_i in grades_info){
+					grades_info[task_i].sort(sort_func);
+					var group_grades;
+					if(current_group != "-"){
+						group_grades = get_group_grades(groups, grades_info[task_i]);
+					}
+					else{
+						group_grades = grades_info[task_i];
+					}
+					var num_grades = group_grades.length;
+					var min_grade = group_grades[0]['grade'];
+					var max_grade = group_grades[num_grades-1]['grade'];
+					var stats = median_func(group_grades);
+					var median_grade = stats.val;
+					var median_idx = stats.idx;
+					var q1_grade = null, q3_grade = null;
+					var q1_index, q3_index;
+					if(num_grades%2){
+						stats = median_func(group_grades.slice(0,Math.max(Math.floor(num_grades/2), 1)));
+						q1_grade = stats.val;
+						q1_index = stats.idx;
+						stats = median_func(group_grades.slice(Math.min(Math.floor(num_grades/2) + 1, num_grades-1),
+												Math.max(num_grades, Math.floor(num_grades/2) + 1)));
+						q3_grade = stats.val;
+						q3_index = stats.idx + Math.min(Math.floor(num_grades/2) + 1, num_grades-1);
+					}
+					else{
+						stats = median_func(group_grades.slice(0,num_grades/2));
+						q1_grade = stats.val;
+						q1_index = stats.idx;
+						stats = median_func(group_grades.slice(num_grades/2, num_grades));
+						q3_grade = stats.val;
+						q3_index = stats.idx + num_grades/2;
+					}
+					tasksinfo[task_i] = {
+						median_index : median_idx,
+						median_grade : median_grade,
+				    	q1_index : q1_index,
+				    	q1_grade : q1_grade,
+				    	q3_index : q3_index,
+				    	q3_grade : q3_grade,
+				    	grades: group_grades
+					};
+					grades_stats.push({
+					    low: min_grade,
+					    q1: q1_grade,
+					    median: median_grade,
+					    q3: q3_grade,
+					    high: max_grade,
+					    name: task_i,
+					    num_grades: num_grades
+					});
+				}
+				$('#chart_div').highcharts().series[0].setData(grades_stats);
+			};
+
+			function make_grades_query(){
+				$('#chart_div').highcharts().xAxis[0].categories = [];
+				if(active_tasks > 0){
+					for(var field in tasks_toggle){
+						if(tasks_toggle[field] === true){
+							send_data.push(field.toString());
+							$('#chart_div').highcharts().xAxis[0].categories.push(taskidname[field.toString()]);
+						}
+					}
+					$.ajax({
+						type: "POST",
+						dataType: "JSON",
+						url: "query_grades.php",
+						data: {
+							"form_data": send_data,
+							"course_id": <?php echo json_encode($courseid); ?>
+						},
+						success: update_chart
+					});
+				}
+				else{
+					$('#chart_div').highcharts().series[0].setData([]);
+				}
 			};
 
 			var base_chart_options = {
@@ -326,6 +457,7 @@ $result = $DB->get_records_sql($sql, array($courseid));
 		    };
 
 			var tasks = <?php echo json_encode($result); ?>;
+			var groups = <?php echo $groupmembersjson; ?>;
 			var tasksinfo = {};
 			var totaltasks = tasks.length;
 			var tasks_toggle = {};
@@ -333,6 +465,7 @@ $result = $DB->get_records_sql($sql, array($courseid));
 			var tasknameid = {};
 			var active_tasks = 0;
 			var cont = 1;
+			var current_group = "-";
 			for(elem in tasks){
 				$("#tasklist_div").append("<div class='individual_task_div' id='div_task_" + tasks[elem]['id'] + "'>" + 
 										"<span class='task_name'>" + cont + " - " + tasks[elem]['itemname'] + "</span>" +
@@ -350,6 +483,13 @@ $result = $DB->get_records_sql($sql, array($courseid));
 			}
 			$(".deactivated").empty().append(<?php echo json_encode(get_string('add_task', 'block_analytics_graphs')); ?>);
 			$("#chart_div").highcharts(base_chart_options);
+			$("#group_select").change(function(){
+				var group = $(this).val();
+				if(group != current_group){
+					current_group = group;
+					make_grades_query();
+				}
+			});
 			$('.task_button').click(function(){
 				var task_name = this.id;
 				var send_data = [];
@@ -367,95 +507,7 @@ $result = $DB->get_records_sql($sql, array($courseid));
 					$(this).empty().append(<?php echo json_encode(get_string('remove_task', 'block_analytics_graphs')); ?>);
 					active_tasks ++;
 				}
-				$('#chart_div').highcharts().xAxis[0].categories = [];
-				if(active_tasks > 0){
-					for(var field in tasks_toggle){
-						if(tasks_toggle[field] === true){
-							send_data.push(field.toString());
-							$('#chart_div').highcharts().xAxis[0].categories.push(taskidname[field.toString()]);
-						}
-					}
-					$.ajax({
-						type: "POST",
-						dataType: "JSON",
-						url: "query_grades.php",
-						data: {
-							"form_data": send_data,
-							"course_id": <?php echo json_encode($courseid); ?>
-						},
-						success: function(grades_info){
-							var grades_stats = [];
-							function sort_func(a, b){
-								return a['grade'] - b['grade'];
-							};
-							function median_func(data){
-								var data_size = data.length;
-								if(data_size % 2){
-									return {
-										idx: Math.floor(data_size/2),
-										val: data[Math.floor(data_size/2)]['grade']
-									};
-								}
-								else{
-									return {
-										idx: (data_size-1)/2,
-										val: 0.5 * (data[data_size/2]['grade'] + data[data_size/2 - 1]['grade'])
-									};
-								}
-							};
-							for(var task_i in grades_info){
-								grades_info[task_i].sort(sort_func);
-								var num_grades = grades_info[task_i].length;
-								var min_grade = grades_info[task_i][0]['grade'];
-								var max_grade = grades_info[task_i][num_grades-1]['grade'];
-								var stats = median_func(grades_info[task_i]);
-								var median_grade = stats.val;
-								var median_idx = stats.idx;
-								var q1_grade = null, q3_grade = null;
-								var q1_index, q3_index;
-								if(num_grades%2){
-									stats = median_func(grades_info[task_i].slice(0,Math.max(Math.floor(num_grades/2), 1)));
-									q1_grade = stats.val;
-									q1_index = stats.idx;
-									stats = median_func(grades_info[task_i].slice(Math.min(Math.floor(num_grades/2) + 1, num_grades-1),
-															Math.max(num_grades, Math.floor(num_grades/2) + 1)));
-									q3_grade = stats.val;
-									q3_index = stats.idx + Math.min(Math.floor(num_grades/2) + 1, num_grades-1);
-								}
-								else{
-									stats = median_func(grades_info[task_i].slice(0,num_grades/2));
-									q1_grade = stats.val;
-									q1_index = stats.idx;
-									stats = median_func(grades_info[task_i].slice(num_grades/2, num_grades));
-									q3_grade = stats.val;
-									q3_index = stats.idx + num_grades/2;
-								}
-								tasksinfo[task_i] = {
-									median_index : median_idx,
-									median_grade : median_grade,
-							    	q1_index : q1_index,
-							    	q1_grade : q1_grade,
-							    	q3_index : q3_index,
-							    	q3_grade : q3_grade,
-							    	grades: grades_info[task_i]
-								};
-								grades_stats.push({
-								    low: min_grade,
-								    q1: q1_grade,
-								    median: median_grade,
-								    q3: q3_grade,
-								    high: max_grade,
-								    name: task_i,
-								    num_grades: num_grades
-								});
-							}
-							$('#chart_div').highcharts().series[0].setData(grades_stats);
-						}
-					});
-				}
-				else{
-					$('#chart_div').highcharts().series[0].setData([]);
-				}
+				make_grades_query();
 				return false;
 			});			
 		</script>
