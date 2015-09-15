@@ -220,16 +220,16 @@ $groupmembersjson = json_encode($groupmembers);
 			function update_chart(grades_info){
 				var grades_stats = [];
 				function get_group_grades(groups, students){
-					var group_grades = [];
+					var grades = [];
 					for(var student_i=0, students_len = students.length; student_i<students_len; student_i++){
 						for(var member_i=0, members_len = groups[current_group].members.length; member_i < members_len; member_i++){
-							if(students[student_i].id === groups[current_group].members[member_i]){
-								group_grades.push(students[student_i]);
+							if(students[student_i].userid === groups[current_group].members[member_i]){
+								grades.push(students[student_i]);
 								break;
 							}
 						}
 					}
-					return group_grades;
+					return grades;
 				};
 				function sort_func(a, b){
 					return a['grade'] - b['grade'];
@@ -251,13 +251,7 @@ $groupmembersjson = json_encode($groupmembers);
 				};
 				for(var task_i in grades_info){
 					grades_info[task_i].sort(sort_func);
-					var group_grades;
-					if(current_group != "-"){
-						group_grades = get_group_grades(groups, grades_info[task_i]);
-					}
-					else{
-						group_grades = grades_info[task_i];
-					}
+					var group_grades = current_group === "-"? grades_info[task_i] : get_group_grades(groups, grades_info[task_i]);
 					var num_grades = group_grades.length;
 					var min_grade = group_grades[0]['grade'];
 					var max_grade = group_grades[num_grades-1]['grade'];
@@ -306,6 +300,7 @@ $groupmembersjson = json_encode($groupmembers);
 			};
 
 			function make_grades_query(){
+				var send_data = [];
 				$('#chart_div').highcharts().xAxis[0].categories = [];
 				if(active_tasks > 0){
 					for(var field in tasks_toggle){
@@ -492,7 +487,6 @@ $groupmembersjson = json_encode($groupmembers);
 			});
 			$('.task_button').click(function(){
 				var task_name = this.id;
-				var send_data = [];
 				if(tasks_toggle[task_name] === true){
 					tasks_toggle[task_name] = false;
 					$(this).removeClass("activated");
