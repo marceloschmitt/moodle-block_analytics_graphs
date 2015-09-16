@@ -88,6 +88,30 @@ $groupmembersjson = json_encode($groupmembers);
 			    margin: 0px auto 0px auto;
 			}
 
+			#tasklist_buttons {
+			    display: -webkit-box;
+			    display: -webkit-flex;
+			    display: flex;
+			    flex-direction: row;
+			    -webkit-flex-direction: row;
+			    -webkit-box-direction: row;
+			    align-items: center;
+			}
+
+			#tasklist_text {
+			    flex: 5;
+			    -webkit-box-flex: 5;
+			}
+
+			#special_buttons {
+			    flex: 1.5;
+			    -webkit-box-flex: 1.5;
+			}
+
+			.sp_button {
+			    width: 47%;
+			}
+
 			#tasklist_div {
 			    height: 85%;
 			    width: 100%;
@@ -110,7 +134,7 @@ $groupmembersjson = json_encode($groupmembers);
 
 			.task_button{
 			    flex: 1.5;
-			    -webkit-box-flex: 1;
+			    -webkit-box-flex: 1.5;
 			    height: 100%;
 			    border: 0px;
 			}
@@ -156,7 +180,17 @@ $groupmembersjson = json_encode($groupmembers);
 			<div id='chart_div'></div>
 		</div>
 		<div id="tasklist_outerdiv">
-			<span id='tasklist_text'><h2><?php echo get_string('task_list', 'block_analytics_graphs'); ?></h2></span>
+			<div id='tasklist_buttons'>
+				<span id='tasklist_text'><h2><?php echo get_string('task_list', 'block_analytics_graphs'); ?></h2></span>
+				<div id='special_buttons'>
+					<button type='button' class='sp_button' id='add_all'>
+						<?php echo get_string('add_all', 'block_analytics_graphs'); ?>
+					</button>
+					<button type='button' class='sp_button' id='remove_all'>
+						<?php echo get_string('remove_all', 'block_analytics_graphs'); ?>
+					</button>
+				</div>
+			</div>
 			<div id="tasklist_div"></div>
 		</div>
 		<script>
@@ -511,6 +545,40 @@ $groupmembersjson = json_encode($groupmembers);
 							$("#img-" + tid).hide();
 						}
 					}
+					make_grades_query();
+				}
+			});
+			$("#add_all.sp_button").click(function(){
+				var task_added = false;
+				for(var task_id in tasks_toggle){
+					if(tasks_toggle[task_id] === false){
+						tasks_toggle[task_id] = true;
+						active_tasks++;
+						$("#" + task_id + ".task_button").removeClass("deactivated");
+						$("#" + task_id + ".task_button").addClass("activated");
+						$("#" + task_id + ".task_button").empty()
+							.append(<?php echo json_encode(get_string('remove_task', 'block_analytics_graphs')); ?>);
+						task_added = true;
+					}
+				}
+				if(task_added){
+					make_grades_query();
+				}
+			});
+			$("#remove_all.sp_button").click(function(){
+				var task_removed = false;
+				for(var task_id in tasks_toggle){
+					if(tasks_toggle[task_id] === true){
+						tasks_toggle[task_id] = false;
+						active_tasks--;
+						$("#" + task_id + ".task_button").removeClass("activated");
+						$("#" + task_id + ".task_button").addClass("deactivated");
+						$("#" + task_id + ".task_button").empty()
+							.append(<?php echo json_encode(get_string('add_task', 'block_analytics_graphs')); ?>);
+						task_removed = true;
+					}
+				}
+				if(task_removed){
 					make_grades_query();
 				}
 			});

@@ -98,3 +98,5 @@ $string['tooltip_grade_achievement'] = "with grades inferior or equal to";
 $string['add_task'] = "Add assessment to chart";
 $string['remove_task'] = "Remove assessment from chart";
 $string['no_student_task'] = "This assessment does not have students in the selected group";
+$string['add_all'] = "Add all";
+$string['remove_all'] = "Remove all";
