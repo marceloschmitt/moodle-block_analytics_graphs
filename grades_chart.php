@@ -581,6 +581,7 @@ $groupmembersjson = json_encode($groupmembers);
 				if(task_removed){
 					make_grades_query();
 				}
+				$(".no_student_img").hide();
 			});
 			$('.task_button').click(function(){
 				var task_name = this.id;
