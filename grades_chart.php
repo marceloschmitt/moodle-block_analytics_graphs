@@ -33,7 +33,6 @@ $PAGE->set_context(context_course::instance($courseid));
 $PAGE->set_pagelayout('print');
 echo $OUTPUT->header();
 
-
 $sql = "SELECT gi.id, categoryid, fullname, itemname, gradetype, grademax, grademin
 			FROM {grade_categories} gc
 			LEFT JOIN {grade_items} gi ON gc.courseid = gi.courseid AND gc.id = gi.categoryid
@@ -172,12 +171,10 @@ $groupmembersjson = json_encode($groupmembers);
 		            	<option value="<?php echo $key; ?>">
 		            		<?php echo $value["name"]; ?>
 		            	</option>
-					<?php endforeach;
-					?>
+					<?php endforeach;?>
 		        </select>
 		    </div>
-		<?php endif;
-		?>
+		<?php endif;?>
 		<div id='chart_outerdiv'>
 			<div id='chart_div'></div>
 		</div>

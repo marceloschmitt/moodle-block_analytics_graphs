@@ -121,7 +121,7 @@ class graph_submission {
                                 block_analytics_graphs_subtract_student_arrays($arrayofstudents,
                                 $this->statistics[$counter]['latesubmissions']);
                         } else {
-                            $this->statistics[$counter]['no_submissions'] = 
+                            $this->statistics[$counter]['no_submissions'] =
                                 block_analytics_graphs_subtract_student_arrays(
                                 block_analytics_graphs_subtract_student_arrays($arrayofstudents,
                                     $this->statistics[$counter]['in_time_submissions']),
@@ -161,18 +161,18 @@ class graph_submission {
             if ($this->statistics[$counter]['numberofnosubmissions'] == $numberofstudents) {
                 $this->statistics[$counter]['no_submissions'] = $arrayofstudents;
             } else if ($numberoflatesubmissions == 0) {
-                $this->statistics[$counter]['no_submissions'] = 
+                $this->statistics[$counter]['no_submissions'] =
                     block_analytics_graphs_subtract_student_arrays($arrayofstudents,
                     $this->statistics[$counter]['in_time_submissions']);
             } else if ($numberofintimesubmissions == 0) {
-                $this->statistics[$counter]['no_submissions'] = 
+                $this->statistics[$counter]['no_submissions'] =
                     block_analytics_graphs_subtract_student_arrays($arrayofstudents,
                     $this->statistics[$counter]['latesubmissions']);
             } else {
                 $this->statistics[$counter]['no_submissions'] =
                     block_analytics_graphs_subtract_student_arrays(
                     block_analytics_graphs_subtract_student_arrays($arrayofstudents,
-                        $this->statistics[$counter]['in_time_submissions']), 
+                        $this->statistics[$counter]['in_time_submissions']),
                     $this->statistics[$counter]['latesubmissions']);
             }
         }

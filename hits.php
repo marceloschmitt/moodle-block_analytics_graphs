@@ -802,10 +802,10 @@ thead th {
                         }
                     }
                     
-                    material_data = [[<?php echo json_encode(get_string('access', 
+                    material_data = [[<?php echo json_encode(get_string('access',
                                         'block_analytics_graphs'))?>, 
                                         material_names["accessed"].length],
-                                     [<?php echo json_encode(get_string('no_access', 
+                                     [<?php echo json_encode(get_string('no_access',
                                         'block_analytics_graphs'))?>,                                         
                                         material_names["not_accessed"].length]];
 
