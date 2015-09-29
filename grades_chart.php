@@ -27,12 +27,12 @@ require_login($courseid);
 $context = context_course::instance($courseid);
 require_capability('block/analytics_graphs:viewpages', $context);
 
-/*
+
 $PAGE->set_url(new moodle_url('/blocks/analytics_graphs/grades_chart.php', array('id' => $courseid)));
 $PAGE->set_context(context_course::instance($courseid));
 $PAGE->set_pagelayout('print');
 echo $OUTPUT->header();
-*/
+
 
 $sql = "SELECT gi.id, categoryid, fullname, itemname, gradetype, grademax, grademin
 			FROM {grade_categories} gc
@@ -168,14 +168,16 @@ $groupmembersjson = json_encode($groupmembers);
 		            <option value="-">
 		            	<?php echo json_encode(get_string('all_groups', 'block_analytics_graphs')); ?>
 		            </option>
-		        	<?php foreach ($groupmembers as $key => $value) : ?>
+		        	<?php   foreach ($groupmembers as $key => $value) : ?>
 		            	<option value="<?php echo $key; ?>">
 		            		<?php echo $value["name"]; ?>
 		            	</option>
-					<?php endforeach; ?>
+					<?php endforeach;
+					?>
 		        </select>
 		    </div>
-		<?php endif; ?>
+		<?php endif;
+		?>
 		<div id='chart_outerdiv'>
 			<div id='chart_div'></div>
 		</div>

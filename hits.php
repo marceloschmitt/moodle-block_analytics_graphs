@@ -567,7 +567,7 @@ thead th {
         <div style="margin: 20px;">
             <select id="group_select">
                 <option value="-"><?php  echo json_encode(get_string('all_groups', 'block_analytics_graphs'));?></option>
-            <?php   foreach ($groupmembers as $key => $value) { ?>
+            <?php    foreach ($groupmembers as $key => $value) { ?>
                 <option value="<?php echo $key; ?>"><?php echo $value["name"]; ?></option>
 <?php
 }
@@ -802,9 +802,11 @@ thead th {
                         }
                     }
                     
-                    material_data = [[<?php echo json_encode(get_string('access', 'block_analytics_graphs'))?>, 
+                    material_data = [[<?php echo json_encode(get_string('access', 
+                                        'block_analytics_graphs'))?>, 
                                         material_names["accessed"].length],
-                                     [<?php echo json_encode(get_string('no_access', 'block_analytics_graphs'))?>,                                         
+                                     [<?php echo json_encode(get_string('no_access', 
+                                        'block_analytics_graphs'))?>,                                         
                                         material_names["not_accessed"].length]];
 
                     assign_data = [[ONTIMESTR, assign_status["on_time"].length],
