@@ -27,6 +27,15 @@ require_login($courseid);
 $context = context_course::instance($courseid);
 require_capability('block/analytics_graphs:viewpages', $context);
 
+/* Log */
+$event = \block_analytics_graphs\event\block_analytics_graphs_event_view_graph::create(array(
+    'objectid' => $courseid,
+    'context' => $context,
+    'other' => "grades_chart.php",
+));
+$event->trigger();
+
+
 /*
 $PAGE->set_url(new moodle_url('/blocks/analytics_graphs/grades_chart.php', array('id' => $courseid)));
 $PAGE->set_context(context_course::instance($courseid));
