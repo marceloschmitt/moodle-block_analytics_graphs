@@ -18,6 +18,7 @@
 
 
 $string['analytics_graphs:addinstance'] = 'Add a new AG block';
+$string['nalytics_graphs:bemonitored'] = 'Usuário é monitorado na disciplina';
 $string['analytics_graphs:myaddinstance'] = 'Add a new AG block to the My Moodle page';
 $string['analytics_graphs:viewpages'] = 'Visualiza gráficos';
 
@@ -28,7 +29,6 @@ $string['access'] = 'Acessaram';
 $string['access_to_contents'] = 'Materiais acessados';
 $string['all_groups'] = 'Todos os grupos';
 $string['begin_date'] = 'Data de início';
-$string['bemonitored'] = 'Usuário é monitorado na disciplina';
 $string['contents'] = 'Material';
 $string['course'] = 'Disciplina';
 $string['date_sent'] = "Data de envio";
