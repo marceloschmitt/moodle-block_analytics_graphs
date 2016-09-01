@@ -28,6 +28,7 @@ $string['access'] = 'Acessaram';
 $string['access_to_contents'] = 'Materiais acessados';
 $string['all_groups'] = 'Todos os grupos';
 $string['begin_date'] = 'Data de início';
+$string['bemonitored'] = 'Usuário é monitorado na disciplina';
 $string['contents'] = 'Material';
 $string['course'] = 'Disciplina';
 $string['date_sent'] = "Data de envio";
