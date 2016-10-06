@@ -110,7 +110,7 @@ function block_analytics_graphs_get_resource_url_access($course, $estudantes, $l
                     LEFT JOIN {url} as u ON cm.instance = u.id
                     LEFT JOIN {page} as p ON cm.instance = p.id
                     LEFT JOIN {user} as usr ON usr.id = temp.userid
-                    ORDER BY cs.section, cs.sequence";
+                    ORDER BY cs.section";
     } else {
         $sql = "SELECT temp.id+(COALESCE(temp.userid,1)*1000000)as id, temp.id as ident, cs.section, m.name as tipo,
                     r.name as resource, u.name as url, p.name as page, temp.userid, usr.firstname,
