@@ -35,7 +35,8 @@ if ($numberofstudents == 0) {
 $result = block_analytics_graphs_get_assign_submission($course, $students);
 $numberoftasks = count($result);
 if ($numberoftasks == 0) {
-    error(get_string('no_graph', 'block_analytics_graphs'));
+    echo(get_string('no_graph', 'block_analytics_graphs'));
+    exit;
 }
 $submissionsgraphoptions = $submissionsgraph->create_graph($result, $students);
 

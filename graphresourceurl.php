@@ -45,7 +45,8 @@ foreach ($students as $tuple) {
 $result = block_analytics_graphs_get_resource_url_access($course, $students, $legacy);
 $numberofresources = count($result);
 if ($numberofresources == 0) {
-    error(get_string('no_graph', 'block_analytics_graphs'));
+    echo(get_string('no_graph', 'block_analytics_graphs'));
+    exit;
 }
 
 $counter = 0;
