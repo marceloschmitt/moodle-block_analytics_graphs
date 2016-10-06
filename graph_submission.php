@@ -59,7 +59,8 @@ class graph_submission {
         }
         $numberofstudents = count($students);
         if ($numberofstudents == 0) {
-            error(get_string('no_students', 'block_analytics_graphs'));
+            echo(get_string('no_students', 'block_analytics_graphs'));
+            exit;
         }
         foreach ($students as $tuple) {
             $arrayofstudents[] = array('userid' => $tuple->id ,

@@ -29,7 +29,8 @@ $submissionsgraph = new graph_submission($course, $title);
 $students = block_analytics_graphs_get_students($course);
 $numberofstudents = count($students);
 if ($numberofstudents == 0) {
-    error(get_string('no_students', 'block_analytics_graphs'));
+    echo(get_string('no_students', 'block_analytics_graphs'));
+    exit;
 }
 $result = block_analytics_graphs_get_assign_submission($course, $students);
 $numberoftasks = count($result);
