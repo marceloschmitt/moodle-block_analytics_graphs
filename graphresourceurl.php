@@ -156,11 +156,6 @@ $event->trigger();
         <script src="externalref/no-data-to-display.js"></script>
         <script src="externalref/exporting.js"></script> 
 
-        <style>
-            .ui-dialog {
-                position: fixed;
-            }
-        </style>
 
 
         <script type="text/javascript">
@@ -327,18 +322,8 @@ foreach ($numberofresourcesintopic as $topico => $numberoftopics) {
                                         var group_id = $( "#group_select" ).val();
                                         if(group_id !== undefined && group_id != "-"){//algum grupo foi selecionado
                                             $("#" + nome_conteudo + "-group-"+group_id).dialog("open");
-                                            $("#" + nome_conteudo + "-group-"+group_id).dialog("option", "position", {
-                                                my:"center top",
-                                                at:"center top+" + 10,
-                                                of:window
-                                            });
                                         }else{
-                                            $("#" + nome_conteudo).dialog("open"); 
-                                            $("#" + nome_conteudo).dialog("option", "position", {
-                                                my:"center top",
-                                                at:"center top+" + 10,
-                                                of:window
-                                            });
+                                            $("#" + nome_conteudo).dialog("open");    
                                         }
                                         
                                 }
