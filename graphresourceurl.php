@@ -33,7 +33,8 @@ $students = block_analytics_graphs_get_students($course);
 
 $numberofstudents = count($students);
 if ($numberofstudents == 0) {
-    error(get_string('no_students', 'block_analytics_graphs'));
+    echo(get_string('no_students', 'block_analytics_graphs'));
+    exit;
 }
 
 foreach ($students as $tuple) {
@@ -44,7 +45,8 @@ foreach ($students as $tuple) {
 $result = block_analytics_graphs_get_resource_url_access($course, $students, $legacy);
 $numberofresources = count($result);
 if ($numberofresources == 0) {
-    error(get_string('no_graph', 'block_analytics_graphs'));
+    echo(get_string('no_graph', 'block_analytics_graphs'));
+    exit;
 }
 
 $counter = 0;
@@ -386,7 +388,7 @@ foreach ($numberofresourcesintopic as $topico => $numberoftopics) {
 <?php 
 }
 ?>
-        <div id="container" style="min-width: 310px; min-width: 800px; min-height: 600px; margin: 0 auto"></div>
+        <div id="container" style="min-width: 800px; height:<?php echo ($counter+1)*50+180;?>; margin: 0 auto"></div>
         <script>
 
             $.each(geral, function(index, value) {
