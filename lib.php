@@ -90,11 +90,41 @@ function block_analytics_graphs_get_resource_url_access($course, $estudantes, $l
     $url = $DB->get_record('modules', array('name' => 'url'), 'id');
     $page = $DB->get_record('modules', array('name' => 'page'), 'id');
     $startdate = $COURSE->startdate;
+    
+    /* Temp table to order */
+    $params = array($course);
+    $sql = "SELECT id, section, sequence
+            FROM {course_sections} as cs
+            WHERE course  = ? AND sequence <> ''
+            ORDER BY section";
+    $result = $DB->get_records_sql($sql, $params);
+
+    $dbman = $DB->get_manager();
+    $table = new xmldb_table('tmp_analytics_graphs');
+    $table->add_field('id', XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+    $table->add_field('section', XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, null);
+    $table->add_field('module', XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, null);
+    $table->add_field('sequence', XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, null);
+    $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
+    $dbman->create_temp_table($table);
+    $sequence = 0;
+    foreach($result as $tuple) {
+        $modules = explode(',', $tuple->sequence);
+        foreach($modules as $module) {
+                               $record = new stdClass();
+                    $record->section = $tuple->section;
+                    $record->module = $module;
+                    $record->sequence = $sequence++;
+                    $DB->insert_record('tmp_analytics_graphs', $record, false);
+            }
+    }
+           
+                              
     $params = array_merge(array($startdate), $inparams, array($course, $resource->id, $url->id, $page->id));
     if (!$legacy) {
-        $sql = "SELECT temp.id+(COALESCE(temp.userid,1)*1000000)as id, temp.id as ident, cs.section, m.name as tipo,
+        $sql = "SELECT temp.id+(COALESCE(temp.userid,1)*1000000)as id, temp.id as ident, tag.section, m.name as tipo,
                     r.name as resource, u.name as url, p.name as page, temp.userid, usr.firstname,
-                    usr.lastname, usr.email, temp.acessos
+                    usr.lastname, usr.email, temp.acessos, tag.sequence
                     FROM (
                         SELECT cm.id, log.userid, count(*) as acessos
                         FROM {course_modules} as cm
@@ -104,13 +134,13 @@ function block_analytics_graphs_get_resource_url_access($course, $estudantes, $l
                         GROUP BY cm.id, log.userid
                         ) as temp
                     LEFT JOIN {course_modules} as cm ON temp.id = cm.id
-                    LEFT JOIN {course_sections} as cs ON cm.section = cs.id
                     LEFT JOIN {modules} as m ON cm.module = m.id
                     LEFT JOIN {resource} as r ON cm.instance = r.id
                     LEFT JOIN {url} as u ON cm.instance = u.id
                     LEFT JOIN {page} as p ON cm.instance = p.id
                     LEFT JOIN {user} as usr ON usr.id = temp.userid
-                    ORDER BY cs.section";
+                    LEFT JOIN {tmp_analytics_graphs} as tag ON tag.module = cm.id
+                    ORDER BY tag.sequence";
     } else {
         $sql = "SELECT temp.id+(COALESCE(temp.userid,1)*1000000)as id, temp.id as ident, cs.section, m.name as tipo,
                     r.name as resource, u.name as url, p.name as page, temp.userid, usr.firstname,
@@ -133,6 +163,7 @@ function block_analytics_graphs_get_resource_url_access($course, $estudantes, $l
                     ORDER BY cs.section, m.name, r.name, u.name, p.name";
     }
     $resultado = $DB->get_records_sql($sql, $params);
+    $dbman->drop_table($table);
     return($resultado);
 }
 
