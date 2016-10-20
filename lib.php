@@ -423,7 +423,7 @@ function block_analytics_graphs_get_user_assign_submission($course, $student) {
 function block_analytics_graphs_extend_navigation_course($navigation, $course, $context) {
     global $CFG;
     $reports = $navigation->find('coursereports', navigation_node::TYPE_CONTAINER);
-    if (has_capability('block/analytics_graphs:viewpages', $context)) {
+    if (has_capability('block/analytics_graphs:viewpages', $context) && $reports) {
         //$url = new moodle_url('/report/forumgraph/index.php', array('course'=>$course->id));
         $report_analytics_graphs = $reports->add(get_string('pluginname', 'block_analytics_graphs'), '#',
             navigation_node::TYPE_SETTING, null, 'analytics_graphs', new pix_icon('i/report', ''));
