@@ -425,7 +425,7 @@ function block_analytics_graphs_extend_navigation_course($navigation, $course, $
     $reports = $navigation->find('coursereports', navigation_node::TYPE_CONTAINER);
     if (has_capability('block/analytics_graphs:viewpages', $context)) {
         //$url = new moodle_url('/report/forumgraph/index.php', array('course'=>$course->id));
-        $report_analytics_graphs = $reports->add(get_string('pluginname', 'block_analytics_graphs'), '',
+        $report_analytics_graphs = $reports->add(get_string('pluginname', 'block_analytics_graphs'), '#',
             navigation_node::TYPE_SETTING, null, 'analytics_graphs', new pix_icon('i/report', ''));
 
         $url = new moodle_url($CFG->wwwroot.'/blocks/analytics_graphs/grades_chart.php', array('id'=>$course->id));
