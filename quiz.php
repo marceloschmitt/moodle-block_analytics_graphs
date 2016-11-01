@@ -21,12 +21,6 @@ require('lib.php');
 
 $course = required_param('id', PARAM_INT);
 
-/* Access control */
-require_login($course);
-$context = context_course::instance($course);
-require_capability('block/analytics_graphs:viewpages', $context);
-
-
 $title = get_string('submissions_quiz', 'block_analytics_graphs');
 $submissionsgraph = new graph_submission($course, $title);
 

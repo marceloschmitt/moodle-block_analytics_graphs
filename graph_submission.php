@@ -38,6 +38,11 @@ class graph_submission {
         $courseparams = get_course($course);
         $this->startdate = $courseparams->startdate;
         $this->coursename = get_string('course', 'block_analytics_graphs') . ": " . $courseparams->fullname;
+        
+        $PAGE->set_url(new moodle_url('/blocks/analytics_graphs/graphresourceurl.php', array('id' => $course, 'legacy' => 0)));
+        $PAGE->set_context(context_course::instance($course));
+        $PAGE->set_pagelayout('print');
+        echo $OUTPUT->header();
     }
 
     public function get_course() {
