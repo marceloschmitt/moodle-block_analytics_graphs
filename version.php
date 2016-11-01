@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 
-
+defined('MOODLE_INTERNAL') || die();
 $plugin->version = 2016102101;  // YYYYMMDDHH (year, month, day, 24-hr time).
 $plugin->requires = 2015051100; // YYYYMMDDHH (This is the release version for Moodle 2.9).
 $plugin->maturity = MATURITY_STABLE;
