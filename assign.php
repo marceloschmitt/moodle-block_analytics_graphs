@@ -22,6 +22,11 @@ require('lib.php');
 
 $course = required_param('id', PARAM_INT);
 
+$PAGE->set_url(new moodle_url('/blocks/analytics_graphs/assign.php', array('id' => $course)));
+$PAGE->set_context(context_course::instance($course));
+$PAGE->set_pagelayout('print');
+echo $OUTPUT->header();
+
 $title = get_string('submissions_assign', 'block_analytics_graphs');
 $submissionsgraph = new graph_submission($course, $title);
 
