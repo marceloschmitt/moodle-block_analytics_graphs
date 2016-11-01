@@ -37,14 +37,13 @@ if ($numberoftasks == 0) {
     echo(get_string('no_graph', 'block_analytics_graphs'));
     exit;
 }
-
-        
-        $PAGE->set_url(new moodle_url('/blocks/analytics_graphs/graphresourceurl.php', array('id' => $course, 'legacy' => 0)));
-        $PAGE->set_context(context_course::instance($course));
-        $PAGE->set_pagelayout('print');
-        echo $OUTPUT->header();
         
 $submissionsgraphoptions = $submissionsgraph->create_graph($result, $students);
+
+$PAGE->set_url(new moodle_url('/blocks/analytics_graphs/quiz.php', array('id' => $course)));
+$PAGE->set_context(context_course::instance($course));
+$PAGE->set_pagelayout('print');
+echo $OUTPUT->header();
 
 /* Discover groups and members */
 $groupmembers = block_analytics_graphs_get_course_group_members($course);
