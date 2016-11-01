@@ -21,6 +21,16 @@ require('lib.php');
 
 $course = required_param('id', PARAM_INT);
 
+/* Access control */
+require_login($course);
+$context = context_course::instance($course);
+require_capability('block/analytics_graphs:viewpages', $context);
+
+$PAGE->set_url(new moodle_url('/blocks/analytics_graphs/quiz.php', array('id' => $course)));
+$PAGE->set_context(context_course::instance($course));
+$PAGE->set_pagelayout('print');
+echo $OUTPUT->header();
+
 $title = get_string('submissions_quiz', 'block_analytics_graphs');
 $submissionsgraph = new graph_submission($course, $title);
 
