@@ -14,6 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+defined('MOODLE_INTERNAL') || die();
 
 function xmldb_block_analytics_graphs_upgrade($oldversion, $block) {
     global $CFG, $DB;

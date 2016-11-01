@@ -162,11 +162,11 @@ defined('MOODLE_INTERNAL') || die();
             <select id="group_select">
                 <option value="-"><?php  echo json_encode(get_string('all_groups', 'block_analytics_graphs'));?></option>
 <?php
-    foreach ($groupmembers as $key => $value) {
+foreach ($groupmembers as $key => $value) {
 ?>
-                    <option value="<?php echo $key; ?>"><?php echo $value["name"]; ?></option>
+    <option value="<?php echo $key; ?>"><?php echo $value["name"]; ?></option>
 <?php
-    }
+}
 ?>
             </select>
         </div>
