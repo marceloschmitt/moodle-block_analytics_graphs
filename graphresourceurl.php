@@ -64,9 +64,18 @@ foreach ($result as $tuple) {
                 $statistics[$counter]['material'] = $tuple->resource;
         } else if ($tuple->tipo == 'url') {
                 $statistics[$counter]['material'] = $tuple->url;
-        } else {
+        } else if ($tuple->tipo == 'page') {
                $statistics[$counter]['material'] = $tuple->page;
+        } else if ($tuple->tipo == 'assign') {
+               $statistics[$counter]['material'] = $tuple->assign;
+        } else if ($tuple->tipo == 'forum') {
+               $statistics[$counter]['material'] = $tuple->forum;
+        } else if ($tuple->tipo == 'quiz') {
+               $statistics[$counter]['material'] = $tuple->quiz;
+        } else if ($tuple->tipo == 'folder') {
+               $statistics[$counter]['material'] = $tuple->folder;
         }
+
         if ($tuple->userid) { /* If a user accessed -> get name */
             $statistics[$counter]['studentswithaccess'][] = array('userid' => $tuple->userid,
                     'nome' => $tuple->firstname." ".$tuple->lastname, 'email' => $tuple->email);
@@ -105,8 +114,16 @@ foreach ($result as $tuple) {
                 $statistics[$counter]['material'] = $tuple->resource;
             } else if ($tuple->tipo == 'url') {
                 $statistics[$counter]['material'] = $tuple->url;
-            } else {
-                $statistics[$counter]['material'] = $tuple->page;
+            } else if ($tuple->tipo == 'page') {
+               $statistics[$counter]['material'] = $tuple->page;
+            } else if ($tuple->tipo == 'assign') {
+               $statistics[$counter]['material'] = $tuple->assign;
+            } else if ($tuple->tipo == 'forum') {
+               $statistics[$counter]['material'] = $tuple->forum;
+            } else if ($tuple->tipo == 'quiz') {
+               $statistics[$counter]['material'] = $tuple->quiz;
+            } else if ($tuple->tipo == 'folder') {
+               $statistics[$counter]['material'] = $tuple->folder;
             }
 
             if ($tuple->userid) {
