@@ -89,6 +89,10 @@ function block_analytics_graphs_get_resource_url_access($course, $estudantes, $l
     $resource = $DB->get_record('modules', array('name' => 'resource'), 'id');
     $url = $DB->get_record('modules', array('name' => 'url'), 'id');
     $page = $DB->get_record('modules', array('name' => 'page'), 'id');
+    $assign = $DB->get_record('modules', array('name' => 'assign'), 'id');
+    $forum = $DB->get_record('modules', array('name' => 'forum'), 'id');
+    $quiz = $DB->get_record('modules', array('name' => 'quiz'), 'id');
+    $folder = $DB->get_record('modules', array('name' => 'folder'), 'id');
     $startdate = $COURSE->startdate;
     
     /* Temp table to order */
@@ -120,17 +124,19 @@ function block_analytics_graphs_get_resource_url_access($course, $estudantes, $l
     }
            
                               
-    $params = array_merge(array($startdate), $inparams, array($course, $resource->id, $url->id, $page->id));
+    $params = array_merge(array($startdate), $inparams, array($course, $resource->id, $url->id, $page->id, $assign->id,
+                                                              $forum->id, $quiz->id, $folder->id));
     if (!$legacy) {
         $sql = "SELECT temp.id+(COALESCE(temp.userid,1)*1000000)as id, temp.id as ident, tag.section, m.name as tipo,
-                    r.name as resource, u.name as url, p.name as page, temp.userid, usr.firstname,
-                    usr.lastname, usr.email, temp.acessos, tag.sequence
+                    r.name as resource, u.name as url, p.name as page,  a.name as assign, f.name as forum, q.name as quiz,
+                    fo.name as folder,temp.userid, usr.firstname, usr.lastname, usr.email, temp.acessos, tag.sequence
                     FROM (
                         SELECT cm.id, log.userid, count(*) as acessos
                         FROM {course_modules} as cm
                         LEFT JOIN {logstore_standard_log} as log ON log.timecreated >= ?
                             AND log.userid $insql AND action = 'viewed' AND cm.id=log.contextinstanceid
-                        WHERE cm.course = ? AND (cm.module=? OR cm.module=? OR cm.module=?)
+                        WHERE cm.course = ? AND (cm.module=? OR cm.module=? OR cm.module=? OR cm.module=? OR cm.module=? OR
+                            cm.module=? OR cm.module=?)
                         GROUP BY cm.id, log.userid
                         ) as temp
                     LEFT JOIN {course_modules} as cm ON temp.id = cm.id
@@ -138,6 +144,10 @@ function block_analytics_graphs_get_resource_url_access($course, $estudantes, $l
                     LEFT JOIN {resource} as r ON cm.instance = r.id
                     LEFT JOIN {url} as u ON cm.instance = u.id
                     LEFT JOIN {page} as p ON cm.instance = p.id
+                    LEFT JOIN {assign} as a ON cm.instance = a.id
+                    LEFT JOIN {forum} as f ON cm.instance = f.id
+                    LEFT JOIN {quiz} as q ON cm.instance = q.id
+                    LEFT JOIN {folder} as fo ON cm.instance = fo.id
                     LEFT JOIN {user} as usr ON usr.id = temp.userid
                     LEFT JOIN {tmp_analytics_graphs} as tag ON tag.module = cm.id
                     ORDER BY tag.sequence";
