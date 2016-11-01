@@ -94,11 +94,11 @@ function block_analytics_graphs_get_resource_url_access($course, $estudantes, $l
     $quiz = $DB->get_record('modules', array('name' => 'quiz'), 'id');
     $folder = $DB->get_record('modules', array('name' => 'folder'), 'id');
     $startdate = $COURSE->startdate;
-    
+
     /* Temp table to order */
     $params = array($course);
     $sql = "SELECT id, section, sequence
-            FROM {course_sections} as cs
+            FROM {course_sections}
             WHERE course  = ? AND sequence <> ''
             ORDER BY section";
     $result = $DB->get_records_sql($sql, $params);
@@ -112,18 +112,16 @@ function block_analytics_graphs_get_resource_url_access($course, $estudantes, $l
     $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
     $dbman->create_temp_table($table);
     $sequence = 0;
-    foreach($result as $tuple) {
+    foreach ($result as $tuple) {
         $modules = explode(',', $tuple->sequence);
         foreach($modules as $module) {
-                               $record = new stdClass();
-                    $record->section = $tuple->section;
-                    $record->module = $module;
-                    $record->sequence = $sequence++;
-                    $DB->insert_record('tmp_analytics_graphs', $record, false);
-            }
+            $record = new stdClass();
+            $record->section = $tuple->section;
+            $record->module = $module;
+            $record->sequence = $sequence++;
+            $DB->insert_record('tmp_analytics_graphs', $record, false);
+        }
     }
-           
-                              
     $params = array_merge(array($startdate), $inparams, array($course, $resource->id, $url->id, $page->id, $assign->id,
                                                               $forum->id, $quiz->id, $folder->id));
     if (!$legacy) {
@@ -465,22 +463,25 @@ function block_analytics_graphs_extend_navigation_course($navigation, $course, $
     global $CFG;
     $reports = $navigation->find('coursereports', navigation_node::TYPE_CONTAINER);
     if (has_capability('block/analytics_graphs:viewpages', $context) && $reports) {
-        $report_analytics_graphs = $reports->add(get_string('pluginname', 'block_analytics_graphs'));
-        $url = new moodle_url($CFG->wwwroot.'/blocks/analytics_graphs/grades_chart.php', array('id'=>$course->id));
-        $report_analytics_graphs->add(get_string('grades_chart', 'block_analytics_graphs'), $url,
+        $reportanalyticsgraphs = $reports->add(get_string('pluginname', 'block_analytics_graphs'));
+        $url = new moodle_url($CFG->wwwroot.'/blocks/analytics_graphs/grades_chart.php',
+            array('id' => $course->id));
+        $reportanalyticsgraphs->add(get_string('grades_chart', 'block_analytics_graphs'), $url,
             navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
         $url = new moodle_url($CFG->wwwroot.'/blocks/analytics_graphs/graphresourceurl.php', 
-            array('id'=>$course->id, 'legacy'=>'0'));
-        $report_analytics_graphs->add(get_string('access_to_contents', 'block_analytics_graphs'), $url,
+            array('id' => $course->id, 'legacy' => '0'));
+        $reportanalyticsgraphs->add(get_string('access_to_contents', 'block_analytics_graphs'), $url,
             navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
-        $url = new moodle_url($CFG->wwwroot.'/blocks/analytics_graphs/assign.php', array('id'=>$course->id));
-        $report_analytics_graphs->add(get_string('submissions_assign', 'block_analytics_graphs'), $url,
+        $url = new moodle_url($CFG->wwwroot.'/blocks/analytics_graphs/assign.php',
+            array('id' => $course->id));
+        $reportanalyticsgraphs->add(get_string('submissions_assign', 'block_analytics_graphs'), $url,
             navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
         $url = new moodle_url($CFG->wwwroot.'/blocks/analytics_graphs/quiz.php', array('id'=>$course->id));
-        $report_analytics_graphs->add(get_string('submissions_quiz', 'block_analytics_graphs'), $url, 
+        $reportanalyticsgraphs->add(get_string('submissions_quiz', 'block_analytics_graphs'), $url, 
             navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
-        $url = new moodle_url($CFG->wwwroot.'/blocks/analytics_graphs/hits.php', array('id'=>$course->id, 'legacy'=>'0'));
-        $report_analytics_graphs->add(get_string('hits_distribution', 'block_analytics_graphs'), $url,         
+        $url = new moodle_url($CFG->wwwroot.'/blocks/analytics_graphs/hits.php', array('id' => $course->id,
+            'legacy'=>'0'));
+        $reportanalyticsgraphs->add(get_string('hits_distribution', 'block_analytics_graphs'), $url,         
             navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
     }
 }

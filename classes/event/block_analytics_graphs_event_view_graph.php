@@ -40,7 +40,7 @@ defined('MOODLE_INTERNAL') || die();
  **/
 class block_analytics_graphs_event_view_graph extends \core\event\base {
     protected function init() {
-        $this->data['crud'] = 'r'; // Crud c(reate), r(ead), u(pdate), d(elete).
+        $this->data['crud'] = 'r';
         $this->data['edulevel'] = self::LEVEL_TEACHING;
         $this->data['objecttable'] = 'course';
     }

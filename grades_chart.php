@@ -35,13 +35,10 @@ $event = \block_analytics_graphs\event\block_analytics_graphs_event_view_graph::
 ));
 $event->trigger();
 
-
-/*
 $PAGE->set_url(new moodle_url('/blocks/analytics_graphs/grades_chart.php', array('id' => $courseid)));
 $PAGE->set_context(context_course::instance($courseid));
 $PAGE->set_pagelayout('print');
 echo $OUTPUT->header();
-*/
 
 $sql = "SELECT gi.id, categoryid, fullname, itemname, gradetype, grademax, grademin
 			FROM {grade_categories} gc
@@ -59,19 +56,10 @@ $groupmembersjson = json_encode($groupmembers);
 ?>
 
 <html>
-	<head>
-		<meta charset=utf-8>
-		<title><?php echo get_string('grades_chart', 'block_analytics_graphs'); ?></title>
+    <head>
+        <meta charset=utf-8>
+        <title><?php echo get_string('grades_chart', 'block_analytics_graphs'); ?></title>
 
-<!--		
-        <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
-		<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-		<script src="http://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
-		<script src="http://code.highcharts.com/highcharts.js"></script>
-		<script src="http://code.highcharts.com/modules/exporting.js"></script>
-		<script src="http://code.highcharts.com/highcharts-more.js"></script>
-		<script src="http://code.highcharts.com/modules/no-data-to-display.js"></script>
--->
         <link rel="stylesheet" href="externalref/jquery-ui-1.11.4/jquery-ui.css">
         <script src="externalref/jquery-1.11.1.js"></script> 
         <script src="externalref/jquery-ui-1.11.4/jquery-ui.js"></script>
