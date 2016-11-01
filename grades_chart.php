@@ -450,7 +450,12 @@ $groupmembersjson = json_encode($groupmembers);
 		                	fontWeight: 'bold',
 		                	fontSize: 12
 		                }
-		            }		        
+		            },
+			    labels: {
+        			formatter: function(){
+          					return 100*this.value  + '%';
+        		     	           }
+      			    },
 		        },
 
 		        tooltip:{
