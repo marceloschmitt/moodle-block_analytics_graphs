@@ -32,8 +32,8 @@ $PAGE->set_url(new moodle_url('/blocks/analytics_graphs/graphresourceurl.php', a
 $PAGE->set_context(context_course::instance($course));
 $PAGE->set_pagelayout('print');
 $PAGE->set_title($title);
-echo $output->header();
-echo $output->heading($pagetitle);
+echo $OUTPUT->header();
+echo $OUTPUT->heading($pagetitle);
 
 
 $courseparams = get_course($course);
