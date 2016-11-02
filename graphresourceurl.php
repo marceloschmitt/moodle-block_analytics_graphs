@@ -16,24 +16,22 @@
 
 require('../../config.php');
 require('lib.php');
-require('javascriptfunctions.php');
 $course = required_param('id', PARAM_INT);
 $legacy = required_param('legacy', PARAM_INT);
 global $DB;
 
-/* Access control */
-require_login($course);
-$context = context_course::instance($course);
-require_capability('block/analytics_graphs:viewpages', $context);
-
-/* $title = get_string('pluginname', 'block_analytics_graphs');
+/* Page header */
+$title = get_string('pluginname', 'block_analytics_graphs');
 $PAGE->set_url(new moodle_url('/blocks/analytics_graphs/graphresourceurl.php', array('id' => $course, 'legacy' => 0)));
 $PAGE->set_context(context_course::instance($course));
 $PAGE->set_pagelayout('print');
 $PAGE->set_title($title);
 echo $OUTPUT->header();
-*/
 
+/* Access control */
+require_login($course);
+$context = context_course::instance($course);
+require_capability('block/analytics_graphs:viewpages', $context);
 
 $courseparams = get_course($course);
 $startdate = $courseparams->startdate;
@@ -170,13 +168,9 @@ $event = \block_analytics_graphs\event\block_analytics_graphs_event_view_graph::
 ));
 $event->trigger();
 
+require('javascriptfunctions.php');
 ?>
-<!--DOCTYPE HTML-->
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <title><?php echo get_string('access_to_contents', 'block_analytics_graphs'); ?></title>
-        
+        <title><?php echo get_string('access_to_contents', 'block_analytics_graphs'); ?></title>        
         <link rel="stylesheet" href="externalref/jquery-ui-1.11.4/jquery-ui.css">
         <script src="externalref/jquery-1.11.1.js"></script> 
         <script src="externalref/jquery-ui-1.11.4/jquery-ui.js"></script>
