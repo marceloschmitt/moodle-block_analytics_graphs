@@ -26,10 +26,15 @@ require_login($course);
 $context = context_course::instance($course);
 require_capability('block/analytics_graphs:viewpages', $context);
 
+$title = get_string('pluginname', 'analytics_graphs');
+$pagetitle = $title;
 $PAGE->set_url(new moodle_url('/blocks/analytics_graphs/graphresourceurl.php', array('id' => $course, 'legacy' => 0)));
 $PAGE->set_context(context_course::instance($course));
 $PAGE->set_pagelayout('print');
-echo $OUTPUT->header();
+$PAGE->set_title($title);
+echo $output->header();
+echo $output->heading($pagetitle);
+
 
 $courseparams = get_course($course);
 $startdate = $courseparams->startdate;
