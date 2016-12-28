@@ -157,7 +157,11 @@ $event->trigger();
         <script src="externalref/highcharts.js"></script>
         <script src="externalref/no-data-to-display.js"></script>
         <script src="externalref/exporting.js"></script> 
-
+        <style>
+            .ui-dialog {
+                position: fixed;
+            }
+        </style>
 
 
         <script type="text/javascript">
