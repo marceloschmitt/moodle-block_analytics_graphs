@@ -151,9 +151,9 @@ $event->trigger();
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <title><?php echo get_string('access_to_contents', 'block_analytics_graphs'); ?></title>
         
-        <link rel="stylesheet" href="externalref/jquery-ui-1.11.4/jquery-ui.css">
-        <script src="externalref/jquery-1.11.1.js"></script> 
-        <script src="externalref/jquery-ui-1.11.4/jquery-ui.js"></script>
+        <link rel="stylesheet" href="externalref/jquery-ui-1.12.1/jquery-ui.css">
+        <script src="externalref/jquery-1.12.2.js"></script> 
+        <script src="externalref/jquery-ui-1.12.1/jquery-ui.js"></script>
         <script src="externalref/highcharts.js"></script>
         <script src="externalref/no-data-to-display.js"></script>
         <script src="externalref/exporting.js"></script> 
