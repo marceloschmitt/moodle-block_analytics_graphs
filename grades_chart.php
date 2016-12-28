@@ -35,10 +35,11 @@ $event = \block_analytics_graphs\event\block_analytics_graphs_event_view_graph::
 ));
 $event->trigger();
 
-$PAGE->set_url(new moodle_url('/blocks/analytics_graphs/grades_chart.php', array('id' => $courseid)));
-$PAGE->set_context(context_course::instance($courseid));
-$PAGE->set_pagelayout('print');
-echo $OUTPUT->header();
+/* For future tests */
+//$PAGE->set_url(new moodle_url('/blocks/analytics_graphs/grades_chart.php', array('id' => $courseid)));
+//$PAGE->set_context(context_course::instance($courseid));
+//$PAGE->set_pagelayout('print');
+//echo $OUTPUT->header();
 
 $sql = "SELECT gi.id, categoryid, fullname, itemname, gradetype, grademax, grademin
             FROM {grade_categories} gc
