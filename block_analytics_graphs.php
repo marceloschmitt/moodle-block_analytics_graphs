@@ -26,7 +26,7 @@ class block_analytics_graphs extends block_base {
 
     public function get_content() {
         global $CFG;
-        global $CFG;
+        global $DB;
         $course = $this->page->course;
         $context = context_course::instance($course->id);
         $canview = has_capability('block/analytics_graphs:viewpages', $context);
