@@ -26,6 +26,7 @@ class block_analytics_graphs extends block_base {
 
     public function get_content() {
         global $CFG;
+        global $CFG;
         $course = $this->page->course;
         $context = context_course::instance($course->id);
         $canview = has_capability('block/analytics_graphs:viewpages', $context);
@@ -36,26 +37,23 @@ class block_analytics_graphs extends block_base {
             return $this->content;
         }
         $this->content = new stdClass;
-        if (floatval($CFG->release) >= 2.7) {
-            $this->content->text = get_string('graphs', 'block_analytics_graphs')
-                . "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/grades_chart.php?id={$course->id}
-                              target=_blank>" . get_string('grades_chart', 'block_analytics_graphs') . "</a>"
-                . "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/graphresourceurl.php?id={$course->id}&legacy=0
-                              target=_blank>" . get_string('access_to_contents', 'block_analytics_graphs') . "</a>"
-                . "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/assign.php?id={$course->id}
-                              target=_blank>" . get_string('submissions_assign', 'block_analytics_graphs') . "</a>"
-                . "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/quiz.php?id={$course->id}
-                              target=_blank>" . get_string('submissions_quiz', 'block_analytics_graphs') . "</a>"
-                . "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/hotpot.php?id={$course->id}
-                              target=_blank>" . get_string('submissions_hotpot', 'block_analytics_graphs') . "</a>"
-                . "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/hits.php?id={$course->id}&legacy=0
-                              target=_blank>" . get_string('hits_distribution', 'block_analytics_graphs') . "</a>";
-        } else {
-            $this->content->text  = $this->content->text . '<br><br>'.get_string('legacy', 'block_analytics_graphs')
-            .  "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/graphresourceurl.php?id={$course->id}&legacy=1
+        $this->content->text = get_string('graphs', 'block_analytics_graphs')
+            . "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/grades_chart.php?id={$course->id}
+                          target=_blank>" . get_string('grades_chart', 'block_analytics_graphs') . "</a>"
+            . "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/graphresourceurl.php?id={$course->id}&legacy=0
                           target=_blank>" . get_string('access_to_contents', 'block_analytics_graphs') . "</a>"
-            . "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/hits.php?id={$course->id}&legacy=1
+            . "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/assign.php?id={$course->id}
+                          target=_blank>" . get_string('submissions_assign', 'block_analytics_graphs') . "</a>"
+            . "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/quiz.php?id={$course->id}
+                          target=_blank>" . get_string('submissions_quiz', 'block_analytics_graphs') . "</a>"
+            . "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/hotpot.php?id={$course->id}
+                          target=_blank>" . get_string('submissions_hotpot', 'block_analytics_graphs') . "</a>"
+            . "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/hits.php?id={$course->id}&legacy=0
                           target=_blank>" . get_string('hits_distribution', 'block_analytics_graphs') . "</a>";
+        if($DB->get_record('modules', array('name' => 'hotpot', 'visible' => '1'), 'id')) {
+            $this->content->text = $this->content->text . "<li> <a href= 
+                {$CFG->wwwroot}/blocks/analytics_graphs/hotpot.php?id={$course->id}
+                target=_blank>" . get_string('submissions_hotpot', 'block_analytics_graphs') . "</a>";
         }
         $this->content->footer = '---';
         return $this->content;
