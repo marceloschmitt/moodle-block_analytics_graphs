@@ -104,15 +104,15 @@ foreach ($result as $tuple) {
             } else if ($tuple->tipo == 'url') {
                 $statistics[$counter]['material'] = $tuple->url;
             } else if ($tuple->tipo == 'page') {
-               $statistics[$counter]['material'] = $tuple->page;
+                $statistics[$counter]['material'] = $tuple->page;
             } else if ($tuple->tipo == 'assign') {
-               $statistics[$counter]['material'] = $tuple->assign;
+                $statistics[$counter]['material'] = $tuple->assign;
             } else if ($tuple->tipo == 'forum') {
-               $statistics[$counter]['material'] = $tuple->forum;
+                $statistics[$counter]['material'] = $tuple->forum;
             } else if ($tuple->tipo == 'quiz') {
-               $statistics[$counter]['material'] = $tuple->quiz;
+                $statistics[$counter]['material'] = $tuple->quiz;
             } else if ($tuple->tipo == 'folder') {
-               $statistics[$counter]['material'] = $tuple->folder;
+                $statistics[$counter]['material'] = $tuple->folder;
             }
             if ($tuple->userid) {
                 $statistics[$counter]['studentswithaccess'][] = array('userid' => $tuple->userid,
@@ -373,18 +373,18 @@ foreach ($numberofresourcesintopic as $topico => $numberoftopics) {
             <select id="group_select">
                 <option value="-"><?php  echo json_encode(get_string('all_groups', 'block_analytics_graphs'));?></option>
 <?php
-    foreach ($groupmembers as $key => $value) {
+foreach ($groupmembers as $key => $value) {
 ?>
-                    <option value="<?php echo $key; ?>"><?php echo $value["name"]; ?></option>
-<?php 
-    }
+    <option value="<?php echo $key; ?>"><?php echo $value["name"]; ?></option>
+<?php
+}
 ?>
             </select>
         </div>
-<?php 
+<?php
 }
 ?>
-        <div id="container" style="min-width: 800px; height:<?php echo ($counter+1)*50+180;?>; margin: 0 auto"></div>
+        <div id="container" style="min-width: 800px; height:<?php echo ($counter +1 ) * 50 + 180;?>; margin: 0 auto"></div>
         <script>
             $.each(geral, function(index, value) {
                 var nome = value.material;

@@ -40,7 +40,7 @@ if ($numberoftasks == 0) {
 }
 $submissionsgraphoptions = $submissionsgraph->create_graph($result, $students);
 
-/* For future tests */        
+/*For future tests*/
 // $PAGE->set_url(new moodle_url('/blocks/analytics_graphs/assign.php', array('id' => $course)));
 // $PAGE->set_context(context_course::instance($course));
 // $PAGE->set_pagelayout('print');
