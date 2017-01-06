@@ -544,7 +544,8 @@ hs.marginLeft = 20;
                                         "' class='no_student_img' id='img-" + tasks[elem]['id'] + "'></span>" +
                                         "<button type='button' class='task_button deactivated' id='" +  tasks[elem]['id'] + "'>" + 
                                         cont + "</button></div>");
-                document.write("<div id='" + tasks[elem]['id'] + "' class='mail_dialog' title='" + tasks[elem]['itemname'] + "'></div>");
+                document.write("<div id='" + tasks[elem]['id'] + "' class='mail_dialog' title='" + tasks[elem]['itemname'] +
+                            "'></div>");
                 $("#" + tasks[elem]['id'] + ".mail_dialog").dialog({
                     modal: true,
                     autoOpen: false
