@@ -108,7 +108,7 @@ class graph_submission {
                 if ($assignmentid != $tuple->assignment) { // Another task -> finish previous and start.
                     $this->statistics[$counter]['numberofintimesubmissions'] = $numberofintimesubmissions;
                     $this->statistics[$counter]['numberoflatesubmissions'] = $numberoflatesubmissions;
-                    $this->statistics[$counter]['numberofnosubmissions'] = 
+                    $this->statistics[$counter]['numberofnosubmissions'] =
                             $numberofstudents - $numberofintimesubmissions - $numberoflatesubmissions;
                     if ($this->statistics[$counter]['numberofnosubmissions'] > 0) {
                         if ($this->statistics[$counter]['numberofnosubmissions'] == $numberofstudents) {
@@ -373,7 +373,7 @@ class graph_submission {
                 // If no duedate or duedate has not passed.
                 $chart .= 1;
             } else {
-                $chart .= sprintf("%.2f", $arrayofintimesubmissions[$x] / 
+                $chart .= sprintf("%.2f", $arrayofintimesubmissions[$x] /
                     ($arrayofintimesubmissions[$x] + $arrayoflatesubmissions[$x] + $arrayofnosubmissions[$x]));
             }
             $chart .= ',';
