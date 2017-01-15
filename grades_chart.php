@@ -61,9 +61,10 @@ $groupmembersjson = json_encode($groupmembers);
         <script src="externalref/highcharts.js"></script>
         <script src="externalref/highcharts-more.js"></script>
         <script src="externalref/no-data-to-display.js"></script>
-        <script src="externalref/exporting.js"></script> 
-<script src="highslide/highslide-full.min.js"></script>
-<link rel="stylesheet" type="text/css" href="highslide/highslide.css" />
+        <script src="externalref/exporting.js"></script>
+        <script src="externalref/export-csv-master/export-csv.js"></script>
+        <script src="highslide/highslide-full.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="highslide/highslide.css" />
         <style>
             body {
                 height: 90%;
