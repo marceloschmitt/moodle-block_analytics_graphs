@@ -337,10 +337,10 @@ console.log(html);
         }, {
             textKey: 'downloadXLS',
             onclick: function () { this.downloadXLS(); }
-        }, {
-            /* textKey: 'viewData',
+        }, /* {
+             textKey: 'viewData',
             onclick: function () { this.viewData(); } */
-        });
+        }*/ );
     }
 
     // Series specific
