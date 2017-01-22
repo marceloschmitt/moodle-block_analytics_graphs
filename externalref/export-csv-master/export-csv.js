@@ -337,7 +337,7 @@ console.log(html);
         }, {
             textKey: 'downloadXLS',
             onclick: function () { this.downloadXLS(); }
-        }, /* {
+        }/*, {
              textKey: 'viewData',
             onclick: function () { this.viewData(); }
         }*/ );
