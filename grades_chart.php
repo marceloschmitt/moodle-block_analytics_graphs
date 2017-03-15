@@ -40,7 +40,7 @@ $sql = "SELECT gi.id, categoryid, fullname, itemname, gradetype, grademax, grade
             LEFT JOIN {grade_items} gi ON gc.courseid = gi.courseid AND gc.id = gi.categoryid
             WHERE gc.courseid = ? AND categoryid IS NOT NULL AND EXISTS (
                 SELECT *
-                    FROM mdl_grade_grades AS gg
+                    FROM {grade_grades} AS gg
                     WHERE gg.itemid = gi.id AND gg.rawgrade IS NOT NULL )
         ORDER BY fullname, itemname";
 
