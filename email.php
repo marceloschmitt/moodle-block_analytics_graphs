@@ -24,6 +24,7 @@ $ids = required_param('ids', PARAM_TEXT);
 $other = required_param('other', PARAM_INT);
 $subject = required_param('subject', PARAM_TEXT);
 $messagetext = required_param('texto', PARAM_TEXT);
+$ccteachers = required_param('ccteachers', PARAM_BOOL);
 $messagehtml = $messagetext;
 
 /* Access control */
@@ -63,14 +64,16 @@ foreach ($destination as $i => $x) {
 
 $messagetext = get_string('mailcopyalert', 'block_analytics_graphs') . $messagetext;
 $messagehtml = get_string('mailcopyalert', 'block_analytics_graphs') . $messagehtml;
-$userstocopyemail = block_analytics_graphs_get_teachers($course);
 
-foreach ($userstocopyemail as $i) {
-    $touser->id = $i->id;
-    $touser->email = $DB->get_field('user', 'email', array('id' => $i->id));
-    email_to_user($touser, $fromuser, $subject, $messagetext, $messagehtml, '', '', true);
+if ($ccteachers) {
+    $userstocopyemail = block_analytics_graphs_get_teachers($course);
+
+    foreach ($userstocopyemail as $i) {
+        $touser->id = $i->id;
+        $touser->email = $DB->get_field('user', 'email', array('id' => $i->id));
+        email_to_user($touser, $fromuser, $subject, $messagetext, $messagehtml, '', '', true);
+    }
 }
-
 $mensagem = "ok";
 echo json_encode($mensagem);
 $event = \block_analytics_graphs\event\block_analytics_graphs_event_send_email::create(array(

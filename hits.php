@@ -115,7 +115,7 @@ $event->trigger();
 <script src="externalref/jquery-ui-1.12.1/jquery-ui.js"></script>
 <script src="externalref/highcharts.js"></script>
 <script src="externalref/no-data-to-display.js"></script>
-<script src="externalref/exporting.js"></script>a
+<script src="externalref/exporting.js"></script>
 <script src="externalref/export-csv-master/export-csv.js"></script> 
 
 <style>
