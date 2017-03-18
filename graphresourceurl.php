@@ -188,7 +188,7 @@ overflow:auto;background-color: white;border-radius: 25px;padding: 20px;border: 
     exit;
 }
 
-$result = block_analytics_graphs_get_resource_url_access_alt($course, $students, $legacy, $requestedTypes);
+$result = block_analytics_graphs_get_resource_url_access($course, $students, $legacy, $requestedTypes);
 
 //echo var_dump($result);
 

@@ -110,7 +110,7 @@ function block_analytics_graphs_get_course_used_modules ($courseID) {
     return $result;
 }
 
-function block_analytics_graphs_get_resource_url_access_alt($course, $estudantes, $legacy, $requestedTypes) {
+function block_analytics_graphs_get_resource_url_access($course, $estudantes, $legacy, $requestedTypes) {
     global $COURSE;
     global $DB;
     foreach ($estudantes as $tupla) {
@@ -435,103 +435,6 @@ function block_analytics_graphs_get_resource_url_access_alt($course, $estudantes
     $dbman->drop_table($table);
     return($resultado);
 }
-
-function block_analytics_graphs_get_resource_url_access_legacy($course, $estudantes, $legacy) {
-    global $COURSE;
-    global $DB;
-    foreach ($estudantes as $tupla) {
-        $inclause[] = $tupla->id;
-    }
-    list($insql, $inparams) = $DB->get_in_or_equal($inclause);
-    $resource = $DB->get_record('modules', array('name' => 'resource'), 'id');
-    $url = $DB->get_record('modules', array('name' => 'url'), 'id');
-    $page = $DB->get_record('modules', array('name' => 'page'), 'id');
-    $assign = $DB->get_record('modules', array('name' => 'assign'), 'id');
-    $forum = $DB->get_record('modules', array('name' => 'forum'), 'id');
-    $quiz = $DB->get_record('modules', array('name' => 'quiz'), 'id');
-    $folder = $DB->get_record('modules', array('name' => 'folder'), 'id');
-    $startdate = $COURSE->startdate;
-
-    /* Temp table to order */
-    $params = array($course);
-    $sql = "SELECT id, section, sequence
-            FROM {course_sections}
-            WHERE course  = ? AND sequence <> ''
-            ORDER BY section";
-    $result = $DB->get_records_sql($sql, $params);
-
-    $dbman = $DB->get_manager();
-    $table = new xmldb_table('tmp_analytics_graphs');
-    $table->add_field('id', XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
-    $table->add_field('section', XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, null);
-    $table->add_field('module', XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, null);
-    $table->add_field('sequence', XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, null);
-    $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
-    $dbman->create_temp_table($table);
-    $sequence = 0;
-    foreach ($result as $tuple) {
-        $modules = explode(',', $tuple->sequence);
-        foreach ($modules as $module) {
-            $record = new stdClass();
-            $record->section = $tuple->section;
-            $record->module = $module;
-            $record->sequence = $sequence++;
-            $DB->insert_record('tmp_analytics_graphs', $record, false);
-        }
-    }
-    $params = array_merge(array($startdate), $inparams, array($course, $resource->id, $url->id, $page->id, $assign->id,
-        $forum->id, $quiz->id, $folder->id));
-    if (!$legacy) {
-        $sql = "SELECT temp.id+(COALESCE(temp.userid,1)*1000000)as id, temp.id as ident, tag.section, m.name as tipo,
-                    r.name as resource, u.name as url, p.name as page,  a.name as assign, f.name as forum, q.name as quiz,
-                    fo.name as folder,temp.userid, usr.firstname, usr.lastname, usr.email, temp.acessos, tag.sequence
-                    FROM (
-                        SELECT cm.id, log.userid, count(*) as acessos
-                        FROM {course_modules} as cm
-                        LEFT JOIN {logstore_standard_log} as log ON log.timecreated >= ?
-                            AND log.userid $insql AND action = 'viewed' AND cm.id=log.contextinstanceid
-                        WHERE cm.course = ? AND (cm.module=? OR cm.module=? OR cm.module=? OR cm.module=? OR cm.module=? OR
-                            cm.module=? OR cm.module=?)
-                        GROUP BY cm.id, log.userid
-                        ) as temp
-                    LEFT JOIN {course_modules} as cm ON temp.id = cm.id
-                    LEFT JOIN {modules} as m ON cm.module = m.id
-                    LEFT JOIN {resource} as r ON cm.instance = r.id
-                    LEFT JOIN {url} as u ON cm.instance = u.id
-                    LEFT JOIN {page} as p ON cm.instance = p.id
-                    LEFT JOIN {assign} as a ON cm.instance = a.id
-                    LEFT JOIN {forum} as f ON cm.instance = f.id
-                    LEFT JOIN {quiz} as q ON cm.instance = q.id
-                    LEFT JOIN {folder} as fo ON cm.instance = fo.id
-                    LEFT JOIN {user} as usr ON usr.id = temp.userid
-                    LEFT JOIN {tmp_analytics_graphs} as tag ON tag.module = cm.id
-                    ORDER BY tag.sequence";
-    } else {
-        $sql = "SELECT temp.id+(COALESCE(temp.userid,1)*1000000)as id, temp.id as ident, cs.section, m.name as tipo,
-                    r.name as resource, u.name as url, p.name as page, temp.userid, usr.firstname,
-                    usr.lastname, usr.email, temp.acessos
-                    FROM (
-                        SELECT cm.id, log.userid, count(*) as acessos
-                        FROM {course_modules} as cm
-                        LEFT JOIN {log} as log ON log.time >= ?
-                            AND log.userid $insql AND action = 'view' AND cm.id = log.cmid
-                        WHERE cm.course = ? AND (cm.module=? OR cm.module=? OR cm.module=?)
-                        GROUP BY cm.id, log.userid
-                        ) as temp
-                    LEFT JOIN {course_modules} as cm ON temp.id = cm.id
-                    LEFT JOIN {course_sections} as cs ON cm.section = cs.id
-                    LEFT JOIN {modules} as m ON cm.module = m.id
-                    LEFT JOIN {resource} as r ON cm.instance = r.id
-                    LEFT JOIN {url} as u ON cm.instance = u.id
-                    LEFT JOIN {page} as p ON cm.instance = p.id
-                    LEFT JOIN {user} as usr ON usr.id = temp.userid
-                    ORDER BY cs.section, m.name, r.name, u.name, p.name";
-    }
-    $resultado = $DB->get_records_sql($sql, $params);
-    $dbman->drop_table($table);
-    return($resultado);
-}
-
 
 function block_analytics_graphs_get_assign_submission($course, $students) {
     global $DB;
