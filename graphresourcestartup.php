@@ -276,7 +276,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                     get_string('typename_poster', 'block_analytics_graphs'));
                 $num++;
             }
-            if (in_array("url", $availableModules)) {
+            if (in_array("recordingsbn", $availableModules)) {
                 echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_url('icon', 'mod_recordingsbn'), "mod" . $num, "recordingsbn",
                     get_string('typename_recordingsbn', 'block_analytics_graphs'));
                 $num++;
