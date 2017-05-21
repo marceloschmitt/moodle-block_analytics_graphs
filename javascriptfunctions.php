@@ -37,6 +37,7 @@ function sendEmail() {
                     subjectval = $form.find( "input[name='subject']" ).val(),
                     textoval = $form.find( "textarea[name='texto']" ).val(),
                     url = $form.attr( "action" ),
+
                     ccteachers = $form.find( "input[name='ccteachers']" ).is(':checked');
                     // Send the data using post
                     var posting = $.post( url, { other: otherval, ids: idsval,  
@@ -61,7 +62,10 @@ function sendEmail() {
             });
 }
 
-function createEmailForm(titulo, alunos, courseid, other, subject = "") {
+function createEmailForm(titulo, alunos, courseid, other, subject) {
+		if (!subject) { //if undefined or null then set to default value
+			subject = "";
+		}
         var nomes="";
                 ids = [];
                 email = [];
@@ -78,7 +82,7 @@ function createEmailForm(titulo, alunos, courseid, other, subject = "") {
                         "<input type='hidden' name='ids[]' value='" + ids + "'>" +
                         "<center>" +
                         "<p style='font-size:small'><?php echo get_string('subject', 'block_analytics_graphs');?>: " +
-            "<input type='text' name='subject' value='" + subject +"'></p>" +
+                        "<input type='text' name='subject' value='" + subject +"'></p>" +
                         "<textarea style='font-size:small' cols='100' rows='6' name='texto' ></textarea>" +
                         "<br>" +
                         "<input type='checkbox' name='ccteachers' checked>" +

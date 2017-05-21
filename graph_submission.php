@@ -284,7 +284,7 @@ class graph_submission {
                                             var group = $("#group_select").val();
                                             $(".div_nomes").dialog("close");
                                             if(group !== undefined && group != "-")
-                                                nome_conteudo +=  "-" + group;
+                                                nome_conteudo +=  "-123" + group;
                                             $("#" + nome_conteudo).dialog("open");
                                 }
                             }

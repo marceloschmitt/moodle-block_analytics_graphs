@@ -127,6 +127,14 @@ $string['subject'] = 'Subject';
 $string['submissions'] = 'Submissions';
 $string['submissions_assign'] = 'Assignment submissions';
 $string['submissions_hotpot'] = 'Hotpot submissions';
+$string['submissions_forumchart'] = 'Forum accesses';
+$string['submissions_forumchart_reads'] = 'Forum Discussion Reads';
+$string['submissions_forumchart_posts'] = 'Forum Discussion Posts';
+$string['forumchart_read'] = 'Forum discussions read';
+$string['forumchart_notread'] = 'Forum discussions not read';
+$string['forumchart_posted'] = 'Forum discussions participated';
+$string['forumchart_notposted'] = 'Forum discussions not participated';
+$string['submissions_quizchart'] = 'Quiz submissions';
 $string['submissions_quiz'] = 'Quiz submissions';
 $string['submission_ratio'] = 'Submission ratio';
 $string['title_access'] = 'Distribution of access to contents (resources, urls and pages)';
@@ -140,10 +148,17 @@ $string['total_not_accessed_resources'] = 'Total not accessed resources';
 $string['on_time'] = 'On time';
 $string['late'] = 'Late';
 $string['no_submission'] = 'No submission';
+$string['subfailed'] = 'Failed submission';
+$string['subpassed'] = 'Passed submission';
 $string['no_submission_on_time'] = 'May submit';
 $string['resources'] = 'Resources';
 $string['task_list'] = "Assessment list";
 
+$string['info_coursetype'] = "Course";
+
+$string['timeaccesschart_title'] = "Number of active students";
+$string['timeaccesschart_activities_title'] = "Number of student activities";
+$string['timeaccesschart_tip'] = "Active students";
 
 $string['grades_chart_no_data'] = "Use the buttons below to toggle the tasks displayed on the chart";
 $string['task_name'] = "Assessments";
