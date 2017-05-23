@@ -13,9 +13,6 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
-
-
 require_once("../../config.php");
 require("lib.php");
 require('javascriptfunctions.php');
@@ -199,7 +196,7 @@ $groupmembersjson = json_encode($groupmembers);
         </div>
         <script>
             function build_point_window(e, quartile){
-                    var str = '<p style="font-size:11"> - ';
+                var str = '<p style="font-size:11"> - ';
                 var num;
                 var index;
                 if(quartile == 25) {
@@ -215,7 +212,7 @@ $groupmembersjson = json_encode($groupmembers);
                     index =  parseInt(tasksinfo[tasknameid[e.point.category]].q3_index + 1)
                 }
                 str += "<a class='mail_link' id='" + e.point.category + "-" + quartile +
-                        "' href='#' onclick='mail_dialog(\"" + e.point.category + "\"," + quartile + "); return false;'>" +
+                        "' href='#' onclick='mail_dialog(\"" + e.point.category + "\"," + quartile + "); return hs.close(this);'>" +
                         index + " " +
                         <?php echo json_encode(get_string('students', 'block_analytics_graphs')); ?> + "</a> " +
                         <?php echo json_encode(get_string('tooltip_grade_achievement', 'block_analytics_graphs')); ?> +
@@ -261,7 +258,8 @@ $groupmembersjson = json_encode($groupmembers);
                 }
 
                 $("#" + tasknameid[task_name] + ".mail_dialog").empty().append(
-                    createEmailForm(title, students, <?php echo json_encode($courseid); ?>, 'grades_chart.php'));
+                    createEmailForm(title, students, <?php echo json_encode($courseid); ?>, 'grades_chart.php',
+                        <?php echo json_encode(get_string('info_coursetype', 'block_analytics_graphs') . ': ' . block_analytics_graphs_get_course_name($courseid)); ?> + ", " + task_name));
                 $("#" + tasknameid[task_name] + ".mail_dialog form").submit(function(event){
                     event.preventDefault();
                     var $form = $(this);

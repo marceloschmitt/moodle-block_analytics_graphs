@@ -36,24 +36,46 @@ class block_analytics_graphs extends block_base {
         if ($this->content !== null) {
             return $this->content;
         }
-        $this->content = new stdClass;
-        $this->content->text = get_string('graphs', 'block_analytics_graphs')
-            . "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/grades_chart.php?id={$course->id}
-                          target=_blank>" . get_string('grades_chart', 'block_analytics_graphs') . "</a>"
-            . "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/graphresourceurl.php?id={$course->id}&legacy=0
-                          target=_blank>" . get_string('access_to_contents', 'block_analytics_graphs') . "</a>"
-            . "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/assign.php?id={$course->id}
-                          target=_blank>" . get_string('submissions_assign', 'block_analytics_graphs') . "</a>"
-            . "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/quiz.php?id={$course->id}
-                          target=_blank>" . get_string('submissions_quiz', 'block_analytics_graphs') . "</a>"
-            . "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/hits.php?id={$course->id}&legacy=0
-                          target=_blank>" . get_string('hits_distribution', 'block_analytics_graphs') . "</a>";
-        if ($DB->get_record('modules', array('name' => 'hotpot', 'visible' => '1'), 'id')) {
-            $this->content->text = $this->content->text . "<li> <a href=
-                {$CFG->wwwroot}/blocks/analytics_graphs/hotpot.php?id={$course->id}
-                target=_blank>" . get_string('submissions_hotpot', 'block_analytics_graphs') . "</a>";
+
+        $sql = "SELECT cm.module, md.name 
+            FROM {course_modules} as cm 
+            LEFT JOIN {modules} as md ON cm.module = md.id 
+            WHERE cm.course = ? 
+            GROUP BY cm.module";
+        $params = array($course->id);
+        $availableModulesTotal = $DB->get_records_sql($sql, $params);
+
+        $availableModules = array();
+        foreach ( $availableModulesTotal as $result ) {
+            array_push($availableModules, $result->name);
         }
-        $this->content->footer = '---';
+
+        $this->content = new stdClass;
+        //$this->content->text = get_string('graphs', 'block_analytics_graphs');
+        $this->content->text = "";
+        $this->content->text .= "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/grades_chart.php?id={$course->id}
+                          target=_blank>" . get_string('grades_chart', 'block_analytics_graphs') . "</a>";
+        $this->content->text .= "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/graphresourcestartup.php?id={$course->id}&legacy=0
+                          target=_blank>" . get_string('access_to_contents', 'block_analytics_graphs') . "</a>";
+        $this->content->text .= "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/timeaccesseschart.php?id={$course->id}&legacy=0
+                          target=_blank>" . get_string('timeaccesschart_title', 'block_analytics_graphs') . "</a>";
+        if (in_array("assign", $availableModules)) {
+            $this->content->text .= "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/assign.php?id={$course->id}
+                          target=_blank>" . get_string('submissions_assign', 'block_analytics_graphs') . "</a>";
+        }
+        if (in_array("quiz", $availableModules)) {
+            $this->content->text .= "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/quiz.php?id={$course->id}
+                          target=_blank>" . get_string('submissions_quiz', 'block_analytics_graphs') . "</a>";
+        }
+        if (in_array("hotpot", $availableModules)) {
+            //if ($DB->get_record('modules', array('name' => 'hotpot', 'visible' => '1'), 'id')) {
+                $this->content->text .= "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/hotpot.php?id={$course->id}
+                target=_blank>" . get_string('submissions_hotpot', 'block_analytics_graphs') . "</a>";
+            //}
+        }
+        $this->content->text .= "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/hits.php?id={$course->id}&legacy=0
+                          target=_blank>" . get_string('hits_distribution', 'block_analytics_graphs') . "</a>";
+        $this->content->footer = '<hr/>';
         return $this->content;
     }
 }  // Here's the closing bracket for the class definition.

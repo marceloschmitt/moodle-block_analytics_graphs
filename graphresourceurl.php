@@ -16,8 +16,8 @@
 require('../../config.php');
 require('lib.php');
 require('javascriptfunctions.php');
-$course = required_param('id', PARAM_INT);
-$legacy = required_param('legacy', PARAM_INT);
+$course = htmlspecialchars(required_param('id', PARAM_INT));
+$legacy = htmlspecialchars(required_param('legacy', PARAM_INT));
 global $DB;
 /* Access control */
 require_login($course);
@@ -36,10 +36,174 @@ foreach ($students as $tuple) {
     $arrayofstudents[] = array('userid' => $tuple->id , 'nome' => $tuple->firstname.' '.$tuple->lastname, 'email' => $tuple->email);
 }
 /* Get accesses to resources and urls */
-$result = block_analytics_graphs_get_resource_url_access($course, $students, $legacy);
+
+
+$requestedTypes = array();
+foreach($_GET as $query_string_variable => $value) {
+    if (substr($query_string_variable, 0, strlen("mod")) !== "mod") {
+        continue;
+    }
+    $temp = $value;
+    if (!in_array($temp, $requestedTypes)) { //prevent duplicates
+        switch ($temp) { //not very necessary, left for readability and a little security
+            case "activequiz" :
+                array_push($requestedTypes, $temp);
+                break;
+            case "assign" :
+                array_push($requestedTypes, $temp);
+                break;
+            case "attendance" :
+                array_push($requestedTypes, $temp);
+                break;
+            case "bigbluebuttonbn":
+                array_push($requestedTypes, $temp);
+                break;
+            case "booking":
+                array_push($requestedTypes, $temp);
+                break;
+            case "certificate":
+                array_push($requestedTypes, $temp);
+                break;
+            case "chat" :
+                array_push($requestedTypes, $temp);
+                break;
+            case "checklist" :
+                array_push($requestedTypes, $temp);
+                break;
+            case "choice" :
+                array_push($requestedTypes, $temp);
+                break;
+            case "icontent" :
+                array_push($requestedTypes, $temp);
+                break;
+            case "customcert" :
+                array_push($requestedTypes, $temp);
+                break;
+            case "data" :
+                array_push($requestedTypes, $temp);
+                break;
+            case "dataform" :
+                array_push($requestedTypes, $temp);
+                break;
+            case "lti" :
+                array_push($requestedTypes, $temp);
+                break;
+            case "feedback" :
+                array_push($requestedTypes, $temp);
+                break;
+            case "forum" :
+                array_push($requestedTypes, $temp);
+                break;
+            case "game" :
+                array_push($requestedTypes, $temp);
+                break;
+            case "glossary" :
+                array_push($requestedTypes, $temp);
+                break;
+            case "choicegroup" :
+                array_push($requestedTypes, $temp);
+                break;
+            case "groupselect" :
+                array_push($requestedTypes, $temp);
+                break;
+            case "hotpot" :
+                array_push($requestedTypes, $temp);
+                break;
+            case "hvp" :
+                array_push($requestedTypes, $temp);
+                break;
+            case "lesson" :
+                array_push($requestedTypes, $temp);
+                break;
+            case "openmeetings" :
+                array_push($requestedTypes, $temp);
+                break;
+            case "questionnaire" :
+                array_push($requestedTypes, $temp);
+                break;
+            case "quiz" :
+                array_push($requestedTypes, $temp);
+                break;
+            case "quizgame" :
+                array_push($requestedTypes, $temp);
+                break;
+            case "scheduler" :
+                array_push($requestedTypes, $temp);
+                break;
+            case "scorm" :
+                array_push($requestedTypes, $temp);
+                break;
+            case "subcourse" :
+                array_push($requestedTypes, $temp);
+                break;
+            case "survey" :
+                array_push($requestedTypes, $temp);
+                break;
+            case "vpl" :
+                array_push($requestedTypes, $temp);
+                break;
+            case "wiki" :
+                array_push($requestedTypes, $temp);
+                break;
+            case "workshop" :
+                array_push($requestedTypes, $temp);
+                break;
+            case "book" :
+                array_push($requestedTypes, $temp);
+                break;
+            case "resource" :
+                array_push($requestedTypes, $temp);
+                break;
+            case "folder" :
+                array_push($requestedTypes, $temp);
+                break;
+            case "imscp" :
+                array_push($requestedTypes, $temp);
+                break;
+            case "label" :
+                array_push($requestedTypes, $temp);
+                break;
+            case "lightboxgallery" :
+                array_push($requestedTypes, $temp);
+                break;
+            case "page" :
+                array_push($requestedTypes, $temp);
+                break;
+            case "poster" :
+                array_push($requestedTypes, $temp);
+                break;
+            case "recordingsbn":
+                array_push($requestedTypes, $temp);
+                break;
+            case "url" :
+                array_push($requestedTypes, $temp);
+                break;
+        }
+    }
+}
+
+if (count($requestedTypes) < 1) {
+    echo "<html style=\"background-color: #f4f4f4;\">";
+    echo "<div style=\"width: 200px;height: 100px;position:absolute;left:0; right:0;top:0; bottom:0;margin:auto;max-width:100%;max-height:100%;
+overflow:auto;background-color: white;border-radius: 25px;padding: 20px;border: 2px solid darkgray;text-align: center;\">";
+    echo "<h3>" . (get_string('no_types_requested', 'block_analytics_graphs')) . "</h3>";
+    echo "</div>";
+    echo "</html>";
+    exit;
+}
+
+$result = block_analytics_graphs_get_resource_url_access($course, $students, $legacy, $requestedTypes);
+
+//echo var_dump($result);
+
 $numberofresources = count($result);
 if ($numberofresources == 0) {
-    echo(get_string('no_graph', 'block_analytics_graphs'));
+    echo "<html style=\"background-color: #f4f4f4;\">";
+    echo "<div style=\"width: 200px;height: 100px;position:absolute;left:0; right:0;top:0; bottom:0;margin:auto;max-width:100%;max-height:100%;
+overflow:auto;background-color: white;border-radius: 25px;padding: 20px;border: 2px solid darkgray;text-align: center;\">";
+    echo "<h3>" . (get_string('no_graph', 'block_analytics_graphs')) . "</h3>";
+    echo "</div>";
+    echo "</html>";
     exit;
 }
 $counter = 0;
@@ -52,21 +216,98 @@ foreach ($result as $tuple) {
         $numberofresourcesintopic[$tuple->section] = 1;
         $statistics[$counter]['topico'] = $tuple->section;
         $statistics[$counter]['tipo'] = $tuple->tipo;
-        if ($tuple->tipo == 'resource') {
-                $statistics[$counter]['material'] = $tuple->resource;
-        } else if ($tuple->tipo == 'url') {
-                $statistics[$counter]['material'] = $tuple->url;
-        } else if ($tuple->tipo == 'page') {
-               $statistics[$counter]['material'] = $tuple->page;
+        if ($tuple->tipo == 'activequiz') {
+            $statistics[$counter]['material'] = $tuple->activequiz;
         } else if ($tuple->tipo == 'assign') {
-               $statistics[$counter]['material'] = $tuple->assign;
+            $statistics[$counter]['material'] = $tuple->assign;
+        } else if ($tuple->tipo == 'attendance') {
+            $statistics[$counter]['material'] = $tuple->attendance;
+        } else if ($tuple->tipo == 'bigbluebuttonbn') {
+            $statistics[$counter]['material'] = $tuple->bigbluebuttonbn;
+        } else if ($tuple->tipo == 'booking') {
+            $statistics[$counter]['material'] = $tuple->booking;
+        } else if ($tuple->tipo == 'certificate') {
+            $statistics[$counter]['material'] = $tuple->certificate;
+        } else if ($tuple->tipo == 'chat') {
+            $statistics[$counter]['material'] = $tuple->chat;
+        } else if ($tuple->tipo == 'checklist') {
+            $statistics[$counter]['material'] = $tuple->checklist;
+        } else if ($tuple->tipo == 'choice') {
+            $statistics[$counter]['material'] = $tuple->choice;
+        } else if ($tuple->tipo == 'icontent') {
+            $statistics[$counter]['material'] = $tuple->icontent;
+        } else if ($tuple->tipo == 'customcert') {
+            $statistics[$counter]['material'] = $tuple->customcert;
+        } else if ($tuple->tipo == 'data') {
+            $statistics[$counter]['material'] = $tuple->data;
+        } else if ($tuple->tipo == 'dataform') {
+            $statistics[$counter]['material'] = $tuple->dataform;
+        } else if ($tuple->tipo == 'lti') {
+            $statistics[$counter]['material'] = $tuple->lti;
+        } else if ($tuple->tipo == 'feedback') {
+            $statistics[$counter]['material'] = $tuple->feedback;
         } else if ($tuple->tipo == 'forum') {
-               $statistics[$counter]['material'] = $tuple->forum;
+            $statistics[$counter]['material'] = $tuple->forum;
+        } else if ($tuple->tipo == 'game') {
+            $statistics[$counter]['material'] = $tuple->game;
+        } else if ($tuple->tipo == 'choicegroup') {
+            $statistics[$counter]['material'] = $tuple->choicegroup;
+        } else if ($tuple->tipo == 'glossary') {
+            $statistics[$counter]['material'] = $tuple->glossary;
+        } else if ($tuple->tipo == 'choicegroup') {
+            $statistics[$counter]['material'] = $tuple->choicegroup;
+        } else if ($tuple->tipo == 'groupselect') {
+            $statistics[$counter]['material'] = $tuple->groupselect;
+        } else if ($tuple->tipo == 'hotpot') {
+            $statistics[$counter]['material'] = $tuple->hotpot;
+        } else if ($tuple->tipo == 'hvp') {
+            $statistics[$counter]['material'] = $tuple->hvp;
+        } else if ($tuple->tipo == 'lesson') {
+            $statistics[$counter]['material'] = $tuple->lesson;
+        } else if ($tuple->tipo == 'openmeetings') {
+            $statistics[$counter]['material'] = $tuple->openmeetings;
+        } else if ($tuple->tipo == 'questionnaire') {
+            $statistics[$counter]['material'] = $tuple->questionnaire;
         } else if ($tuple->tipo == 'quiz') {
-               $statistics[$counter]['material'] = $tuple->quiz;
+            $statistics[$counter]['material'] = $tuple->quiz;
+        } else if ($tuple->tipo == 'quizgame') {
+            $statistics[$counter]['material'] = $tuple->quizgame;
+        } else if ($tuple->tipo == 'scheduler') {
+            $statistics[$counter]['material'] = $tuple->scheduler;
+        } else if ($tuple->tipo == 'scorm') {
+            $statistics[$counter]['material'] = $tuple->scorm;
+        } else if ($tuple->tipo == 'subcourse') {
+            $statistics[$counter]['material'] = $tuple->subcourse;
+        } else if ($tuple->tipo == 'survey') {
+            $statistics[$counter]['material'] = $tuple->survey;
+        } else if ($tuple->tipo == 'vpl') {
+            $statistics[$counter]['material'] = $tuple->vpl;
+        } else if ($tuple->tipo == 'wiki') {
+            $statistics[$counter]['material'] = $tuple->wiki;
+        } else if ($tuple->tipo == 'workshop') {
+            $statistics[$counter]['material'] = $tuple->workshop;
+        } else if ($tuple->tipo == 'book') {
+            $statistics[$counter]['material'] = $tuple->book;
+        } else if ($tuple->tipo == 'resource') {
+            $statistics[$counter]['material'] = $tuple->resource;
         } else if ($tuple->tipo == 'folder') {
-               $statistics[$counter]['material'] = $tuple->folder;
+            $statistics[$counter]['material'] = $tuple->folder;
+        } else if ($tuple->tipo == 'imscp') {
+            $statistics[$counter]['material'] = $tuple->imscp;
+        } else if ($tuple->tipo == 'label') {
+            $statistics[$counter]['material'] = $tuple->label;
+        } else if ($tuple->tipo == 'lightboxgallery') {
+            $statistics[$counter]['material'] = $tuple->lightboxgallery;
+        } else if ($tuple->tipo == 'page') {
+            $statistics[$counter]['material'] = $tuple->page;
+        } else if ($tuple->tipo == 'poster') {
+            $statistics[$counter]['material'] = $tuple->poster;
+        } else if ($tuple->tipo == 'recordingsbn') {
+            $statistics[$counter]['material'] = $tuple->recordingsbn;
+        } else if ($tuple->tipo == 'url') {
+            $statistics[$counter]['material'] = $tuple->url;
         }
+
         if ($tuple->userid) { /* If a user accessed -> get name */
             $statistics[$counter]['studentswithaccess'][] = array('userid' => $tuple->userid,
                     'nome' => $tuple->firstname." ".$tuple->lastname, 'email' => $tuple->email);
@@ -99,21 +340,99 @@ foreach ($result as $tuple) {
             $statistics[$counter]['topico'] = $tuple->section;
             $statistics[$counter]['tipo'] = $tuple->tipo;
             $resourceid = $tuple->ident;
-            if ($tuple->tipo == 'resource') {
-                $statistics[$counter]['material'] = $tuple->resource;
-            } else if ($tuple->tipo == 'url') {
-                $statistics[$counter]['material'] = $tuple->url;
-            } else if ($tuple->tipo == 'page') {
-                $statistics[$counter]['material'] = $tuple->page;
+
+            if ($tuple->tipo == 'activequiz') {
+                $statistics[$counter]['material'] = $tuple->activequiz;
             } else if ($tuple->tipo == 'assign') {
                 $statistics[$counter]['material'] = $tuple->assign;
+            } else if ($tuple->tipo == 'attendance') {
+                $statistics[$counter]['material'] = $tuple->attendance;
+            } else if ($tuple->tipo == 'bigbluebuttonbn') {
+                $statistics[$counter]['material'] = $tuple->bigbluebuttonbn;
+            } else if ($tuple->tipo == 'booking') {
+                $statistics[$counter]['material'] = $tuple->booking;
+            } else if ($tuple->tipo == 'certificate') {
+                $statistics[$counter]['material'] = $tuple->certificate;
+            } else if ($tuple->tipo == 'chat') {
+                $statistics[$counter]['material'] = $tuple->chat;
+            } else if ($tuple->tipo == 'checklist') {
+                $statistics[$counter]['material'] = $tuple->checklist;
+            } else if ($tuple->tipo == 'choice') {
+                $statistics[$counter]['material'] = $tuple->choice;
+            } else if ($tuple->tipo == 'icontent') {
+                $statistics[$counter]['material'] = $tuple->icontent;
+            } else if ($tuple->tipo == 'customcert') {
+                $statistics[$counter]['material'] = $tuple->customcert;
+            } else if ($tuple->tipo == 'data') {
+                $statistics[$counter]['material'] = $tuple->data;
+            } else if ($tuple->tipo == 'dataform') {
+                $statistics[$counter]['material'] = $tuple->dataform;
+            } else if ($tuple->tipo == 'lti') {
+                $statistics[$counter]['material'] = $tuple->lti;
+            } else if ($tuple->tipo == 'feedback') {
+                $statistics[$counter]['material'] = $tuple->feedback;
             } else if ($tuple->tipo == 'forum') {
                 $statistics[$counter]['material'] = $tuple->forum;
+            } else if ($tuple->tipo == 'game') {
+                $statistics[$counter]['material'] = $tuple->game;
+            } else if ($tuple->tipo == 'choicegroup') {
+                $statistics[$counter]['material'] = $tuple->choicegroup;
+            } else if ($tuple->tipo == 'glossary') {
+                $statistics[$counter]['material'] = $tuple->glossary;
+            } else if ($tuple->tipo == 'choicegroup') {
+                $statistics[$counter]['material'] = $tuple->choicegroup;
+            } else if ($tuple->tipo == 'groupselect') {
+                $statistics[$counter]['material'] = $tuple->groupselect;
+            } else if ($tuple->tipo == 'hotpot') {
+                $statistics[$counter]['material'] = $tuple->hotpot;
+            } else if ($tuple->tipo == 'hvp') {
+                $statistics[$counter]['material'] = $tuple->hvp;
+            } else if ($tuple->tipo == 'lesson') {
+                $statistics[$counter]['material'] = $tuple->lesson;
+            } else if ($tuple->tipo == 'openmeetings') {
+                $statistics[$counter]['material'] = $tuple->openmeetings;
+            } else if ($tuple->tipo == 'questionnaire') {
+                $statistics[$counter]['material'] = $tuple->questionnaire;
             } else if ($tuple->tipo == 'quiz') {
                 $statistics[$counter]['material'] = $tuple->quiz;
+            } else if ($tuple->tipo == 'quizgame') {
+                $statistics[$counter]['material'] = $tuple->quizgame;
+            } else if ($tuple->tipo == 'scheduler') {
+                $statistics[$counter]['material'] = $tuple->scheduler;
+            } else if ($tuple->tipo == 'scorm') {
+                $statistics[$counter]['material'] = $tuple->scorm;
+            } else if ($tuple->tipo == 'subcourse') {
+                $statistics[$counter]['material'] = $tuple->subcourse;
+            } else if ($tuple->tipo == 'survey') {
+                $statistics[$counter]['material'] = $tuple->survey;
+            } else if ($tuple->tipo == 'vpl') {
+                $statistics[$counter]['material'] = $tuple->vpl;
+            } else if ($tuple->tipo == 'wiki') {
+                $statistics[$counter]['material'] = $tuple->wiki;
+            } else if ($tuple->tipo == 'workshop') {
+                $statistics[$counter]['material'] = $tuple->workshop;
+            } else if ($tuple->tipo == 'book') {
+                $statistics[$counter]['material'] = $tuple->book;
+            } else if ($tuple->tipo == 'resource') {
+                $statistics[$counter]['material'] = $tuple->resource;
             } else if ($tuple->tipo == 'folder') {
                 $statistics[$counter]['material'] = $tuple->folder;
+            } else if ($tuple->tipo == 'imscp') {
+                $statistics[$counter]['material'] = $tuple->imscp;
+            } else if ($tuple->tipo == 'label') {
+                $statistics[$counter]['material'] = $tuple->label;
+            } else if ($tuple->tipo == 'lightboxgallery') {
+                $statistics[$counter]['material'] = $tuple->lightboxgallery;
+            } else if ($tuple->tipo == 'page') {
+                $statistics[$counter]['material'] = $tuple->page;
+            } else if ($tuple->tipo == 'poster') {
+                $statistics[$counter]['material'] = $tuple->poster;
+            } else if ($tuple->tipo == 'recordingsbn') {
+                $statistics[$counter]['material'] = $tuple->recordingsbn;
+            } else if ($tuple->tipo == 'url') {
+                $statistics[$counter]['material'] = $tuple->url;
             }
+
             if ($tuple->userid) {
                 $statistics[$counter]['studentswithaccess'][] = array('userid' => $tuple->userid,
                         'nome' => $tuple->firstname." ".$tuple->lastname, 'email' => $tuple->email);
@@ -394,20 +713,22 @@ foreach ($groupmembers as $key => $value) {
                 if (typeof value.studentswithaccess != 'undefined')
                 {
                      var titulo = coursename + "</h3>" +
-                            <?php  echo json_encode(get_string('access', 'block_analytics_graphs'));?> + " - "+
+                            <?php  echo json_encode(get_string('access', 'block_analytics_graphs')); ?> + " - "+
                             nome;
                     div += "<div class='div_nomes' id='" + index + "-" + 
-                        "<?php echo substr(get_string('access', 'block_analytics_graphs'), 0, 1);?>" +
-                        "'>" + createEmailForm(titulo, value.studentswithaccess, courseid, 'graphResourceUrl.php') + "</div>";
+                        "<?php echo substr(get_string('access', 'block_analytics_graphs'), 0, 1); ?>" +
+                        "'>" + createEmailForm(titulo, value.studentswithaccess, courseid, 'graphResourceUrl.php',
+                            <?php echo json_encode(get_string('info_coursetype', 'block_analytics_graphs') . ': ' . block_analytics_graphs_get_course_name($course)); ?> + ', ' + nome) + "</div>";
                 }
                 if (typeof value.studentswithnoaccess != 'undefined')
                 {
                     var titulo = coursename + "</h3>" +
-                            <?php  echo json_encode(get_string('no_access', 'block_analytics_graphs'));?> + " - "+
+                            <?php  echo json_encode(get_string('no_access', 'block_analytics_graphs')); ?> + " - "+
                             nome;
                     div += "<div class='div_nomes' id='" + index + "-" +
-                        "<?php echo substr(get_string('no_access', 'block_analytics_graphs'), 0, 1);?>" +
-                        "'>" + createEmailForm(titulo, value.studentswithnoaccess, courseid, 'graphResourceUrl.php') + "</div>";
+                        "<?php echo substr(get_string('no_access', 'block_analytics_graphs'), 0, 1); ?>" +
+                        "'>" + createEmailForm(titulo, value.studentswithnoaccess, courseid, 'graphResourceUrl.php',
+                            <?php echo json_encode(get_string('info_coursetype', 'block_analytics_graphs') . ': ' . block_analytics_graphs_get_course_name($course)); ?> + ', ' + nome) + "</div>";
                 }
                 document.write(div);
             });
@@ -417,26 +738,28 @@ foreach ($groupmembers as $key => $value) {
                 {
                     $.each(value.studentswithaccess, function(ind, student){
                         var titulo = coursename + "</h3>" +
-                        <?php  echo json_encode(get_string('access', 'block_analytics_graphs'));?> + " - "+
+                        <?php  echo json_encode(get_string('access', 'block_analytics_graphs')); ?> + " - "+
                         value.material[ind];
                     
                         if(student !== undefined)
                             div += "<div class='div_nomes' id='" + ind + "-" + 
-                            "<?php echo substr(get_string('access', 'block_analytics_graphs'), 0, 1);?>" +
-                            "-group-"+index+"'>" + createEmailForm(titulo, student, courseid, 'graphResourceUrl.php') + "</div>";
+                            "<?php echo substr(get_string('access', 'block_analytics_graphs'), 0, 1); ?>" +
+                            "-group-"+index+"'>" + createEmailForm(titulo, student, courseid, 'graphResourceUrl.php',
+                                    <?php echo json_encode(get_string('info_coursetype', 'block_analytics_graphs') . ': ' . block_analytics_graphs_get_course_name($course)); ?> + ', ' + nome) + "</div>";
                     });
                 }
                 if (typeof value.studentswithnoaccess != 'undefined')
                 {
                     $.each(value.studentswithnoaccess, function(ind, student){
                         var titulo = coursename + "</h3>" +
-                            <?php  echo json_encode(get_string('no_access', 'block_analytics_graphs'));?> + " - "+
+                            <?php  echo json_encode(get_string('no_access', 'block_analytics_graphs')); ?> + " - "+
                             value.material[ind];
                     
                         if(student !== undefined)
                             div += "<div class='div_nomes' id='" + ind + "-" + 
-                            "<?php echo substr(get_string('no_access', 'block_analytics_graphs'), 0, 1);?>" +
-                            "-group-"+index+"'>" + createEmailForm(titulo, student, courseid, 'graphResourceUrl.php') + "</div>";
+                            "<?php echo substr(get_string('no_access', 'block_analytics_graphs'), 0, 1); ?>" +
+                            "-group-"+index+"'>" + createEmailForm(titulo, student, courseid, 'graphResourceUrl.php',
+                                    <?php echo json_encode(get_string('info_coursetype', 'block_analytics_graphs') . ': ' . block_analytics_graphs_get_course_name($course)); ?> + ', ' + nome) + "</div>";
                     });
                 }
                 document.write(div);

@@ -30,5 +30,8 @@ require_capability('block/analytics_graphs:viewpages', $context);
 
 $resourceaccess = block_analytics_graphs_get_user_resource_url_page_access($courseid, $studentid, $legacy);
 $assigninfo = block_analytics_graphs_get_user_assign_submission($courseid, $studentid);
+$quizinfo = block_analytics_graphs_get_user_quiz_state($courseid, $studentid);
+$foruminfo = block_analytics_graphs_get_user_forum_state($courseid, $studentid);
 
-echo json_encode(array("resources" => $resourceaccess, "assign" => $assigninfo));
+echo json_encode(array("resources" => $resourceaccess, "assign" => $assigninfo, "quiz" => $quizinfo,
+    "forum" => $foruminfo));
