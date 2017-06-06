@@ -221,6 +221,18 @@ thead th {
     overflow: auto;
     height: 200px;
 }
+.totalgraph {
+    width: 55%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50px;
+    border-radius: 0px;
+    padding: 10px;
+    border-top: 1px solid silver;
+    border-bottom: 1px solid silver;
+    border-right: 1px solid silver;
+}
 </style>
 
 
@@ -233,8 +245,10 @@ thead th {
     var studentswithnoaccess = <?php echo $studentswithnoaccess; ?>;
     var groups = <?php echo $groupmembersjson; ?>;
     var legacy = <?php echo json_encode($legacy); ?>;
-
+    var weekBeginningOffset = 1; //added to each loop making charts start from WEEK#1 instead of WEEK#0
     var nomes = [];
+    var totalResourceAccessData = [];
+    var totalWeekDaysAccessData = [];
     $.each(geral, function(ind, val){   
         var nome = val.firstname+" "+val.lastname;
         if (nomes.indexOf(nome) === -1)
@@ -288,6 +302,23 @@ thead th {
         }
     });
 
+    for (i = 0; i <= <?php echo $maxnumberofweeks; ?>; i++) {
+        totalResourceAccessData[i] = 0;
+        $.each(students, function(index, item) {
+            if (item !== undefined && item.acessosModulos !== undefined && item.acessosModulos[i] != undefined) {
+                totalResourceAccessData[i] += item.acessosModulos[i];
+            }
+        });
+        totalWeekDaysAccessData[i] = 0;
+        $.each(students, function(index, item) {
+            if (item !== undefined && item.acessos !== undefined && item.acessos[i] != undefined) {
+                totalWeekDaysAccessData[i] += item.acessos[i];
+            }
+        });
+    }
+    totalResourceAccessData = pan_array_to_max_number_of_weeks(totalResourceAccessData);
+    totalWeekDaysAccessData = pan_array_to_max_number_of_weeks(totalWeekDaysAccessData);
+
     function trata_array(array){
         var novo = [];
         $.each(array, function(ind, value){
@@ -296,16 +327,15 @@ thead th {
             else
                 novo[ind] = value;
         });
-        if (novo.length < <?php echo $maxnumberofweeks; ?>) {
-            return pan_array_to_max_number_of_weeks(novo);
+        if (novo.length <= <?php echo $maxnumberofweeks; ?>) {
+            novo = pan_array_to_max_number_of_weeks(novo);
         }
-        else {
-            return novo;
-        }
+        return novo;
     }
 
     function pan_array_to_max_number_of_weeks(array) {
-        for (i = array.length; i < (<?php echo $maxnumberofweeks; ?>); i++ ) {
+        for (i = array.length; i <= (<?php echo $maxnumberofweeks; ?>); i++ ) {
+		if (array[i] === undefined)
             array[i] = 0;
         }
         return array;
@@ -340,8 +370,8 @@ thead th {
                         tickPositions: [],
                         tickInterval: 1,
                         minTickInterval: 24,
-                        min: <?php echo $maxnumberofweeks; ?> - 15,
-                        max: <?php echo $maxnumberofweeks; ?>
+                        min: (<?php echo $maxnumberofweeks; ?> + weekBeginningOffset) - 15,
+                        max: <?php echo $maxnumberofweeks; ?> + weekBeginningOffset
                  },
 
                 navigator: {
@@ -419,9 +449,8 @@ thead th {
                         },
                 },
                 series: [{
-                    //data: trata_array(student.acessos)
+                    pointStart: weekBeginningOffset,
                     data: trata_array(student.acessosModulos)
-                    
                 }],
                 
                 
@@ -470,8 +499,8 @@ thead th {
                 tickPositions: [],
                 tickInterval: 1,
                 minTickInterval: 24,
-                min: <?php echo $maxnumberofweeks; ?> - 15,
-                max: <?php echo $maxnumberofweeks; ?>
+                min: (<?php echo $maxnumberofweeks; ?> + weekBeginningOffset) - 15,
+                max: <?php echo $maxnumberofweeks; ?>  + weekBeginningOffset
             },
 
             navigator: {
@@ -495,7 +524,7 @@ thead th {
                     text: null
                 },
                 tickPositions: [0],
-                max: 7,
+                max: 7, 
                 tickInterval: 1
             },
 
@@ -557,7 +586,7 @@ thead th {
 
 
             series: [{
-                //data: [1,1,2,1,3,1,4,1,5,1,6,1,7,1,8,1,9,1,10,1,11,1,12,1,13,1,14,1,15,1,16,1]
+                pointStart: weekBeginningOffset,
                 data: trata_array(student.acessos)
             }],
 
@@ -669,14 +698,13 @@ thead th {
             </script>
         </tbody>
     </table>
+
     <div class="nao-acessaram">
     <br><BR>
         <center>
         <h3><?php echo get_string('no_access', 'block_analytics_graphs');?></h3>
         <p>
-
-
-                <script type="text/javascript">
+            <script type="text/javascript">
         var title = <?php echo json_encode(get_string('no_access', 'block_analytics_graphs'));?> + " - " + coursename;
         $.each(studentswithnoaccess, function(i, v) {
                                 document.write("<span class='span-name' id='span-name-"+v.userid+"'>"+v.nome+"</span><br>");
@@ -686,7 +714,7 @@ thead th {
                                 <?php echo json_encode(get_string('info_coursetype', 'block_analytics_graphs') . ': ' . block_analytics_graphs_get_course_name($course)); ?>)+
                             "</div>";
                 document.write(form);
-                </script>
+            </script>
 
 
             <input type="button" value="<?php echo get_string('send_email', 'block_analytics_graphs');?>" class="button-fancy" />
@@ -694,8 +722,13 @@ thead th {
         </center>
     </div>
 
+    <div class="totalgraph">
+        <div id="containerTotalWeekDaysAccess"></div>
+        <div id="containerTotalGraphModules"></div>
+    </div>
 
 <script type="text/javascript">
+
     var studentwithaccess = [];
     $.each(students, function(ind, val) {
         var div = "";
@@ -1725,6 +1758,250 @@ thead th {
                 }
             });
         }
+    });
+
+    Highcharts.chart('containerTotalGraphModules', {
+        chart: {
+            //borderWidth: 0,
+            type: 'area',
+            //margin: [0, 0, 0, 0],
+            //spacingBottom: 0,
+            //width: 250,
+            height: 250,
+            style: {
+                overflow: 'visible'
+            },
+            skipClone: true,
+        },
+
+        title: {
+            text: '<?php echo get_string('hitschart_totalresourcechart', 'block_analytics_graphs'); ?>'
+        },
+
+        xAxis: {
+            labels: {
+                enabled: false
+            },
+            title: {
+                text: null
+            },
+            startOnTick: false,
+            endOnTick: false,
+            tickPositions: [],
+            tickInterval: 1,
+            minTickInterval: 24,
+            min: (<?php echo $maxnumberofweeks; ?> + weekBeginningOffset) - 31,
+            max: <?php echo $maxnumberofweeks; ?>  + weekBeginningOffset
+        },
+
+        navigator: {
+            enabled: false,
+            margin: 5
+        },
+
+        scrollbar: {
+            enabled: true,
+            height: 10
+        },
+
+        yAxis: {
+            minorTickInterval: 1,
+            endOnTick: false,
+            startOnTick: false,
+            labels: {
+                enabled: false
+            },
+            title: {
+                text: null
+            },
+            tickPositions: [0],
+            tickInterval: 1
+        },
+
+
+        credits: {
+            enabled: false
+        },
+
+
+        legend: {
+            enabled: false
+        },
+
+
+        tooltip: {
+            backgroundColor: null,
+            borderWidth: 0,
+            shadow: false,
+            useHTML: true,
+            hideDelay: 0,
+            shared: true,
+            padding: 0,
+            headerFormat: '',
+            pointFormat: <?php echo "'".get_string('week_number', 'block_analytics_graphs').": '"; ?> +
+                '{point.x}<br>' +
+            <?php echo "'".get_string('resources_with_access', 'block_analytics_graphs').": '"; ?> +
+                '{point.y}',
+            positioner: function (w, h, point) { return { x: point.plotX - w / 2, y: point.plotY - h}; }
+        },
+
+
+        plotOptions: {
+            series: {
+                animation: {
+                    duration: 2000
+                },
+                lineWidth: 1,
+                shadow: false,
+                states: {
+                    hover: {
+                        lineWidth: 1
+                    }
+                },
+                marker: {
+                    radius: 2,
+                    states: {
+                        hover: {
+                            radius: 4                                                        }
+                    }
+                },
+                fillOpacity: 0.25
+            },
+        },
+
+
+        series: [{
+            pointStart: weekBeginningOffset,
+            data: trata_array(totalResourceAccessData)
+        }],
+
+
+        exporting: {
+            enabled: false
+        },
+
+    });
+
+    Highcharts.chart('containerTotalWeekDaysAccess', {
+        chart: {
+            //borderWidth: 0,
+            type: 'area',
+            //margin: [0, 0, 0, 0],
+            //spacingBottom: 0,
+            //width: 250,
+            height: 250,
+            style: {
+                overflow: 'visible'
+            },
+            skipClone: true,
+        },
+
+        title: {
+            text: '<?php echo get_string('hitschart_totalweekaccesseschart', 'block_analytics_graphs'); ?>'
+        },
+
+        xAxis: {
+            labels: {
+                enabled: false
+            },
+            title: {
+                text: null
+            },
+            startOnTick: false,
+            endOnTick: false,
+            tickPositions: [],
+            tickInterval: 1,
+            minTickInterval: 24,
+            min: (<?php echo $maxnumberofweeks; ?> + weekBeginningOffset) - 31,
+            max: <?php echo $maxnumberofweeks; ?>  + weekBeginningOffset
+        },
+
+        navigator: {
+            enabled: false,
+            margin: 5
+        },
+
+        scrollbar: {
+            enabled: true,
+            height: 10
+        },
+
+        yAxis: {
+            minorTickInterval: 1,
+            endOnTick: false,
+            startOnTick: false,
+            labels: {
+                enabled: false
+            },
+            title: {
+                text: null
+            },
+            tickPositions: [0],
+            tickInterval: 1
+        },
+
+
+        credits: {
+            enabled: false
+        },
+
+
+        legend: {
+            enabled: false
+        },
+
+
+        tooltip: {
+            backgroundColor: null,
+            borderWidth: 0,
+            shadow: false,
+            useHTML: true,
+            hideDelay: 0,
+            shared: true,
+            padding: 0,
+            headerFormat: '',
+            pointFormat: <?php echo "'".get_string('week_number', 'block_analytics_graphs').": '"; ?> +
+                '{point.x}<br>' +
+            <?php echo "'".get_string('days_with_access', 'block_analytics_graphs').": '"; ?> +
+                '{point.y}',
+            positioner: function (w, h, point) { return { x: point.plotX - w / 2, y: point.plotY - h}; }
+        },
+
+
+        plotOptions: {
+            series: {
+                animation: {
+                    duration: 2000
+                },
+                lineWidth: 1,
+                shadow: false,
+                states: {
+                    hover: {
+                        lineWidth: 1
+                    }
+                },
+                marker: {
+                    radius: 2,
+                    states: {
+                        hover: {
+                            radius: 4                                                        }
+                    }
+                },
+                fillOpacity: 0.25
+            },
+        },
+
+
+        series: [{
+            pointStart: weekBeginningOffset,
+            data: trata_array(totalWeekDaysAccessData)
+        }],
+
+
+        exporting: {
+            enabled: false
+        },
+
     });
     </script>
 </body>

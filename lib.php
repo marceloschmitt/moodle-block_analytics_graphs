@@ -79,16 +79,12 @@ function block_analytics_graphs_get_teachers($course) {
     return($teachers);
 }
 
-function block_analytics_graphs_generate_graph_startup_module_entry ($icon, $name, $value, $title, $forceIconSize = true) {
-
-    if ($forceIconSize) { //in case icon has non-default size, for example, in case of 3rd-party modules or themes.
-        $iconSize = " width='24' height='24'";
-    }
+function block_analytics_graphs_generate_graph_startup_module_entry ($iconhtml, $name, $value, $title) {
 
     return      "<div style='height: 24px;line-height: 24px;text-align: left;border: 1px solid lightgrey;" .
                 "margin-bottom: 2px; margin-top: 8px'>" .
                 "<div style='display: table;'>" .
-                "<img style='display: table-cell; vertical-align: middle;' src='" . $icon . "'". $iconSize . ">" .
+                $iconhtml .
                 "<div style='display: table-cell; vertical-align: middle;'>" .
                 "<input type='checkbox' id='selectable' name='" . $name . "' value='" . $value . "'>" . $title . "</div>" .
                 "</div></div>";
@@ -108,7 +104,7 @@ function block_analytics_graphs_get_course_used_modules ($courseID) {
     return $result;
 }
 
-function block_analytics_graphs_get_resource_url_access($course, $estudantes, $legacy, $requestedTypes) {
+function block_analytics_graphs_get_resource_url_access($course, $estudantes, $requestedTypes) {
     global $COURSE;
     global $DB;
     foreach ($estudantes as $tupla) {
@@ -155,7 +151,6 @@ function block_analytics_graphs_get_resource_url_access($course, $estudantes, $l
 
     $params = array_merge(array($startdate), $inparams, $requestedModules);
 
-    if (!$legacy) {
         $sqlA = "SELECT temp.id+(COALESCE(temp.userid,1)*1000000)as id, temp.id as ident, tag.section, m.name as tipo, ";
         $sqlB = "temp.userid, usr.firstname, usr.lastname, usr.email, temp.acessos, tag.sequence
                     FROM (
@@ -408,27 +403,7 @@ function block_analytics_graphs_get_resource_url_access($course, $estudantes, $l
         }
 
         $sql = $sqlA . $sqlB . $sqlC . $sqlD . $sqlE;
-    } else {
-        $sql = "SELECT temp.id+(COALESCE(temp.userid,1)*1000000)as id, temp.id as ident, cs.section, m.name as tipo,
-                    r.name as resource, u.name as url, p.name as page, temp.userid, usr.firstname,
-                    usr.lastname, usr.email, temp.acessos
-                    FROM (
-                        SELECT cm.id, log.userid, count(*) as acessos
-                        FROM {course_modules} as cm
-                        LEFT JOIN {log} as log ON log.time >= ?
-                            AND log.userid $insql AND action = 'view' AND cm.id = log.cmid
-                        WHERE cm.course = ? AND (cm.module=? OR cm.module=? OR cm.module=?)
-                        GROUP BY cm.id, log.userid
-                        ) as temp
-                    LEFT JOIN {course_modules} as cm ON temp.id = cm.id
-                    LEFT JOIN {course_sections} as cs ON cm.section = cs.id
-                    LEFT JOIN {modules} as m ON cm.module = m.id
-                    LEFT JOIN {resource} as r ON cm.instance = r.id
-                    LEFT JOIN {url} as u ON cm.instance = u.id
-                    LEFT JOIN {page} as p ON cm.instance = p.id
-                    LEFT JOIN {user} as usr ON usr.id = temp.userid
-                    ORDER BY cs.section, m.name, r.name, u.name, p.name";
-    }
+
     $resultado = $DB->get_records_sql($sql, $params);
     $dbman->drop_table($table);
     return($resultado);
@@ -1093,6 +1068,27 @@ function block_analytics_graphs_get_course_name($course) {
     return $resultname;
 }
 
+function block_analytics_graphs_get_logstore_loglife() {
+    global $DB;
+    $sql = "SELECT  a.id, a.plugin, a.name, a.value
+                FROM {config_plugins} a
+                WHERE a.name = 'loglifetime' AND a.plugin = 'logstore_standard'
+                ORDER BY name";
+    $result = $DB->get_records_sql($sql);
+    return reset($result)->value;
+}
+
+function block_analytics_graphs_get_course_days_since_startdate($course) {
+    global $DB;
+    $sql = "SELECT  a.id, a.startdate
+                FROM {course} a
+                WHERE a.id = " . $course;
+    $result = $DB->get_records_sql($sql);
+    $startdate = reset($result)->startdate;
+    $currentdate = time();
+    return floor(($currentdate - $startdate) / (60 * 60 * 24));
+}
+
 function block_analytics_graphs_get_user_quiz_state($course, $student) {
     global $DB;
     $quiz = $DB->get_record('modules', array('name' => 'quiz'), 'id');
@@ -1165,24 +1161,58 @@ function block_analytics_graphs_get_user_quiz_state($course, $student) {
  */
 function block_analytics_graphs_extend_navigation_course($navigation, $course, $context) {
     global $CFG;
+    global $DB;
     $reports = $navigation->find('coursereports', navigation_node::TYPE_CONTAINER);
     if (has_capability('block/analytics_graphs:viewpages', $context) && $reports) {
+
+        $sql = "SELECT cm.module, md.name 
+            FROM {course_modules} as cm 
+            LEFT JOIN {modules} as md ON cm.module = md.id 
+            WHERE cm.course = ? 
+            GROUP BY cm.module";
+        $params = array($course->id);
+        $availableModulesTotal = $DB->get_records_sql($sql, $params);
+        $availableModules = array();
+        foreach ( $availableModulesTotal as $result ) {
+            array_push($availableModules, $result->name);
+        }
+
         $reportanalyticsgraphs = $reports->add(get_string('pluginname', 'block_analytics_graphs'));
+
         $url = new moodle_url($CFG->wwwroot.'/blocks/analytics_graphs/grades_chart.php',
             array('id' => $course->id));
         $reportanalyticsgraphs->add(get_string('grades_chart', 'block_analytics_graphs'), $url,
             navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
+
         $url = new moodle_url($CFG->wwwroot.'/blocks/analytics_graphs/graphresourcestartup.php',
             array('id' => $course->id, 'legacy' => '0'));
         $reportanalyticsgraphs->add(get_string('access_to_contents', 'block_analytics_graphs'), $url,
             navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
-        $url = new moodle_url($CFG->wwwroot.'/blocks/analytics_graphs/assign.php',
-            array('id' => $course->id));
-        $reportanalyticsgraphs->add(get_string('submissions_assign', 'block_analytics_graphs'), $url,
+
+        $url = new moodle_url($CFG->wwwroot.'/blocks/analytics_graphs/timeaccesseschart.php',
+            array('id' => $course->id, 'days' => '7'));
+        $reportanalyticsgraphs->add(get_string('timeaccesschart_title', 'block_analytics_graphs'), $url,
             navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
-        $url = new moodle_url($CFG->wwwroot.'/blocks/analytics_graphs/quiz.php', array('id' => $course->id));
-        $reportanalyticsgraphs->add(get_string('submissions_quiz', 'block_analytics_graphs'), $url,
-            navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
+
+        if (in_array("assign", $availableModules)) {
+            $url = new moodle_url($CFG->wwwroot . '/blocks/analytics_graphs/assign.php',
+                array('id' => $course->id));
+            $reportanalyticsgraphs->add(get_string('submissions_assign', 'block_analytics_graphs'), $url,
+                navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
+        }
+
+        if (in_array("quiz", $availableModules)) {
+            $url = new moodle_url($CFG->wwwroot . '/blocks/analytics_graphs/quiz.php', array('id' => $course->id));
+            $reportanalyticsgraphs->add(get_string('submissions_quiz', 'block_analytics_graphs'), $url,
+                navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
+        }
+
+        if (in_array("hotpot", $availableModules)) {
+            $url = new moodle_url($CFG->wwwroot.'/blocks/analytics_graphs/hotpot.php', array('id' => $course->id));
+            $reportanalyticsgraphs->add(get_string('submissions_hotpot', 'block_analytics_graphs'), $url,
+                navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
+        }
+
         $url = new moodle_url($CFG->wwwroot.'/blocks/analytics_graphs/hits.php', array('id' => $course->id,
             'legacy' => '0'));
         $reportanalyticsgraphs->add(get_string('hits_distribution', 'block_analytics_graphs'), $url,

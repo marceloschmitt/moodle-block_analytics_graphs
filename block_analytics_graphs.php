@@ -13,20 +13,19 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
 defined('MOODLE_INTERNAL') || die();
-
 class block_analytics_graphs extends block_base {
     public function init() {
         $this->title = get_string('analytics_graphs', 'block_analytics_graphs');
     }
     // The PHP tag and the curly bracket for the class definition
     // will only be closed after there is another function added in the next section.
-
-
     public function get_content() {
         global $CFG;
         global $DB;
+
+        $useLegacyPixUrl = false; //pix_url got deprecated in Moodle 3.3, leaving this just in case.
+
         $course = $this->page->course;
         $context = context_course::instance($course->id);
         $canview = has_capability('block/analytics_graphs:viewpages', $context);
@@ -44,7 +43,6 @@ class block_analytics_graphs extends block_base {
             GROUP BY cm.module";
         $params = array($course->id);
         $availableModulesTotal = $DB->get_records_sql($sql, $params);
-
         $availableModules = array();
         foreach ( $availableModulesTotal as $result ) {
             array_push($availableModules, $result->name);
@@ -55,9 +53,14 @@ class block_analytics_graphs extends block_base {
         $this->content->text = "";
         $this->content->text .= "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/grades_chart.php?id={$course->id}
                           target=_blank>" . get_string('grades_chart', 'block_analytics_graphs') . "</a>";
-        $this->content->text .= "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/graphresourcestartup.php?id={$course->id}&legacy=0
+        if ($useLegacyPixUrl) {
+            $this->content->text .= "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/graphresourcestartuplegacy.php?id={$course->id}
                           target=_blank>" . get_string('access_to_contents', 'block_analytics_graphs') . "</a>";
-        $this->content->text .= "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/timeaccesseschart.php?id={$course->id}&legacy=0
+        } else {
+            $this->content->text .= "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/graphresourcestartup.php?id={$course->id}
+                          target=_blank>" . get_string('access_to_contents', 'block_analytics_graphs') . "</a>";
+        }
+        $this->content->text .= "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/timeaccesseschart.php?id={$course->id}&days=7
                           target=_blank>" . get_string('timeaccesschart_title', 'block_analytics_graphs') . "</a>";
         if (in_array("assign", $availableModules)) {
             $this->content->text .= "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/assign.php?id={$course->id}
@@ -69,7 +72,7 @@ class block_analytics_graphs extends block_base {
         }
         if (in_array("hotpot", $availableModules)) {
             //if ($DB->get_record('modules', array('name' => 'hotpot', 'visible' => '1'), 'id')) {
-                $this->content->text .= "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/hotpot.php?id={$course->id}
+            $this->content->text .= "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/hotpot.php?id={$course->id}
                 target=_blank>" . get_string('submissions_hotpot', 'block_analytics_graphs') . "</a>";
             //}
         }
