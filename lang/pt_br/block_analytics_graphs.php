@@ -75,6 +75,7 @@ $string['subject'] = 'Assunto';
 $string['submissions'] = 'Submissões';
 $string['submissions_assign'] = 'Submissões de tarefas';
 $string['submissions_hotpot'] = 'Submissoes de Hot Potatoes';
+$string['submissions_turnitin'] = 'Submissoes de Turnitin';
 $string['submissions_quiz'] = 'Submissões de questionários';
 $string['submission_ratio'] = 'Relação de envio';
 $string['title_access'] = 'Distribuição de acesso aos materiais (recursos, links e páginas)';
