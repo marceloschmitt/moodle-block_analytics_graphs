@@ -17,7 +17,6 @@ require('../../config.php');
 require('lib.php');
 require('javascriptfunctions.php');
 $course = htmlspecialchars(required_param('id', PARAM_INT));
-$legacy = htmlspecialchars(required_param('legacy', PARAM_INT));
 global $DB;
 /* Access control */
 require_login($course);
@@ -192,7 +191,7 @@ overflow:auto;background-color: white;border-radius: 25px;padding: 20px;border: 
     exit;
 }
 
-$result = block_analytics_graphs_get_resource_url_access($course, $students, $legacy, $requestedTypes);
+$result = block_analytics_graphs_get_resource_url_access($course, $students, $requestedTypes);
 
 //echo var_dump($result);
 

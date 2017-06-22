@@ -19,12 +19,29 @@ require('../../config.php');
 require('lib.php');
 require('javascriptfunctions.php');
 $course = required_param('id', PARAM_INT);
-$legacy = required_param('legacy', PARAM_INT);
+$days = required_param('days', PARAM_INT);
 global $DB;
+global $CFG;
+
+$logstorelife = block_analytics_graphs_get_logstore_loglife();
+$coursedayssincestart = block_analytics_graphs_get_course_days_since_startdate($course);
+if ($logstorelife === NULL || $logstorelife == 0) { //0, false and NULL are threated as null in case logstore setting not found and 0 is "no removal" logs.
+    $maximumdays = $coursedayssincestart; //the chart should not break with value more than available
+} else if ($logstorelife >= $coursedayssincestart) {
+    $maximumdays = $coursedayssincestart;
+} else {
+    $maximumdays = $logstorelife;
+}
+
+if ($days > $maximumdays) { //sanitycheck
+    $days = $maximumdays;
+} else if ($days < 1) {
+    $days = 1;
+}
 
 $students = block_analytics_graphs_get_students($course);
-$sevendayaccesses = block_analytics_graphs_get_accesses_last_days($course, $students, 7);
-$sevendayaccesses = json_encode($sevendayaccesses);
+$daysaccess = block_analytics_graphs_get_accesses_last_days($course, $students, $days);
+$daysaccess = json_encode($daysaccess);
 
 
 ?>
@@ -149,6 +166,15 @@ $sevendayaccesses = json_encode($sevendayaccesses);
 
 </head>
 
+<div style="width: 300px; min-width: 325px; height: 65px;left:10px; top:5px; border-radius: 0px;padding: 5px;border: 2px solid silver;text-align: center;">
+    <?php echo get_string('timeaccesschart_daysforstatistics', 'block_analytics_graphs'); ?>
+    <input style="width: 50px;" id = "days" type="number" name="days" min="1" max="<?php echo $maximumdays; ?>" value="<?php echo $days ?>">
+    <br>
+    <button style="width: 225px;" id="apply"><?php echo get_string('timeaccesschart_button_apply', 'block_analytics_graphs'); ?></button>
+    <br>
+    <?php echo get_string('timeaccesschart_maxdays', 'block_analytics_graphs') . "<b>" . $maximumdays . "</b>"; ?>
+</div>
+
 <div id="containerA" style="min-width: 300px; height: 400px; margin: 0 auto"></div>
 <br>
 <hr/>
@@ -156,7 +182,7 @@ $sevendayaccesses = json_encode($sevendayaccesses);
 <div id="containerB" style="min-width: 300px; height: 400px; margin: 0 auto"></div>
 
 <script type="text/javascript">
-    var data = <?php echo $sevendayaccesses; ?>;
+    var data = <?php echo $daysaccess; ?>;
     var houraccesses = [];
     var houractivities = [];
 
@@ -167,6 +193,7 @@ $sevendayaccesses = json_encode($sevendayaccesses);
         var countedIds = [];
         var numActiveStudents = 0;
         var numActivitiesHour = 0;
+        var maximumDays = <?php echo $maximumdays; ?>;
 
         for(var j in data)
         {
@@ -182,6 +209,15 @@ $sevendayaccesses = json_encode($sevendayaccesses);
         houraccesses[i] = numActiveStudents;
         houractivities[i] = numActivitiesHour;
     }
+
+    $('#apply').click(function() {
+        if (maximumDays < $('#days').val()) {
+            window.location.href = '<?php echo $CFG->wwwroot . "/blocks/analytics_graphs/timeaccesseschart.php?id=" . $course . "&days="; ?>' + maximumDays;
+        } else {
+            window.location.href = '<?php echo $CFG->wwwroot . "/blocks/analytics_graphs/timeaccesseschart.php?id=" . $course . "&days="; ?>' + $('#days').val();
+        }
+        return false;
+    });
 
     Highcharts.chart('containerA', {
         chart: {
@@ -344,12 +380,33 @@ $sevendayaccesses = json_encode($sevendayaccesses);
                     this.point.name +
                     "</b></span>:<br>";
 
+                var previousStr = "";
+                var sameStrCount = 0;
                 for(var j in data)
                 {
                     if (data[j].timecreated >= hourbegin && data[j].timecreated <= hourend) {
-                        tooltipStr += data[j].firstname + " " + data[j].lastname
-                            + "->" + data[j].action + ":" + data[j].target + "<br>";
+                        var tempstr = data[j].firstname + " " + data[j].lastname
+                            + "->" + data[j].action + ":" + data[j].target;
+
+                        if (tempstr != previousStr && sameStrCount == 0) {
+                            if (previousStr != "") {
+                                tooltipStr += previousStr + "<br>";
+                            }
+                            previousStr = tempstr;
+                        } else if (tempstr == previousStr) {
+                            sameStrCount++;
+                        } else if (tempstr != previousStr && sameStrCount > 0) {
+                            tooltipStr += previousStr + ":" + (sameStrCount+1) +"<br>";
+                            sameStrCount = 0;
+                            previousStr = tempstr;
+                        }
                     }
+                }
+
+                if (sameStrCount > 0) {
+                    tooltipStr += previousStr + ":" + (sameStrCount+1) +"<br>";
+                } else {
+                    tooltipStr += previousStr + "<br>";
                 }
 
                 return "<div class='scrollableHighchartsTooltipAddition'>" + tooltipStr + "</div>";
