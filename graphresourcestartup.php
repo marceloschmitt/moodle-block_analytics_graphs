@@ -28,7 +28,7 @@ require_capability('block/analytics_graphs:viewpages', $context);
 /* Initializing and filling array with available modules, to display only modules that are
  available on the server on the course */
 $availablemodules = array();
-foreach (block_analytics_graphs_get_course_used_modules($course) as $result ) {
+foreach (block_analytics_graphs_get_course_used_modules($course) as $result) {
     array_push($availablemodules, $result->name);
 }
 
@@ -63,7 +63,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
             /* Checking and displaying available choices based on installed modules and specific order and formatting,
             if order does not matter, then can be exchanged with a simple for loop */
             $num = 1;
-            //get_string('no_types_requested', 'block_analytics_graphs')
+            // get_string('no_types_requested', 'block_analytics_graphs')
             echo "<h4 style='margin-bottom: 3px'>Activities:</h4>";
             if (in_array("activequiz", $availablemodules)) {
                 // from here used to check if specific module is available, otherwise it is not displayed
@@ -75,7 +75,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                 $num++;
             }
             if (in_array("assign", $availablemodules)) {
-                //from here used to check if specific module is available, otherwise it is not displayed
+                // from here used to check if specific module is available, otherwise it is not displayed
                 echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", "mod_assign", "mod_assign", array(
                     'width' => 24,
                     'height' => 24,
@@ -83,8 +83,8 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                 )), "mod" . $num, "assign", get_string('typename_assign', 'block_analytics_graphs'));
                 $num++;
             }
-            if (in_array("attendance", $availablemodules)) { 
-                //from here used to check if specific module is available, otherwise it is not displayed
+            if (in_array("attendance", $availablemodules)) {
+                // from here used to check if specific module is available, otherwise it is not displayed
                 echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", "mod_attendance", "mod_attendance", array(
                     'width' => 24,
                     'height' => 24,
@@ -101,7 +101,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                 $num++;
             }
             if (in_array("booking", $availablemodules)) {
-            //from here used to check if specific module is available, otherwise it is not displayed
+                // from here used to check if specific module is available, otherwise it is not displayed
                 echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", "mod_booking", "mod_booking", array(
                     'width' => 24,
                     'height' => 24,
@@ -424,7 +424,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                 )), "mod" . $num, "url", get_string('typename_url', 'block_analytics_graphs'));
                 $num++;
             }
-			 echo "<input type=\"hidden\" name=\"id\" value=\"$course\">";
+            echo "<input type=\"hidden\" name=\"id\" value=\"$course\">";
             ?>
     </div>
     <?php

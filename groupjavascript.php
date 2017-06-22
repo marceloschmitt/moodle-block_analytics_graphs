@@ -192,7 +192,7 @@ foreach ($groupmembers as $key => $value) {
                         " - " +  nome ;
                     div += "<div class='div_nomes' id='" + index + "-0'>" + 
                         createEmailForm(title, value.in_time_submissions, courseid, codename,
-                            <?php echo json_encode(get_string('info_coursetype', 'block_analytics_graphs') . ': ' . 
+                            <?php echo json_encode(get_string('info_coursetype', 'block_analytics_graphs') . ': ' .
                             block_analytics_graphs_get_course_name($course)); ?> + ", " + nome) +
                         "</div>";
                 }
@@ -204,7 +204,7 @@ foreach ($groupmembers as $key => $value) {
                         " - " +  nome ;
                     div += "<div class='div_nomes' id='" + index + "-1'>" +
                         createEmailForm(title, value.latesubmissions, courseid, codename,
-                            <?php echo json_encode(get_string('info_coursetype', 'block_analytics_graphs') . ': ' . 
+                            <?php echo json_encode(get_string('info_coursetype', 'block_analytics_graphs') . ': ' .
                             block_analytics_graphs_get_course_name($course)); ?> + ", " + nome) +
                         "</div>";
                 }
@@ -216,7 +216,7 @@ foreach ($groupmembers as $key => $value) {
                         " - " +  nome ;
                     div += "<div class='div_nomes' id='" + index + "-2'>" +
                         createEmailForm(title, value.no_submissions, courseid, codename,
-                            <?php echo json_encode(get_string('info_coursetype', 'block_analytics_graphs') . ': ' . 
+                            <?php echo json_encode(get_string('info_coursetype', 'block_analytics_graphs') . ': ' .
                             block_analytics_graphs_get_course_name($course)); ?> + ", " + nome) +
                         "</div>";
                 }
@@ -235,7 +235,7 @@ foreach ($groupmembers as $key => $value) {
                             " - " +  nome ;
                         div += "<div class='div_nomes' id='" + index + "-0-"+ind+"'>" + 
                             createEmailForm(title, group.in_time_submissions[index], courseid, codename,
-                                <?php echo json_encode(get_string('info_coursetype', 'block_analytics_graphs') . ': ' . 
+                                <?php echo json_encode(get_string('info_coursetype', 'block_analytics_graphs') . ': ' .
                                 block_analytics_graphs_get_course_name($course)); ?> + ", " + nome) +
                             "</div>";
                     }
@@ -247,7 +247,7 @@ foreach ($groupmembers as $key => $value) {
                             " - " +  nome ;
                         div += "<div class='div_nomes' id='" + index + "-1-"+ind+"'>" +
                             createEmailForm(title, group.latesubmissions[index], courseid, codename,
-                                <?php echo json_encode(get_string('info_coursetype', 'block_analytics_graphs') . ': ' . 
+                                <?php echo json_encode(get_string('info_coursetype', 'block_analytics_graphs') . ': ' .
                                 block_analytics_graphs_get_course_name($course)); ?> + ", " + nome) +
                             "</div>";
                     }
@@ -259,7 +259,7 @@ foreach ($groupmembers as $key => $value) {
                             " - " +  nome ;
                         div += "<div class='div_nomes' id='" + index + "-2-"+ind+"'>" +
                             createEmailForm(title, group.no_submissions[index], courseid, codename,
-                                <?php echo json_encode(get_string('info_coursetype', 'block_analytics_graphs') . ': ' . 
+                                <?php echo json_encode(get_string('info_coursetype', 'block_analytics_graphs') . ': ' .
                                 block_analytics_graphs_get_course_name($course)); ?> + ", " + nome) +
                             "</div>";
                     }

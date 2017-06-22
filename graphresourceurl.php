@@ -38,7 +38,7 @@ foreach ($students as $tuple) {
 
 
 $requestedtypes = array();
-foreach($_GET as $$querystringvariable => $value) {
+foreach ($_GET as $$querystringvariable => $value) {
     if (substr($$querystringvariable, 0, strlen("mod")) !== "mod") {
         continue;
     }
@@ -717,7 +717,7 @@ foreach ($groupmembers as $key => $value) {
                     div += "<div class='div_nomes' id='" + index + "-" + 
                         "<?php echo substr(get_string('access', 'block_analytics_graphs'), 0, 1); ?>" +
                         "'>" + createEmailForm(titulo, value.studentswithaccess, courseid, 'graphResourceUrl.php',
-                            <?php echo json_encode(get_string('info_coursetype', 'block_analytics_graphs') . ': ' . 
+                            <?php echo json_encode(get_string('info_coursetype', 'block_analytics_graphs') . ': ' .
                             block_analytics_graphs_get_course_name($course)); ?> + ', ' + nome) + "</div>";
                 }
                 if (typeof value.studentswithnoaccess != 'undefined')
@@ -728,7 +728,7 @@ foreach ($groupmembers as $key => $value) {
                     div += "<div class='div_nomes' id='" + index + "-" +
                         "<?php echo substr(get_string('no_access', 'block_analytics_graphs'), 0, 1); ?>" +
                         "'>" + createEmailForm(titulo, value.studentswithnoaccess, courseid, 'graphResourceUrl.php',
-                            <?php echo json_encode(get_string('info_coursetype', 'block_analytics_graphs') . ': ' . 
+                            <?php echo json_encode(get_string('info_coursetype', 'block_analytics_graphs') . ': ' .
                             block_analytics_graphs_get_course_name($course)); ?> + ', ' + nome) + "</div>";
                 }
                 document.write(div);
@@ -746,7 +746,7 @@ foreach ($groupmembers as $key => $value) {
                             div += "<div class='div_nomes' id='" + ind + "-" + 
                             "<?php echo substr(get_string('access', 'block_analytics_graphs'), 0, 1); ?>" +
                             "-group-"+index+"'>" + createEmailForm(titulo, student, courseid, 'graphResourceUrl.php',
-                                    <?php echo json_encode(get_string('info_coursetype', 'block_analytics_graphs') . ': ' . 
+                                    <?php echo json_encode(get_string('info_coursetype', 'block_analytics_graphs') . ': ' .
                                     block_analytics_graphs_get_course_name($course)); ?> + ', ' + nome) + "</div>";
                     });
                 }
@@ -761,7 +761,7 @@ foreach ($groupmembers as $key => $value) {
                             div += "<div class='div_nomes' id='" + ind + "-" + 
                             "<?php echo substr(get_string('no_access', 'block_analytics_graphs'), 0, 1); ?>" +
                             "-group-"+index+"'>" + createEmailForm(titulo, student, courseid, 'graphResourceUrl.php',
-                                    <?php echo json_encode(get_string('info_coursetype', 'block_analytics_graphs') . ': ' . 
+                                    <?php echo json_encode(get_string('info_coursetype', 'block_analytics_graphs') . ': ' .
                                     block_analytics_graphs_get_course_name($course)); ?> + ', ' + nome) + "</div>";
                     });
                 }
