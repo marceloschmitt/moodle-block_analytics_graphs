@@ -17,7 +17,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 function block_analytics_graphs_subtract_student_arrays($estudantes, $acessaram) {
-    $encontrou = array();
+    $resultado = array();
     foreach ($estudantes as $estudante) {
         $encontrou = false;
         foreach ($acessaram as $acessou) {
