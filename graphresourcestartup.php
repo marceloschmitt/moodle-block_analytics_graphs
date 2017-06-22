@@ -16,7 +16,7 @@
 
 require('../../config.php');
 require('lib.php');
-//require('javascriptfunctions.php');
+// require('javascriptfunctions.php');
 $course = required_param('id', PARAM_INT);
 global $DB;
 /* Access control */
@@ -27,9 +27,9 @@ require_capability('block/analytics_graphs:viewpages', $context);
 
 /* Initializing and filling array with available modules, to display only modules that are
  available on the server on the course */
-$availableModules = array();
-foreach ( block_analytics_graphs_get_course_used_modules($course) as $result ) {
-    array_push($availableModules, $result->name);
+$availablemodules = array();
+foreach (block_analytics_graphs_get_course_used_modules($course) as $result ) {
+    array_push($availablemodules, $result->name);
 }
 
 $legacypixurlbefore = "<img style='display: table-cell; vertical-align: middle;' src='";
@@ -65,7 +65,8 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
             $num = 1;
             //get_string('no_types_requested', 'block_analytics_graphs')
             echo "<h4 style='margin-bottom: 3px'>Activities:</h4>";
-            if (in_array("activequiz", $availableModules)) { //from here used to check if specific module is available, otherwise it is not displayed
+            if (in_array("activequiz", $availablemodules)) {
+                // from here used to check if specific module is available, otherwise it is not displayed
                 echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", "mod_activequiz", "mod_activequiz", array(
                     'width' => 24,
                     'height' => 24,
@@ -73,7 +74,8 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                 )), "mod" . $num, "activequiz", get_string('typename_activequiz', 'block_analytics_graphs'));
                 $num++;
             }
-            if (in_array("assign", $availableModules)) { //from here used to check if specific module is available, otherwise it is not displayed
+            if (in_array("assign", $availablemodules)) {
+                //from here used to check if specific module is available, otherwise it is not displayed
                 echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", "mod_assign", "mod_assign", array(
                     'width' => 24,
                     'height' => 24,
@@ -81,7 +83,8 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                 )), "mod" . $num, "assign", get_string('typename_assign', 'block_analytics_graphs'));
                 $num++;
             }
-            if (in_array("attendance", $availableModules)) { //from here used to check if specific module is available, otherwise it is not displayed
+            if (in_array("attendance", $availablemodules)) { 
+                //from here used to check if specific module is available, otherwise it is not displayed
                 echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", "mod_attendance", "mod_attendance", array(
                     'width' => 24,
                     'height' => 24,
@@ -89,7 +92,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                 )), "mod" . $num, "attendance", get_string('typename_attendance', 'block_analytics_graphs'));
                 $num++;
             }
-            if (in_array("bigbluebuttonbn", $availableModules)) {
+            if (in_array("bigbluebuttonbn", $availablemodules)) {
                 echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", "mod_bigbluebuttonbn", "mod_bigbluebuttonbn", array(
                     'width' => 24,
                     'height' => 24,
@@ -97,7 +100,8 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                 )), "mod" . $num, "bigbluebuttonbn", get_string('typename_bigbluebuttonbn', 'block_analytics_graphs'));
                 $num++;
             }
-            if (in_array("booking", $availableModules)) { //from here used to check if specific module is available, otherwise it is not displayed
+            if (in_array("booking", $availablemodules)) {
+            //from here used to check if specific module is available, otherwise it is not displayed
                 echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", "mod_booking", "mod_booking", array(
                     'width' => 24,
                     'height' => 24,
@@ -105,7 +109,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                 )), "mod" . $num, "booking", get_string('typename_booking', 'block_analytics_graphs'));
                 $num++;
             }
-            if (in_array("certificate", $availableModules)) {
+            if (in_array("certificate", $availablemodules)) {
                 echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", "mod_certificate", "mod_certificate", array(
                     'width' => 24,
                     'height' => 24,
@@ -113,7 +117,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                 )), "mod" . $num, "certificate", get_string('typename_certificate', 'block_analytics_graphs'));
                 $num++;
             }
-            if (in_array("chat", $availableModules)) {
+            if (in_array("chat", $availablemodules)) {
                 echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", "mod_chat", "mod_chat", array(
                     'width' => 24,
                     'height' => 24,
@@ -121,7 +125,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                 )), "mod" . $num, "chat", get_string('typename_chat', 'block_analytics_graphs'));
                 $num++;
             }
-            if (in_array("checklist", $availableModules)) {
+            if (in_array("checklist", $availablemodules)) {
                 echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", "mod_checklist", "mod_checklist", array(
                     'width' => 24,
                     'height' => 24,
@@ -129,7 +133,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                 )), "mod" . $num, "checklist", get_string('typename_checklist', 'block_analytics_graphs'));
                 $num++;
             }
-            if (in_array("choice", $availableModules)) {
+            if (in_array("choice", $availablemodules)) {
                 echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", "mod_choice", "mod_choice", array(
                     'width' => 24,
                     'height' => 24,
@@ -137,7 +141,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                 )), "mod" . $num, "choice", get_string('typename_choice', 'block_analytics_graphs'));
                 $num++;
             }
-            if (in_array("icontent", $availableModules)) {
+            if (in_array("icontent", $availablemodules)) {
                 echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", "mod_icontent", "mod_icontent", array(
                     'width' => 24,
                     'height' => 24,
@@ -145,7 +149,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                 )), "mod" . $num, "icontent", get_string('typename_icontent', 'block_analytics_graphs'));
                 $num++;
             }
-            if (in_array("customcert", $availableModules)) {
+            if (in_array("customcert", $availablemodules)) {
                 echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", "mod_customcert", "mod_customcert", array(
                     'width' => 24,
                     'height' => 24,
@@ -153,7 +157,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                 )), "mod" . $num, "customcert", get_string('typename_customcert', 'block_analytics_graphs'));
                 $num++;
             }
-            if (in_array("data", $availableModules)) {
+            if (in_array("data", $availablemodules)) {
                 echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", "mod_data", "mod_data", array(
                     'width' => 24,
                     'height' => 24,
@@ -161,7 +165,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                 )), "mod" . $num, "data", get_string('typename_data', 'block_analytics_graphs'));
                 $num++;
             }
-            if (in_array("dataform", $availableModules)) {
+            if (in_array("dataform", $availablemodules)) {
                 echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", "mod_dataform", "mod_dataform", array(
                     'width' => 24,
                     'height' => 24,
@@ -169,7 +173,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                 )), "mod" . $num, "dataform", get_string('typename_dataform', 'block_analytics_graphs'));
                 $num++;
             }
-            if (in_array("lti", $availableModules)) {
+            if (in_array("lti", $availablemodules)) {
                 echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", "mod_lti", "mod_lti", array(
                     'width' => 24,
                     'height' => 24,
@@ -177,7 +181,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                 )), "mod" . $num, "lti", get_string('typename_lti', 'block_analytics_graphs'));
                 $num++;
             }
-            if (in_array("feedback", $availableModules)) {
+            if (in_array("feedback", $availablemodules)) {
                 echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", "mod_feedback", "mod_feedback", array(
                     'width' => 24,
                     'height' => 24,
@@ -185,7 +189,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                 )), "mod" . $num, "feedback", get_string('typename_feedback', 'block_analytics_graphs'));
                 $num++;
             }
-            if (in_array("forum", $availableModules)) {
+            if (in_array("forum", $availablemodules)) {
                 echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", "mod_forum", "mod_forum", array(
                     'width' => 24,
                     'height' => 24,
@@ -193,7 +197,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                 )), "mod" . $num, "forum", get_string('typename_forum', 'block_analytics_graphs'));
                 $num++;
             }
-            if (in_array("game", $availableModules)) {
+            if (in_array("game", $availablemodules)) {
                 echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", "mod_game", "mod_game", array(
                     'width' => 24,
                     'height' => 24,
@@ -201,7 +205,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                 )), "mod" . $num, "game", get_string('typename_game', 'block_analytics_graphs'));
                 $num++;
             }
-            if (in_array("glossary", $availableModules)) {
+            if (in_array("glossary", $availablemodules)) {
                 echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", "mod_glossary", "mod_glossary", array(
                     'width' => 24,
                     'height' => 24,
@@ -209,7 +213,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                 )), "mod" . $num, "glossary", get_string('typename_glossary', 'block_analytics_graphs'));
                 $num++;
             }
-            if (in_array("choicegroup", $availableModules)) {
+            if (in_array("choicegroup", $availablemodules)) {
                 echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", "mod_choicegroup", "mod_choicegroup", array(
                     'width' => 24,
                     'height' => 24,
@@ -217,7 +221,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                 )), "mod" . $num, "choicegroup", get_string('typename_choicegroup', 'block_analytics_graphs'));
                 $num++;
             }
-            if (in_array("groupselect", $availableModules)) {
+            if (in_array("groupselect", $availablemodules)) {
                 echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", "mod_groupselect", "mod_groupselect", array(
                     'width' => 24,
                     'height' => 24,
@@ -225,7 +229,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                 )), "mod" . $num, "groupselect", get_string('typename_groupselect', 'block_analytics_graphs'));
                 $num++;
             }
-            if (in_array("hotpot", $availableModules)) {
+            if (in_array("hotpot", $availablemodules)) {
                 echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", "mod_hotpot", "mod_hotpot", array(
                     'width' => 24,
                     'height' => 24,
@@ -233,7 +237,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                 )), "mod" . $num, "hotpot", get_string('typename_hotpot', 'block_analytics_graphs'));
                 $num++;
             }
-            if (in_array("hvp", $availableModules)) {
+            if (in_array("hvp", $availablemodules)) {
                 echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", "mod_hvp", "mod_hvp", array(
                     'width' => 24,
                     'height' => 24,
@@ -241,7 +245,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                 )), "mod" . $num, "hvp", get_string('typename_hvp', 'block_analytics_graphs'));
                 $num++;
             }
-            if (in_array("lesson", $availableModules)) {
+            if (in_array("lesson", $availablemodules)) {
                 echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", "mod_lesson", "mod_lesson", array(
                     'width' => 24,
                     'height' => 24,
@@ -249,7 +253,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                 )), "mod" . $num, "lesson", get_string('typename_lesson', 'block_analytics_graphs'));
                 $num++;
             }
-            if (in_array("openmeetings", $availableModules)) {
+            if (in_array("openmeetings", $availablemodules)) {
                 echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", "mod_openmeetings", "mod_openmeetings", array(
                     'width' => 24,
                     'height' => 24,
@@ -257,7 +261,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                 )), "mod" . $num, "openmeetings", get_string('typename_openmeetings', 'block_analytics_graphs'));
                 $num++;
             }
-            if (in_array("questionnaire", $availableModules)) {
+            if (in_array("questionnaire", $availablemodules)) {
                 echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", "mod_questionnaire", "mod_questionnaire", array(
                     'width' => 24,
                     'height' => 24,
@@ -265,7 +269,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                 )), "mod" . $num, "questionnaire", get_string('typename_questionnaire', 'block_analytics_graphs'));
                 $num++;
             }
-            if (in_array("quiz", $availableModules)) {
+            if (in_array("quiz", $availablemodules)) {
                 echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", "mod_quiz", "mod_quiz", array(
                     'width' => 24,
                     'height' => 24,
@@ -273,7 +277,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                 )), "mod" . $num, "quiz", get_string('typename_quiz', 'block_analytics_graphs'));
                 $num++;
             }
-            if (in_array("quizgame", $availableModules)) {
+            if (in_array("quizgame", $availablemodules)) {
                 echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", "mod_quizgame", "mod_quizgame", array(
                     'width' => 24,
                     'height' => 24,
@@ -281,7 +285,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                 )), "mod" . $num, "quizgame", get_string('typename_quizgame', 'block_analytics_graphs'));
                 $num++;
             }
-            if (in_array("scheduler", $availableModules)) {
+            if (in_array("scheduler", $availablemodules)) {
                 echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", "mod_scheduler", "mod_scheduler", array(
                     'width' => 24,
                     'height' => 24,
@@ -289,7 +293,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                 )), "mod" . $num, "scheduler", get_string('typename_scheduler', 'block_analytics_graphs'));
                 $num++;
             }
-            if (in_array("scorm", $availableModules)) {
+            if (in_array("scorm", $availablemodules)) {
                 echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", "mod_scorm", "mod_scorm", array(
                     'width' => 24,
                     'height' => 24,
@@ -297,7 +301,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                 )), "mod" . $num, "scorm", get_string('typename_scorm', 'block_analytics_graphs'));
                 $num++;
             }
-            if (in_array("subcourse", $availableModules)) {
+            if (in_array("subcourse", $availablemodules)) {
                 echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", "mod_subcourse", "mod_subcourse", array(
                     'width' => 24,
                     'height' => 24,
@@ -305,7 +309,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                 )), "mod" . $num, "subcourse", get_string('typename_subcourse', 'block_analytics_graphs'));
                 $num++;
             }
-            if (in_array("survey", $availableModules)) {
+            if (in_array("survey", $availablemodules)) {
                 echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", "mod_survey", "mod_survey", array(
                     'width' => 24,
                     'height' => 24,
@@ -313,7 +317,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                 )), "mod" . $num, "survey", get_string('typename_survey', 'block_analytics_graphs'));
                 $num++;
             }
-            if (in_array("vpl", $availableModules)) {
+            if (in_array("vpl", $availablemodules)) {
                 echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", "mod_vpl", "mod_vpl", array(
                     'width' => 24,
                     'height' => 24,
@@ -321,7 +325,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                 )), "mod" . $num, "vpl", get_string('typename_vpl', 'block_analytics_graphs'));
                 $num++;
             }
-            if (in_array("wiki", $availableModules)) {
+            if (in_array("wiki", $availablemodules)) {
                 echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", "mod_wiki", "mod_wiki", array(
                     'width' => 24,
                     'height' => 24,
@@ -329,7 +333,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                 )), "mod" . $num, "wiki", get_string('typename_wiki', 'block_analytics_graphs'));
                 $num++;
             }
-            if (in_array("workshop", $availableModules)) {
+            if (in_array("workshop", $availablemodules)) {
                 echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", "mod_workshop", "mod_workshop", array(
                     'width' => 24,
                     'height' => 24,
@@ -340,7 +344,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
 
             echo "<h4 style='margin-bottom: 3px'>Resources:</h4>";
 
-            if (in_array("book", $availableModules)) {
+            if (in_array("book", $availablemodules)) {
                 echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", "mod_book", "mod_book", array(
                     'width' => 24,
                     'height' => 24,
@@ -348,7 +352,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                 )), "mod" . $num, "book", get_string('typename_book', 'block_analytics_graphs'));
                 $num++;
             }
-            if (in_array("resource", $availableModules)) {
+            if (in_array("resource", $availablemodules)) {
                 echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", "mod_resource", "mod_resource", array(
                     'width' => 24,
                     'height' => 24,
@@ -356,7 +360,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                 )), "mod" . $num, "resource", get_string('typename_resource', 'block_analytics_graphs'));
                 $num++;
             }
-            if (in_array("folder", $availableModules)) {
+            if (in_array("folder", $availablemodules)) {
                 echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", "mod_folder", "mod_folder", array(
                     'width' => 24,
                     'height' => 24,
@@ -364,7 +368,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                 )), "mod" . $num, "folder", get_string('typename_folder', 'block_analytics_graphs'));
                 $num++;
             }
-            if (in_array("imscp", $availableModules)) {
+            if (in_array("imscp", $availablemodules)) {
                 echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", "mod_imscp", "mod_imscp", array(
                     'width' => 24,
                     'height' => 24,
@@ -372,7 +376,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                 )), "mod" . $num, "imscp", get_string('typename_imscp', 'block_analytics_graphs'));
                 $num++;
             }
-            if (in_array("label", $availableModules)) {
+            if (in_array("label", $availablemodules)) {
                 echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", "mod_label", "mod_label", array(
                     'width' => 24,
                     'height' => 24,
@@ -380,7 +384,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                 )), "mod" . $num, "label", get_string('typename_label', 'block_analytics_graphs'));
                 $num++;
             }
-            if (in_array("lightboxgallery", $availableModules)) {
+            if (in_array("lightboxgallery", $availablemodules)) {
                 echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", "mod_lightboxgallery", "mod_lightboxgallery", array(
                     'width' => 24,
                     'height' => 24,
@@ -388,7 +392,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                 )), "mod" . $num, "lightboxgallery", get_string('typename_lightboxgallery', 'block_analytics_graphs'));
                 $num++;
             }
-            if (in_array("page", $availableModules)) {
+            if (in_array("page", $availablemodules)) {
                 echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", "mod_page", "mod_page", array(
                     'width' => 24,
                     'height' => 24,
@@ -396,7 +400,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                 )), "mod" . $num, "page", get_string('typename_page', 'block_analytics_graphs'));
                 $num++;
             }
-            if (in_array("poster", $availableModules)) {
+            if (in_array("poster", $availablemodules)) {
                 echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", "mod_poster", "mod_poster", array(
                     'width' => 24,
                     'height' => 24,
@@ -404,7 +408,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                 )), "mod" . $num, "poster", get_string('typename_poster', 'block_analytics_graphs'));
                 $num++;
             }
-            if (in_array("recordingsbn", $availableModules)) {
+            if (in_array("recordingsbn", $availablemodules)) {
                 echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", "mod_recordingsbn", "mod_recordingsbn", array(
                     'width' => 24,
                     'height' => 24,
@@ -412,7 +416,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                 )), "mod" . $num, "recordingsbn", get_string('typename_recordingsbn', 'block_analytics_graphs'));
                 $num++;
             }
-            if (in_array("url", $availableModules)) {
+            if (in_array("url", $availablemodules)) {
                 echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", "mod_url", "mod_url", array(
                     'width' => 24,
                     'height' => 24,
