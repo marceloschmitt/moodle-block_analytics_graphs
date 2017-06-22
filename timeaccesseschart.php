@@ -14,7 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-
 require('../../config.php');
 require('lib.php');
 require('javascriptfunctions.php');
@@ -25,15 +24,16 @@ global $CFG;
 
 $logstorelife = block_analytics_graphs_get_logstore_loglife();
 $coursedayssincestart = block_analytics_graphs_get_course_days_since_startdate($course);
-if ($logstorelife === NULL || $logstorelife == 0) { //0, false and NULL are threated as null in case logstore setting not found and 0 is "no removal" logs.
-    $maximumdays = $coursedayssincestart; //the chart should not break with value more than available
+if ($logstorelife === null || $logstorelife == 0) {
+    // 0, false and NULL are threated as null in case logstore setting not found and 0 is "no removal" logs.
+    $maximumdays = $coursedayssincestart; // the chart should not break with value more than available
 } else if ($logstorelife >= $coursedayssincestart) {
     $maximumdays = $coursedayssincestart;
 } else {
     $maximumdays = $logstorelife;
 }
 
-if ($days > $maximumdays) { //sanitycheck
+if ($days > $maximumdays) { // sanitycheck
     $days = $maximumdays;
 } else if ($days < 1) {
     $days = 1;
