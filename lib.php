@@ -482,6 +482,32 @@ function block_analytics_graphs_get_hotpot_submission($course, $students) {
      return($resultado);
 }
 
+function block_analytics_graphs_get_turnitin_submission($course, $students) {
+    global $DB;
+    foreach ($students as $tuple) {
+        $inclause[] = $tuple->id;
+    }
+    list($insql, $inparams) = $DB->get_in_or_equal($inclause);
+    $params = array_merge(array($course), $inparams);
+    $sql = "SELECT temp.id+(COALESCE(temp.userid,1)*1000000) as id, temp.id as assignment, CONCAT(t.name, '-', tp.partname) as name,
+                dtdue as duedate, dtdue as cutoffdate,
+                temp.userid, usr.firstname, usr.lastname, usr.email, temp.timecreated
+            FROM (
+                SELECT t.id, ts.userid, MAX(tp.dtdue) as timecreated
+                FROM {turnitintooltwo} t
+                LEFT JOIN {turnitintooltwo_submissions} ts on t.id = ts.turnitintooltwoid
+				LEFT JOIN {turnitintooltwo_parts} tp on t.id = tp.turnitintooltwoid
+                WHERE t.course = ? AND (ts.userid IS NULL OR ts.userid $insql)
+                GROUP BY t.id, ts.userid
+            ) temp
+            LEFT JOIN {turnitintooltwo} t on t.id = temp.id
+			LEFT JOIN {turnitintooltwo_parts} tp on t.id = tp.turnitintooltwoid
+            LEFT JOIN {user} usr on usr.id = temp.userid
+            ORDER BY duedate, name, firstname";
+     
+     $resultado = $DB->get_records_sql($sql, $params);
+     return($resultado);
+}
 
 function block_analytics_graphs_get_quiz_submission($course, $students) {
     global $DB;
