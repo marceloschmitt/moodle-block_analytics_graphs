@@ -38,8 +38,8 @@ foreach ($students as $tuple) {
 
 
 $requestedtypes = array();
-foreach ($_GET as $$querystringvariable => $value) {
-    if (substr($$querystringvariable, 0, strlen("mod")) !== "mod") {
+foreach ($_GET as $querystringvariable => $value) {
+    if (substr($querystringvariable, 0, strlen("mod")) !== "mod") {
         continue;
     }
     $temp = $value;
