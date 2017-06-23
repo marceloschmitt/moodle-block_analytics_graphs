@@ -44,7 +44,7 @@ foreach ($_GET as $querystringvariable => $value) {
     }
     $temp = $value;
     if (!in_array($temp, $requestedtypes)) { // prevent duplicates
-        switch ($temp) { // not very necessary, left for readability and a little security
+        switch ($temp) { //not very necessary, left for readability and a little security
             case "activequiz" :
                 array_push($requestedtypes, $temp);
                 break;
@@ -106,6 +106,9 @@ foreach ($_GET as $querystringvariable => $value) {
                 array_push($requestedtypes, $temp);
                 break;
             case "hotpot" :
+                array_push($requestedtypes, $temp);
+                break;
+            case "turnitintooltwo" :
                 array_push($requestedtypes, $temp);
                 break;
             case "hvp" :
@@ -193,7 +196,7 @@ overflow:auto;background-color: white;border-radius: 25px;padding: 20px;border: 
 
 $result = block_analytics_graphs_get_resource_url_access($course, $students, $requestedtypes);
 
-// echo var_dump($result);
+//echo var_dump($result);
 
 $numberofresources = count($result);
 if ($numberofresources == 0) {
@@ -259,6 +262,8 @@ foreach ($result as $tuple) {
             $statistics[$counter]['material'] = $tuple->groupselect;
         } else if ($tuple->tipo == 'hotpot') {
             $statistics[$counter]['material'] = $tuple->hotpot;
+        } else if ($tuple->tipo == 'turnitintooltwo') {
+            $statistics[$counter]['material'] = $tuple->turnitintooltwo;
         } else if ($tuple->tipo == 'hvp') {
             $statistics[$counter]['material'] = $tuple->hvp;
         } else if ($tuple->tipo == 'lesson') {
@@ -384,6 +389,8 @@ foreach ($result as $tuple) {
                 $statistics[$counter]['material'] = $tuple->groupselect;
             } else if ($tuple->tipo == 'hotpot') {
                 $statistics[$counter]['material'] = $tuple->hotpot;
+            } else if ($tuple->tipo == 'turnitintooltwo') {
+                $statistics[$counter]['material'] = $tuple->turnitintooltwo;
             } else if ($tuple->tipo == 'hvp') {
                 $statistics[$counter]['material'] = $tuple->hvp;
             } else if ($tuple->tipo == 'lesson') {
