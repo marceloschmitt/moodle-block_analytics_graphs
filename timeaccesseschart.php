@@ -22,6 +22,13 @@ $days = required_param('days', PARAM_INT);
 global $DB;
 global $CFG;
 
+$students = block_analytics_graphs_get_students($course);
+$numberofstudents = count($students);
+if ($numberofstudents == 0) {
+    echo(get_string('no_students', 'block_analytics_graphs'));
+    exit;
+}
+
 $logstorelife = block_analytics_graphs_get_logstore_loglife();
 $coursedayssincestart = block_analytics_graphs_get_course_days_since_startdate($course);
 if ($logstorelife === null || $logstorelife == 0) {
@@ -39,7 +46,6 @@ if ($days > $maximumdays) { // sanitycheck
     $days = 1;
 }
 
-$students = block_analytics_graphs_get_students($course);
 $daysaccess = block_analytics_graphs_get_accesses_last_days($course, $students, $days);
 $daysaccess = json_encode($daysaccess);
 

@@ -237,6 +237,14 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                 )), "mod" . $num, "hotpot", get_string('typename_hotpot', 'block_analytics_graphs'));
                 $num++;
             }
+            if (in_array("turnitintooltwo", $availablemodules)) {
+                echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", "mod_turnitintooltwo", "mod_turnitintooltwo", array(
+                    'width' => 24,
+                    'height' => 24,
+                    'title' => ''
+                )), "mod" . $num, "turnitintooltwo", get_string('typename_turnitintooltwo', 'block_analytics_graphs'));
+                $num++;
+            }
             if (in_array("hvp", $availablemodules)) {
                 echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", "mod_hvp", "mod_hvp", array(
                     'width' => 24,
