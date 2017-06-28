@@ -178,7 +178,7 @@ function block_analytics_graphs_get_resource_url_access($course, $estudantes, $r
                     ORDER BY tag.sequence";
 
     foreach ($requestedtypes as $type) {
-        switch ($type) { //probably unnecessary, but here it is fine I think, at least for readability
+        switch ($type) { // probably unnecessary, but here it is fine I think, at least for readability
             case "activequiz" :
                 $sqla .= "avq.name as activequiz, ";
                 $sqld .= "LEFT JOIN {activequiz} avq ON cm.instance = avq.id
@@ -479,7 +479,7 @@ function block_analytics_graphs_get_turnitin_submission($course, $students) {
 			LEFT JOIN {turnitintooltwo_parts} tp on t.id = tp.turnitintooltwoid
             LEFT JOIN {user} usr on usr.id = temp.userid
             ORDER BY duedate, name, firstname";
-     
+
      $resultado = $DB->get_records_sql($sql, $params);
      return($resultado);
 }
@@ -566,10 +566,10 @@ function block_analytics_graphs_get_number_of_days_access_by_week($course, $estu
 function block_analytics_graphs_get_accesses_last_days($course, $estudantes, $daystoget) {
     global $DB;
     $date = strtotime(date('Y-m-d', strtotime('-'. $daystoget .' days')));
-    $sql = "SELECT s.id, s.action, s.target, s.userid, s.courseid, s.timecreated, usr.firstname, usr.lastname 
+    $sql = "SELECT s.id, s.action, s.target, s.userid, s.courseid, s.timecreated, usr.firstname, usr.lastname
             FROM {logstore_standard_log} s
-            LEFT JOIN {user} usr ON s.userid = usr.id 
-            WHERE s.courseid = " . $course . " AND s.timecreated >= " . $date . " 
+            LEFT JOIN {user} usr ON s.userid = usr.id
+            WHERE s.courseid = " . $course . " AND s.timecreated >= " . $date . "
             AND (";
     $iterator = 0;
     foreach ($estudantes as $item) {
@@ -587,25 +587,6 @@ function block_analytics_graphs_get_accesses_last_days($course, $estudantes, $da
     foreach ($resultado as $item) {
         $item->timecreated = date("His", $item->timecreated);
     }
-
-//    $timearray = array();
-
-//    for ($i = 0; $i < 24; $i++)
-//    {
-//        $hourbegin = $i * 10000;
-//        $hourend = $i * 10000 + 9999;
-//        $countedIds = array();
-//        $numActiveStudents = 0;
-//
-//        foreach ($resultado as $item) {
-//            if (!in_array($item->userid, $countedIds) && date("His", $item->timecreated) >= $hourbegin && date("His", $item->timecreated) <= $hourend) {
-//                array_push($countedIds, $item->userid);
-//                $numActiveStudents++;
-//            }
-//        }
-//
-//        $timearray[$i] = $numActiveStudents;
-//    }
 
     return($resultado);
 }
@@ -699,13 +680,14 @@ function block_analytics_graphs_get_user_resource_url_page_access($course, $stud
 
     $requestedmodules = block_analytics_graphs_get_course_used_modules($course);
 
-    //$resource = $DB->get_record('modules', array('name' => 'resource'), 'id');
-    //$url = $DB->get_record('modules', array('name' => 'url'), 'id');
-    //$page = $DB->get_record('modules', array('name' => 'page'), 'id');
-   // $wiki = $DB->get_record('modules', array('name' => 'wiki'), 'id');
+    // $resource = $DB->get_record('modules', array('name' => 'resource'), 'id');
+    // $url = $DB->get_record('modules', array('name' => 'url'), 'id');
+    // $page = $DB->get_record('modules', array('name' => 'page'), 'id');
+    // $wiki = $DB->get_record('modules', array('name' => 'wiki'), 'id');
     $startdate = $COURSE->startdate;
 
-    $paramsdefault = array($startdate, $student, $course);//array($startdate, $student, $course, $resource->id, $url->id, $page->id, $wiki->id);
+    $paramsdefault = array($startdate, $student, $course);
+    // array($startdate, $student, $course, $resource->id, $url->id, $page->id, $wiki->id);
     $paramsids = array();
     $sqla = "SELECT temp.id, m.name as tipo, ";
     $sqlb = "COALESCE(temp.userid,0) as userid,  temp.acessos
@@ -715,7 +697,6 @@ function block_analytics_graphs_get_user_resource_url_page_access($course, $stud
                         LEFT JOIN {logstore_standard_log} log ON log.timecreated >= ?
                             AND log.userid = ? AND action = 'viewed' AND cm.id=log.contextinstanceid
                         WHERE cm.course = ? AND (";
-
 
     $sqlc = "cm.module=?";
 
@@ -960,10 +941,10 @@ function block_analytics_graphs_get_user_resource_url_page_access($course, $stud
         }
     }
 
-    //$params = "SETHERE";
+    // $params = "SETHERE";
     $sql = $sqla . $sqlb . $sqlc . $sqld . $sqle;
     $params = array_merge($paramsdefault, $paramsids);
-    //return $paramsdefault;
+    // return $paramsdefault;
     $result = $DB->get_records_sql($sql, $paramsdefault);
     return($result);
 
@@ -1048,7 +1029,7 @@ function block_analytics_graphs_get_user_forum_state($course, $student) {
         }
     }
 
-    $result = array(); //merging arrays
+    $result = array(); // merging arrays
 
     $i = 0;
     foreach ($read as $item) {
@@ -1196,9 +1177,9 @@ function block_analytics_graphs_extend_navigation_course($navigation, $course, $
             WHERE cm.course = ?
             GROUP BY cm.module";
         $params = array($course->id);
-        $availablemodulesTotal = $DB->get_records_sql($sql, $params);
+        $availablemodulestotal = $DB->get_records_sql($sql, $params);
         $availablemodules = array();
-        foreach ($availablemodulesTotal as $result) {
+        foreach ($availablemodulestotal as $result) {
             array_push($availablemodules, $result->name);
         }
 
