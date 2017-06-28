@@ -94,8 +94,8 @@ function block_analytics_graphs_get_course_used_modules ($courseID) {
     global $DB;
 
     $sql = "SELECT cm.module, md.name 
-            FROM {course_modules} as cm 
-            LEFT JOIN {modules} as md ON cm.module = md.id 
+            FROM {course_modules} cm 
+            LEFT JOIN {modules} md ON cm.module = md.id 
             WHERE cm.course = ? 
             GROUP BY cm.module";
     $params = array($courseID);
@@ -155,8 +155,8 @@ function block_analytics_graphs_get_resource_url_access($course, $estudantes, $r
         $sqlB = "temp.userid, usr.firstname, usr.lastname, usr.email, temp.acessos, tag.sequence
                     FROM (
                         SELECT cm.id, log.userid, count(*) as acessos
-                        FROM {course_modules} as cm
-                        LEFT JOIN {logstore_standard_log} as log ON log.timecreated >= ?
+                        FROM {course_modules} cm
+                        LEFT JOIN {logstore_standard_log} log ON log.timecreated >= ?
                             AND log.userid $insql AND action = 'viewed' AND cm.id=log.contextinstanceid
                         WHERE cm.course = ? AND (";
         $sqlC = "cm.module=?";
@@ -170,233 +170,233 @@ function block_analytics_graphs_get_resource_url_access($course, $estudantes, $r
         $sqlD =")
                         GROUP BY cm.id, log.userid
                         ) as temp
-                    LEFT JOIN {course_modules} as cm ON temp.id = cm.id
-                    LEFT JOIN {modules} as m ON cm.module = m.id
+                    LEFT JOIN {course_modules} cm ON temp.id = cm.id
+                    LEFT JOIN {modules} m ON cm.module = m.id
                     ";
-        $sqlE = "   LEFT JOIN {user} as usr ON usr.id = temp.userid
-                    LEFT JOIN {tmp_analytics_graphs} as tag ON tag.module = cm.id
+        $sqlE = "   LEFT JOIN {user} usr ON usr.id = temp.userid
+                    LEFT JOIN {tmp_analytics_graphs} tag ON tag.module = cm.id
                     ORDER BY tag.sequence";
 
         foreach ($requestedTypes as $type) {
             switch ($type) { //probably unnecessary, but here it is fine I think, at least for readability
                 case "activequiz" :
                     $sqlA.= "avq.name as activequiz, ";
-                    $sqlD.= "LEFT JOIN {activequiz} as avq ON cm.instance = avq.id
+                    $sqlD.= "LEFT JOIN {activequiz} avq ON cm.instance = avq.id
             ";
                     break;
                 case "assign" :
                     $sqlA.= "asn.name as assign, ";
-                    $sqlD.= "LEFT JOIN {assign} as asn ON cm.instance = asn.id
+                    $sqlD.= "LEFT JOIN {assign}n ON cm.instance = asn.id
             ";
                     break;
                 case "attendance" :
                     $sqlA.= "att.name as attendance, ";
-                    $sqlD.= "LEFT JOIN {attendance} as att ON cm.instance = att.id
+                    $sqlD.= "LEFT JOIN {attendance} att ON cm.instance = att.id
             ";
                     break;
                 case "bigbluebuttonbn" :
                     $sqlA.= "bbn.name as bigbluebuttonbn, ";
-                    $sqlD.= "LEFT JOIN {bigbluebuttonbn} as bbn ON cm.instance = bbn.id
+                    $sqlD.= "LEFT JOIN {bigbluebuttonbn} bbn ON cm.instance = bbn.id
             ";
                     break;
                 case "booking" :
                     $sqlA.= "bkn.name as booking, ";
-                    $sqlD.= "LEFT JOIN {booking} as bkn ON cm.instance = bkn.id
+                    $sqlD.= "LEFT JOIN {booking} bkn ON cm.instance = bkn.id
             ";
                     break;
                 case "certificate" :
                     $sqlA.= "cft.name as certificate, ";
-                    $sqlD.= "LEFT JOIN {certificate} as cft ON cm.instance = cft.id
+                    $sqlD.= "LEFT JOIN {certificate} cft ON cm.instance = cft.id
             ";
                     break;
                 case "chat" :
                     $sqlA.= "cht.name as chat, ";
-                    $sqlD.= "LEFT JOIN {chat} as cht ON cm.instance = cht.id
+                    $sqlD.= "LEFT JOIN {chat} cht ON cm.instance = cht.id
             ";
                     break;
                 case "checklist" :
                     $sqlA.= "ckl.name as checklist, ";
-                    $sqlD.= "LEFT JOIN {checklist} as ckl ON cm.instance = ckl.id
+                    $sqlD.= "LEFT JOIN {checklist} ckl ON cm.instance = ckl.id
             ";
                     break;
                 case "choice" :
                     $sqlA.= "chc.name as choice, ";
-                    $sqlD.= "LEFT JOIN {choice} as chc ON cm.instance = chc.id
+                    $sqlD.= "LEFT JOIN {choice} chc ON cm.instance = chc.id
             ";
                     break;
                 case "icontent" :
                     $sqlA.= "ict.name as icontent, ";
-                    $sqlD.= "LEFT JOIN {icontent} as ict ON cm.instance = ict.id
+                    $sqlD.= "LEFT JOIN {icontent} ict ON cm.instance = ict.id
             ";
                     break;
                 case "customcert" :
                     $sqlA.= "ctc.name as customcert, ";
-                    $sqlD.= "LEFT JOIN {customcert} as ctc ON cm.instance = ctc.id
+                    $sqlD.= "LEFT JOIN {customcert} ctc ON cm.instance = ctc.id
             ";
                     break;
                 case "data" :
                     $sqlA.= "dt.name as data, ";
-                    $sqlD.= "LEFT JOIN {data} as dt ON cm.instance = dt.id
+                    $sqlD.= "LEFT JOIN {data} dt ON cm.instance = dt.id
             ";
                     break;
                 case "dataform" :
                     $sqlA.= "dfm.name as dataform, ";
-                    $sqlD.= "LEFT JOIN {dataform} as dfm ON cm.instance = dfm.id
+                    $sqlD.= "LEFT JOIN {dataform} dfm ON cm.instance = dfm.id
             ";
                     break;
                 case "lti" :
                     $sqlA.= "lt.name as lti, ";
-                    $sqlD.= "LEFT JOIN {lti} as lt ON cm.instance = lt.id
+                    $sqlD.= "LEFT JOIN {lti} lt ON cm.instance = lt.id
             ";
                     break;
                 case "feedback" :
                     $sqlA.= "fdb.name as feedback, ";
-                    $sqlD.= "LEFT JOIN {feedback} as fdb ON cm.instance = fdb.id
+                    $sqlD.= "LEFT JOIN {feedback} fdb ON cm.instance = fdb.id
             ";
                     break;
                 case "forum" :
                     $sqlA.= "frm.name as forum, ";
-                    $sqlD.= "LEFT JOIN {forum} as frm ON cm.instance = frm.id
+                    $sqlD.= "LEFT JOIN {forum} frm ON cm.instance = frm.id
             ";
                     break;
                 case "game" :
                     $sqlA.= "gme.name as game, ";
-                    $sqlD.= "LEFT JOIN {game} as gme ON cm.instance = gme.id
+                    $sqlD.= "LEFT JOIN {game} gme ON cm.instance = gme.id
             ";
                     break;
                 case "glossary" :
                     $sqlA.= "gls.name as glossary, ";
-                    $sqlD.= "LEFT JOIN {glossary} as gls ON cm.instance = gls.id
+                    $sqlD.= "LEFT JOIN {glossary} gls ON cm.instance = gls.id
             ";
                     break;
                 case "choicegroup" :
                     $sqlA.= "cgr.name as choicegroup, ";
-                    $sqlD.= "LEFT JOIN {choicegroup} as cgr ON cm.instance = cgr.id
+                    $sqlD.= "LEFT JOIN {choicegroup} cgr ON cm.instance = cgr.id
             ";
                     break;
                 case "groupselect" :
                     $sqlA.= "grs.name as groupselect, ";
-                    $sqlD.= "LEFT JOIN {groupselect} as grs ON cm.instance = grs.id
+                    $sqlD.= "LEFT JOIN {groupselect} grs ON cm.instance = grs.id
             ";
                     break;
                 case "hotpot" :
                     $sqlA.= "htp.name as hotpot, ";
-                    $sqlD.= "LEFT JOIN {hotpot} as htp ON cm.instance = htp.id
+                    $sqlD.= "LEFT JOIN {hotpot} htp ON cm.instance = htp.id
             ";
                     break;
                 case "hvp" :
                     $sqlA.= "hvp.name as hvp, ";
-                    $sqlD.= "LEFT JOIN {hvp} as hvp ON cm.instance = hvp.id
+                    $sqlD.= "LEFT JOIN {hvp} hvp ON cm.instance = hvp.id
             ";
                     break;
                 case "lesson" :
                     $sqlA.= "lss.name as lesson, ";
-                    $sqlD.= "LEFT JOIN {lesson} as lss ON cm.instance = lss.id
+                    $sqlD.= "LEFT JOIN {lesson} lss ON cm.instance = lss.id
             ";
                     break;
                 case "openmeetings" :
                     $sqlA.= "opm.name as openmeetings, ";
-                    $sqlD.= "LEFT JOIN {openmeetings} as opm ON cm.instance = opm.id
+                    $sqlD.= "LEFT JOIN {openmeetings} opm ON cm.instance = opm.id
             ";
                     break;
                 case "questionnaire" :
                     $sqlA.= "qst.name as questionnaire, ";
-                    $sqlD.= "LEFT JOIN {questionnaire} as qst ON cm.instance = qst.id
+                    $sqlD.= "LEFT JOIN {questionnaire} qst ON cm.instance = qst.id
             ";
                     break;
                 case "quiz" :
                     $sqlA.= "qz.name as quiz, ";
-                    $sqlD.= "LEFT JOIN {quiz} as qz ON cm.instance = qz.id
+                    $sqlD.= "LEFT JOIN {quiz} qz ON cm.instance = qz.id
             ";
                     break;
                 case "quizgame" :
                     $sqlA.= "qzg.name as quizgame, ";
-                    $sqlD.= "LEFT JOIN {quizgame} as qzg ON cm.instance = qzg.id
+                    $sqlD.= "LEFT JOIN {quizgame} qzg ON cm.instance = qzg.id
             ";
                     break;
                 case "scheduler" :
                     $sqlA.= "sdr.name as scheduler, ";
-                    $sqlD.= "LEFT JOIN {scheduler} as sdr ON cm.instance = sdr.id
+                    $sqlD.= "LEFT JOIN {scheduler} sdr ON cm.instance = sdr.id
             ";
                     break;
                 case "scorm" :
                     $sqlA.= "scr.name as scorm, ";
-                    $sqlD.= "LEFT JOIN {scorm} as scr ON cm.instance = scr.id
+                    $sqlD.= "LEFT JOIN {scorm} scr ON cm.instance = scr.id
             ";
                     break;
                 case "subcourse" :
                     $sqlA.= "sbc.name as subcourse, ";
-                    $sqlD.= "LEFT JOIN {subcourse} as sbc ON cm.instance = sbc.id
+                    $sqlD.= "LEFT JOIN {subcourse} sbc ON cm.instance = sbc.id
             ";
                     break;
                 case "survey" :
                     $sqlA.= "srv.name as survey, ";
-                    $sqlD.= "LEFT JOIN {survey} as srv ON cm.instance = srv.id
+                    $sqlD.= "LEFT JOIN {survey} srv ON cm.instance = srv.id
             ";
                     break;
                 case "vpl" :
                     $sqlA.= "vpl.name as vpl, ";
-                    $sqlD.= "LEFT JOIN {vpl} as vpl ON cm.instance = vpl.id
+                    $sqlD.= "LEFT JOIN {vpl} vpl ON cm.instance = vpl.id
             ";
                     break;
                 case "wiki" :
                     $sqlA.= "wk.name as wiki, ";
-                    $sqlD.= "LEFT JOIN {wiki} as wk ON cm.instance = wk.id
+                    $sqlD.= "LEFT JOIN {wiki} wk ON cm.instance = wk.id
             ";
                     break;
                 case "workshop" :
                     $sqlA.= "wrk.name as workshop, ";
-                    $sqlD.= "LEFT JOIN {workshop} as wrk ON cm.instance = wrk.id
+                    $sqlD.= "LEFT JOIN {workshop} wrk ON cm.instance = wrk.id
             ";
                     break;
                 case "book" :
                     $sqlA.= "bk.name as book, ";
-                    $sqlD.= "LEFT JOIN {book} as bk ON cm.instance = bk.id
+                    $sqlD.= "LEFT JOIN {book} bk ON cm.instance = bk.id
             ";
                     break;
                 case "resource" :
                     $sqlA.= "rsr.name as resource, ";
-                    $sqlD.= "LEFT JOIN {resource} as rsr ON cm.instance = rsr.id
+                    $sqlD.= "LEFT JOIN {resource} rsr ON cm.instance = rsr.id
             ";
                     break;
                 case "folder" :
                     $sqlA.= "fld.name as folder, ";
-                    $sqlD.= "LEFT JOIN {folder} as fld ON cm.instance = fld.id
+                    $sqlD.= "LEFT JOIN {folder} fld ON cm.instance = fld.id
             ";
                     break;
                 case "imscp" :
                     $sqlA.= "msc.name as imscp, ";
-                    $sqlD.= "LEFT JOIN {imscp} as msc ON cm.instance = msc.id
+                    $sqlD.= "LEFT JOIN {imscp} msc ON cm.instance = msc.id
             ";
                     break;
                 case "label" :
                     $sqlA.= "lbl.name as label, ";
-                    $sqlD.= "LEFT JOIN {label} as lbl ON cm.instance = lbl.id
+                    $sqlD.= "LEFT JOIN {label} lbl ON cm.instance = lbl.id
             ";
                     break;
                 case "lightboxgallery" :
                     $sqlA.= "lbg.name as lightboxgallery, ";
-                    $sqlD.= "LEFT JOIN {lightboxgallery} as lbg ON cm.instance = lbg.id
+                    $sqlD.= "LEFT JOIN {lightboxgallery} lbg ON cm.instance = lbg.id
             ";
                     break;
                 case "page" :
                     $sqlA.= "pg.name as page, ";
-                    $sqlD.= "LEFT JOIN {page} as pg ON cm.instance = pg.id
+                    $sqlD.= "LEFT JOIN {page} pg ON cm.instance = pg.id
             ";
                     break;
                 case "poster" :
                     $sqlA.= "pst.name as poster, ";
-                    $sqlD.= "LEFT JOIN {poster} as pst ON cm.instance = pst.id
+                    $sqlD.= "LEFT JOIN {poster} pst ON cm.instance = pst.id
             ";
                     break;
                 case "recordingsbn" :
                     $sqlA.= "rbn.name as recordingsbn, ";
-                    $sqlD.= "LEFT JOIN {recordingsbn} as rbn ON cm.instance = rbn.id
+                    $sqlD.= "LEFT JOIN {recordingsbn} rbn ON cm.instance = rbn.id
             ";
                     break;
                 case "url" :
                     $sqlA.= "rl.name as url, ";
-                    $sqlD.= "LEFT JOIN {url} as rl ON cm.instance = rl.id
+                    $sqlD.= "LEFT JOIN {url} rl ON cm.instance = rl.id
             ";
                     break;
             }
@@ -530,7 +530,7 @@ function block_analytics_graphs_get_number_of_days_access_by_week($course, $estu
                             FLOOR((log.timecreated + ?)/ 86400)   as day,
                             FLOOR( (((log.timecreated  + ?) / 86400) - (?/86400))/7) as week,
                             COUNT(*) as numberofpageviews
-                        FROM {logstore_standard_log} as log
+                        FROM {logstore_standard_log} log
                         WHERE courseid = ? AND action = 'viewed' AND target = 'course'
                             AND log.timecreated >= ? AND log.userid $insql
                         GROUP BY userid, day, week
@@ -549,7 +549,7 @@ function block_analytics_graphs_get_number_of_days_access_by_week($course, $estu
                             FLOOR((log.time + ?)/ 86400)   as day,
                             FLOOR( (((log.time  + ?) / 86400) - (?/86400))/7) as week,
                             COUNT(*) as numberofpageviews
-                        FROM {log} as log
+                        FROM {log} log
                         WHERE course = ? AND action = 'view' AND module = 'course'
                             AND log.time >= ? AND log.userid $insql
                         GROUP BY userid, day, week
@@ -667,7 +667,7 @@ function block_analytics_graphs_get_number_of_modules_accessed($course, $estudan
         $sql = "SELECT userid, COUNT(*) as number
             FROM (
                 SELECT log.userid, objecttable, objectid
-                FROM {logstore_standard_log} as log
+                FROM {logstore_standard_log} log
                 LEFT JOIN {user} usr ON usr.id = log.userid
                 WHERE courseid = ? AND action = 'viewed' AND target = 'course_module'
                     AND log.timecreated >= ? AND log.userid $insql
@@ -679,7 +679,7 @@ function block_analytics_graphs_get_number_of_modules_accessed($course, $estudan
         $sql = "SELECT userid, COUNT(*) as number
             FROM (
                 SELECT log.userid, module, cmid
-                FROM {log} as log
+                FROM {log} log
                 LEFT JOIN {user} usr ON usr.id = log.userid
                 WHERE course = ? AND (action = 'view' OR action = 'view forum')
                     AND module <> 'assign' AND cmid <> 0  AND log.time >= ? AND log.userid $insql
@@ -739,222 +739,222 @@ function block_analytics_graphs_get_user_resource_url_page_access($course, $stud
         switch ($module->name) {
             case "activequiz" :
                 $sqlA.= "avq.name as activequiz, ";
-                $sqlD.= "LEFT JOIN {activequiz} as avq ON cm.instance = avq.id
+                $sqlD.= "LEFT JOIN {activequiz} avq ON cm.instance = avq.id
             ";
                 break;
             case "assign" :
                 $sqlA.= "asn.name as assign, ";
-                $sqlD.= "LEFT JOIN {assign} as asn ON cm.instance = asn.id
+                $sqlD.= "LEFT JOIN {assign} asn ON cm.instance = asn.id
             ";
                 break;
             case "attendance" :
                 $sqlA.= "att.name as attendance, ";
-                $sqlD.= "LEFT JOIN {attendance} as att ON cm.instance = att.id
+                $sqlD.= "LEFT JOIN {attendance} att ON cm.instance = att.id
             ";
                 break;
             case "bigbluebuttonbn" :
                 $sqlA.= "bbn.name as bigbluebuttonbn, ";
-                $sqlD.= "LEFT JOIN {bigbluebuttonbn} as bbn ON cm.instance = bbn.id
+                $sqlD.= "LEFT JOIN {bigbluebuttonbn} bbn ON cm.instance = bbn.id
             ";
                 break;
             case "booking" :
                 $sqlA.= "bkn.name as booking, ";
-                $sqlD.= "LEFT JOIN {booking} as bkn ON cm.instance = bkn.id
+                $sqlD.= "LEFT JOIN {booking} bkn ON cm.instance = bkn.id
             ";
                 break;
             case "certificate" :
                 $sqlA.= "cft.name as certificate, ";
-                $sqlD.= "LEFT JOIN {certificate} as cft ON cm.instance = cft.id
+                $sqlD.= "LEFT JOIN {certificate} cft ON cm.instance = cft.id
             ";
                 break;
             case "chat" :
                 $sqlA.= "cht.name as chat, ";
-                $sqlD.= "LEFT JOIN {chat} as cht ON cm.instance = cht.id
+                $sqlD.= "LEFT JOIN {chat} cht ON cm.instance = cht.id
             ";
                 break;
             case "checklist" :
                 $sqlA.= "ckl.name as checklist, ";
-                $sqlD.= "LEFT JOIN {checklist} as ckl ON cm.instance = ckl.id
+                $sqlD.= "LEFT JOIN {checklist} ckl ON cm.instance = ckl.id
             ";
                 break;
             case "choice" :
                 $sqlA.= "chc.name as choice, ";
-                $sqlD.= "LEFT JOIN {choice} as chc ON cm.instance = chc.id
+                $sqlD.= "LEFT JOIN {choice} chc ON cm.instance = chc.id
             ";
                 break;
             case "icontent" :
                 $sqlA.= "ict.name as icontent, ";
-                $sqlD.= "LEFT JOIN {icontent} as ict ON cm.instance = ict.id
+                $sqlD.= "LEFT JOIN {icontent} ict ON cm.instance = ict.id
             ";
                 break;
             case "customcert" :
                 $sqlA.= "ctc.name as customcert, ";
-                $sqlD.= "LEFT JOIN {customcert} as ctc ON cm.instance = ctc.id
+                $sqlD.= "LEFT JOIN {customcert} ctc ON cm.instance = ctc.id
             ";
                 break;
             case "data" :
                 $sqlA.= "dt.name as data, ";
-                $sqlD.= "LEFT JOIN {data} as dt ON cm.instance = dt.id
+                $sqlD.= "LEFT JOIN {data} dt ON cm.instance = dt.id
             ";
                 break;
             case "dataform" :
                 $sqlA.= "dfm.name as dataform, ";
-                $sqlD.= "LEFT JOIN {dataform} as dfm ON cm.instance = dfm.id
+                $sqlD.= "LEFT JOIN {dataform} dfm ON cm.instance = dfm.id
             ";
                 break;
             case "lti" :
                 $sqlA.= "lt.name as lti, ";
-                $sqlD.= "LEFT JOIN {lti} as lt ON cm.instance = lt.id
+                $sqlD.= "LEFT JOIN {lti} lt ON cm.instance = lt.id
             ";
                 break;
             case "feedback" :
                 $sqlA.= "fdb.name as feedback, ";
-                $sqlD.= "LEFT JOIN {feedback} as fdb ON cm.instance = fdb.id
+                $sqlD.= "LEFT JOIN {feedback} fdb ON cm.instance = fdb.id
             ";
                 break;
             case "forum" :
                 $sqlA.= "frm.name as forum, ";
-                $sqlD.= "LEFT JOIN {forum} as frm ON cm.instance = frm.id
+                $sqlD.= "LEFT JOIN {forum} frm ON cm.instance = frm.id
             ";
                 break;
             case "game" :
                 $sqlA.= "gme.name as game, ";
-                $sqlD.= "LEFT JOIN {game} as gme ON cm.instance = gme.id
+                $sqlD.= "LEFT JOIN {game} gme ON cm.instance = gme.id
             ";
                 break;
             case "glossary" :
                 $sqlA.= "gls.name as glossary, ";
-                $sqlD.= "LEFT JOIN {glossary} as gls ON cm.instance = gls.id
+                $sqlD.= "LEFT JOIN {glossary} gls ON cm.instance = gls.id
             ";
                 break;
             case "choicegroup" :
                 $sqlA.= "cgr.name as choicegroup, ";
-                $sqlD.= "LEFT JOIN {choicegroup} as cgr ON cm.instance = cgr.id
+                $sqlD.= "LEFT JOIN {choicegroup} cgr ON cm.instance = cgr.id
             ";
                 break;
             case "groupselect" :
                 $sqlA.= "grs.name as groupselect, ";
-                $sqlD.= "LEFT JOIN {groupselect} as grs ON cm.instance = grs.id
+                $sqlD.= "LEFT JOIN {groupselect} grs ON cm.instance = grs.id
             ";
                 break;
             case "hotpot" :
                 $sqlA.= "htp.name as hotpot, ";
-                $sqlD.= "LEFT JOIN {hotpot} as htp ON cm.instance = htp.id
+                $sqlD.= "LEFT JOIN {hotpot} htp ON cm.instance = htp.id
             ";
                 break;
             case "hvp" :
                 $sqlA.= "hvp.name as hvp, ";
-                $sqlD.= "LEFT JOIN {hvp} as hvp ON cm.instance = hvp.id
+                $sqlD.= "LEFT JOIN {hvp} hvp ON cm.instance = hvp.id
             ";
                 break;
             case "lesson" :
                 $sqlA.= "lss.name as lesson, ";
-                $sqlD.= "LEFT JOIN {lesson} as lss ON cm.instance = lss.id
+                $sqlD.= "LEFT JOIN {lesson} lss ON cm.instance = lss.id
             ";
                 break;
             case "openmeetings" :
                 $sqlA.= "opm.name as openmeetings, ";
-                $sqlD.= "LEFT JOIN {openmeetings} as opm ON cm.instance = opm.id
+                $sqlD.= "LEFT JOIN {openmeetings} opm ON cm.instance = opm.id
             ";
                 break;
             case "questionnaire" :
                 $sqlA.= "qst.name as questionnaire, ";
-                $sqlD.= "LEFT JOIN {questionnaire} as qst ON cm.instance = qst.id
+                $sqlD.= "LEFT JOIN {questionnaire} qst ON cm.instance = qst.id
             ";
                 break;
             case "quiz" :
                 $sqlA.= "qz.name as quiz, ";
-                $sqlD.= "LEFT JOIN {quiz} as qz ON cm.instance = qz.id
+                $sqlD.= "LEFT JOIN {quiz} qz ON cm.instance = qz.id
             ";
                 break;
             case "quizgame" :
                 $sqlA.= "qzg.name as quizgame, ";
-                $sqlD.= "LEFT JOIN {quizgame} as qzg ON cm.instance = qzg.id
+                $sqlD.= "LEFT JOIN {quizgame} qzg ON cm.instance = qzg.id
             ";
                 break;
             case "scheduler" :
                 $sqlA.= "sdr.name as scheduler, ";
-                $sqlD.= "LEFT JOIN {scheduler} as sdr ON cm.instance = sdr.id
+                $sqlD.= "LEFT JOIN {scheduler} sdr ON cm.instance = sdr.id
             ";
                 break;
             case "scorm" :
                 $sqlA.= "scr.name as scorm, ";
-                $sqlD.= "LEFT JOIN {scorm} as scr ON cm.instance = scr.id
+                $sqlD.= "LEFT JOIN {scorm} scr ON cm.instance = scr.id
             ";
                 break;
             case "subcourse" :
                 $sqlA.= "sbc.name as subcourse, ";
-                $sqlD.= "LEFT JOIN {subcourse} as sbc ON cm.instance = sbc.id
+                $sqlD.= "LEFT JOIN {subcourse} sbc ON cm.instance = sbc.id
             ";
                 break;
             case "survey" :
                 $sqlA.= "srv.name as survey, ";
-                $sqlD.= "LEFT JOIN {survey} as srv ON cm.instance = srv.id
+                $sqlD.= "LEFT JOIN {survey} srv ON cm.instance = srv.id
             ";
                 break;
             case "vpl" :
                 $sqlA.= "vpl.name as vpl, ";
-                $sqlD.= "LEFT JOIN {vpl} as vpl ON cm.instance = vpl.id
+                $sqlD.= "LEFT JOIN {vpl} vpl ON cm.instance = vpl.id
             ";
                 break;
             case "wiki" :
                 $sqlA.= "wk.name as wiki, ";
-                $sqlD.= "LEFT JOIN {wiki} as wk ON cm.instance = wk.id
+                $sqlD.= "LEFT JOIN {wiki} wk ON cm.instance = wk.id
             ";
                 break;
             case "workshop" :
                 $sqlA.= "wrk.name as workshop, ";
-                $sqlD.= "LEFT JOIN {workshop} as wrk ON cm.instance = wrk.id
+                $sqlD.= "LEFT JOIN {workshop} wrk ON cm.instance = wrk.id
             ";
                 break;
             case "book" :
                 $sqlA.= "bk.name as book, ";
-                $sqlD.= "LEFT JOIN {book} as bk ON cm.instance = bk.id
+                $sqlD.= "LEFT JOIN {book} bk ON cm.instance = bk.id
             ";
                 break;
             case "resource" :
                 $sqlA.= "rsr.name as resource, ";
-                $sqlD.= "LEFT JOIN {resource} as rsr ON cm.instance = rsr.id
+                $sqlD.= "LEFT JOIN {resource} rsr ON cm.instance = rsr.id
             ";
                 break;
             case "folder" :
                 $sqlA.= "fld.name as folder, ";
-                $sqlD.= "LEFT JOIN {folder} as fld ON cm.instance = fld.id
+                $sqlD.= "LEFT JOIN {folder} fld ON cm.instance = fld.id
             ";
                 break;
             case "imscp" :
                 $sqlA.= "msc.name as imscp, ";
-                $sqlD.= "LEFT JOIN {imscp} as msc ON cm.instance = msc.id
+                $sqlD.= "LEFT JOIN {imscp} msc ON cm.instance = msc.id
             ";
                 break;
             case "label" :
                 $sqlA.= "lbl.name as label, ";
-                $sqlD.= "LEFT JOIN {label} as lbl ON cm.instance = lbl.id
+                $sqlD.= "LEFT JOIN {label} lbl ON cm.instance = lbl.id
             ";
                 break;
             case "lightboxgallery" :
                 $sqlA.= "lbg.name as lightboxgallery, ";
-                $sqlD.= "LEFT JOIN {lightboxgallery} as lbg ON cm.instance = lbg.id
+                $sqlD.= "LEFT JOIN {lightboxgallery} lbg ON cm.instance = lbg.id
             ";
                 break;
             case "page" :
                 $sqlA.= "pg.name as page, ";
-                $sqlD.= "LEFT JOIN {page} as pg ON cm.instance = pg.id
+                $sqlD.= "LEFT JOIN {page} pg ON cm.instance = pg.id
             ";
                 break;
             case "poster" :
                 $sqlA.= "pst.name as poster, ";
-                $sqlD.= "LEFT JOIN {poster} as pst ON cm.instance = pst.id
+                $sqlD.= "LEFT JOIN {poster} pst ON cm.instance = pst.id
             ";
                 break;
             case "recordingsbn" :
                 $sqlA.= "rbn.name as recordingsbn, ";
-                $sqlD.= "LEFT JOIN {recordingsbn} as rbn ON cm.instance = rbn.id
+                $sqlD.= "LEFT JOIN {recordingsbn} rbn ON cm.instance = rbn.id
             ";
                 break;
             case "url" :
                 $sqlA.= "rl.name as url, ";
-                $sqlD.= "LEFT JOIN {url} as rl ON cm.instance = rl.id
+                $sqlD.= "LEFT JOIN {url} rl ON cm.instance = rl.id
             ";
                 break;
         }
@@ -1192,8 +1192,8 @@ function block_analytics_graphs_extend_navigation_course($navigation, $course, $
     if (has_capability('block/analytics_graphs:viewpages', $context) && $reports) {
 
         $sql = "SELECT cm.module, md.name 
-            FROM {course_modules} as cm 
-            LEFT JOIN {modules} as md ON cm.module = md.id 
+            FROM {course_modules} cm 
+            LEFT JOIN {modules} md ON cm.module = md.id 
             WHERE cm.course = ? 
             GROUP BY cm.module";
         $params = array($course->id);

@@ -37,14 +37,14 @@ class block_analytics_graphs extends block_base {
         }
 
         $sql = "SELECT cm.module, md.name
-            FROM {course_modules} as cm
-            LEFT JOIN {modules} as md ON cm.module = md.id
+            FROM {course_modules} cm
+            LEFT JOIN {modules} md ON cm.module = md.id
             WHERE cm.course = ?
             GROUP BY cm.module";
         $params = array($course->id);
         $availablemodulestotal = $DB->get_records_sql($sql, $params);
         $availablemodules = array();
-        foreach ( $availablemodulestotal as $result ) {
+        foreach ($availablemodulestotal as $result) {
             array_push($availablemodules, $result->name);
         }
 
