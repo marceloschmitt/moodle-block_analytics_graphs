@@ -229,6 +229,16 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                 )), "mod" . $num, "groupselect", get_string('typename_groupselect', 'block_analytics_graphs'));
                 $num++;
             }
+            
+            if (in_array("turnitintooltwo", $availablemodules)) {
+                echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", "mod_turnitintooltwo", "mod_turnitintooltwo", array(
+                    'width' => 24,
+                    'height' => 24,
+                    'title' => ''
+                )), "mod" . $num, "turnitintooltwo", get_string('typename_turnitintooltwo', 'block_analytics_graphs'));
+                $num++;
+            }
+            
             if (in_array("hotpot", $availablemodules)) {
                 echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", "mod_hotpot", "mod_hotpot", array(
                     'width' => 24,

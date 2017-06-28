@@ -108,6 +108,9 @@ foreach ($_GET as $querystringvariable => $value) {
             case "hotpot" :
                 array_push($requestedtypes, $temp);
                 break;
+            case "turnitintooltwo" :
+                array_push($requestedtypes, $temp);
+                break;
             case "hvp" :
                 array_push($requestedtypes, $temp);
                 break;
@@ -259,6 +262,8 @@ foreach ($result as $tuple) {
             $statistics[$counter]['material'] = $tuple->groupselect;
         } else if ($tuple->tipo == 'hotpot') {
             $statistics[$counter]['material'] = $tuple->hotpot;
+        } else if ($tuple->tipo == 'turnitintooltwo') {
+            $statistics[$counter]['material'] = $tuple->turnitintooltwo;
         } else if ($tuple->tipo == 'hvp') {
             $statistics[$counter]['material'] = $tuple->hvp;
         } else if ($tuple->tipo == 'lesson') {
@@ -384,6 +389,8 @@ foreach ($result as $tuple) {
                 $statistics[$counter]['material'] = $tuple->groupselect;
             } else if ($tuple->tipo == 'hotpot') {
                 $statistics[$counter]['material'] = $tuple->hotpot;
+            } else if ($tuple->tipo == 'turnitintooltwo') {
+                $statistics[$counter]['material'] = $tuple->turnitintooltwo;
             } else if ($tuple->tipo == 'hvp') {
                 $statistics[$counter]['material'] = $tuple->hvp;
             } else if ($tuple->tipo == 'lesson') {
