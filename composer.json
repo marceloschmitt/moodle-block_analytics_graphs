@@ -1,0 +1,10 @@
+{
+    "name": "marceloschmitt/moodle-block_analytics_graphs",
+    "type": "moodle-block",
+    "require": {
+        "composer/installers": "~1.0"
+    },
+    "extra": {
+        "installer-name": "analytics_graphs"
+    }
+}
