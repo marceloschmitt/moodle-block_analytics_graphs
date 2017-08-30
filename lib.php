@@ -1069,7 +1069,7 @@ function block_analytics_graphs_get_course_name($course) {
     $sql = "SELECT
               a.fullname
             FROM
-              `mdl_course` a
+              {course} a
             WHERE
               a.id = " . $course;
     $result = $DB->get_records_sql($sql);
