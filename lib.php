@@ -285,8 +285,8 @@ function block_analytics_graphs_get_resource_url_access($course, $estudantes, $r
         ";
                 break;
             case "turnitintooltwo" :
-                $sqlA.= "tii.name as turnitintooltwo, ";
-                $sqlD.= "LEFT JOIN {turnitintooltwo} as tii ON cm.instance = tii.id
+                $sqla.= "tii.name as turnitintooltwo, ";
+                $sqld.= "LEFT JOIN {turnitintooltwo} as tii ON cm.instance = tii.id
         ";
                     break;
             case "hvp" :
@@ -469,7 +469,7 @@ function block_analytics_graphs_get_turnitin_submission($course, $students) {
     }
     list($insql, $inparams) = $DB->get_in_or_equal($inclause);
     $params = array_merge(array($course), $inparams);
-    $sql = "SELECT temp.id+(COALESCE(temp.userid,1)*1000000) as id, temp.id as assignment, CONCAT(t.name, '-', tp.partname) as name,
+    $sql = "SELECT temp.id+(COALESCE(temp.userid,1)*1000000) as id, temp.id as assignment, t.name,
                 dtdue as duedate, dtdue as cutoffdate,
                 temp.userid, usr.firstname, usr.lastname, usr.email, temp.timecreated
             FROM (
@@ -849,8 +849,8 @@ function block_analytics_graphs_get_user_resource_url_page_access($course, $stud
             ";
                 break;
             case "turnitintooltwo" :
-                $sqlA.= "tii.name as turnitintooltwo, ";
-                $sqlD.= "LEFT JOIN {turnitintooltwo} as tii ON cm.instance = tii.id
+                $sqla.= "tii.name as turnitintooltwo, ";
+                $sqld.= "LEFT JOIN {turnitintooltwo} as tii ON cm.instance = tii.id
             ";
                 break;
             case "quiz" :
