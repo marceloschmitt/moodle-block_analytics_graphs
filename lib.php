@@ -286,7 +286,7 @@ function block_analytics_graphs_get_resource_url_access($course, $estudantes, $r
                 break;
             case "turnitintooltwo" :
                 $sqla.= "tii.name as turnitintooltwo, ";
-                $sqld.= "LEFT JOIN {turnitintooltwo} as tii ON cm.instance = tii.id
+                $sqld.= "LEFT JOIN {turnitintooltwo} tii ON cm.instance = tii.id
         ";
                     break;
             case "hvp" :
@@ -476,12 +476,12 @@ function block_analytics_graphs_get_turnitin_submission($course, $students) {
                 SELECT t.id, ts.userid, MAX(tp.dtdue) as timecreated
                 FROM {turnitintooltwo} t
                 LEFT JOIN {turnitintooltwo_submissions} ts on t.id = ts.turnitintooltwoid
-				LEFT JOIN {turnitintooltwo_parts} tp on t.id = tp.turnitintooltwoid
+		LEFT JOIN {turnitintooltwo_parts} tp on t.id = tp.turnitintooltwoid
                 WHERE t.course = ? AND (ts.userid IS NULL OR ts.userid $insql)
                 GROUP BY t.id, ts.userid
             ) temp
             LEFT JOIN {turnitintooltwo} t on t.id = temp.id
-			LEFT JOIN {turnitintooltwo_parts} tp on t.id = tp.turnitintooltwoid
+	    LEFT JOIN {turnitintooltwo_parts} tp on t.id = tp.turnitintooltwoid
             LEFT JOIN {user} usr on usr.id = temp.userid
             ORDER BY duedate, name, firstname";
 
@@ -850,7 +850,7 @@ function block_analytics_graphs_get_user_resource_url_page_access($course, $stud
                 break;
             case "turnitintooltwo" :
                 $sqla.= "tii.name as turnitintooltwo, ";
-                $sqld.= "LEFT JOIN {turnitintooltwo} as tii ON cm.instance = tii.id
+                $sqld.= "LEFT JOIN {turnitintooltwo} tii ON cm.instance = tii.id
             ";
                 break;
             case "quiz" :
@@ -1069,7 +1069,7 @@ function block_analytics_graphs_get_course_name($course) {
     $sql = "SELECT
               a.fullname
             FROM
-              `mdl_course` a
+              {course} a
             WHERE
               a.id = " . $course;
     $result = $DB->get_records_sql($sql);
@@ -1185,7 +1185,7 @@ function block_analytics_graphs_extend_navigation_course($navigation, $course, $
             FROM {course_modules} cm
             LEFT JOIN {modules} md ON cm.module = md.id
             WHERE cm.course = ?
-            GROUP BY cm.module";
+            GROUP BY cm.module, md.name";
         $params = array($course->id);
         $availablemodulestotal = $DB->get_records_sql($sql, $params);
         $availablemodules = array();
@@ -1228,7 +1228,7 @@ function block_analytics_graphs_extend_navigation_course($navigation, $course, $
                 navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
         }
         
-        if (in_array("turnitintooltwo", $availableModules)) {
+        if (in_array("turnitintooltwo", $availablemodules)) {
             $url = new moodle_url($CFG->wwwroot.'/blocks/analytics_graphs/turnitin.php', array('id' => $course->id));
             $reportanalyticsgraphs->add(get_string('submissions_turnitin', 'block_analytics_graphs'), $url,
                 navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
