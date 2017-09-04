@@ -469,7 +469,7 @@ function block_analytics_graphs_get_turnitin_submission($course, $students) {
     }
     list($insql, $inparams) = $DB->get_in_or_equal($inclause);
     $params = array_merge(array($course), $inparams);
-    $sql = "SELECT temp.id+(COALESCE(temp.userid,1)*1000000) as id, temp.id as assignment, t.name,
+    $sql = "SELECT temp.id+(COALESCE(temp.userid,1)*1000000) as id, temp.id as assignment, CONCAT(t.name, '-', tp.partname) as name,
                 dtdue as duedate, dtdue as cutoffdate,
                 temp.userid, usr.firstname, usr.lastname, usr.email, temp.timecreated
             FROM (
