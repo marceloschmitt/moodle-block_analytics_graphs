@@ -157,7 +157,7 @@ function block_analytics_graphs_get_resource_url_access($course, $estudantes, $r
                         SELECT cm.id, log.userid, count(*) as acessos
                         FROM {course_modules} cm
                         LEFT JOIN {logstore_standard_log} log ON log.timecreated >= ?
-                            AND log.userid $insql AND action = 'viewed' AND cm.id=log.contextinstanceid
+                            AND log.userid $insql AND (action = 'viewed' OR action = 'submission') AND cm.id=log.contextinstanceid
                         WHERE cm.course = ? AND (";
     $sqlc = "cm.module=?";
 
@@ -285,8 +285,8 @@ function block_analytics_graphs_get_resource_url_access($course, $estudantes, $r
         ";
                 break;
             case "turnitintooltwo" :
-                $sqlA.= "tii.name as turnitintooltwo, ";
-                $sqlD.= "LEFT JOIN {turnitintooltwo} tii ON cm.instance = tii.id
+                $sqla.= "tii.name as turnitintooltwo, ";
+                $sqld.= "LEFT JOIN {turnitintooltwo} tii ON cm.instance = tii.id
         ";
                     break;
             case "hvp" :
@@ -849,8 +849,8 @@ function block_analytics_graphs_get_user_resource_url_page_access($course, $stud
             ";
                 break;
             case "turnitintooltwo" :
-                $sqlA.= "tii.name as turnitintooltwo, ";
-                $sqlD.= "LEFT JOIN {turnitintooltwo} tii ON cm.instance = tii.id
+                $sqla.= "tii.name as turnitintooltwo, ";
+                $sqld.= "LEFT JOIN {turnitintooltwo} tii ON cm.instance = tii.id
             ";
                 break;
             case "quiz" :
