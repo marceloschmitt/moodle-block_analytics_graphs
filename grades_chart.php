@@ -37,7 +37,7 @@ $sql = "SELECT gi.id, categoryid, fullname, itemname, gradetype, grademax, grade
             LEFT JOIN {grade_items} gi ON gc.courseid = gi.courseid AND gc.id = gi.categoryid
             WHERE gc.courseid = ? AND categoryid IS NOT NULL AND EXISTS (
                 SELECT *
-                    FROM {grade_grades} AS gg
+                    FROM {grade_grades} gg
                     WHERE gg.itemid = gi.id AND gg.rawgrade IS NOT NULL )
         ORDER BY fullname, itemname";
 
@@ -259,7 +259,8 @@ $groupmembersjson = json_encode($groupmembers);
 
                 $("#" + tasknameid[task_name] + ".mail_dialog").empty().append(
                     createEmailForm(title, students, <?php echo json_encode($courseid); ?>, 'grades_chart.php',
-                        <?php echo json_encode(get_string('info_coursetype', 'block_analytics_graphs') . ': ' . block_analytics_graphs_get_course_name($courseid)); ?> + ", " + task_name));
+                        <?php echo json_encode(get_string('info_coursetype', 'block_analytics_graphs') . ': ' .
+                         block_analytics_graphs_get_course_name($courseid)); ?> + ", " + task_name));
                 $("#" + tasknameid[task_name] + ".mail_dialog form").submit(function(event){
                     event.preventDefault();
                     var $form = $(this);

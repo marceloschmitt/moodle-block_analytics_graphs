@@ -63,9 +63,9 @@ function sendEmail() {
 }
 
 function createEmailForm(titulo, alunos, courseid, other, subject) {
-		if (!subject) { //if undefined or null then set to default value
-			subject = "";
-		}
+        if (!subject) { //if undefined or null then set to default value
+            subject = "";
+        }
         var nomes="";
                 ids = [];
                 email = [];

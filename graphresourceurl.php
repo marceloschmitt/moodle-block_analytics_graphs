@@ -37,151 +37,154 @@ foreach ($students as $tuple) {
 /* Get accesses to resources and urls */
 
 
-$requestedTypes = array();
-foreach($_GET as $query_string_variable => $value) {
-    if (substr($query_string_variable, 0, strlen("mod")) !== "mod") {
+$requestedtypes = array();
+foreach ($_GET as $querystringvariable => $value) {
+    if (substr($querystringvariable, 0, strlen("mod")) !== "mod") {
         continue;
     }
     $temp = $value;
-    if (!in_array($temp, $requestedTypes)) { //prevent duplicates
-        switch ($temp) { //not very necessary, left for readability and a little security
+    if (!in_array($temp, $requestedtypes)) { // prevent duplicates
+        switch ($temp) { // not very necessary, left for readability and a little security
             case "activequiz" :
-                array_push($requestedTypes, $temp);
+                array_push($requestedtypes, $temp);
                 break;
             case "assign" :
-                array_push($requestedTypes, $temp);
+                array_push($requestedtypes, $temp);
                 break;
             case "attendance" :
-                array_push($requestedTypes, $temp);
+                array_push($requestedtypes, $temp);
                 break;
             case "bigbluebuttonbn":
-                array_push($requestedTypes, $temp);
+                array_push($requestedtypes, $temp);
                 break;
             case "booking":
-                array_push($requestedTypes, $temp);
+                array_push($requestedtypes, $temp);
                 break;
             case "certificate":
-                array_push($requestedTypes, $temp);
+                array_push($requestedtypes, $temp);
                 break;
             case "chat" :
-                array_push($requestedTypes, $temp);
+                array_push($requestedtypes, $temp);
                 break;
             case "checklist" :
-                array_push($requestedTypes, $temp);
+                array_push($requestedtypes, $temp);
                 break;
             case "choice" :
-                array_push($requestedTypes, $temp);
+                array_push($requestedtypes, $temp);
                 break;
             case "icontent" :
-                array_push($requestedTypes, $temp);
+                array_push($requestedtypes, $temp);
                 break;
             case "customcert" :
-                array_push($requestedTypes, $temp);
+                array_push($requestedtypes, $temp);
                 break;
             case "data" :
-                array_push($requestedTypes, $temp);
+                array_push($requestedtypes, $temp);
                 break;
             case "dataform" :
-                array_push($requestedTypes, $temp);
+                array_push($requestedtypes, $temp);
                 break;
             case "lti" :
-                array_push($requestedTypes, $temp);
+                array_push($requestedtypes, $temp);
                 break;
             case "feedback" :
-                array_push($requestedTypes, $temp);
+                array_push($requestedtypes, $temp);
                 break;
             case "forum" :
-                array_push($requestedTypes, $temp);
+                array_push($requestedtypes, $temp);
                 break;
             case "game" :
-                array_push($requestedTypes, $temp);
+                array_push($requestedtypes, $temp);
                 break;
             case "glossary" :
-                array_push($requestedTypes, $temp);
+                array_push($requestedtypes, $temp);
                 break;
             case "choicegroup" :
-                array_push($requestedTypes, $temp);
+                array_push($requestedtypes, $temp);
                 break;
             case "groupselect" :
-                array_push($requestedTypes, $temp);
+                array_push($requestedtypes, $temp);
                 break;
             case "hotpot" :
-                array_push($requestedTypes, $temp);
+                array_push($requestedtypes, $temp);
+                break;
+            case "turnitintooltwo" :
+                array_push($requestedtypes, $temp);
                 break;
             case "hvp" :
-                array_push($requestedTypes, $temp);
+                array_push($requestedtypes, $temp);
                 break;
             case "lesson" :
-                array_push($requestedTypes, $temp);
+                array_push($requestedtypes, $temp);
                 break;
             case "openmeetings" :
-                array_push($requestedTypes, $temp);
+                array_push($requestedtypes, $temp);
                 break;
             case "questionnaire" :
-                array_push($requestedTypes, $temp);
+                array_push($requestedtypes, $temp);
                 break;
             case "quiz" :
-                array_push($requestedTypes, $temp);
+                array_push($requestedtypes, $temp);
                 break;
             case "quizgame" :
-                array_push($requestedTypes, $temp);
+                array_push($requestedtypes, $temp);
                 break;
             case "scheduler" :
-                array_push($requestedTypes, $temp);
+                array_push($requestedtypes, $temp);
                 break;
             case "scorm" :
-                array_push($requestedTypes, $temp);
+                array_push($requestedtypes, $temp);
                 break;
             case "subcourse" :
-                array_push($requestedTypes, $temp);
+                array_push($requestedtypes, $temp);
                 break;
             case "survey" :
-                array_push($requestedTypes, $temp);
+                array_push($requestedtypes, $temp);
                 break;
             case "vpl" :
-                array_push($requestedTypes, $temp);
+                array_push($requestedtypes, $temp);
                 break;
             case "wiki" :
-                array_push($requestedTypes, $temp);
+                array_push($requestedtypes, $temp);
                 break;
             case "workshop" :
-                array_push($requestedTypes, $temp);
+                array_push($requestedtypes, $temp);
                 break;
             case "book" :
-                array_push($requestedTypes, $temp);
+                array_push($requestedtypes, $temp);
                 break;
             case "resource" :
-                array_push($requestedTypes, $temp);
+                array_push($requestedtypes, $temp);
                 break;
             case "folder" :
-                array_push($requestedTypes, $temp);
+                array_push($requestedtypes, $temp);
                 break;
             case "imscp" :
-                array_push($requestedTypes, $temp);
+                array_push($requestedtypes, $temp);
                 break;
             case "label" :
-                array_push($requestedTypes, $temp);
+                array_push($requestedtypes, $temp);
                 break;
             case "lightboxgallery" :
-                array_push($requestedTypes, $temp);
+                array_push($requestedtypes, $temp);
                 break;
             case "page" :
-                array_push($requestedTypes, $temp);
+                array_push($requestedtypes, $temp);
                 break;
             case "poster" :
-                array_push($requestedTypes, $temp);
+                array_push($requestedtypes, $temp);
                 break;
             case "recordingsbn":
-                array_push($requestedTypes, $temp);
+                array_push($requestedtypes, $temp);
                 break;
             case "url" :
-                array_push($requestedTypes, $temp);
+                array_push($requestedtypes, $temp);
                 break;
         }
     }
 }
 
-if (count($requestedTypes) < 1) {
+if (count($requestedtypes) < 1) {
     echo "<html style=\"background-color: #f4f4f4;\">";
     echo "<div style=\"width: 200px;height: 100px;position:absolute;left:0; right:0;top:0; bottom:0;margin:auto;max-width:100%;max-height:100%;
 overflow:auto;background-color: white;border-radius: 25px;padding: 20px;border: 2px solid darkgray;text-align: center;\">";
@@ -191,9 +194,9 @@ overflow:auto;background-color: white;border-radius: 25px;padding: 20px;border: 
     exit;
 }
 
-$result = block_analytics_graphs_get_resource_url_access($course, $students, $requestedTypes);
+$result = block_analytics_graphs_get_resource_url_access($course, $students, $requestedtypes);
 
-//echo var_dump($result);
+// echo var_dump($result);
 
 $numberofresources = count($result);
 if ($numberofresources == 0) {
@@ -259,6 +262,8 @@ foreach ($result as $tuple) {
             $statistics[$counter]['material'] = $tuple->groupselect;
         } else if ($tuple->tipo == 'hotpot') {
             $statistics[$counter]['material'] = $tuple->hotpot;
+        } else if ($tuple->tipo == 'turnitintooltwo') {
+            $statistics[$counter]['material'] = $tuple->turnitintooltwo;
         } else if ($tuple->tipo == 'hvp') {
             $statistics[$counter]['material'] = $tuple->hvp;
         } else if ($tuple->tipo == 'lesson') {
@@ -384,6 +389,8 @@ foreach ($result as $tuple) {
                 $statistics[$counter]['material'] = $tuple->groupselect;
             } else if ($tuple->tipo == 'hotpot') {
                 $statistics[$counter]['material'] = $tuple->hotpot;
+            } else if ($tuple->tipo == 'turnitintooltwo') {
+                $statistics[$counter]['material'] = $tuple->turnitintooltwo;
             } else if ($tuple->tipo == 'hvp') {
                 $statistics[$counter]['material'] = $tuple->hvp;
             } else if ($tuple->tipo == 'lesson') {
@@ -717,7 +724,8 @@ foreach ($groupmembers as $key => $value) {
                     div += "<div class='div_nomes' id='" + index + "-" + 
                         "<?php echo substr(get_string('access', 'block_analytics_graphs'), 0, 1); ?>" +
                         "'>" + createEmailForm(titulo, value.studentswithaccess, courseid, 'graphResourceUrl.php',
-                            <?php echo json_encode(get_string('info_coursetype', 'block_analytics_graphs') . ': ' . block_analytics_graphs_get_course_name($course)); ?> + ', ' + nome) + "</div>";
+                            <?php echo json_encode(get_string('info_coursetype', 'block_analytics_graphs') . ': ' .
+                            block_analytics_graphs_get_course_name($course)); ?> + ', ' + nome) + "</div>";
                 }
                 if (typeof value.studentswithnoaccess != 'undefined')
                 {
@@ -727,7 +735,8 @@ foreach ($groupmembers as $key => $value) {
                     div += "<div class='div_nomes' id='" + index + "-" +
                         "<?php echo substr(get_string('no_access', 'block_analytics_graphs'), 0, 1); ?>" +
                         "'>" + createEmailForm(titulo, value.studentswithnoaccess, courseid, 'graphResourceUrl.php',
-                            <?php echo json_encode(get_string('info_coursetype', 'block_analytics_graphs') . ': ' . block_analytics_graphs_get_course_name($course)); ?> + ', ' + nome) + "</div>";
+                            <?php echo json_encode(get_string('info_coursetype', 'block_analytics_graphs') . ': ' .
+                            block_analytics_graphs_get_course_name($course)); ?> + ', ' + nome) + "</div>";
                 }
                 document.write(div);
             });
@@ -744,7 +753,8 @@ foreach ($groupmembers as $key => $value) {
                             div += "<div class='div_nomes' id='" + ind + "-" + 
                             "<?php echo substr(get_string('access', 'block_analytics_graphs'), 0, 1); ?>" +
                             "-group-"+index+"'>" + createEmailForm(titulo, student, courseid, 'graphResourceUrl.php',
-                                    <?php echo json_encode(get_string('info_coursetype', 'block_analytics_graphs') . ': ' . block_analytics_graphs_get_course_name($course)); ?> + ', ' + nome) + "</div>";
+                                    <?php echo json_encode(get_string('info_coursetype', 'block_analytics_graphs') . ': ' .
+                                    block_analytics_graphs_get_course_name($course)); ?> + ', ' + nome) + "</div>";
                     });
                 }
                 if (typeof value.studentswithnoaccess != 'undefined')
@@ -758,7 +768,8 @@ foreach ($groupmembers as $key => $value) {
                             div += "<div class='div_nomes' id='" + ind + "-" + 
                             "<?php echo substr(get_string('no_access', 'block_analytics_graphs'), 0, 1); ?>" +
                             "-group-"+index+"'>" + createEmailForm(titulo, student, courseid, 'graphResourceUrl.php',
-                                    <?php echo json_encode(get_string('info_coursetype', 'block_analytics_graphs') . ': ' . block_analytics_graphs_get_course_name($course)); ?> + ', ' + nome) + "</div>";
+                                    <?php echo json_encode(get_string('info_coursetype', 'block_analytics_graphs') . ': ' .
+                                    block_analytics_graphs_get_course_name($course)); ?> + ', ' + nome) + "</div>";
                     });
                 }
                 document.write(div);

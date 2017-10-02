@@ -50,7 +50,7 @@ foreach ($students as $tuple) {
 }
 
 /* Get the number of days with access by week */
-$resultado = block_analytics_graphs_get_number_of_days_access_by_week($course, $students, $startdate, $legacy); //A
+$resultado = block_analytics_graphs_get_number_of_days_access_by_week($course, $students, $startdate, $legacy); // A
 
 /* Get the students that have no access */
 $maxnumberofweeks = 0;
@@ -70,7 +70,7 @@ if ($maxnumberofweeks) {
 }
 
 /* Get the number of modules accessed by week */
-$accessresults = block_analytics_graphs_get_number_of_modules_access_by_week($course, $students, $startdate, $legacy); //B
+$accessresults = block_analytics_graphs_get_number_of_modules_access_by_week($course, $students, $startdate, $legacy); // B
 $maxnumberofresources = 0;
 foreach ($accessresults as $tuple) {
     if ( $tuple->number > $maxnumberofresources) {
@@ -335,7 +335,7 @@ thead th {
 
     function pan_array_to_max_number_of_weeks(array) {
         for (i = array.length; i <= (<?php echo $maxnumberofweeks; ?>); i++ ) {
-		if (array[i] === undefined)
+        if (array[i] === undefined)
             array[i] = 0;
         }
         return array;
