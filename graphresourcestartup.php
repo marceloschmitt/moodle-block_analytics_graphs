@@ -74,6 +74,14 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                 )), "mod" . $num, "activequiz", get_string('typename_activequiz', 'block_analytics_graphs'));
                 $num++;
             }
+			if (in_array("adobeconnect", $availablemodules)) {
+                echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", "mod_lightboxgallery", "mod_adobeconnect", array(
+                    'width' => 24,
+                    'height' => 24,
+                    'title' => ''
+                )), "mod" . $num, "adobeconnect", get_string('typename_adobeconnect', 'block_analytics_graphs'));
+                $num++;
+            }
             if (in_array("assign", $availablemodules)) {
                 // from here used to check if specific module is available, otherwise it is not displayed
                 echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", "mod_assign", "mod_assign", array(

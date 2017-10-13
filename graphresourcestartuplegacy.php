@@ -268,6 +268,11 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                     get_string('typename_lightboxgallery', 'block_analytics_graphs'));
                 $num++;
             }
+			if (in_array("adobeconnect", $availableModules)) {
+                echo block_analytics_graphs_generate_graph_startup_module_entry($legacypixurlbefore . $OUTPUT->pix_url('icon', 'mod_lightboxgallery') . $legacypixurlafter, "mod" . $num, "adobeconnect",
+                    get_string('typename_adobeconnect', 'block_analytics_graphs'));
+                $num++;
+            }
             if (in_array("page", $availableModules)) {
                 echo block_analytics_graphs_generate_graph_startup_module_entry($legacypixurlbefore . $OUTPUT->pix_url('icon', 'mod_page') . $legacypixurlafter, "mod" . $num, "page",
                     get_string('typename_page', 'block_analytics_graphs'));

@@ -75,6 +75,7 @@ $string['typename_folder'] = 'Folder';
 $string['typename_imscp'] = 'IMS Content Package';
 $string['typename_label'] = 'Label';
 $string['typename_lightboxgallery'] = 'Lightbox Gallery';
+$string['typename_adobeconnect'] = 'Adobe Connect';
 $string['typename_page'] = 'Page';
 $string['typename_poster'] = 'Poster';
 $string['typename_recordingsbn'] = 'RecordingsBN';
