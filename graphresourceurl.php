@@ -458,8 +458,10 @@ if ($numberofaccesses == 0) {
     $statistics[$counter]['studentswithnoaccess'] = block_analytics_graphs_subtract_student_arrays($arrayofstudents,
                                                     $statistics[$counter]['studentswithaccess']);
 }
-/* Discover groups and members */
+/* Discover groups/groupings and members */
 $groupmembers = block_analytics_graphs_get_course_group_members($course);
+$groupingmembers = block_analytics_graphs_get_course_grouping_members($course);
+$groupmembers = array_merge($groupmembers,$groupingmembers);
 $groupmembersjson = json_encode($groupmembers);
 $statistics = json_encode($statistics);
 /* Log */
@@ -535,21 +537,21 @@ $event->trigger();
                             group.numberofaccesses[index] = 0;
                     }
                     if(value.numberofnoaccess > 0){
-                        $.each(value.studentswithnoaccess, function(ind, student){
+                        $.each(value.studentswithnoaccess, function(j, student){
                             if(group.studentswithnoaccess[index] === undefined)
                                 group.studentswithnoaccess[index] = [];
                             if(group.numberofnoaccess[index] === undefined)
                                 group.numberofnoaccess[index] = 0;
                             if(group.members.indexOf(student.userid) != -1){
                                 group.numberofnoaccess[index] += 1;
-                                group.studentswithnoaccess[index].push(value.studentswithnoaccess[ind]);
+                                group.studentswithnoaccess[index].push(value.studentswithnoaccess[j]);
                             }
                         }); 
                     }else{
-                        if(group.studentswithaccess[index] === undefined)
+                        if(group.studentswithnoaccess[index] === undefined)
                             group.studentswithnoaccess[index] = [];
-                        if(group.numberofaccesses[index] === undefined)
-                            group.numberofnoaccesses[index] = 0;
+                        if(group.numberofnoaccess[index] === undefined)
+                            group.numberofnoaccess[index] = 0;
                     }
                 });
             });

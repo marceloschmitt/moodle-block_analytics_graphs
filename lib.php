@@ -51,6 +51,24 @@ function block_analytics_graphs_get_course_group_members($course) {
     return($groupmembers);
 }
 
+function block_analytics_graphs_get_course_grouping_members($course) {
+    $groupingmembers = array();
+    $groupings = groups_get_all_groupings($course);
+    foreach ($groupings as $grouping) {
+        $members = groups_get_grouping_members($grouping->id);
+        if (!empty($members)) {
+            $groupingmembers[$grouping->id]['name'] = $grouping->name;
+            $numberofmembers = 0;
+            foreach ($members as $member) {
+                $groupingmembers[$grouping->id]['members'][] = $member->id;
+                $numberofmembers++;
+            }
+            $groupingmembers[$grouping->id]['numberofmembers']  = $numberofmembers;
+        }
+    }
+    return($groupingmembers);
+}
+
 
 function block_analytics_graphs_get_students($course) {
     $students = array();

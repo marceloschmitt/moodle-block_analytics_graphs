@@ -79,8 +79,10 @@ foreach ($accessresults as $tuple) {
 }
 
 
-/* Discover groups and members */
+/* Discover groups/groupings and members */
 $groupmembers = block_analytics_graphs_get_course_group_members($course);
+$groupingmembers = block_analytics_graphs_get_course_grouping_members($course);
+$groupmembers = array_merge($groupmembers,$groupingmembers);
 $groupmembersjson = json_encode($groupmembers);
 
 
