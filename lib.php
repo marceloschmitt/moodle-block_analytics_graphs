@@ -122,7 +122,7 @@ function block_analytics_graphs_get_course_used_modules ($courseid) {
     return $result;
 }
 
-function block_analytics_graphs_get_resource_url_access($course, $estudantes, $requestedtypes) {
+function block_analytics_graphs_get_resource_url_access($course, $estudantes, $requestedtypes, $startdate) {
     global $COURSE;
     global $DB;
     foreach ($estudantes as $tupla) {
@@ -137,7 +137,7 @@ function block_analytics_graphs_get_resource_url_access($course, $estudantes, $r
         array_push($requestedmodules, $temp->id);
     }
 
-    $startdate = $COURSE->startdate;
+	// $startdate = $COURSE->startdate;
 
     /* Temp table to order */
     $params = array($course);
