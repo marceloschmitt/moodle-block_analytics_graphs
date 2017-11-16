@@ -39,8 +39,10 @@ if ($numberoftasks == 0) {
 }
 $submissionsgraphoptions = $submissionsgraph->create_graph($result, $students);
 
-/* Discover groups and members */
+/* Discover groups/groupings and members */
 $groupmembers = block_analytics_graphs_get_course_group_members($course);
+$groupingmembers = block_analytics_graphs_get_course_grouping_members($course);
+$groupmembers = array_merge($groupmembers,$groupingmembers);
 $numberoftasks = count($result);
 if ($numberoftasks == 0) {
     error(get_string('no_graph', 'block_analytics_graphs'));

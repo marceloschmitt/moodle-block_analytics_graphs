@@ -17,13 +17,22 @@ require('../../config.php');
 require('lib.php');
 require('javascriptfunctions.php');
 $course = htmlspecialchars(required_param('id', PARAM_INT));
+$startdate = optional_param('from', '***', PARAM_TEXT);
 global $DB;
 /* Access control */
 require_login($course);
 $context = context_course::instance($course);
 require_capability('block/analytics_graphs:viewpages', $context);
 $courseparams = get_course($course);
+if ($startdate === '***') {
 $startdate = $courseparams->startdate;
+} else {
+	$datetoarray = explode('-', $startdate);
+	$starttime = new DateTime("now", core_date::get_server_timezone_object());
+	$starttime->setDate((int)$datetoarray[0], (int)$datetoarray[1], (int)$datetoarray[2]);
+	$starttime->setTime(0, 0, 0);
+	$startdate = $starttime->getTimestamp();
+}
 $coursename = get_string('course', 'block_analytics_graphs') . ": " . $courseparams->fullname;
 $students = block_analytics_graphs_get_students($course);
 $numberofstudents = count($students);
@@ -194,7 +203,7 @@ overflow:auto;background-color: white;border-radius: 25px;padding: 20px;border: 
     exit;
 }
 
-$result = block_analytics_graphs_get_resource_url_access($course, $students, $requestedtypes);
+$result = block_analytics_graphs_get_resource_url_access($course, $students, $requestedtypes, $startdate);
 
 // echo var_dump($result);
 
@@ -458,8 +467,10 @@ if ($numberofaccesses == 0) {
     $statistics[$counter]['studentswithnoaccess'] = block_analytics_graphs_subtract_student_arrays($arrayofstudents,
                                                     $statistics[$counter]['studentswithaccess']);
 }
-/* Discover groups and members */
+/* Discover groups/groupings and members */
 $groupmembers = block_analytics_graphs_get_course_group_members($course);
+$groupingmembers = block_analytics_graphs_get_course_grouping_members($course);
+$groupmembers = array_merge($groupmembers,$groupingmembers);
 $groupmembersjson = json_encode($groupmembers);
 $statistics = json_encode($statistics);
 /* Log */
@@ -535,21 +546,21 @@ $event->trigger();
                             group.numberofaccesses[index] = 0;
                     }
                     if(value.numberofnoaccess > 0){
-                        $.each(value.studentswithnoaccess, function(ind, student){
+                        $.each(value.studentswithnoaccess, function(j, student){
                             if(group.studentswithnoaccess[index] === undefined)
                                 group.studentswithnoaccess[index] = [];
                             if(group.numberofnoaccess[index] === undefined)
                                 group.numberofnoaccess[index] = 0;
                             if(group.members.indexOf(student.userid) != -1){
                                 group.numberofnoaccess[index] += 1;
-                                group.studentswithnoaccess[index].push(value.studentswithnoaccess[ind]);
+                                group.studentswithnoaccess[index].push(value.studentswithnoaccess[j]);
                             }
                         }); 
                     }else{
-                        if(group.studentswithaccess[index] === undefined)
+                        if(group.studentswithnoaccess[index] === undefined)
                             group.studentswithnoaccess[index] = [];
-                        if(group.numberofaccesses[index] === undefined)
-                            group.numberofnoaccesses[index] = 0;
+                        if(group.numberofnoaccess[index] === undefined)
+                            group.numberofnoaccess[index] = 0;
                     }
                 });
             });
