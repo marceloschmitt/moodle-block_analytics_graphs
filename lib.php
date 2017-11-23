@@ -176,7 +176,7 @@ function block_analytics_graphs_get_resource_url_access($course, $estudantes, $r
                         FROM {course_modules} cm
                         LEFT JOIN {logstore_standard_log} log ON log.timecreated >= ?
                             AND log.userid $insql AND (action = 'viewed' OR action = 'submission') AND cm.id=log.contextinstanceid
-                        WHERE cm.course = ? AND (";
+                        WHERE cm.course = ? AND cm.visible=1 AND (";
     $sqlc = "cm.module=?";
 
     if (count($requestedmodules) >= 2) {
