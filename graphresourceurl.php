@@ -18,6 +18,7 @@ require('lib.php');
 require('javascriptfunctions.php');
 $course = htmlspecialchars(required_param('id', PARAM_INT));
 $startdate = optional_param('from', '***', PARAM_TEXT);
+$hidden =  optional_param('hidden', false, PARAM_TEXT);
 global $DB;
 /* Access control */
 require_login($course);
@@ -203,7 +204,7 @@ overflow:auto;background-color: white;border-radius: 25px;padding: 20px;border: 
     exit;
 }
 
-$result = block_analytics_graphs_get_resource_url_access($course, $students, $requestedtypes, $startdate);
+$result = block_analytics_graphs_get_resource_url_access($course, $students, $requestedtypes, $startdate, $hidden);
 
 // echo var_dump($result);
 

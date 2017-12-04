@@ -39,7 +39,7 @@ $fromuser = new stdClass();
 $touser->mailformat = 0;
 $fromuser->email = $USER->email;
 $fromuser->firstname = $USER->firstname;
-$fromuser->maildisplay = true;
+$fromuser->maildisplay = core_user::MAILDISPLAY_COURSE_MEMBERS_ONLY;
 $fromuser->lastname = $USER->lastname;
 $fromuser->id = $USER->id;
 
