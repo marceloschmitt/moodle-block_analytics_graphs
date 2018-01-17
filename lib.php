@@ -115,7 +115,7 @@ function block_analytics_graphs_get_course_used_modules ($courseid) {
             FROM {course_modules} cm
             LEFT JOIN {modules} md ON cm.module = md.id
             WHERE cm.course = ?
-            GROUP BY cm.module";
+            GROUP BY cm.module, md.name";
     $params = array($courseid);
     $result = $DB->get_records_sql($sql, $params);
 
