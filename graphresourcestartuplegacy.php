@@ -23,7 +23,8 @@ global $DB;
 require_login($course);
 $context = context_course::instance($course);
 require_capability('block/analytics_graphs:viewpages', $context);
-
+$courseparams = get_course($course);
+$startdate = date("Y-m-d", $courseparams->startdate);
 
 /* Initializing and filling array with available modules, to display only modules that are
  available on the server on the course */
@@ -288,7 +289,14 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                     get_string('typename_url', 'block_analytics_graphs'));
                 $num++;
             }
-			 echo "<input type=\"hidden\" name=\"id\" value=\"$course\">";
+			
+			echo "<input type=\"hidden\" name=\"id\" value=\"$course\">";
+			
+			echo "<h4 style='margin-bottom: 3px'>Options:</h4>";
+			
+			echo "Start from: <input type=\"date\" name=\"from\" value=\"$startdate\"><br>";
+			 
+			echo "<input type=\"checkbox\" name=\"hidden\" value=\"true\"> Display hidden items";
             ?>
     </div>
     <?php
