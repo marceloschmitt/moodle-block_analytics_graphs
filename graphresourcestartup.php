@@ -65,7 +65,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
             if order does not matter, then can be exchanged with a simple for loop */
             $num = 1;
             // get_string('no_types_requested', 'block_analytics_graphs')
-            echo "<h4 style='margin-bottom: 3px'>Activities:</h4>";
+            echo "<h4 style='margin-bottom: 3px'>" . get_string('activities', 'block_analytics_graphs') . ":</h4>";
             if (in_array("activequiz", $availablemodules)) {
                 // from here used to check if specific module is available, otherwise it is not displayed
                 echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", "mod_activequiz", "mod_activequiz", array(
@@ -438,11 +438,11 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
 			
             echo "<input type=\"hidden\" name=\"id\" value=\"$course\">";
 			
-			echo "<h4 style='margin-bottom: 3px'>Options:</h4>";
+			echo "<h4 style='margin-bottom: 3px'>" . get_string('options', 'block_analytics_graphs') . ":</h4>";
 			
-			echo "Start from: <input type=\"date\" name=\"from\" value=\"$startdate\"><br>";
+			echo get_string('startfrom', 'block_analytics_graphs') . ": <input type=\"date\" name=\"from\" value=\"$startdate\"><br>";
 			
-			echo "<input type=\"checkbox\" name=\"hidden\" value=\"true\"> Display hidden items";
+			echo "<input type=\"checkbox\" name=\"hidden\" value=\"true\">" . get_string('displayhidden', 'block_analytics_graphs');
             ?>
     </div>
     <?php

@@ -179,3 +179,9 @@ $string['remove_task'] = "Remove assessment from chart";
 $string['no_student_task'] = "This assessment does not have students in the selected group";
 $string['add_all'] = "Add all";
 $string['remove_all'] = "Remove all";
+
+// graphresourcestartup
+$string['activities'] = "Activities";
+$string['displayhidden'] = "Display hidden items";
+$string['options'] = "Options";
+$string['startfrom'] = "Start from";
