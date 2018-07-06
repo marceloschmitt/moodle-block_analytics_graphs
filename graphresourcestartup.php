@@ -353,7 +353,7 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
                 $num++;
             }
 
-            echo "<h4 style='margin-bottom: 3px'>Resources:</h4>";
+            echo "<h4 style='margin-bottom: 3px'>" . get_string('resources', 'block_analytics_graphs') . ":</h4>";
 
             if (in_array("book", $availablemodules)) {
                 echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", "mod_book", "mod_book", array(
