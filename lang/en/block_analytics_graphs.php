@@ -185,3 +185,7 @@ $string['activities'] = "Activities";
 $string['displayhidden'] = "Display hidden items";
 $string['options'] = "Options";
 $string['startfrom'] = "Start from";
+
+// Privacy
+$string['privacy:metadata'] = 'The Analytics Graphs block only displays existing calendar data.';
+

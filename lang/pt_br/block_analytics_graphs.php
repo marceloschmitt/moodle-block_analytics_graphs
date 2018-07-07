@@ -111,4 +111,6 @@ $string['displayhidden'] = "Mostrar itens escondidos";
 $string['options'] = "Opções";
 $string['startfrom'] = "Iniciar em";
 
+// Privacy
+$string['privacy:metadata'] = 'O bloco Analytics Graphs mostra apenas dados já existentes no moodle.';
 
