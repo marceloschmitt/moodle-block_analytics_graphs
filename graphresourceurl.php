@@ -35,7 +35,7 @@ $startdate = $courseparams->startdate;
 	$startdate = $starttime->getTimestamp();
 }
 $coursename = get_string('course', 'block_analytics_graphs') . ": " . $courseparams->fullname;
-$students = block_analytics_graphs_get_students($course);
+$students = block_analytics_graphs_get_students($COURSE);
 $numberofstudents = count($students);
 if ($numberofstudents == 0) {
     echo(get_string('no_students', 'block_analytics_graphs'));
@@ -487,15 +487,15 @@ $event->trigger();
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <title><?php echo get_string('access_to_contents', 'block_analytics_graphs'); ?></title>
-        
+
         <link rel="stylesheet" href="externalref/jquery-ui-1.12.1/jquery-ui.css">
-        <script src="externalref/jquery-1.12.2.js"></script> 
+        <script src="externalref/jquery-1.12.2.js"></script>
         <script src="externalref/jquery-ui-1.12.1/jquery-ui.js"></script>
         <script src="externalref/highcharts.js"></script>
         <script src="externalref/no-data-to-display.js"></script>
         <script src="externalref/exporting.js"></script>
         <script src="externalref/export-csv-master/export-csv.js"></script>
-        
+
         <style>
             .ui-dialog {
                 position: fixed;
@@ -539,7 +539,7 @@ $event->trigger();
                                 group.studentswithaccess[index].push(value.studentswithaccess[i]);
                             }
                         });
-                        
+
                     }else{
                         if(group.studentswithaccess[index] === undefined)
                             group.studentswithaccess[index] = [];
@@ -556,7 +556,7 @@ $event->trigger();
                                 group.numberofnoaccess[index] += 1;
                                 group.studentswithnoaccess[index].push(value.studentswithnoaccess[j]);
                             }
-                        }); 
+                        });
                     }else{
                         if(group.studentswithnoaccess[index] === undefined)
                             group.studentswithnoaccess[index] = [];
@@ -594,14 +594,14 @@ $event->trigger();
                         title: {
                             text: '<?php echo get_string('contents', 'block_analytics_graphs'); ?>'
                         },
-        
+
                     plotBands: [
 <?php
 $inicio = -0.5;
 $par = 2;
 foreach ($numberofresourcesintopic as $topico => $numberoftopics) {
     $fim = $inicio + $numberoftopics;
-?>        
+?>
                     {
                          color: ' <?php echo ($par % 2 ? 'rgba(0, 0, 0, 0)' : 'rgba(68, 170, 213, 0.1)'); ?>',
                          label: {
@@ -623,7 +623,7 @@ foreach ($numberofresourcesintopic as $topico => $numberoftopics) {
                 ?>
                     ]
                 },
-                    
+
                 yAxis: {
                     min: 0,
                     maxPadding: 0.1,
@@ -636,11 +636,11 @@ foreach ($numberofresourcesintopic as $topico => $numberoftopics) {
                         overflow: 'justify'
                     }
                 },
-                
+
                 tooltip: {
                     valueSuffix: ' <?php echo get_string('students', 'block_analytics_graphs'); ?>'
                 },
-                
+
                 plotOptions: {
                     series: {
                         cursor: 'pointer',
@@ -658,20 +658,20 @@ foreach ($numberofresourcesintopic as $topico => $numberoftopics) {
                                                 of:window
                                             });
                                         }else{
-                                            $("#" + nome_conteudo).dialog("open");  
+                                            $("#" + nome_conteudo).dialog("open");
                                             $("#" + nome_conteudo).dialog("option", "position", {
                                                 my:"center top",
                                                 at:"center top+" + 10,
                                                 of:window
-                                            });  
-                                            $("#" + nome_conteudo).dialog("open");  
+                                            });
+                                            $("#" + nome_conteudo).dialog("open");
                                         }
-                                        
+
                                 }
                             }
                         }
                     },
-    
+
                     bar: {
                         dataLabels: {
                             useHTML: this,
@@ -733,7 +733,7 @@ foreach ($groupmembers as $key => $value) {
                      var titulo = coursename + "</h3>" +
                             <?php  echo json_encode(get_string('access', 'block_analytics_graphs')); ?> + " - "+
                             nome;
-                    div += "<div class='div_nomes' id='" + index + "-" + 
+                    div += "<div class='div_nomes' id='" + index + "-" +
                         "<?php echo substr(get_string('access', 'block_analytics_graphs'), 0, 1); ?>" +
                         "'>" + createEmailForm(titulo, value.studentswithaccess, courseid, 'graphResourceUrl.php',
                             <?php echo json_encode(get_string('info_coursetype', 'block_analytics_graphs') . ': ' .
@@ -760,9 +760,9 @@ foreach ($groupmembers as $key => $value) {
                         var titulo = coursename + "</h3>" +
                         <?php  echo json_encode(get_string('access', 'block_analytics_graphs')); ?> + " - "+
                         value.material[ind];
-                    
+
                         if(student !== undefined)
-                            div += "<div class='div_nomes' id='" + ind + "-" + 
+                            div += "<div class='div_nomes' id='" + ind + "-" +
                             "<?php echo substr(get_string('access', 'block_analytics_graphs'), 0, 1); ?>" +
                             "-group-"+index+"'>" + createEmailForm(titulo, student, courseid, 'graphResourceUrl.php',
                                     <?php echo json_encode(get_string('info_coursetype', 'block_analytics_graphs') . ': ' .
@@ -775,9 +775,9 @@ foreach ($groupmembers as $key => $value) {
                         var titulo = coursename + "</h3>" +
                             <?php  echo json_encode(get_string('no_access', 'block_analytics_graphs')); ?> + " - "+
                             value.material[ind];
-                    
+
                         if(student !== undefined)
-                            div += "<div class='div_nomes' id='" + ind + "-" + 
+                            div += "<div class='div_nomes' id='" + ind + "-" +
                             "<?php echo substr(get_string('no_access', 'block_analytics_graphs'), 0, 1); ?>" +
                             "-group-"+index+"'>" + createEmailForm(titulo, student, courseid, 'graphResourceUrl.php',
                                     <?php echo json_encode(get_string('info_coursetype', 'block_analytics_graphs') . ': ' .
