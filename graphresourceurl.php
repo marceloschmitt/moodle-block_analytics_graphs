@@ -469,8 +469,8 @@ if ($numberofaccesses == 0) {
                                                     $statistics[$counter]['studentswithaccess']);
 }
 /* Discover groups/groupings and members */
-$groupmembers = block_analytics_graphs_get_course_group_members($course);
-$groupingmembers = block_analytics_graphs_get_course_grouping_members($course);
+$groupmembers = block_analytics_graphs_get_course_group_members($COURSE);
+$groupingmembers = block_analytics_graphs_get_course_grouping_members($COURSE);
 $groupmembers = array_merge($groupmembers,$groupingmembers);
 $groupmembersjson = json_encode($groupmembers);
 $statistics = json_encode($statistics);
