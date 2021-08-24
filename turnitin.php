@@ -30,7 +30,7 @@ $title = get_string('submissions_turnitin', 'block_analytics_graphs');
 $submissionsgraph = new graph_submission($course, $title);
 
 
-$students = block_analytics_graphs_get_students($course);
+$students = block_analytics_graphs_get_students($COURSE);
 $numberofstudents = count($students);
 if ($numberofstudents == 0) {
     echo(get_string('no_students', 'block_analytics_graphs'));
@@ -45,8 +45,8 @@ if ($numberoftasks == 0) {
 $submissionsgraphoptions = $submissionsgraph->create_graph($result, $students);
 
 /* Discover groups/groupings and members */
-$groupmembers = block_analytics_graphs_get_course_group_members($course);
-$groupingmembers = block_analytics_graphs_get_course_grouping_members($course);
+$groupmembers = block_analytics_graphs_get_course_group_members($COURSE);
+$groupingmembers = block_analytics_graphs_get_course_grouping_members($COURSE);
 $groupmembers = array_merge($groupmembers,$groupingmembers);
 $numberoftasks = count($result);
 if ($numberoftasks == 0) {

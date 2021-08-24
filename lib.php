@@ -34,11 +34,11 @@ function block_analytics_graphs_subtract_student_arrays($estudantes, $acessaram)
 }
 
 function block_analytics_graphs_get_course_group_members($course) {
-    global $DB;
+    global $DB, $USER;
     $groupmembers = array();
-    $groups = groups_get_all_groups($course);
+    $groups = groups_get_all_groups($course->id);
     foreach ($groups as $group) {
-        if (groups_group_visible($group->id, $DB->get_record('course', array('id' =>  $course), '*', MUST_EXIST))) {
+        if (groups_group_visible($group->id, $course)) {
         	$members = groups_get_members($group->id);
         	if (!empty($members)) {
             	$groupmembers[$group->id]['name'] = $group->name;
@@ -55,11 +55,11 @@ function block_analytics_graphs_get_course_group_members($course) {
 }
 
 function block_analytics_graphs_get_course_grouping_members($course) {
- 	global $DB;
+ 	global $DB, $USER;
  	$groupingmembers = array();
-    $groupings = groups_get_all_groupings($course);
+    $groupings = groups_get_all_groupings($course->id);
     foreach ($groupings as $grouping) {
-        if (groups_group_visible($group->id, $DB->get_record('course', array('id' =>  $course), '*', MUST_EXIST))) {
+        if (groups_group_visible($group->id, $course)) {
         	$members = groups_get_grouping_members($grouping->id);
         	if (!empty($members)) {
             	$groupingmembers[$grouping->id]['name'] = $grouping->name;
@@ -77,14 +77,14 @@ function block_analytics_graphs_get_course_grouping_members($course) {
 
 
 function block_analytics_graphs_get_students($course) {
-    global $DB;
+    global $DB, $USER;
     $students = array();
-    $context = context_course::instance($course);
+    $context = context_course::instance($course->id);
     $allstudents = get_enrolled_users($context, 'block/analytics_graphs:bemonitored', 0,
                     'u.id, u.firstname, u.lastname, u.email, u.suspended', 'firstname, lastname');
     foreach ($allstudents as $student) {
         if ($student->suspended == 0) {
-            if (groups_user_groups_visible($DB->get_record('course', array('id' =>  $course), '*', MUST_EXIST), $student->id)) {
+            if (groups_user_groups_visible($course, $student->id) {
                 $students[] = $student;
             }
         }
@@ -191,7 +191,7 @@ function block_analytics_graphs_get_resource_url_access($course, $estudantes, $r
 	} else {
 		$sqlb .= " AND cm.visible=1 AND (";
 	}
-	
+
     $sqlc = "cm.module=?";
 
     if (count($requestedmodules) >= 2) {
@@ -1260,7 +1260,7 @@ function block_analytics_graphs_extend_navigation_course($navigation, $course, $
             $reportanalyticsgraphs->add(get_string('submissions_hotpot', 'block_analytics_graphs'), $url,
                 navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
         }
-        
+
         if (in_array("turnitintooltwo", $availablemodules)) {
             $url = new moodle_url($CFG->wwwroot.'/blocks/analytics_graphs/turnitin.php', array('id' => $course->id));
             $reportanalyticsgraphs->add(get_string('submissions_turnitin', 'block_analytics_graphs'), $url,

@@ -27,7 +27,7 @@ require_login($course);
 $context = context_course::instance($course);
 require_capability('block/analytics_graphs:viewpages', $context);
 
-$students = block_analytics_graphs_get_students($course);
+$students = block_analytics_graphs_get_students($COURSE);
 $numberofstudents = count($students);
 if ($numberofstudents == 0) {
     echo(get_string('no_students', 'block_analytics_graphs'));

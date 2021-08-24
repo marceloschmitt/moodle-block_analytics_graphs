@@ -89,8 +89,8 @@ foreach ($accessresults as $tuple) {
 
 
 /* Discover groups/groupings and members */
-$groupmembers = block_analytics_graphs_get_course_group_members($course);
-$groupingmembers = block_analytics_graphs_get_course_grouping_members($course);
+$groupmembers = block_analytics_graphs_get_course_group_members($COURSE);
+$groupingmembers = block_analytics_graphs_get_course_grouping_members($COURSE);
 $groupmembers = array_merge($groupmembers,$groupingmembers);
 $groupmembersjson = json_encode($groupmembers);
 
@@ -123,12 +123,12 @@ $event->trigger();
 <title><?php echo get_string('hits_distribution', 'block_analytics_graphs'); ?></title>
 
 <link rel="stylesheet" href="externalref/jquery-ui-1.12.1/jquery-ui.css">
-<script src="externalref/jquery-1.12.2.js"></script> 
+<script src="externalref/jquery-1.12.2.js"></script>
 <script src="externalref/jquery-ui-1.12.1/jquery-ui.js"></script>
 <script src="externalref/highstock.js"></script>
 <script src="externalref/no-data-to-display.js"></script>
 <script src="externalref/exporting.js"></script>
-<script src="externalref/export-csv-master/export-csv.js"></script> 
+<script src="externalref/export-csv-master/export-csv.js"></script>
 
 <style>
 div.res_query {
@@ -260,16 +260,16 @@ thead th {
     var nomes = [];
     var totalResourceAccessData = [];
     var totalWeekDaysAccessData = [];
-    $.each(geral, function(ind, val){   
+    $.each(geral, function(ind, val){
         var nome = val.firstname+" "+val.lastname;
         if (nomes.indexOf(nome) === -1)
             nomes.push(nome);
 
     });
-    
+
     nomes.sort();
     var students = [];
-    
+
     // Organize data to generate right graph.
     $.each(geral, function(ind, val){
         if (students[val.userid]){
@@ -304,7 +304,7 @@ thead th {
         if (students[value.userid]){
             var student = students[value.userid];
             if (student.semanasModulos === undefined)
-                student.semanasModulos = [];                
+                student.semanasModulos = [];
             student.semanasModulos[value.week] = Number(value.week);
             if (student.acessosModulos === undefined)
                 student.acessosModulos = [];
@@ -432,14 +432,14 @@ thead th {
                         padding: 0,
                         headerFormat: '',
                         pointFormat: <?php echo "'".get_string('week_number', 'block_analytics_graphs').": '"; ?> +
-                                        '{point.x}<br>' +  
+                                        '{point.x}<br>' +
                                         <?php echo "'".get_string('resources_with_access', 'block_analytics_graphs').": '"; ?> +
                                         '{point.y}',
                         positioner: function (w, h, point) { return { x: point.plotX - w / 2, y: point.plotY - h};}
                 },
                 plotOptions: {
                         series: {
-                                animation:  { 
+                                animation:  {
                                         duration: 4000
                                 },
                                 lineWidth: 1,
@@ -463,13 +463,13 @@ thead th {
                     pointStart: weekBeginningOffset,
                     data: trata_array(student.acessosModulos)
                 }],
-                
-                
+
+
                 exporting: {
                     enabled: false
                 },
-                
-                    });                    
+
+                    });
                     last_week = <?php echo $maxnumberofweeks; ?>;
                     if(!(last_week in student.acessosModulos)){
                         $("#" + student.userid + "-1-img").css("visibility", "visible");
@@ -535,7 +535,7 @@ thead th {
                     text: null
                 },
                 tickPositions: [0],
-                max: 7, 
+                max: 7,
                 tickInterval: 1
             },
 
@@ -649,7 +649,7 @@ thead th {
                                             "</td>"+
                                             "<td width='250' id='acessos-"+value.userid+"'>"+
                                             "</td>"+
-                                            "<td>"+                                                
+                                            "<td>"+
                                             //(value.totalModulos>0? value.totalModulos : 0)+
                                             (numberofresources[value.userid]? numberofresources[value.userid].number : 0)+
                                             "</td>"+
@@ -664,7 +664,7 @@ thead th {
             });
         });
     }
-    
+
 </script>
 
 
@@ -692,20 +692,20 @@ thead th {
 </center>
     <table id="table-sparkline" >
         <thead>
-            <tr>                
-        <th><?php  echo   get_string('students', 'block_analytics_graphs');?></th>                
-        <th width=50><?php echo get_string('hits', 'block_analytics_graphs');?></th>                
-        <th width=50><?php echo get_string('days_with_access', 'block_analytics_graphs');?></th>                
+            <tr>
+        <th><?php  echo   get_string('students', 'block_analytics_graphs');?></th>
+        <th width=50><?php echo get_string('hits', 'block_analytics_graphs');?></th>
+        <th width=50><?php echo get_string('days_with_access', 'block_analytics_graphs');?></th>
         <th><center><?php echo get_string('days_by_week', 'block_analytics_graphs');
             echo "<br><i>(". get_string('number_of_weeks', 'block_analytics_graphs')
                     . ": " . ($maxnumberofweeks + 1).")</i>";?></center></th>
-        <th width=50><?php  echo   get_string('resources_with_access', 'block_analytics_graphs');?></th>                
+        <th width=50><?php  echo   get_string('resources_with_access', 'block_analytics_graphs');?></th>
         <th><center><?php echo get_string('resources_by_week', 'block_analytics_graphs');?></center></th>
             </tr>
         </thead>
         <tbody  id='tbody-sparklines'>
             <script type="text/javascript">
-                    createRow(students, nomes);            
+                    createRow(students, nomes);
             </script>
         </tbody>
     </table>
@@ -743,17 +743,17 @@ thead th {
     var studentwithaccess = [];
     $.each(students, function(ind, val) {
         var div = "";
-        if (val !== undefined){   
-            var title = coursename + 
-                "</h3><p style='font-size:small'>" + 
+        if (val !== undefined){
+            var title = coursename +
+                "</h3><p style='font-size:small'>" +
                 <?php  echo json_encode(get_string('hits', 'block_analytics_graphs'));?> + ": "+
-                val.pageViews + 
+                val.pageViews +
                 ", "+ <?php  echo json_encode(get_string('days_with_access', 'block_analytics_graphs'));?> + ": "+
-                val.totalofaccesses + 
+                val.totalofaccesses +
                 ", "+ <?php  echo json_encode(get_string('resources_with_access', 'block_analytics_graphs'));?> + ": "+
-                val.totalofresources ; 
-            studentwithaccess[0] = val;             
-            div = 
+                val.totalofresources ;
+            studentwithaccess[0] = val;
+            div =
                 "<div class='div_nomes' id='" + val.userid + "' title='" + val.nome + "'>" +
                     "<div class='student_tabs'> \
                         <ul> \
@@ -785,13 +785,13 @@ thead th {
                         "<div class='student_panel' id='email_panel-" + val.userid + "'>" +
                         createEmailForm(title,studentwithaccess, courseid, 'hits.php',
                         <?php echo json_encode(get_string('info_coursetype', 'block_analytics_graphs') . ': ' . block_analytics_graphs_get_course_name($course)); ?>) + "</div>" +
-                        "<div class='student_panel' id='student_tab_panel-" + val.userid + "'></div>" + 
-                    "</div>" + 
+                        "<div class='student_panel' id='student_tab_panel-" + val.userid + "'></div>" +
+                    "</div>" +
                 "</div>";
-            document.write(div);     
+            document.write(div);
         }
     });
-        
+
 
     $("li.navi_tab a").click(function(){
         if($(this).hasClass("msgs")){
@@ -802,8 +802,8 @@ thead th {
             var fill_panel = function(panel_id){
                 return function fill_panel_callback(data){
                     if(jQuery.isEmptyObject(data)){
-                        $("#student_tab_panel-" + panel_id).empty().append("<div>" + 
-                        <?php echo json_encode(get_string('no_messages', 'block_analytics_graphs')); ?> + 
+                        $("#student_tab_panel-" + panel_id).empty().append("<div>" +
+                        <?php echo json_encode(get_string('no_messages', 'block_analytics_graphs')); ?> +
                         "</div>");
                     }
                     else{
@@ -811,10 +811,10 @@ thead th {
                         var sender_string = <?php echo json_encode(get_string('sender', 'block_analytics_graphs')); ?>;
                         var subject_string = <?php echo json_encode(get_string('subject', 'block_analytics_graphs')); ?>;
                         var message_text_string = <?php echo json_encode(get_string('message_text', 'block_analytics_graphs')); ?>;
-                        var table = "<table class='res_query'><tr><th>" + date_string + 
-                                            "</th><th>" + sender_string + 
-                                            "</th><th>" + subject_string + 
-                                            "</th><th>" + message_text_string + 
+                        var table = "<table class='res_query'><tr><th>" + date_string +
+                                            "</th><th>" + sender_string +
+                                            "</th><th>" + subject_string +
+                                            "</th><th>" + message_text_string +
                                             "</th></tr>";
                         for(elem in data){
                             table += "<tr>";
@@ -829,8 +829,8 @@ thead th {
                         $("#student_tab_panel-" + panel_id).empty().append('<div class="res_query">' + table + '</div>');
                     }
                 }
-            }; 
-     
+            };
+
             $.ajax({
                 method: "POST",
                 url: "query_messages.php",
@@ -1693,7 +1693,7 @@ thead th {
         return false;
     });
 
-    $(".button-fancy").bind("click", function(){                
+    $(".button-fancy").bind("click", function(){
         $(".div_nomes").dialog("close");
         $("#studentswithnoaccess").dialog("open");
         $("#studentswithnoaccess").dialog("option", "position", {
@@ -1704,9 +1704,9 @@ thead th {
 
     });
 
-    $(".nome_student").bind("click", function(){                
+    $(".nome_student").bind("click", function(){
         $(".div_nomes").dialog("close");
-        var val = $(this).attr('id');                
+        var val = $(this).attr('id');
         val = val.split("-");
         $("#" + val[1]).dialog("open");
         $("#" + val[1]).dialog("option", "width", 1000);
@@ -1761,7 +1761,7 @@ thead th {
                         $(".button-fancy").attr('disabled', 'disabled');
                     }else{
                         $("#studentswithnoaccess").children().remove();
-                        var title = <?php echo json_encode(get_string('no_access', 'block_analytics_graphs'));?> + 
+                        var title = <?php echo json_encode(get_string('no_access', 'block_analytics_graphs'));?> +
                             " - " + coursename;
                         $("#studentswithnoaccess").append(createEmailForm(title , studentswithnoaccessgroup, courseid, 'hits.php',
                             <?php echo json_encode(get_string('info_coursetype', 'block_analytics_graphs') . ': ' . block_analytics_graphs_get_course_name($course)); ?>));
