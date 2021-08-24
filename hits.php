@@ -45,7 +45,7 @@ if ($startdate === '***') {
 	$startdate = $starttime->getTimestamp();
 }
 $coursename = get_string('course', 'block_analytics_graphs') . ": " . $courseparams->fullname;
-$students = block_analytics_graphs_get_students($course);
+$students = block_analytics_graphs_get_students($COURSE);
 
 $numberofstudents = count($students);
 if ($numberofstudents == 0) {
