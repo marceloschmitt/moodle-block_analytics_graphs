@@ -84,7 +84,7 @@ function block_analytics_graphs_get_students($course) {
                     'u.id, u.firstname, u.lastname, u.email, u.suspended', 'firstname, lastname');
     foreach ($allstudents as $student) {
         if ($student->suspended == 0) {
-            if (groups_user_groups_visible($course, $student->id) {
+            if (groups_user_groups_visible($course, $student->id)) {
                 $students[] = $student;
             }
         }
