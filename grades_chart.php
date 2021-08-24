@@ -43,7 +43,7 @@ $sql = "SELECT gi.id, categoryid, fullname, itemname, gradetype, grademax, grade
 
 $result = $DB->get_records_sql($sql, array($courseid));
 
-$groupmembers = block_analytics_graphs_get_course_group_members($courseid);
+$groupmembers = block_analytics_graphs_get_course_group_members($COURSE);
 $groupmembersjson = json_encode($groupmembers);
 ?>
 
@@ -53,7 +53,7 @@ $groupmembersjson = json_encode($groupmembers);
         <title><?php echo get_string('grades_chart', 'block_analytics_graphs'); ?></title>
 
         <link rel="stylesheet" href="externalref/jquery-ui-1.12.1/jquery-ui.css">
-        <script src="externalref/jquery-3.1.1.js"></script> 
+        <script src="externalref/jquery-3.1.1.js"></script>
         <script src="externalref/jquery-ui-1.12.1/jquery-ui.js"></script>
         <script src="externalref/highcharts.js"></script>
         <script src="externalref/highcharts-more.js"></script>
@@ -206,7 +206,7 @@ $groupmembersjson = json_encode($groupmembers);
                 else if(quartile == 50) {
                     num = e.point.median.toFixed(2) * 100;
                     index =  parseInt(tasksinfo[tasknameid[e.point.category]].median_index + 1)
-                } 
+                }
                 else {
                     num = e.point.q3.toFixed(2) * 100;
                     index =  parseInt(tasksinfo[tasknameid[e.point.category]].q3_index + 1)
@@ -227,7 +227,7 @@ $groupmembersjson = json_encode($groupmembers);
                 var index;
                 var title = <?php echo json_encode(get_string('grades_mail_dialog_title', 'block_analytics_graphs')); ?> + " ";
                 var students;
-                
+
                 quartile = parseInt(quartile);
                 $("#" + tasknameid[task_name] + ".mail_dialog").dialog("open");
                 $("#" + tasknameid[task_name] + ".mail_dialog").dialog("option", "position", {
@@ -237,7 +237,7 @@ $groupmembersjson = json_encode($groupmembers);
                 });
                 $("#" + tasknameid[task_name] + ".mail_dialog").dialog("option", "width", 900);
                 $("#" + tasknameid[task_name] + ".mail_dialog").dialog("option", "height", 600);
-                
+
                 if(quartile == 25){
                     index = taskgrades.q1_index;
                     title += taskgrades.q1_grade.toFixed(2);
@@ -251,7 +251,7 @@ $groupmembersjson = json_encode($groupmembers);
                     title += taskgrades.q3_grade.toFixed(2);
                 }
 
-                students = taskgrades.grades.slice(0, parseInt(index)+1);               
+                students = taskgrades.grades.slice(0, parseInt(index)+1);
 
                 for(var s=0; s<students.length; s++){
                     students[s]['nome'] = students[s].name;
@@ -458,7 +458,7 @@ $groupmembersjson = json_encode($groupmembers);
                     formatter: function() {
                         return(this.value*100);
                     }
-                }, 
+                },
                     min: 0,
                     max: 1,
                     title: {
@@ -466,7 +466,7 @@ $groupmembersjson = json_encode($groupmembers);
                         style: {
                             fontWeight: 'bold',
                             fontSize: 12
-                    },      
+                    },
                 },
             },
 
@@ -522,7 +522,7 @@ hs.marginLeft = 20;
                         }
                                 } ,
                             },
-                        } 
+                        }
                 },
 
                 series: [{
@@ -540,19 +540,19 @@ hs.marginLeft = 20;
             var cont = 1;
             var current_group = "-";
             for(var elem in tasks){
-                $("#tasklist_div").append("<div class='individual_task_div' id='div_task_" + tasks[elem]['id'] + "'>" + 
+                $("#tasklist_div").append("<div class='individual_task_div' id='div_task_" + tasks[elem]['id'] + "'>" +
                                         "<span class='task_name'>" + cont + " - " + tasks[elem]['itemname'] +
-                                        "<img src='images/exclamation_sign.png' title='" + 
+                                        "<img src='images/exclamation_sign.png' title='" +
                                         <?php echo json_encode(get_string('no_student_task', 'block_analytics_graphs')); ?> +
                                         "' class='no_student_img' id='img-" + tasks[elem]['id'] + "'></span>" +
-                                        "<button type='button' class='task_button deactivated' id='" +  tasks[elem]['id'] + "'>" + 
+                                        "<button type='button' class='task_button deactivated' id='" +  tasks[elem]['id'] + "'>" +
                                         cont + "</button></div>");
                 document.write("<div id='" + tasks[elem]['id'] + "' class='mail_dialog' title='" + tasks[elem]['itemname'] +
                             "'></div>");
                 $("#" + tasks[elem]['id'] + ".mail_dialog").dialog({
                     modal: true,
                     autoOpen: false
-                });             
+                });
                 tasks_toggle[tasks[elem]['id']] = false;
                 taskidname[tasks[elem]['id']] = tasks[elem]['itemname'];
                 tasknameid[tasks[elem]['itemname']] = tasks[elem]['id'];
@@ -626,7 +626,7 @@ hs.marginLeft = 20;
                 }
                 make_grades_query();
                 return false;
-            });         
+            });
         </script>
     </body>
 </html>
