@@ -84,5 +84,5 @@ function xmldb_block_analytics_graphs_upgrade($oldversion, $block) {
         }
     }
     // Analytics_graphs savepoint reached.
-    upgrade_block_savepoint(true, 2018072501, 'analytics_graphs');
+    upgrade_block_savepoint(true, 2021082401, 'analytics_graphs');
 }
