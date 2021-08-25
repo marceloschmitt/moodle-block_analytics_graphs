@@ -50,14 +50,8 @@ class block_analytics_graphs extends block_base {
         $this->content->text = "";
         $this->content->text .= "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/grades_chart.php?id={$course->id}
                           target=_blank>" . get_string('grades_chart', 'block_analytics_graphs') . "</a>";
-        if ($uselegacypixurl) {
-            $this->content->text .= "<li> <a href=
-                {$CFG->wwwroot}/blocks/analytics_graphs/graphresourcestartuplegacy.php?id={$course->id}
-                target=_blank>" . get_string('access_to_contents', 'block_analytics_graphs') . "</a>";
-        } else {
-            $this->content->text .= "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/graphresourcestartup.php?id={$course->id}
+        $this->content->text .= "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/graphresourcestartup.php?id={$course->id}
                           target=_blank>" . get_string('access_to_contents', 'block_analytics_graphs') . "</a>";
-        }
         $this->content->text .= "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/timeaccesseschart.php?id={$course->id}&days=7
                           target=_blank>" . get_string('timeaccesschart_title', 'block_analytics_graphs') . "</a>";
         if (in_array("assign", $availablemodules)) {
