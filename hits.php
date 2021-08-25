@@ -19,7 +19,6 @@ require('../../config.php');
 require('lib.php');
 require('javascriptfunctions.php');
 $course = required_param('id', PARAM_INT);
-$legacy = required_param('legacy', PARAM_INT);
 $startdate = optional_param('from', '***', PARAM_TEXT);
 global $DB;
 
@@ -53,7 +52,7 @@ foreach ($students as $tuple) {
 }
 
 /* Get the number of days with access by week */
-$resultado = block_analytics_graphs_get_number_of_days_access_by_week($course, $students, $startdate, $legacy);
+$resultado = block_analytics_graphs_get_number_of_days_access_by_week($course, $students, $startdate);
 
 /* Get the students that have no access */
 $maxnumberofweeks = 0;
@@ -73,7 +72,7 @@ if ($maxnumberofweeks) {
 }
 
 /* Get the number of modules accessed by week */
-$accessresults = block_analytics_graphs_get_number_of_modules_access_by_week($course, $students, $startdate, $legacy);
+$accessresults = block_analytics_graphs_get_number_of_modules_access_by_week($course, $students, $startdate);
 $maxnumberofresources = 0;
 foreach ($accessresults as $tuple) {
     if ( $tuple->number > $maxnumberofresources) {
@@ -90,7 +89,7 @@ $groupmembersjson = json_encode($groupmembers);
 
 
 /* Get the total number of modules accessed */
-$numberofresourcesresult = block_analytics_graphs_get_number_of_modules_accessed($course, $students, $startdate, $legacy);
+$numberofresourcesresult = block_analytics_graphs_get_number_of_modules_accessed($course, $students, $startdate);
 
 /* Convert results to javascript */
 $resultado = json_encode($resultado);
@@ -249,7 +248,6 @@ thead th {
     var numberofresources = <?php echo $numberofresourcesresult; ?>;
     var studentswithnoaccess = <?php echo $studentswithnoaccess; ?>;
     var groups = <?php echo $groupmembersjson; ?>;
-    var legacy = <?php echo json_encode($legacy); ?>;
     var weekBeginningOffset = 1; //added to each loop making charts start from WEEK#1 instead of WEEK#0
     var nomes = [];
     var totalResourceAccessData = [];
@@ -1103,7 +1101,6 @@ thead th {
                 data: {
                     student_id: this.id.split("-")[1],
                     course_id: this.id.split("-")[2],
-                    legacy: legacy
                 },
                 success: fill_panel(this.id.split("-")[1])
             });
@@ -1287,7 +1284,6 @@ thead th {
                 data: {
                     student_id: this.id.split("-")[1],
                     course_id: this.id.split("-")[2],
-                    legacy: legacy
                 },
                 success: fill_panel(this.id.split("-")[1])
             });
@@ -1439,7 +1435,6 @@ thead th {
                 data: {
                     student_id: this.id.split("-")[1],
                     course_id: this.id.split("-")[2],
-                    legacy: legacy
                 },
                 success: fill_panel(this.id.split("-")[1])
             });
@@ -1681,7 +1676,6 @@ thead th {
                 data: {
                     student_id: this.id.split("-")[1],
                     course_id: this.id.split("-")[2],
-                    legacy: legacy
                 },
                 success: fill_panel(this.id.split("-")[1])
             });
