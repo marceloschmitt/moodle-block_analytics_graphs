@@ -49,8 +49,15 @@ $legacypixurlafter = "'width='24' height='24'>";
     }
 </script>
 
+ <style>
+    .my_text {
+        font-family: Arial, Helvetica, sans-serif
+        font-size: 12px;
+    }
+</style>
+
 <html style="background-color: #f4f4f4;">
-<div style="width: 250px;height: 80%;position:absolute;left:0; right:0;top:0; bottom:0;margin:auto;max-width:100%;max-height:100%;
+<div class = "my_text" style="width: 250px;height: 80%;position:absolute;left:0; right:0;top:0; bottom:0;margin:auto;max-width:100%;max-height:100%;
 overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2px solid darkgray;text-align: center;">
     <?php
     echo "<input type=\"hidden\" name=\"id\" value=\"$course\">";
