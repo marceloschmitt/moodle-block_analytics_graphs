@@ -720,9 +720,9 @@ foreach ($numberofresourcesintopic as $topico => $numberoftopics) {
                 ?>
             </select>
         </div>
-                <?php
-                }
-                ?>
+        <?php
+        }
+        ?>
         <div id="container" style="min-width: 800px; height:<?php echo ($counter + 1) * 50 + 180;?>; margin: 0 auto"></div>
         <script>
             $.each(geral, function(index, value) {

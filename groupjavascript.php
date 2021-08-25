@@ -166,14 +166,14 @@ defined('MOODLE_INTERNAL') || die();
             foreach ($groupmembers as $key => $value) {
             ?>
                 <option value="<?php echo $key; ?>"><?php echo $value["name"]; ?></option>
+                <?php
+                }
+                ?>
+            </select>
+        </div>
             <?php
             }
             ?>
-            </select>
-        </div>
-        <?php
-        }
-        ?>
         <div id="container" style="min-width: 310px; min-width: 800px; height: 650px; margin: 0 auto"></div>
         <script>
             $(function(){

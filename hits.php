@@ -28,12 +28,6 @@ require_login($course);
 $context = context_course::instance($course);
 require_capability('block/analytics_graphs:viewpages', $context);
 
-/*For future tests*/
-// $PAGE->set_url(new moodle_url('/blocks/analytics_graphs/hits.php', array('id' => $course, 'legacy' => 0)));
-// $PAGE->set_context(context_course::instance($course));
-// $PAGE->set_pagelayout('print');
-// echo $OUTPUT->header();
-
 $courseparams = get_course($course);
 if ($startdate === '***') {
     $startdate = $courseparams->startdate;
@@ -681,9 +675,9 @@ thead th {
                 ?>
             </select>
         </div>
-    <?php
-    }
-    ?>
+        <?php
+        }
+        ?>
 <center>
 <H2><?php  echo   get_string('hits_distribution', 'block_analytics_graphs');?></H2>
 <H3><?php  echo $coursename;?> </H3>

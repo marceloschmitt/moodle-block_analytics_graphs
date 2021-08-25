@@ -70,7 +70,7 @@ $legacypixurlafter = "'width='24' height='24'>";
             <?php
             $num = 1;
             echo "<h4 style='margin-bottom: 3px'>" . get_string('activities', 'block_analytics_graphs') . ":</h4>";
-            foreach ($availablemodules AS $modulename) {
+            foreach ($availablemodules as $modulename) {
                 $module = "mod_$modulename";
                 $typename = "typename_$modulename";
                 echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", $module,
@@ -84,16 +84,18 @@ $legacypixurlafter = "'width='24' height='24'>";
 
             echo "<input type=\"hidden\" name=\"id\" value=\"$course\">";
 
-			echo "<h4 style='margin-bottom: 3px'>" . get_string('options', 'block_analytics_graphs') . ":</h4>";
+            echo "<h4 style='margin-bottom: 3px'>" . get_string('options', 'block_analytics_graphs') . ":</h4>";
 
-			echo get_string('startfrom', 'block_analytics_graphs') . ": <input type=\"date\" name=\"from\" value=\"$startdate\"><br>";
+            echo get_string('startfrom', 'block_analytics_graphs') . ": <input type=\"date\" name=\"from\" value=\"$startdate\"><br>";
 
-			echo "<input type=\"checkbox\" name=\"hidden\" value=\"true\">" . get_string('displayhidden', 'block_analytics_graphs');
+            echo "<input type=\"checkbox\" name=\"hidden\" value=\"true\">" . get_string('displayhidden', 'block_analytics_graphs');
             ?>
     </div>
     <?php
-    echo "<input type='button' value='" . get_string('btn_select_all', 'block_analytics_graphs') . "' onclick='checkUncheck(true);'>";
-    echo "<input type='button' value='" . get_string('btn_deselect_all', 'block_analytics_graphs') . "' onclick='checkUncheck(false);'>";
+    echo "<input type='button' value='" . get_string('btn_select_all', 'block_analytics_graphs') . "'
+        onclick='checkUncheck(true);'>";
+    echo "<input type='button' value='" . get_string('btn_deselect_all', 'block_analytics_graphs') . "'
+        onclick='checkUncheck(false);'>";
     echo "<input type='submit' value='" . get_string('btn_submit', 'block_analytics_graphs') . "''>";
     ?>
     </form>

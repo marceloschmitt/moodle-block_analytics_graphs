@@ -38,7 +38,7 @@ $sql = "SELECT itemid + (userid*1000000) AS id, itemid, userid, usr.firstname,
 $result = $DB->get_records_sql($sql, $inparams);
 $taskgrades = new stdClass();
 foreach ($result as $id => $taskattrs) {
-    if(groups_user_groups_visible($COURSE, $taskattrs->userid)) {
+    if (groups_user_groups_visible($COURSE, $taskattrs->userid)) {
         $itemid = $taskattrs->itemid;
         $record = new stdClass();
         $record->userid = $taskattrs->userid;
