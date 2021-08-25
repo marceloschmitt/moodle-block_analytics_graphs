@@ -547,7 +547,7 @@ function block_analytics_graphs_get_quiz_submission($course, $students) {
 
 
 
-function block_analytics_graphs_get_number_of_days_access_by_week($course, $estudantes, $startdate, $legacy=0) {
+function block_analytics_graphs_get_number_of_days_access_by_week($course, $estudantes, $startdate) {
     global $DB;
     $timezone = new DateTimeZone(core_date::get_server_timezone());
     $timezoneadjust   = $timezone->getOffset(new DateTime);
@@ -606,7 +606,7 @@ function block_analytics_graphs_get_accesses_last_days($course, $estudantes, $da
     return($resultado);
 }
 
-function block_analytics_graphs_get_number_of_modules_access_by_week($course, $estudantes, $startdate, $legacy=0) {
+function block_analytics_graphs_get_number_of_modules_access_by_week($course, $estudantes, $startdate) {
     global $DB;
     $timezone = new DateTimeZone(core_date::get_server_timezone());
     $timezoneadjust   = $timezone->getOffset(new DateTime);
@@ -634,7 +634,7 @@ function block_analytics_graphs_get_number_of_modules_access_by_week($course, $e
     return($resultado);
 }
 
-function block_analytics_graphs_get_number_of_modules_accessed($course, $estudantes, $startdate, $legacy=0) {
+function block_analytics_graphs_get_number_of_modules_accessed($course, $estudantes, $startdate) {
     global $DB;
     foreach ($estudantes as $tupla) {
         $inclause[] = $tupla->id;
