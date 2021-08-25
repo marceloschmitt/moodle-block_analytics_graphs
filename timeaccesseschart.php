@@ -227,10 +227,10 @@ $daysaccess = json_encode($daysaccess);
     $('#apply').click(function() {
         if (maximumDays < $('#days').val()) {
             window.location.href = '<?php echo $CFG->wwwroot . "/blocks/analytics_graphs/timeaccesseschart.php?id=" .
-            	$course . "&days="; ?>' + maximumDays;
+                $course . "&days="; ?>' + maximumDays;
         } else {
             window.location.href = '<?php echo $CFG->wwwroot . "/blocks/analytics_graphs/timeaccesseschart.php?id=" .
-            	$course . "&days="; ?>' + $('#days').val();
+                $course . "&days="; ?>' + $('#days').val();
         }
         return false;
     });
