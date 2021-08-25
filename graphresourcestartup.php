@@ -51,7 +51,7 @@ $legacypixurlafter = "'width='24' height='24'>";
 
  <style>
     .my_text {
-        font-family: Arial, Helvetica, sans-serif
+        font-family: Arial, Helvetica, sans-serif;
         font-size: 12px;
     }
 </style>
