@@ -38,16 +38,18 @@ $sql = "SELECT itemid + (userid*1000000) AS id, itemid, userid, usr.firstname,
 $result = $DB->get_records_sql($sql, $inparams);
 $taskgrades = new stdClass();
 foreach ($result as $id => $taskattrs) {
-    $itemid = $taskattrs->itemid;
-    $record = new stdClass();
-    $record->userid = $taskattrs->userid;
-    $record->grade = floatval($taskattrs->grade);
-    $record->email = $taskattrs->email;
-    $record->name = $taskattrs->firstname . " " . $taskattrs->lastname;
-    if (!property_exists($taskgrades, $itemid)) {
-        $taskgrades->{$itemid} = array();
-    }
+    if(groups_user_groups_visible($COURSE, $taskattrs->userid)) {
+        $itemid = $taskattrs->itemid;
+        $record = new stdClass();
+        $record->userid = $taskattrs->userid;
+        $record->grade = floatval($taskattrs->grade);
+        $record->email = $taskattrs->email;
+        $record->name = $taskattrs->firstname . " " . $taskattrs->lastname;
+        if (!property_exists($taskgrades, $itemid)) {
+            $taskgrades->{$itemid} = array();
+        }
     $taskgrades->{$itemid}[] = $record;
+    }
 }
 
 echo json_encode($taskgrades);
