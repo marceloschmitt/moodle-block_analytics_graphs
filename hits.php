@@ -36,13 +36,13 @@ require_capability('block/analytics_graphs:viewpages', $context);
 
 $courseparams = get_course($course);
 if ($startdate === '***') {
-	$startdate = $courseparams->startdate;
+    $startdate = $courseparams->startdate;
 } else {
-	$datetoarray = explode('-', $startdate);
-	$starttime = new DateTime("now", core_date::get_server_timezone_object());
-	$starttime->setDate((int)$datetoarray[0], (int)$datetoarray[1], (int)$datetoarray[2]);
-	$starttime->setTime(0, 0, 0);
-	$startdate = $starttime->getTimestamp();
+    $datetoarray = explode('-', $startdate);
+    $starttime = new DateTime("now", core_date::get_server_timezone_object());
+    $starttime->setDate((int)$datetoarray[0], (int)$datetoarray[1], (int)$datetoarray[2]);
+    $starttime->setTime(0, 0, 0);
+    $startdate = $starttime->getTimestamp();
 }
 $coursename = get_string('course', 'block_analytics_graphs') . ": " . $courseparams->fullname;
 $students = block_analytics_graphs_get_students($COURSE);
@@ -59,7 +59,7 @@ foreach ($students as $tuple) {
 }
 
 /* Get the number of days with access by week */
-$resultado = block_analytics_graphs_get_number_of_days_access_by_week($course, $students, $startdate, $legacy); // A
+$resultado = block_analytics_graphs_get_number_of_days_access_by_week($course, $students, $startdate, $legacy);
 
 /* Get the students that have no access */
 $maxnumberofweeks = 0;
@@ -79,7 +79,7 @@ if ($maxnumberofweeks) {
 }
 
 /* Get the number of modules accessed by week */
-$accessresults = block_analytics_graphs_get_number_of_modules_access_by_week($course, $students, $startdate, $legacy); // B
+$accessresults = block_analytics_graphs_get_number_of_modules_access_by_week($course, $students, $startdate, $legacy);
 $maxnumberofresources = 0;
 foreach ($accessresults as $tuple) {
     if ( $tuple->number > $maxnumberofresources) {
@@ -91,7 +91,7 @@ foreach ($accessresults as $tuple) {
 /* Discover groups/groupings and members */
 $groupmembers = block_analytics_graphs_get_course_group_members($COURSE);
 $groupingmembers = block_analytics_graphs_get_course_grouping_members($COURSE);
-$groupmembers = array_merge($groupmembers,$groupingmembers);
+$groupmembers = array_merge($groupmembers, $groupingmembers);
 $groupmembersjson = json_encode($groupmembers);
 
 
@@ -676,14 +676,14 @@ thead th {
                 <option value="-"><?php  echo json_encode(get_string('all_groups', 'block_analytics_graphs'));?></option>
             <?php    foreach ($groupmembers as $key => $value) { ?>
                 <option value="<?php echo $key; ?>"><?php echo $value["name"]; ?></option>
-<?php
-}
-?>
+                <?php
+                }
+                ?>
             </select>
         </div>
-<?php
-}
-?>
+    <?php
+    }
+    ?>
 <center>
 <H2><?php  echo   get_string('hits_distribution', 'block_analytics_graphs');?></H2>
 <H3><?php  echo $coursename;?> </H3>
@@ -722,7 +722,8 @@ thead th {
         });
                 var form ="<div class='div_nomes' id='studentswithnoaccess'>" +
                             createEmailForm(title , studentswithnoaccess, courseid, 'hits.php',
-                                <?php echo json_encode(get_string('info_coursetype', 'block_analytics_graphs') . ': ' . block_analytics_graphs_get_course_name($course)); ?>)+
+                                <?php echo json_encode(get_string('info_coursetype', 'block_analytics_graphs') . ': ' .
+                                    block_analytics_graphs_get_course_name($course)); ?>)+
                             "</div>";
                 document.write(form);
             </script>
@@ -784,7 +785,8 @@ thead th {
 </ul>" +
                         "<div class='student_panel' id='email_panel-" + val.userid + "'>" +
                         createEmailForm(title,studentwithaccess, courseid, 'hits.php',
-                        <?php echo json_encode(get_string('info_coursetype', 'block_analytics_graphs') . ': ' . block_analytics_graphs_get_course_name($course)); ?>) + "</div>" +
+                        <?php echo json_encode(get_string('info_coursetype', 'block_analytics_graphs') . ': ' .
+                            block_analytics_graphs_get_course_name($course)); ?>) + "</div>" +
                         "<div class='student_panel' id='student_tab_panel-" + val.userid + "'></div>" +
                     "</div>" +
                 "</div>";
@@ -1740,7 +1742,8 @@ thead th {
                 $("#studentswithnoaccess").children().remove();
                 var title = <?php echo json_encode(get_string('no_access', 'block_analytics_graphs'));?> + " - " + coursename;
                 $("#studentswithnoaccess").append(createEmailForm(title , studentswithnoaccessgroup, courseid, 'hits.php',
-                    <?php echo json_encode(get_string('info_coursetype', 'block_analytics_graphs') . ': ' . block_analytics_graphs_get_course_name($course)); ?>));
+                    <?php echo json_encode(get_string('info_coursetype', 'block_analytics_graphs') . ': ' .
+                        block_analytics_graphs_get_course_name($course)); ?>));
             }
         }else{
             $.each(groups, function(index, value){
@@ -1764,7 +1767,8 @@ thead th {
                         var title = <?php echo json_encode(get_string('no_access', 'block_analytics_graphs'));?> +
                             " - " + coursename;
                         $("#studentswithnoaccess").append(createEmailForm(title , studentswithnoaccessgroup, courseid, 'hits.php',
-                            <?php echo json_encode(get_string('info_coursetype', 'block_analytics_graphs') . ': ' . block_analytics_graphs_get_course_name($course)); ?>));
+                            <?php echo json_encode(get_string('info_coursetype', 'block_analytics_graphs') . ': ' .
+                                block_analytics_graphs_get_course_name($course)); ?>));
                     }
                 }
             });

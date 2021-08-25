@@ -48,7 +48,7 @@ foreach ($result as $id => $taskattrs) {
         if (!property_exists($taskgrades, $itemid)) {
             $taskgrades->{$itemid} = array();
         }
-    $taskgrades->{$itemid}[] = $record;
+        $taskgrades->{$itemid}[] = $record;
     }
 }
 

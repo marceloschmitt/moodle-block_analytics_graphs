@@ -56,5 +56,4 @@ class block_analytics_graphs_event_view_graph extends \core\event\base {
     public function get_url() {
         return new \moodle_url('/blocks/analytics_graphs/' . $this->other, array('id' => $this->objectid, 'legacy' => '0'));
     }
-
 }

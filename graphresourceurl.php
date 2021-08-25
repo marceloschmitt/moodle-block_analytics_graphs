@@ -18,7 +18,7 @@ require('lib.php');
 require('javascriptfunctions.php');
 $course = htmlspecialchars(required_param('id', PARAM_INT));
 $startdate = optional_param('from', '***', PARAM_TEXT);
-$hidden =  optional_param('hidden', false, PARAM_TEXT);
+$hidden = optional_param('hidden', false, PARAM_TEXT);
 global $DB;
 /* Access control */
 require_login($course);
@@ -26,13 +26,13 @@ $context = context_course::instance($course);
 require_capability('block/analytics_graphs:viewpages', $context);
 $courseparams = get_course($course);
 if ($startdate === '***') {
-$startdate = $courseparams->startdate;
+    $startdate = $courseparams->startdate;
 } else {
-	$datetoarray = explode('-', $startdate);
-	$starttime = new DateTime("now", core_date::get_server_timezone_object());
-	$starttime->setDate((int)$datetoarray[0], (int)$datetoarray[1], (int)$datetoarray[2]);
-	$starttime->setTime(0, 0, 0);
-	$startdate = $starttime->getTimestamp();
+    $datetoarray = explode('-', $startdate);
+    $starttime = new DateTime("now", core_date::get_server_timezone_object());
+    $starttime->setDate((int)$datetoarray[0], (int)$datetoarray[1], (int)$datetoarray[2]);
+    $starttime->setTime(0, 0, 0);
+    $startdate = $starttime->getTimestamp();
 }
 $coursename = get_string('course', 'block_analytics_graphs') . ": " . $courseparams->fullname;
 $students = block_analytics_graphs_get_students($COURSE);
@@ -53,8 +53,8 @@ foreach ($_GET as $querystringvariable => $value) {
         continue;
     }
     $temp = $value;
-    if (!in_array($temp, $requestedtypes)) { // prevent duplicates
-        switch ($temp) { // not very necessary, left for readability and a little security
+    if (!in_array($temp, $requestedtypes)) { // Prevent duplicates.
+        switch ($temp) { // Not very necessary, left for readability and a little security.
             case "activequiz" :
                 array_push($requestedtypes, $temp);
                 break;
@@ -196,8 +196,9 @@ foreach ($_GET as $querystringvariable => $value) {
 
 if (count($requestedtypes) < 1) {
     echo "<html style=\"background-color: #f4f4f4;\">";
-    echo "<div style=\"width: 200px;height: 100px;position:absolute;left:0; right:0;top:0; bottom:0;margin:auto;max-width:100%;max-height:100%;
-overflow:auto;background-color: white;border-radius: 25px;padding: 20px;border: 2px solid darkgray;text-align: center;\">";
+    echo "<div style=\"width: 200px;height: 100px;position:absolute;left:0; right:0;top:0;
+        bottom:0;margin:auto;max-width:100%;max-height:100%;
+        overflow:auto;background-color: white;border-radius: 25px;padding: 20px;border: 2px solid darkgray;text-align: center;\">";
     echo "<h3>" . (get_string('no_types_requested', 'block_analytics_graphs')) . "</h3>";
     echo "</div>";
     echo "</html>";
@@ -206,13 +207,12 @@ overflow:auto;background-color: white;border-radius: 25px;padding: 20px;border: 
 
 $result = block_analytics_graphs_get_resource_url_access($course, $students, $requestedtypes, $startdate, $hidden);
 
-// echo var_dump($result);
-
 $numberofresources = count($result);
 if ($numberofresources == 0) {
     echo "<html style=\"background-color: #f4f4f4;\">";
-    echo "<div style=\"width: 200px;height: 100px;position:absolute;left:0; right:0;top:0; bottom:0;margin:auto;max-width:100%;max-height:100%;
-overflow:auto;background-color: white;border-radius: 25px;padding: 20px;border: 2px solid darkgray;text-align: center;\">";
+    echo "<div style=\"width: 200px;height: 100px;position:absolute;left:0; right:0;top:0;
+        bottom:0;margin:auto;max-width:100%;max-height:100%;
+        overflow:auto;background-color: white;border-radius: 25px;padding: 20px;border: 2px solid darkgray;text-align: center;\">";
     echo "<h3>" . (get_string('no_graph', 'block_analytics_graphs')) . "</h3>";
     echo "</div>";
     echo "</html>";
@@ -471,7 +471,7 @@ if ($numberofaccesses == 0) {
 /* Discover groups/groupings and members */
 $groupmembers = block_analytics_graphs_get_course_group_members($COURSE);
 $groupingmembers = block_analytics_graphs_get_course_grouping_members($COURSE);
-$groupmembers = array_merge($groupmembers,$groupingmembers);
+$groupmembers = array_merge($groupmembers, $groupingmembers);
 $groupmembersjson = json_encode($groupmembers);
 $statistics = json_encode($statistics);
 /* Log */
@@ -711,18 +711,18 @@ foreach ($numberofresourcesintopic as $topico => $numberoftopics) {
         <div style="margin: 20px;">
             <select id="group_select">
                 <option value="-"><?php  echo json_encode(get_string('all_groups', 'block_analytics_graphs'));?></option>
-<?php
-foreach ($groupmembers as $key => $value) {
-?>
-    <option value="<?php echo $key; ?>"><?php echo $value["name"]; ?></option>
-<?php
-}
-?>
+                <?php
+                foreach ($groupmembers as $key => $value) {
+                ?>
+                    <option value="<?php echo $key; ?>"><?php echo $value["name"]; ?></option>
+                <?php
+                }
+                ?>
             </select>
         </div>
-<?php
-}
-?>
+                <?php
+                }
+                ?>
         <div id="container" style="min-width: 800px; height:<?php echo ($counter + 1) * 50 + 180;?>; margin: 0 auto"></div>
         <script>
             $.each(geral, function(index, value) {

@@ -39,38 +39,38 @@ function block_analytics_graphs_get_course_group_members($course) {
     $groups = groups_get_all_groups($course->id);
     foreach ($groups as $group) {
         if (groups_group_visible($group->id, $course)) {
-        	$members = groups_get_members($group->id);
-        	if (!empty($members)) {
-            	$groupmembers[$group->id]['name'] = $group->name;
-            	$numberofmembers = 0;
-            	foreach ($members as $member) {
-                	$groupmembers[$group->id]['members'][] = $member->id;
-                	$numberofmembers++;
-            	}
-            	$groupmembers[$group->id]['numberofmembers']  = $numberofmembers;
-        	}
-		}
+            $members = groups_get_members($group->id);
+            if (!empty($members)) {
+                $groupmembers[$group->id]['name'] = $group->name;
+                $numberofmembers = 0;
+                foreach ($members as $member) {
+                    $groupmembers[$group->id]['members'][] = $member->id;
+                    $numberofmembers++;
+                }
+                $groupmembers[$group->id]['numberofmembers']  = $numberofmembers;
+            }
+        }
     }
     return($groupmembers);
 }
 
 function block_analytics_graphs_get_course_grouping_members($course) {
- 	global $DB, $USER;
- 	$groupingmembers = array();
+    global $DB, $USER;
+    $groupingmembers = array();
     $groupings = groups_get_all_groupings($course->id);
     foreach ($groupings as $grouping) {
         if (groups_group_visible($group->id, $course)) {
-        	$members = groups_get_grouping_members($grouping->id);
-        	if (!empty($members)) {
-            	$groupingmembers[$grouping->id]['name'] = $grouping->name;
-            	$numberofmembers = 0;
-            	foreach ($members as $member) {
-                	$groupingmembers[$grouping->id]['members'][] = $member->id;
-                	$numberofmembers++;
-            	}
-            	$groupingmembers[$grouping->id]['numberofmembers']  = $numberofmembers;
-        	}
-		}
+            $members = groups_get_grouping_members($grouping->id);
+            if (!empty($members)) {
+                $groupingmembers[$grouping->id]['name'] = $grouping->name;
+                $numberofmembers = 0;
+                foreach ($members as $member) {
+                    $groupingmembers[$grouping->id]['members'][] = $member->id;
+                    $numberofmembers++;
+                }
+                $groupingmembers[$grouping->id]['numberofmembers']  = $numberofmembers;
+            }
+        }
     }
     return($groupingmembers);
 }
@@ -146,7 +146,7 @@ function block_analytics_graphs_get_resource_url_access($course, $estudantes, $r
         array_push($requestedmodules, $temp->id);
     }
 
-	// $startdate = $COURSE->startdate;
+    // $startdate = $COURSE->startdate;
 
     /* Temp table to order */
     $params = array($course);
@@ -186,11 +186,11 @@ function block_analytics_graphs_get_resource_url_access($course, $estudantes, $r
                         LEFT JOIN {logstore_standard_log} log ON log.timecreated >= ?
                             AND log.userid $insql AND (action = 'viewed' OR action = 'submission') AND cm.id=log.contextinstanceid
                         WHERE cm.course = ?";
-	if ($hidden) {
-		$sqlb .= " AND (";
-	} else {
-		$sqlb .= " AND cm.visible=1 AND (";
-	}
+    if ($hidden) {
+        $sqlb .= " AND (";
+    } else {
+        $sqlb .= " AND cm.visible=1 AND (";
+    }
 
     $sqlc = "cm.module=?";
 
@@ -509,12 +509,12 @@ function block_analytics_graphs_get_turnitin_submission($course, $students) {
                 SELECT t.id, ts.userid, MAX(tp.dtdue) as timecreated
                 FROM {turnitintooltwo} t
                 LEFT JOIN {turnitintooltwo_submissions} ts on t.id = ts.turnitintooltwoid
-		LEFT JOIN {turnitintooltwo_parts} tp on t.id = tp.turnitintooltwoid
+        LEFT JOIN {turnitintooltwo_parts} tp on t.id = tp.turnitintooltwoid
                 WHERE t.course = ? AND (ts.userid IS NULL OR ts.userid $insql)
                 GROUP BY t.id, ts.userid
             ) temp
             LEFT JOIN {turnitintooltwo} t on t.id = temp.id
-	    LEFT JOIN {turnitintooltwo_parts} tp on t.id = tp.turnitintooltwoid
+        LEFT JOIN {turnitintooltwo_parts} tp on t.id = tp.turnitintooltwoid
             LEFT JOIN {user} usr on usr.id = temp.userid
             ORDER BY duedate, name, firstname";
 

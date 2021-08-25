@@ -24,7 +24,8 @@ $capabilities = array(
             'student' => CAP_ALLOW,
         )
     ),
-         'block/analytics_graphs:viewpages' => array(
+
+    'block/analytics_graphs:viewpages' => array(
         'riskbitmask' => RISK_SPAM,
         'captype' => 'read',
         'contextlevel' => CONTEXT_BLOCK,
@@ -35,9 +36,9 @@ $capabilities = array(
             'editingteacher' => CAP_ALLOW,
             'manager' => CAP_ALLOW
         )
-     ),
+    ),
 
-      'block/analytics_graphs:addinstance' => array(
+    'block/analytics_graphs:addinstance' => array(
         'riskbitmask' => RISK_SPAM | RISK_XSS,
         'captype' => 'write',
         'contextlevel' => CONTEXT_BLOCK,
@@ -46,5 +47,4 @@ $capabilities = array(
             'manager' => CAP_ALLOW
         )
     ),
-
 );

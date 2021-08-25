@@ -24,8 +24,6 @@ class block_analytics_graphs extends block_base {
         global $CFG;
         global $DB;
 
-        $uselegacypixurl = false; // pix_url got deprecated in Moodle 3.3, leaving this just in case.
-
         $course = $this->page->course;
         $context = context_course::instance($course->id);
         $canview = has_capability('block/analytics_graphs:viewpages', $context);
@@ -49,13 +47,13 @@ class block_analytics_graphs extends block_base {
         }
 
         $this->content = new stdClass;
-        // $this->content->text = get_string('graphs', 'block_analytics_graphs');
         $this->content->text = "";
         $this->content->text .= "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/grades_chart.php?id={$course->id}
                           target=_blank>" . get_string('grades_chart', 'block_analytics_graphs') . "</a>";
         if ($uselegacypixurl) {
-            $this->content->text .= "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/graphresourcestartuplegacy.php?id={$course->id}
-                          target=_blank>" . get_string('access_to_contents', 'block_analytics_graphs') . "</a>";
+            $this->content->text .= "<li> <a href=
+                {$CFG->wwwroot}/blocks/analytics_graphs/graphresourcestartuplegacy.php?id={$course->id}
+                target=_blank>" . get_string('access_to_contents', 'block_analytics_graphs') . "</a>";
         } else {
             $this->content->text .= "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/graphresourcestartup.php?id={$course->id}
                           target=_blank>" . get_string('access_to_contents', 'block_analytics_graphs') . "</a>";
@@ -71,10 +69,8 @@ class block_analytics_graphs extends block_base {
                           target=_blank>" . get_string('submissions_quiz', 'block_analytics_graphs') . "</a>";
         }
         if (in_array("hotpot", $availablemodules)) {
-            // if ($DB->get_record('modules', array('name' => 'hotpot', 'visible' => '1'), 'id')) {
             $this->content->text .= "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/hotpot.php?id={$course->id}
                 target=_blank>" . get_string('submissions_hotpot', 'block_analytics_graphs') . "</a>";
-            // }
         }
         if (in_array("turnitintooltwo", $availablemodules)) {
             $this->content->text .= "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/turnitin.php?id={$course->id}

@@ -269,7 +269,7 @@ $groupmembersjson = json_encode($groupmembers);
                     var subjectval = $form.find( "input[name='subject']" ).val();
                     var textoval = $form.find( "textarea[name='texto']" ).val();
                     var url = $form.attr( "action" );
-					var ccteachers = $form.find( "input[name='ccteachers']" ).is(':checked');
+                    var ccteachers = $form.find( "input[name='ccteachers']" ).is(':checked');
 
 
                     var posting = $.post( url, {

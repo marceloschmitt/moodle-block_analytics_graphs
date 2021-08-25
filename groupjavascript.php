@@ -21,7 +21,7 @@ defined('MOODLE_INTERNAL') || die();
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <title><?php echo get_string('submissions', 'block_analytics_graphs'); ?></title>
-        
+
         <link rel="stylesheet" href="externalref/jquery-ui-1.12.1/jquery-ui.css">
         <script src="externalref/jquery-3.1.1.js"></script>
         <script src="externalref/jquery-ui-1.12.1/jquery-ui.js"></script>
@@ -30,22 +30,22 @@ defined('MOODLE_INTERNAL') || die();
         <script src="externalref/exporting.js"></script>
         <script src="externalref/export-csv-master/export-csv.js"></script>
 
-        
+
         <script type="text/javascript">
             var courseid = <?php echo json_encode($submissionsgraph->get_course()); ?>;
-            
-            var codename = <?php echo json_encode($codename); ?>;           
+
+            var codename = <?php echo json_encode($codename); ?>;
 
             var groups = <?php echo $groupmembersjson; ?>;
             var result_json = <?php echo $resultjson; ?>;
             var students_json = <?php echo $studentsjson; ?>;
             var geral = <?php echo $statisticsjson; ?>;
-            
+
             //full students on groups
             $.each(groups, function(index, group){
                 group.assign = [];
                 group.duedate = [];
-                
+
                 group.in_time_submissions = [];
                 group.latesubmissions = [];
                 group.no_submissions = [];
@@ -60,11 +60,11 @@ defined('MOODLE_INTERNAL') || die();
             console.log(geral);
 
             $.each(geral, function(index, value){
-                
+
                 $.each(groups, function(ind, group){
                     if(group.assign[index] === undefined)
                         group.assign[index] = value.assign;
-        
+
                     if(group.duedate[index] === undefined)
                         group.duedate[index] = value.duedate;
 
@@ -141,7 +141,7 @@ defined('MOODLE_INTERNAL') || die();
 
                     group.submission_ratio[index] = parseFloat(parseFloat((group.numberofintimesubmissions[index] +
                         group.numberoflatesubmissions[index]) /
-                        (group.numberofintimesubmissions[index] + group.numberoflatesubmissions[index] +    
+                        (group.numberofintimesubmissions[index] + group.numberoflatesubmissions[index] +
                         group.numberofnosubmissions[index])).toFixed(2));
 
                     if(group.duedate[index] == 0  || group.duedate[index] > time){
@@ -162,18 +162,18 @@ defined('MOODLE_INTERNAL') || die();
         <div style="margin: 20px;">
             <select id="group_select">
                 <option value="-"><?php  echo json_encode(get_string('all_groups', 'block_analytics_graphs'));?></option>
-<?php
-foreach ($groupmembers as $key => $value) {
-?>
-    <option value="<?php echo $key; ?>"><?php echo $value["name"]; ?></option>
-<?php
-}
-?>
+            <?php
+            foreach ($groupmembers as $key => $value) {
+            ?>
+                <option value="<?php echo $key; ?>"><?php echo $value["name"]; ?></option>
+            <?php
+            }
+            ?>
             </select>
         </div>
-<?php
-}
-?>
+        <?php
+        }
+        ?>
         <div id="container" style="min-width: 310px; min-width: 800px; height: 650px; margin: 0 auto"></div>
         <script>
             $(function(){
@@ -187,10 +187,10 @@ foreach ($groupmembers as $key => $value) {
                 if (typeof value.in_time_submissions != 'undefined')
                 {
                     title = <?php echo json_encode($submissionsgraph->get_coursename()); ?> +
-                        "</h3>" + 
+                        "</h3>" +
                         <?php echo json_encode(get_string('in_time_submission', 'block_analytics_graphs')); ?> +
                         " - " +  nome ;
-                    div += "<div class='div_nomes' id='" + index + "-0'>" + 
+                    div += "<div class='div_nomes' id='" + index + "-0'>" +
                         createEmailForm(title, value.in_time_submissions, courseid, codename,
                             <?php echo json_encode(get_string('info_coursetype', 'block_analytics_graphs') . ': ' .
                             block_analytics_graphs_get_course_name($course)); ?> + ", " + nome) +
@@ -211,7 +211,7 @@ foreach ($groupmembers as $key => $value) {
                 if (typeof value.no_submissions != 'undefined')
                 {
                     title = <?php echo json_encode($submissionsgraph->get_coursename()); ?> +
-                        "</h3>" + 
+                        "</h3>" +
                         <?php echo json_encode(get_string('no_submission', 'block_analytics_graphs')); ?> +
                         " - " +  nome ;
                     div += "<div class='div_nomes' id='" + index + "-2'>" +
@@ -230,10 +230,10 @@ foreach ($groupmembers as $key => $value) {
                     if (typeof group.in_time_submissions[index] != 'undefined')
                     {
                         title = <?php echo json_encode($submissionsgraph->get_coursename()); ?> +
-                            "</h3>" + 
+                            "</h3>" +
                             <?php echo json_encode(get_string('in_time_submission', 'block_analytics_graphs')); ?> +
                             " - " +  nome ;
-                        div += "<div class='div_nomes' id='" + index + "-0-"+ind+"'>" + 
+                        div += "<div class='div_nomes' id='" + index + "-0-"+ind+"'>" +
                             createEmailForm(title, group.in_time_submissions[index], courseid, codename,
                                 <?php echo json_encode(get_string('info_coursetype', 'block_analytics_graphs') . ': ' .
                                 block_analytics_graphs_get_course_name($course)); ?> + ", " + nome) +
@@ -254,7 +254,7 @@ foreach ($groupmembers as $key => $value) {
                     if (typeof group.no_submissions[index] != 'undefined')
                     {
                         title = <?php echo json_encode($submissionsgraph->get_coursename()); ?> +
-                            "</h3>" + 
+                            "</h3>" +
                             <?php echo json_encode(get_string('no_submission', 'block_analytics_graphs')); ?> +
                             " - " +  nome ;
                         div += "<div class='div_nomes' id='" + index + "-2-"+ind+"'>" +

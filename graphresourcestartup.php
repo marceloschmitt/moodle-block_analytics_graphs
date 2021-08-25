@@ -16,7 +16,6 @@
 
 require('../../config.php');
 require('lib.php');
-// require('javascriptfunctions.php');
 $course = required_param('id', PARAM_INT);
 global $DB;
 /* Access control */
@@ -57,8 +56,9 @@ $legacypixurlafter = "'width='24' height='24'>";
 </style>
 
 <html style="background-color: #f4f4f4;">
-<div class = "my_text" style="width: 250px;height: 80%;position:absolute;left:0; right:0;top:0; bottom:0;margin:auto;max-width:100%;max-height:100%;
-overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2px solid darkgray;text-align: center;">
+<div class = "my_text" style="width: 250px;height: 80%;position:absolute;left:0; right:0;top:0;
+    bottom:0;margin:auto;max-width:100%;max-height:100%;
+    overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2px solid darkgray;text-align: center;">
     <?php
     echo "<input type=\"hidden\" name=\"id\" value=\"$course\">";
 
@@ -68,19 +68,17 @@ overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2
     <div style="text-align: left">
         <form action="graphresourceurl.php" method="get">
             <?php
-            /* Checking and displaying available choices based on installed modules and specific order and formatting,
-            if order does not matter, then can be exchanged with a simple for loop */
             $num = 1;
-            // get_string('no_types_requested', 'block_analytics_graphs')
             echo "<h4 style='margin-bottom: 3px'>" . get_string('activities', 'block_analytics_graphs') . ":</h4>";
-            foreach($availablemodules AS $modulename) {
-                    $module = "mod_$modulename";
-                    $typename = "typename_$modulename";
-                echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", $module, $module, array(
-                    'width' => 24,
-                    'height' => 24,
-                    'title' => ''
-                )), "mod" . $num, $modulename, get_string('pluginname', $module));
+            foreach ($availablemodules AS $modulename) {
+                $module = "mod_$modulename";
+                $typename = "typename_$modulename";
+                echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", $module,
+                    $module, array(
+                        'width' => 24,
+                        'height' => 24,
+                       'title' => ''
+                    )), "mod" . $num, $modulename, get_string('pluginname', $module));
                 $num++;
             }
 

@@ -136,7 +136,7 @@ class graph_submission {
                     $this->statistics[$counter]['duedate'] = $tuple->duedate;
                     $this->statistics[$counter]['cutoffdate'] = $tuple->cutoffdate;
                     $assignmentid = $tuple->assignment;
-                    if ($tuple->userid) { // If a user has submitted
+                    if ($tuple->userid) { // If a user has submitted.
                         if ($tuple->duedate >= $tuple->timecreated || $tuple->duedate == 0) { // Right time.
                             $this->statistics[$counter]['in_time_submissions'][] = array('userid'  => $tuple->userid,
                                 'nome' => $tuple->firstname." ".$tuple->lastname,

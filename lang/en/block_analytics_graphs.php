@@ -180,12 +180,12 @@ $string['no_student_task'] = "This assessment does not have students in the sele
 $string['add_all'] = "Add all";
 $string['remove_all'] = "Remove all";
 
-// graphresourcestartup
+// Graphresourcestartup.
 $string['activities'] = "Activities";
 $string['displayhidden'] = "Display hidden items";
 $string['options'] = "Options";
 $string['startfrom'] = "Start from";
 
-// Privacy
+// Privacy.
 $string['privacy:metadata'] = 'The Analytics Graphs block only displays existing calendar data.';
 

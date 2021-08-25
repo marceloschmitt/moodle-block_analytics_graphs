@@ -105,12 +105,12 @@ $string['no_student_task'] = "Esta avaliação não possui estudantes no grupo s
 $string['add_all'] = "Adicionar todas";
 $string['remove_all'] = "Remover todas";
 
-// graphresourcestartup
+// Graphresourcestartup.
 $string['activities'] = "Atividades";
 $string['displayhidden'] = "Mostrar itens escondidos";
 $string['options'] = "Opções";
 $string['startfrom'] = "Iniciar em";
 
-// Privacy
+// Privacy.
 $string['privacy:metadata'] = 'O bloco Analytics Graphs mostra apenas dados já existentes no moodle.';
 
