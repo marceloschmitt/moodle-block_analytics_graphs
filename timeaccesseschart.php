@@ -251,16 +251,21 @@ $daysaccess = json_encode($daysaccess);
             type: 'category',
             labels: {
                 rotation: -45,
-                style: {
-                    fontSize: '13px',
-                    fontFamily: 'Verdana, sans-serif'
-                }
             }
         },
         yAxis: {
             min: 0,
+            labels: {
+                format: "{value}",
+                style: {
+                    color: Highcharts.getOptions().colors[1]
+                }
+            },
             title: {
-                text: '<?php echo get_string('timeaccesschart_tip', 'block_analytics_graphs'); ?>'
+                text: '<?php echo get_string('timeaccesschart_tip', 'block_analytics_graphs'); ?>',
+                style: {
+                    color: Highcharts.getOptions().colors[1]
+                }
             }
         },
         legend: {
@@ -339,15 +344,8 @@ $daysaccess = json_encode($daysaccess);
             ],
             dataLabels: {
                 enabled: true,
-                rotation: -90,
-                color: '#FFFFFF',
-                align: 'right',
-                format: '{point.y:.1f}', // one decimal
-                y: 10, // 10 pixels down from the top
-                style: {
-                    fontSize: '13px',
-                    fontFamily: 'Verdana, sans-serif'
-                }
+                align: 'center',
+                y: 20, // 10 pixels down from the top
             }
         }]
     });
@@ -368,16 +366,21 @@ $daysaccess = json_encode($daysaccess);
             type: 'category',
             labels: {
                 rotation: -45,
-                style: {
-                    fontSize: '13px',
-                    fontFamily: 'Verdana, sans-serif'
-                }
             }
         },
         yAxis: {
             min: 0,
+            labels: {
+            	format: "{value}",
+                style: {
+					color: Highcharts.getOptions().colors[1]
+                }
+            },
             title: {
-                text: '<?php echo get_string('timeaccesschart_tip', 'block_analytics_graphs'); ?>'
+                text: '<?php echo get_string('timeaccesschart_tip', 'block_analytics_graphs'); ?>',
+                style: {
+                	color: Highcharts.getOptions().colors[1]
+                }
             }
         },
         legend: {
@@ -474,15 +477,8 @@ $daysaccess = json_encode($daysaccess);
             ],
             dataLabels: {
                 enabled: true,
-                rotation: -90,
-                color: '#FFFFFF',
-                align: 'right',
-                format: '{point.y:.1f}', // one decimal
-                y: 10, // 10 pixels down from the top
-                style: {
-                    fontSize: '13px',
-                    fontFamily: 'Verdana, sans-serif'
-                }
+                align: 'center',
+                y: 20, // 10 pixels down from the top
             }
         }]
     });
