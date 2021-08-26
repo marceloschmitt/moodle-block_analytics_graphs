@@ -657,7 +657,7 @@ function block_analytics_graphs_get_number_of_modules_accessed($course, $estudan
 }
 
 
-function block_analytics_graphs_get_user_resource_url_page_access($course, $student, $legacy=0) {
+function block_analytics_graphs_get_user_resource_url_page_access($course, $student) {
     global $COURSE;
     global $DB;
 
@@ -1173,7 +1173,7 @@ function block_analytics_graphs_extend_navigation_course($navigation, $course, $
             navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
 
         $url = new moodle_url($CFG->wwwroot.'/blocks/analytics_graphs/graphresourcestartup.php',
-            array('id' => $course->id, 'legacy' => '0'));
+            array('id' => $course->id));
         $reportanalyticsgraphs->add(get_string('access_to_contents', 'block_analytics_graphs'), $url,
             navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
         $url = new moodle_url($CFG->wwwroot.'/blocks/analytics_graphs/timeaccesseschart.php',
@@ -1206,8 +1206,7 @@ function block_analytics_graphs_extend_navigation_course($navigation, $course, $
                 navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
         }
 
-        $url = new moodle_url($CFG->wwwroot.'/blocks/analytics_graphs/hits.php', array('id' => $course->id,
-            'legacy' => '0'));
+        $url = new moodle_url($CFG->wwwroot.'/blocks/analytics_graphs/hits.php', array('id' => $course->id,));
         $reportanalyticsgraphs->add(get_string('hits_distribution', 'block_analytics_graphs'), $url,
             navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
     }

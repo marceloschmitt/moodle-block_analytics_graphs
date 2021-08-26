@@ -70,7 +70,7 @@ class block_analytics_graphs extends block_base {
             $this->content->text .= "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/turnitin.php?id={$course->id}
             target=_blank>" . get_string('submissions_turnitin', 'block_analytics_graphs') . "</a>";
         }
-        $this->content->text .= "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/hits.php?id={$course->id}&legacy=0
+        $this->content->text .= "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/hits.php?id={$course->id}
                           target=_blank>" . get_string('hits_distribution', 'block_analytics_graphs') . "</a>";
         $this->content->footer = '<hr/>';
         return $this->content;

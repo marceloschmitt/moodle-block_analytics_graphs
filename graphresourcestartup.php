@@ -32,9 +32,6 @@ foreach (block_analytics_graphs_get_course_used_modules($course) as $result) {
     array_push($availablemodules, $result->name);
 }
 
-$legacypixurlbefore = "<img style='display: table-cell; vertical-align: middle;' src='";
-$legacypixurlafter = "'width='24' height='24'>";
-
 ?>
 
 <script>
