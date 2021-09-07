@@ -699,8 +699,8 @@ function block_analytics_graphs_get_user_quiz_state($course, $student) {
 function block_analytics_graphs_extend_navigation_course($navigation, $course, $context) {
     global $CFG;
     global $DB;
-    $reports = $navigation->find('coursereports', navigation_node::TYPE_CONTAINER);
-    if (has_capability('block/analytics_graphs:viewpages', $context) && $reports) {
+    $reportanalyticsgraphs = $navigation->find('coursereports', navigation_node::TYPE_CONTAINER);
+    if (has_capability('block/analytics_graphs:viewpages', $context) && $reportanalyticsgraphs) {
         $sql = "SELECT cm.module, md.name
             FROM {course_modules} cm
             LEFT JOIN {modules} md ON cm.module = md.id
@@ -713,49 +713,46 @@ function block_analytics_graphs_extend_navigation_course($navigation, $course, $
             array_push($availablemodules, $result->name);
         }
 
-        $reportanalyticsgraphs = $reports->add(get_string('pluginname', 'block_analytics_graphs'));
+        $url = new moodle_url($CFG->wwwroot.'/blocks/analytics_graphs/grades_chart.php', array('id' => $course->id));
+        $node = navigation_node::create(get_string('grades_chart', 'block_analytics_graphs'),
+                $url, navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
+        $reportanalyticsgraphs->add_node($node);
 
-        $url = new moodle_url($CFG->wwwroot.'/blocks/analytics_graphs/grades_chart.php',
-            array('id' => $course->id));
-        $reportanalyticsgraphs->add(get_string('grades_chart', 'block_analytics_graphs'), $url,
-            navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
+        $url = new moodle_url($CFG->wwwroot.'/blocks/analytics_graphs/graphresourcestartup.php', array('id' => $course->id));
+        $node = navigation_node::create(get_string('access_to_contents', 'block_analytics_graphs'),
+                $url, navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
+        $reportanalyticsgraphs->add_node($node);
 
-        $url = new moodle_url($CFG->wwwroot.'/blocks/analytics_graphs/graphresourcestartup.php',
-            array('id' => $course->id));
-        $reportanalyticsgraphs->add(get_string('access_to_contents', 'block_analytics_graphs'), $url,
-            navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
         $url = new moodle_url($CFG->wwwroot.'/blocks/analytics_graphs/timeaccesseschart.php',
-            array('id' => $course->id, 'days' => '7'));
-        $reportanalyticsgraphs->add(get_string('timeaccesschart_title', 'block_analytics_graphs'), $url,
-            navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
+                array('id' => $course->id, 'days' => '7'));
+        $node = navigation_node::create(get_string('timeaccesschart_title', 'block_analytics_graphs'),
+                $url, navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
+        $reportanalyticsgraphs->add_node($node);
 
         if (in_array("assign", $availablemodules)) {
-            $url = new moodle_url($CFG->wwwroot . '/blocks/analytics_graphs/assign.php',
-                array('id' => $course->id));
-            $reportanalyticsgraphs->add(get_string('submissions_assign', 'block_analytics_graphs'), $url,
-                navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
-        }
-
-        if (in_array("quiz", $availablemodules)) {
-            $url = new moodle_url($CFG->wwwroot . '/blocks/analytics_graphs/quiz.php', array('id' => $course->id));
-            $reportanalyticsgraphs->add(get_string('submissions_quiz', 'block_analytics_graphs'), $url,
-                navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
+            $url = new moodle_url($CFG->wwwroot . '/blocks/analytics_graphs/assign.php', array('id' => $course->id));
+            $node = navigation_node::create(get_string('submissions_assign', 'block_analytics_graphs'),
+                            $url, navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
+            $reportanalyticsgraphs->add_node($node);
         }
 
         if (in_array("hotpot", $availablemodules)) {
             $url = new moodle_url($CFG->wwwroot.'/blocks/analytics_graphs/hotpot.php', array('id' => $course->id));
-            $reportanalyticsgraphs->add(get_string('submissions_hotpot', 'block_analytics_graphs'), $url,
-                navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
+            $node = navigation_node::create(get_string('submissions_hotpot', 'block_analytics_graphs'),
+                            $url, navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
+            $reportanalyticsgraphs->add_node($node);
         }
 
         if (in_array("turnitintooltwo", $availablemodules)) {
             $url = new moodle_url($CFG->wwwroot.'/blocks/analytics_graphs/turnitin.php', array('id' => $course->id));
-            $reportanalyticsgraphs->add(get_string('submissions_turnitin', 'block_analytics_graphs'), $url,
-                navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
+            $node = navigation_node::create(get_string('submissions_turnitin', 'block_analytics_graphs'),
+                            $url, navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
+            $reportanalyticsgraphs->add_node($node);
         }
 
         $url = new moodle_url($CFG->wwwroot.'/blocks/analytics_graphs/hits.php', array('id' => $course->id,));
-        $reportanalyticsgraphs->add(get_string('hits_distribution', 'block_analytics_graphs'), $url,
-            navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
+        $node = navigation_node::create(get_string('hits_distribution', 'block_analytics_graphs'),
+                $url, navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
+        $reportanalyticsgraphs->add_node($node);
     }
 }
