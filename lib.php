@@ -470,7 +470,7 @@ function block_analytics_graphs_get_user_resource_url_page_access($course, $stud
     $result = $DB->get_records_sql($sql, $paramsdefault);
 
     $modinfo = get_fast_modinfo($course);
-    foreach ($result as $object){
+    foreach ($result as $object) {
             $cm = $modinfo->get_cm($object->cmid);
             $object->cmid = $cm->name;
     }
