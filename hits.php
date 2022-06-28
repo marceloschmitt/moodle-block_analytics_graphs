@@ -675,7 +675,7 @@ thead th {
             </select>
         </div>
         <?php
-        }
+    }
         ?>
 <center>
 <H2><?php  echo   get_string('hits_distribution', 'block_analytics_graphs');?></H2>
