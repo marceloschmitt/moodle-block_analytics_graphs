@@ -45,12 +45,6 @@ if ($numberoftasks == 0) {
 }
 $submissionsgraphoptions = $submissionsgraph->create_graph($result, $students);
 
-/* For future tests
- $PAGE->set_url(new moodle_url('/blocks/analytics_graphs/assign.php', array('id' => $course)));
- $PAGE->set_context(context_course::instance($course));
- $PAGE->set_pagelayout('print');
- echo $OUTPUT->header(); */
-
 /* Discover groups/groupings and members */
 $groupmembers = block_analytics_graphs_get_course_group_members($COURSE);
 $groupingmembers = block_analytics_graphs_get_course_grouping_members($COURSE);
