@@ -24,7 +24,7 @@
 
 
 namespace block_analytics_graphs\event;
-defined('MOODLE_INTERNAL') || die();
+
 /**
  * The block_analytics_graphs_event_send_email event class.
  *
