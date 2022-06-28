@@ -14,14 +14,12 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-defined('MOODLE_INTERNAL') || die();
-
 function block_analytics_graphs_subtract_student_arrays($estudantes, $acessaram) {
     $resultado = array();
     foreach ($estudantes as $estudante) {
         $encontrou = false;
         foreach ($acessaram as $acessou) {
-            if ($estudante['userid'] == $acessou ['userid']) {
+            if ($estudante['userid'] == $acessou['userid']) {
                 $encontrou = true;
                 break;
             }
@@ -472,7 +470,7 @@ function block_analytics_graphs_get_user_resource_url_page_access($course, $stud
     $result = $DB->get_records_sql($sql, $paramsdefault);
 
     $modinfo = get_fast_modinfo($course);
-    foreach($result as $object){
+    foreach ($result as $object){
             $cm = $modinfo->get_cm($object->cmid);
             $object->cmid = $cm->name;
     }
@@ -647,7 +645,7 @@ function block_analytics_graphs_get_user_quiz_state($course, $student) {
                 ORDER BY name";
     $resultstudentquizes = $DB->get_records_sql($sql, $params);
 
-    $passed = array(); // generating arrays
+    $passed = array(); // Generating arrays.
     $failed = array();
     $noaccess = array();
 
@@ -669,7 +667,7 @@ function block_analytics_graphs_get_user_quiz_state($course, $student) {
         }
     }
 
-    $result = array(); // merging arrays
+    $result = array(); // Merging arrays.
 
     $i = 0;
     foreach ($passed as $item) {
@@ -750,7 +748,7 @@ function block_analytics_graphs_extend_navigation_course($navigation, $course, $
             $reportanalyticsgraphs->add_node($node);
         }
 
-        $url = new moodle_url($CFG->wwwroot.'/blocks/analytics_graphs/hits.php', array('id' => $course->id,));
+        $url = new moodle_url($CFG->wwwroot . '/blocks/analytics_graphs/hits.php', array('id' => $course->id));
         $node = navigation_node::create(get_string('hits_distribution', 'block_analytics_graphs'),
                 $url, navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
         $reportanalyticsgraphs->add_node($node);
