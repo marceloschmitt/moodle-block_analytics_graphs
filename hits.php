@@ -666,11 +666,12 @@ thead th {
         <div style="margin: 20px;">
             <select id="group_select">
                 <option value="-"><?php  echo json_encode(get_string('all_groups', 'block_analytics_graphs'));?></option>
-            <?php    foreach ($groupmembers as $key => $value) { ?>
+            <?php    
+            foreach ($groupmembers as $key => $value) { ?>
                 <option value="<?php echo $key; ?>"><?php echo $value["name"]; ?></option>
-                <?php
-                }
-                ?>
+            <?php
+            }
+            ?>
             </select>
         </div>
         <?php
