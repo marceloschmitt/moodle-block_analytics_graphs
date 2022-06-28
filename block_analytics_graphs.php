@@ -13,7 +13,7 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-defined('MOODLE_INTERNAL') || die();
+
 class block_analytics_graphs extends block_base {
     public function init() {
         $this->title = get_string('analytics_graphs', 'block_analytics_graphs');
