@@ -371,15 +371,15 @@ $daysaccess = json_encode($daysaccess);
         yAxis: {
             min: 0,
             labels: {
-            	format: "{value}",
+                format: "{value}",
                 style: {
-					color: Highcharts.getOptions().colors[1]
+                    color: Highcharts.getOptions().colors[1]
                 }
             },
             title: {
                 text: '<?php echo get_string('timeaccesschart_tip', 'block_analytics_graphs'); ?>',
                 style: {
-                	color: Highcharts.getOptions().colors[1]
+                    color: Highcharts.getOptions().colors[1]
                 }
             }
         },
