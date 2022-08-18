@@ -37,7 +37,15 @@ $capabilities = array(
             'manager' => CAP_ALLOW
         )
     ),
-
+    'block/analytics_graphs:myaddinstance' => array(
+        'riskbitmask' => RISK_SPAM | RISK_XSS,
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_SYSTEM,
+        'archetypes' => array(
+            'editingteacher' => CAP_ALLOW,
+            'manager' => CAP_ALLOW
+        ),
+    ),
     'block/analytics_graphs:addinstance' => array(
         'riskbitmask' => RISK_SPAM | RISK_XSS,
         'captype' => 'write',
