@@ -187,5 +187,9 @@ $string['options'] = "Options";
 $string['startfrom'] = "Start from";
 
 // Privacy.
-$string['privacy:metadata'] = 'The Analytics Graphs block only displays existing calendar data.';
-
+$string['privacy:metadata:block_analytics_graphs_msg'] = 'Information about the messages sent to students.';
+$string['privacy:metadata:block_analytics_graphs_msg:fromid'] = 'The ID of the user the message was sent from.';
+$string['privacy:metadata:block_analytics_graphs_msg:subject'] = 'Subject of the message.';
+$string['privacy:metadata:block_analytics_graphs_dest'] = 'Information about students that got messages.';
+$string['privacy:metadata:block_analytics_graphs_dest:toid'] = 'The ID of the user the message was sent to.';
+$string['privacy:metadata:block_analytics_graphs_dest:messageid'] = 'The ID of the message.';
