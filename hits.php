@@ -969,6 +969,9 @@ thead th {
                         else if(data["resources"][elem]["tipo"] === "lightboxgallery"){
                             name = data["resources"][elem]["lightboxgallery"];
                         }
+						else if(data["resources"][elem]["tipo"] === "adobeconnect"){
+                            name = data["resources"][elem]["adobeconnect"];
+                        }
                         else if(data["resources"][elem]["tipo"] === "page"){
                             name = data["resources"][elem]["page"];
                         }

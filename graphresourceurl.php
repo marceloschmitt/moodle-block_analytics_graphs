@@ -168,6 +168,9 @@ foreach ($_GET as $querystringvariable => $value) {
             case "lightboxgallery" :
                 array_push($requestedtypes, $temp);
                 break;
+			case "adobeconnect" :
+                array_push($requestedtypes, $temp);
+                break;
             case "page" :
                 array_push($requestedtypes, $temp);
                 break;
@@ -302,6 +305,8 @@ foreach ($result as $tuple) {
             $statistics[$counter]['material'] = $tuple->label;
         } else if ($tuple->tipo == 'lightboxgallery') {
             $statistics[$counter]['material'] = $tuple->lightboxgallery;
+        } else if ($tuple->tipo == 'adobeconnect') {
+            $statistics[$counter]['material'] = $tuple->adobeconnect;
         } else if ($tuple->tipo == 'page') {
             $statistics[$counter]['material'] = $tuple->page;
         } else if ($tuple->tipo == 'poster') {
@@ -429,6 +434,8 @@ foreach ($result as $tuple) {
                 $statistics[$counter]['material'] = $tuple->label;
             } else if ($tuple->tipo == 'lightboxgallery') {
                 $statistics[$counter]['material'] = $tuple->lightboxgallery;
+            } else if ($tuple->tipo == 'adobeconnect') {
+                $statistics[$counter]['material'] = $tuple->adobeconnect;
             } else if ($tuple->tipo == 'page') {
                 $statistics[$counter]['material'] = $tuple->page;
             } else if ($tuple->tipo == 'poster') {
