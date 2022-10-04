@@ -25,6 +25,7 @@ $course = required_param('id', PARAM_INT);
 require_login($course);
 $context = context_course::instance($course);
 require_capability('block/analytics_graphs:viewpages', $context);
+require_capability('block/analytics_graphs:viewquizsubmissions', $context);
 
 $title = get_string('submissions_quiz', 'block_analytics_graphs');
 $submissionsgraph = new graph_submission($course, $title);

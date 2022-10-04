@@ -19,7 +19,13 @@
 $string['analytics_graphs:addinstance'] = 'Add a new AG block';
 $string['analytics_graphs:bemonitored'] = 'User is monitored in the course';
 $string['analytics_graphs:myaddinstance'] = 'Add a new AG block to the My Moodle page';
+$string['analytics_graphs:viewassignmentsubmissions'] = 'View assignment submissions report';
+$string['analytics_graphs:viewcontentaccesses'] = 'View content accesses report';
+$string['analytics_graphs:viewgradeschart'] = 'View grades chart report';
+$string['analytics_graphs:viewhitsdistribution'] = 'View hits distribution report';
+$string['analytics_graphs:viewnumberofactivestudents'] = 'View number of active students report';
 $string['analytics_graphs:viewpages'] = 'View graphs';
+$string['analytics_graphs:viewquizsubmissions'] = 'View quiz submissions report';
 $string['pluginname'] = 'Analytics Graphs';
 $string['analytics_graphs'] = 'Analytics Graphs';
 

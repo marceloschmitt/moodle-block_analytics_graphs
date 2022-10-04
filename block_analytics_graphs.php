@@ -26,6 +26,7 @@ class block_analytics_graphs extends block_base {
 
         $course = $this->page->course;
         $context = context_course::instance($course->id);
+        // Capability is course level, not block level, as graphs are for course level.
         $canview = has_capability('block/analytics_graphs:viewpages', $context);
         if (!$canview) {
             return;
@@ -48,17 +49,23 @@ class block_analytics_graphs extends block_base {
 
         $this->content = new stdClass;
         $this->content->text = "";
-        $this->content->text .= "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/grades_chart.php?id={$course->id}
+        if (has_capability('block/analytics_graphs:viewgradeschart', $context)) {
+            $this->content->text .= "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/grades_chart.php?id={$course->id}
                           target=_blank>" . get_string('grades_chart', 'block_analytics_graphs') . "</a>";
-        $this->content->text .= "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/graphresourcestartup.php?id={$course->id}
+        }
+        if (has_capability('block/analytics_graphs:viewcontentaccesses', $context)) {
+            $this->content->text .= "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/graphresourcestartup.php?id={$course->id}
                           target=_blank>" . get_string('access_to_contents', 'block_analytics_graphs') . "</a>";
-        $this->content->text .= "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/timeaccesseschart.php?id={$course->id}&days=7
+        }
+        if (has_capability('block/analytics_graphs:viewnumberofactivestudents', $context)) {
+            $this->content->text .= "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/timeaccesseschart.php?id={$course->id}&days=7
                           target=_blank>" . get_string('timeaccesschart_title', 'block_analytics_graphs') . "</a>";
-        if (in_array("assign", $availablemodules)) {
+        }
+        if (has_capability('block/analytics_graphs:viewassignmentsubmissions', $context) && in_array("assign", $availablemodules)) {
             $this->content->text .= "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/assign.php?id={$course->id}
                           target=_blank>" . get_string('submissions_assign', 'block_analytics_graphs') . "</a>";
         }
-        if (in_array("quiz", $availablemodules)) {
+        if (has_capability('block/analytics_graphs:viewquizsubmissions', $context) && in_array("quiz", $availablemodules)) {
             $this->content->text .= "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/quiz.php?id={$course->id}
                           target=_blank>" . get_string('submissions_quiz', 'block_analytics_graphs') . "</a>";
         }
@@ -70,8 +77,11 @@ class block_analytics_graphs extends block_base {
             $this->content->text .= "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/turnitin.php?id={$course->id}
             target=_blank>" . get_string('submissions_turnitin', 'block_analytics_graphs') . "</a>";
         }
-        $this->content->text .= "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/hits.php?id={$course->id}
+        if (has_capability('block/analytics_graphs:viewhitsdistribution', $context)) {
+            $this->content->text .= "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/hits.php?id={$course->id}
                           target=_blank>" . get_string('hits_distribution', 'block_analytics_graphs') . "</a>";
+        }
+
         $this->content->footer = '<hr/>';
         return $this->content;
     }
