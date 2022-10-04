@@ -26,6 +26,7 @@ global $CFG;
 require_login($course);
 $context = context_course::instance($course);
 require_capability('block/analytics_graphs:viewpages', $context);
+require_capability('block/analytics_graphs:viewnumberofactivestudents', $context);
 
 $students = block_analytics_graphs_get_students($COURSE);
 $numberofstudents = count($students);

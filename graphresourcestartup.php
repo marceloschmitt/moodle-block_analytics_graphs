@@ -22,6 +22,7 @@ global $DB;
 require_login($course);
 $context = context_course::instance($course);
 require_capability('block/analytics_graphs:viewpages', $context);
+require_capability('block/analytics_graphs:viewcontentaccesses', $context);
 $courseparams = get_course($course);
 $startdate = date("Y-m-d", $courseparams->startdate);
 
