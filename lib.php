@@ -59,17 +59,21 @@ function block_analytics_graphs_get_course_grouping_members($course) {
     $groupingmembers = array();
     $groupings = groups_get_all_groupings($course->id);
     foreach ($groupings as $grouping) {
-        if (groups_group_visible($group->id, $course)) {
-            $members = groups_get_grouping_members($grouping->id);
-            if (!empty($members)) {
-                $groupingmembers[$grouping->id]['name'] = $grouping->name;
-                $numberofmembers = 0;
-                foreach ($members as $member) {
-                    $groupingmembers[$grouping->id]['members'][] = $member->id;
-                    $numberofmembers++;
-                }
-                $groupingmembers[$grouping->id]['numberofmembers']  = $numberofmembers;
+        $groups = groups_get_all_groups($course->id, 0, $grouping->id);
+        $members = [];
+        foreach ($groups as $group) {
+            // Only get members from a group which is visible to current user.
+            if (groups_group_visible($group->id, $course)) {
+                $groupmembers = groups_get_members($group->id, 'u.id');
+                $members = array_merge($members, array_keys($groupmembers));
             }
+        }
+        // Only return "non-empty" grouping.
+        if (!empty($members)) {
+            sort($members);
+            $groupingmembers[$grouping->id]['name'] = $grouping->name;
+            $groupingmembers[$grouping->id]['members'] = $members;
+            $groupingmembers[$grouping->id]['numberofmembers']  = count($members);
         }
     }
     return($groupingmembers);
