@@ -19,6 +19,7 @@
 require_once("../../config.php");
 global $DB;
 require_once($CFG->dirroot.'/lib/moodlelib.php');
+require('lib.php');
 
 $courseid = required_param('course_id', PARAM_INT);
 $formdata = required_param_array('form_data', PARAM_INT);
@@ -36,9 +37,10 @@ $sql = "SELECT itemid + (userid*1000000) AS id, itemid, userid, usr.firstname,
             ORDER BY id";
 
 $result = $DB->get_records_sql($sql, $inparams);
+$students = array_column(block_analytics_graphs_get_students($COURSE), 'id');
 $taskgrades = new stdClass();
 foreach ($result as $id => $taskattrs) {
-    if (groups_user_groups_visible($COURSE, $taskattrs->userid)) {
+    if (in_array($taskattrs->userid, $students) && groups_user_groups_visible($COURSE, $taskattrs->userid)) {
         $itemid = $taskattrs->itemid;
         $record = new stdClass();
         $record->userid = $taskattrs->userid;

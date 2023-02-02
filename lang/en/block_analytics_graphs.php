@@ -193,3 +193,7 @@ $string['privacy:metadata:block_analytics_graphs_msg:subject'] = 'Subject of the
 $string['privacy:metadata:block_analytics_graphs_dest'] = 'Information about students that got messages.';
 $string['privacy:metadata:block_analytics_graphs_dest:toid'] = 'The ID of the user the message was sent to.';
 $string['privacy:metadata:block_analytics_graphs_dest:messageid'] = 'The ID of the message.';
+
+// Settings.
+$string['settings:onlyactive'] = 'Only active enrolments';
+$string['settings:onlyactivedescription'] = 'Consider only active enrolments for the reports';

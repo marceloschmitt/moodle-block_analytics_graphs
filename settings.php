@@ -14,11 +14,21 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * Settings for the HTML block
+ *
+ * @package   block_analytics_graphs
+ * @copyright 2023 Catalyst IT
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
-defined('MOODLE_INTERNAL') || die();
-$plugin->version = 2021090705;  // YYYYMMDDHH (year, month, day, 24-hr time).
-$plugin->requires = 2015111600; // YYYYMMDDHH (This is the release version for Moodle 3.0).
-$plugin->maturity = MATURITY_STABLE;
-$plugin->release = '4.2.1';
-$plugin->branch = '4.2';
-$plugin->component = 'block_analytics_graphs';
+defined('MOODLE_INTERNAL') || die;
+
+if ($ADMIN->fulltree) {
+    $settings->add(new admin_setting_configcheckbox(
+        'block_analytics_graphs/onlyactive',
+        get_string('settings:onlyactive', 'block_analytics_graphs'),
+        get_string('settings:onlyactivedescription', 'block_analytics_graphs'),
+        0)
+    );
+}
