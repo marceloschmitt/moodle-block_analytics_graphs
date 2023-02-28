@@ -75,4 +75,13 @@ class block_analytics_graphs extends block_base {
         $this->content->footer = '<hr/>';
         return $this->content;
     }
+
+    /**
+     * Enables global configuration of the block in settings.php.
+     *
+     * @return bool True if the global configuration is enabled.
+     */
+    public function has_config() {
+        return true;
+    }
 }  // Here's the closing bracket for the class definition.

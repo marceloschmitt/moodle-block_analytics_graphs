@@ -80,8 +80,9 @@ function block_analytics_graphs_get_students($course) {
     global $DB, $USER;
     $students = array();
     $context = context_course::instance($course->id);
+    $onlyactive = block_analytics_graphs_only_active_enrolments();
     $allstudents = get_enrolled_users($context, 'block/analytics_graphs:bemonitored', 0,
-                    'u.id, u.firstname, u.lastname, u.email, u.suspended', 'firstname, lastname');
+        'u.id, u.firstname, u.lastname, u.email, u.suspended', 'firstname, lastname', 0, 0, $onlyactive);
     foreach ($allstudents as $student) {
         if ($student->suspended == 0) {
             if (groups_user_groups_visible($course, $student->id)) {
@@ -96,8 +97,9 @@ function block_analytics_graphs_get_students($course) {
 function block_analytics_graphs_get_teachers($course) {
     $teachers = array();
     $context = context_course::instance($course);
+    $onlyactive = block_analytics_graphs_only_active_enrolments();
     $allteachers = get_enrolled_users($context, 'block/analytics_graphs:viewpages', 0,
-                    'u.id, u.firstname, u.lastname, u.email, u.suspended', 'firstname, lastname');
+                    'u.id, u.firstname, u.lastname, u.email, u.suspended', 'firstname, lastname', 0, 0, $onlyactive);
     foreach ($allteachers as $teacher) {
         if ($teacher->suspended == 0) {
             $teachers[] = $teacher;
@@ -755,4 +757,13 @@ function block_analytics_graphs_extend_navigation_course($navigation, $course, $
                 $url, navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
         $reportanalyticsgraphs->add_node($node);
     }
+}
+
+/**
+ * Do we consider only active enrolments?
+ *
+ * @return bool
+ */
+function block_analytics_graphs_only_active_enrolments() {
+    return (bool) get_config('block_analytics_graphs', 'onlyactive');
 }
