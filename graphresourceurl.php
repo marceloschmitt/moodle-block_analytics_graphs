@@ -265,10 +265,10 @@ $event->trigger();
                         text: ' <?php echo get_string('title_access', 'block_analytics_graphs'); ?>'
                     },
                     subtitle: {
-                        text: ' <?php echo get_string('course', 'block_analytics_graphs') . ": "
+                        text: ' <?php echo addslashes(get_string('course', 'block_analytics_graphs') . ": "
                                         . $courseparams->fullname . "<br>".
                                         get_string('begin_date', 'block_analytics_graphs') . ": "
-                                        . userdate($startdate); ?>'
+                                        . userdate($startdate)); ?>'
                     },
                     xAxis: {
                         minRange: 1,
