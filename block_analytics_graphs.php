@@ -14,6 +14,10 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+defined('MOODLE_INTERNAL') || die();
+
+require_once($CFG->dirroot . '/blocks/analytics_graphs/lib.php');
+
 class block_analytics_graphs extends block_base {
     public function init() {
         $this->title = get_string('analytics_graphs', 'block_analytics_graphs');
@@ -84,5 +88,41 @@ class block_analytics_graphs extends block_base {
 
         $this->content->footer = '<hr/>';
         return $this->content;
+    }
+
+    /**
+     * Enables global configuration of the block in settings.php.
+     *
+     * @return bool True if the global configuration is enabled.
+     */
+    public function has_config() {
+        return true;
+    }
+
+    /**
+     * Enabled config per block.
+     *
+     * @return true
+     */
+    public function instance_allow_config() {
+        return (bool) get_config('block_analytics_graphs', 'overrideonlyactive');;
+    }
+
+    /**
+     * Process deletion of a block instance.
+     */
+    public function instance_delete() {
+        $needupdate = false;
+        $onlyactivecourses = block_analytics_graphs_get_onlyactivecourses();
+
+        // If related course has "onlyactive" setting enabled, we would like to clean it up on the block deletion.
+        if (($key = array_search($this->page->course->id, $onlyactivecourses)) !== false) {
+            unset($onlyactivecourses[$key]);
+            $needupdate = true;
+        }
+
+        if ($needupdate) {
+            set_config('onlyactivecourses', implode(',', $onlyactivecourses), 'block_analytics_graphs');
+        }
     }
 }  // Here's the closing bracket for the class definition.

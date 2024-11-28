@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 require('../../config.php');
-require('lib.php');
+require_once('lib.php');
 $course = required_param('id', PARAM_INT);
 global $DB;
 /* Access control */

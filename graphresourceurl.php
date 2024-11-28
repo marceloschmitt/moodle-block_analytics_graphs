@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 require('../../config.php');
-require('lib.php');
+require_once('lib.php');
 require('javascriptfunctions.php');
 $course = htmlspecialchars(required_param('id', PARAM_INT));
 $startdate = optional_param('from', '***', PARAM_TEXT);

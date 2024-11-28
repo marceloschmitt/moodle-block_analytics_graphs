@@ -84,9 +84,9 @@ function block_analytics_graphs_get_students($course) {
     global $DB, $USER;
     $students = array();
     $context = context_course::instance($course->id);
+    $onlyactive = block_analytics_graphs_only_active_enrolments($course);
     $allstudents = get_enrolled_users($context, 'block/analytics_graphs:bemonitored', 0,
-                    'u.id, u.firstname, u.lastname, u.email, u.suspended', 'firstname, lastname',
-                    0, 0, true); // Partial correction. The ideal is to allow selection.
+        'u.id, u.firstname, u.lastname, u.email, u.suspended', 'firstname, lastname', 0, 0, $onlyactive);
     foreach ($allstudents as $student) {
         if ($student->suspended == 0) {
             if (groups_user_groups_visible($course, $student->id)) {
@@ -101,8 +101,9 @@ function block_analytics_graphs_get_students($course) {
 function block_analytics_graphs_get_teachers($course) {
     $teachers = array();
     $context = context_course::instance($course);
+    $onlyactive = block_analytics_graphs_only_active_enrolments($course);
     $allteachers = get_enrolled_users($context, 'block/analytics_graphs:viewpages', 0,
-                    'u.id, u.firstname, u.lastname, u.email, u.suspended', 'firstname, lastname');
+                    'u.id, u.firstname, u.lastname, u.email, u.suspended', 'firstname, lastname', 0, 0, $onlyactive);
     foreach ($allteachers as $teacher) {
         if ($teacher->suspended == 0) {
             $teachers[] = $teacher;
@@ -760,4 +761,31 @@ function block_analytics_graphs_extend_navigation_course($navigation, $course, $
                 $url, navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
         $reportanalyticsgraphs->add_node($node);
     }
+}
+
+/**
+ * Do we consider only active enrolments for a given course?
+ *
+ * @param \stdClass $course Course instance.
+ * @return bool
+ */
+function block_analytics_graphs_only_active_enrolments($course): bool {
+    // If only active setting is allowed per instance, let's try to see if it's enabled for a course we run a report on.
+    // Otherwise, use globally configured setting.
+    if (get_config('block_analytics_graphs', 'overrideonlyactive')) {
+        return in_array($course->id, block_analytics_graphs_get_onlyactivecourses());
+    } else {
+        return (bool) get_config('block_analytics_graphs', 'onlyactive');
+    }
+}
+
+/**
+ * Gets a list of courses with enabled "onlyactive" setting.
+ *
+ * @return array
+ */
+function block_analytics_graphs_get_onlyactivecourses(): array {
+    $onlyactivecourses = get_config('block_analytics_graphs', 'onlyactivecourses');
+
+    return !empty($onlyactivecourses) ? explode(',', $onlyactivecourses) : [];
 }

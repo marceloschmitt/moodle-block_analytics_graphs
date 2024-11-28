@@ -16,7 +16,7 @@
 
 
 require('../../config.php');
-require('lib.php');
+require_once('lib.php');
 require('javascriptfunctions.php');
 $course = required_param('id', PARAM_INT);
 $startdate = optional_param('from', '***', PARAM_TEXT);

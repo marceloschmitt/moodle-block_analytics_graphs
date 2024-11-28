@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 require_once("../../config.php");
-require('lib.php');
+require_once('lib.php');
 global $USER;
 global $DB;
 require_once($CFG->dirroot.'/lib/moodlelib.php');

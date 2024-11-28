@@ -199,3 +199,9 @@ $string['privacy:metadata:block_analytics_graphs_msg:subject'] = 'Subject of the
 $string['privacy:metadata:block_analytics_graphs_dest'] = 'Information about students that got messages.';
 $string['privacy:metadata:block_analytics_graphs_dest:toid'] = 'The ID of the user the message was sent to.';
 $string['privacy:metadata:block_analytics_graphs_dest:messageid'] = 'The ID of the message.';
+
+// Settings.
+$string['settings:onlyactive'] = 'Only active enrolments';
+$string['settings:onlyactive_help'] = 'Consider only active enrolments for the reports';
+$string['settings:overrideonlyactive'] = 'Allow \'Only active enrolments\' per block instance';
+$string['settings:overrideonlyactive_help'] = 'If enabled, then \'Only active enrolments\' can be set per block instance. Otherwise, global setting will be used for all blocks.';
