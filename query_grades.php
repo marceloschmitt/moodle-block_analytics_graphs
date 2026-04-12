@@ -54,10 +54,11 @@ foreach ($result as $id => $taskattrs) {
         $record->email = $taskattrs->email;
         $record->name = $taskattrs->firstname . " " . $taskattrs->lastname;
         if (!property_exists($taskgrades, $itemid)) {
-            $taskgrades->{$itemid} = array();
+            $taskgrades->{$itemid} = [];
         }
         $taskgrades->{$itemid}[] = $record;
     }
 }
 
 echo json_encode($taskgrades);
+

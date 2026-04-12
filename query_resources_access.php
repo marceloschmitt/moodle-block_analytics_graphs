@@ -39,5 +39,10 @@ $assigninfo = block_analytics_graphs_get_user_assign_submission($courseid, $stud
 $quizinfo = block_analytics_graphs_get_user_quiz_state($courseid, $studentid);
 $foruminfo = block_analytics_graphs_get_user_forum_state($courseid, $studentid);
 
-echo json_encode(array("resources" => $resourceaccess, "assign" => $assigninfo, "quiz" => $quizinfo,
-    "forum" => $foruminfo));
+echo json_encode([
+    'resources' => $resourceaccess,
+    'assign' => $assigninfo,
+    'quiz' => $quizinfo,
+    'forum' => $foruminfo,
+]);
+

@@ -63,11 +63,11 @@ $recorddest->messageid = $messageid;
 
 
 foreach ($destination as $i => $x) {
-        $touser->id = $destination[$i];
-        $recorddest->toid = $touser->id;
-        $touser->email = $DB->get_field('user', 'email', array('id' => $destination[$i]));
-        email_to_user($touser, $fromuser, $subject, $messagetext, $messagehtml, '', '', true);
-        $DB->insert_record('block_analytics_graphs_dest', $recorddest, false);
+    $touser->id = $destination[$i];
+    $recorddest->toid = $touser->id;
+    $touser->email = $DB->get_field('user', 'email', ['id' => $destination[$i]]);
+    email_to_user($touser, $fromuser, $subject, $messagetext, $messagehtml, '', '', true);
+    $DB->insert_record('block_analytics_graphs_dest', $recorddest, false);
 }
 
 $messagetext = get_string('mailcopyalert', 'block_analytics_graphs') . $messagetext;
@@ -78,15 +78,15 @@ if ($ccteachers) {
 
     foreach ($userstocopyemail as $i) {
         $touser->id = $i->id;
-        $touser->email = $DB->get_field('user', 'email', array('id' => $i->id));
+        $touser->email = $DB->get_field('user', 'email', ['id' => $i->id]);
         email_to_user($touser, $fromuser, $subject, $messagetext, $messagehtml, '', '', true);
     }
 }
 $mensagem = "ok";
 echo json_encode($mensagem);
-$event = \block_analytics_graphs\event\block_analytics_graphs_event_send_email::create(array(
+$event = \block_analytics_graphs\event\block_analytics_graphs_event_send_email::create([
     'objectid' => $course,
     'context' => $context,
     'other' => $other,
-));
+]);
 $event->trigger();

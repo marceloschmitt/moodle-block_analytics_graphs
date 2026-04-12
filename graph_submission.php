@@ -31,13 +31,25 @@ defined('MOODLE_INTERNAL') || die();
  */
 class graph_submission {
 
+    /** @var \context_course */
     private $context;
+    /** @var int Course id. */
     private $course;
+    /** @var string Course label for charts. */
     private $coursename;
+    /** @var int Course start timestamp. */
     private $startdate;
+    /** @var string Chart title string. */
     private $title;
+    /** @var array|string|null Aggregated statistics or JSON string. */
     private $statistics;
 
+    /**
+     * Build helper for submission charts.
+     *
+     * @param int $course Course id.
+     * @param string $title Localised chart title.
+     */
     public function __construct($course, $title) {
         $this->course = $course;
         $this->title = $title;
@@ -53,19 +65,40 @@ class graph_submission {
         $this->coursename = get_string('course', 'block_analytics_graphs') . ": " . $courseparams->fullname;
     }
 
+    /**
+     * Course id used by this chart.
+     *
+     * @return int
+     */
     public function get_course() {
         return $this->course;
     }
 
+    /**
+     * Human-readable course name line for the chart subtitle.
+     *
+     * @return string
+     */
     public function get_coursename() {
         return $this->coursename;
     }
 
+    /**
+     * Raw statistics structure after {@see self::create_graph()} has run.
+     *
+     * @return array|string|null
+     */
     public function get_statistics() {
         return $this->statistics;
     }
 
-
+    /**
+     * Build Highcharts options JSON and statistics from DB rows.
+     *
+     * @param array $result Assignment/quiz rows from the block query.
+     * @param array $students Enrolled students to include.
+     * @return string Highcharts configuration fragment.
+     */
     public function create_graph($result, $students) {
         if (empty($result)) {
             exit;
@@ -76,8 +109,11 @@ class graph_submission {
             exit;
         }
         foreach ($students as $tuple) {
-            $arrayofstudents[] = array('userid' => $tuple->id ,
-                'nome' => $tuple->firstname.' '.$tuple->lastname, 'email' => $tuple->email);
+            $arrayofstudents[] = [
+                'userid' => $tuple->id,
+                'nome' => $tuple->firstname . ' ' . $tuple->lastname,
+                'email' => $tuple->email,
+            ];
         }
         $counter = 0;
         $numberofintimesubmissions = 0;
@@ -91,29 +127,41 @@ class graph_submission {
                 $this->statistics[$counter]['cutoffdate'] = $tuple->cutoffdate;
                 if (isset($tuple->userid)) { // If a student submitted.
                     if ($tuple->duedate >= $tuple->timecreated || $tuple->duedate == 0) { // In the right time.
-                        $this->statistics[$counter]['in_time_submissions'][] = array('userid'  => $tuple->userid,
-                            'nome'  => $tuple->firstname." ".$tuple->lastname,
-                            'email'  => $tuple->email, 'timecreated'  => $tuple->timecreated);
+                        $this->statistics[$counter]['in_time_submissions'][] = [
+                            'userid' => $tuple->userid,
+                            'nome' => $tuple->firstname . ' ' . $tuple->lastname,
+                            'email' => $tuple->email,
+                            'timecreated' => $tuple->timecreated,
+                        ];
                         $numberofintimesubmissions++;
                     } else { // Late.
-                        $this->statistics[$counter]['latesubmissions'][] = array('userid'  => $tuple->userid,
-                            'nome'  => $tuple->firstname." ".$tuple->lastname, 'email'  => $tuple->email,
-                            'timecreated'  => $tuple->timecreated);
+                        $this->statistics[$counter]['latesubmissions'][] = [
+                            'userid' => $tuple->userid,
+                            'nome' => $tuple->firstname . ' ' . $tuple->lastname,
+                            'email' => $tuple->email,
+                            'timecreated' => $tuple->timecreated,
+                        ];
                         $numberoflatesubmissions++;
                     }
                 }
                 $assignmentid = $tuple->assignment;
             } else { // Not first time in loop.
-                if ($assignmentid == $tuple->assignment and $tuple->userid) { // Same task -> add student.
+                if ($assignmentid == $tuple->assignment && $tuple->userid) { // Same task -> add student.
                     if ($tuple->duedate >= $tuple->timecreated || $tuple->duedate == 0) { // Right time.
-                        $this->statistics[$counter]['in_time_submissions'][] = array('userid'  => $tuple->userid,
-                            'nome'  => $tuple->firstname." ".$tuple->lastname,
-                            'email'  => $tuple->email, 'timecreated'  => $tuple->timecreated);
+                        $this->statistics[$counter]['in_time_submissions'][] = [
+                            'userid' => $tuple->userid,
+                            'nome' => $tuple->firstname . ' ' . $tuple->lastname,
+                            'email' => $tuple->email,
+                            'timecreated' => $tuple->timecreated,
+                        ];
                         $numberofintimesubmissions++;
                     } else { // Late.
-                        $this->statistics[$counter]['latesubmissions'][] = array('userid'  => $tuple->userid,
-                            'nome'  => $tuple->firstname." ".$tuple->lastname,
-                            'email'  => $tuple->email, 'timecreated'  => $tuple->timecreated);
+                        $this->statistics[$counter]['latesubmissions'][] = [
+                            'userid' => $tuple->userid,
+                            'nome' => $tuple->firstname . ' ' . $tuple->lastname,
+                            'email' => $tuple->email,
+                            'timecreated' => $tuple->timecreated,
+                        ];
                         $numberoflatesubmissions++;
                     }
                 }
@@ -151,14 +199,20 @@ class graph_submission {
                     $assignmentid = $tuple->assignment;
                     if ($tuple->userid) { // If a user has submitted.
                         if ($tuple->duedate >= $tuple->timecreated || $tuple->duedate == 0) { // Right time.
-                            $this->statistics[$counter]['in_time_submissions'][] = array('userid'  => $tuple->userid,
-                                'nome' => $tuple->firstname." ".$tuple->lastname,
-                                'email' => $tuple->email, 'timecreated'  => $tuple->timecreated);
+                            $this->statistics[$counter]['in_time_submissions'][] = [
+                                'userid' => $tuple->userid,
+                                'nome' => $tuple->firstname . ' ' . $tuple->lastname,
+                                'email' => $tuple->email,
+                                'timecreated' => $tuple->timecreated,
+                            ];
                             $numberofintimesubmissions = 1;
                         } else { // Late.
-                            $this->statistics[$counter]['latesubmissions'][] = array('userid'  => $tuple->userid,
-                                'nome'  => $tuple->firstname." ".$tuple->lastname,
-                                'email'  => $tuple->email, 'timecreated'  => $tuple->timecreated);
+                            $this->statistics[$counter]['latesubmissions'][] = [
+                                'userid' => $tuple->userid,
+                                'nome' => $tuple->firstname . ' ' . $tuple->lastname,
+                                'email' => $tuple->email,
+                                'timecreated' => $tuple->timecreated,
+                            ];
                             $numberoflatesubmissions = 1;
                         }
                     }
@@ -401,11 +455,11 @@ class graph_submission {
                 ]
             }';
 
-        $event = \block_analytics_graphs\event\block_analytics_graphs_event_view_graph::create(array(
+        $event = \block_analytics_graphs\event\block_analytics_graphs_event_view_graph::create([
             'objectid' => $this->course,
             'context' => $this->context,
-            'other' => "assign.php",
-        ));
+            'other' => 'assign.php',
+        ]);
         $event->trigger();
 
         return $chart;

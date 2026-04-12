@@ -157,7 +157,7 @@ class provider implements \core_privacy\local\metadata\provider,
                     $subcontext = [
                         get_string('pluginname', 'block_analytics_graphs'),
                         'block_analytics_graphs_msg',
-                        $index
+                        $index,
                     ];
 
                     $data = (object) [
@@ -185,7 +185,7 @@ class provider implements \core_privacy\local\metadata\provider,
                     $subcontext = [
                         get_string('pluginname', 'block_analytics_graphs'),
                         'block_analytics_graphs_dest',
-                        $index
+                        $index,
                     ];
 
                     $data = (object) [

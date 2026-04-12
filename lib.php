@@ -25,11 +25,11 @@
 defined('MOODLE_INTERNAL') || die();
 
 function block_analytics_graphs_subtract_student_arrays($estudantes, $acessaram) {
-    $resultado = array();
+    $resultado = [];
     foreach ($estudantes as $estudante) {
         $encontrou = false;
         foreach ($acessaram as $acessou) {
-            if ($estudante['userid'] == $acessou ['userid']) {
+            if ($estudante['userid'] == $acessou['userid']) {
                 $encontrou = true;
                 break;
             }
@@ -43,7 +43,7 @@ function block_analytics_graphs_subtract_student_arrays($estudantes, $acessaram)
 
 function block_analytics_graphs_get_course_group_members($course) {
     global $DB, $USER;
-    $groupmembers = array();
+    $groupmembers = [];
     $groups = groups_get_all_groups($course->id);
     foreach ($groups as $group) {
         if (groups_group_visible($group->id, $course)) {
@@ -64,7 +64,7 @@ function block_analytics_graphs_get_course_group_members($course) {
 
 function block_analytics_graphs_get_course_grouping_members($course) {
     global $DB, $USER;
-    $groupingmembers = array();
+    $groupingmembers = [];
     $groupings = groups_get_all_groupings($course->id);
     foreach ($groupings as $grouping) {
         $groups = groups_get_all_groups($course->id, 0, $grouping->id);
@@ -90,7 +90,7 @@ function block_analytics_graphs_get_course_grouping_members($course) {
 
 function block_analytics_graphs_get_students($course) {
     global $DB, $USER;
-    $students = array();
+    $students = [];
     $context = context_course::instance($course->id);
     $onlyactive = block_analytics_graphs_only_active_enrolments($course);
     $allstudents = get_enrolled_users($context, 'block/analytics_graphs:bemonitored', 0,
@@ -107,7 +107,7 @@ function block_analytics_graphs_get_students($course) {
 
 
 function block_analytics_graphs_get_teachers($course) {
-    $teachers = array();
+    $teachers = [];
     $context = context_course::instance($course);
     $onlyactive = block_analytics_graphs_only_active_enrolments($course);
     $allteachers = get_enrolled_users($context, 'block/analytics_graphs:viewpages', 0,
@@ -139,7 +139,7 @@ function block_analytics_graphs_get_course_used_modules ($courseid) {
             LEFT JOIN {modules} md ON cm.module = md.id
             WHERE cm.course = ? AND md.name <> 'label'
             GROUP BY cm.module, md.name";
-    $params = array($courseid);
+    $params = [$courseid];
     $result = $DB->get_records_sql($sql, $params);
 
     return $result;
@@ -153,15 +153,15 @@ function block_analytics_graphs_get_resource_url_access($course, $estudantes, $r
     }
     list($insql, $inparams) = $DB->get_in_or_equal($inclause);
 
-    $requestedmodules = array($course); // First parameter is courseid, later are modulesids to display.
+    $requestedmodules = [$course]; // First parameter is courseid, later are modulesids to display.
 
     foreach ($requestedtypes as $module) { // Making params for the table.
-        $temp = $resource = $DB->get_record('modules', array('name' => $module), 'id');
+        $temp = $resource = $DB->get_record('modules', ['name' => $module], 'id');
         array_push($requestedmodules, $temp->id);
     }
 
     /* Temp table to order */
-    $params = array($course);
+    $params = [$course];
     $sql = "SELECT id, section, sequence
             FROM {course_sections}
             WHERE course  = ? AND sequence <> ''
@@ -174,7 +174,7 @@ function block_analytics_graphs_get_resource_url_access($course, $estudantes, $r
     $table->add_field('section', XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, null);
     $table->add_field('module', XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, null);
     $table->add_field('sequence', XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, null);
-    $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
+    $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
     $dbman->create_temp_table($table);
     $sequence = 0;
     foreach ($result as $tuple) {
@@ -188,7 +188,7 @@ function block_analytics_graphs_get_resource_url_access($course, $estudantes, $r
         }
     }
 
-    $params = array_merge(array($startdate), $inparams, $requestedmodules);
+    $params = array_merge([$startdate], $inparams, $requestedmodules);
 
     $sqla = "SELECT temp.id+(COALESCE(temp.userid,1)*1000000)as id, temp.id as ident, tag.section, m.name as tipo, cm.id as cmid, ";
     $sqlb = "temp.userid, usr.firstname, usr.lastname, usr.email, temp.acessos, tag.sequence
@@ -235,8 +235,8 @@ function block_analytics_graphs_get_assign_submission($course, $students) {
         $inclause[] = $tuple->id;
     }
     list($insql, $inparams) = $DB->get_in_or_equal($inclause);
-    $assign = $DB->get_record('modules', array('name' => 'assign'), 'id');
-    $params = array_merge(array($assign->id, $course), $inparams);
+    $assign = $DB->get_record('modules', ['name' => 'assign'], 'id');
+    $params = array_merge([$assign->id, $course], $inparams);
     $sql = "SELECT a.id+(COALESCE(s.id,1)*1000000)as id, a.id as assignment, name, duedate, cutoffdate,
                 s.userid, usr.firstname, usr.lastname, usr.email, s.timemodified as timecreated
                 FROM {assign} a
@@ -257,7 +257,7 @@ function block_analytics_graphs_get_hotpot_submission($course, $students) {
         $inclause[] = $tuple->id;
     }
     list($insql, $inparams) = $DB->get_in_or_equal($inclause);
-    $params = array_merge(array($course), $inparams);
+    $params = array_merge([$course], $inparams);
     $sql = "SELECT temp.id+(COALESCE(temp.userid,1)*1000000) as id, temp.id as assignment, name,
                 timeclose as duedate, timeclose as cutoffdate,
                 temp.userid, usr.firstname, usr.lastname, usr.email, temp.timecreated
@@ -283,7 +283,7 @@ function block_analytics_graphs_get_turnitin_submission($course, $students) {
         $inclause[] = $tuple->id;
     }
     list($insql, $inparams) = $DB->get_in_or_equal($inclause);
-    $params = array_merge(array($course), $inparams);
+    $params = array_merge([$course], $inparams);
     $sql = "SELECT temp.id+(COALESCE(temp.userid,1)*1000000) as id, temp.id as assignment, CONCAT(t.name, '-', tp.partname) as name,
                 dtdue as duedate, dtdue as cutoffdate,
                 temp.userid, usr.firstname, usr.lastname, usr.email, temp.timecreated
@@ -310,7 +310,7 @@ function block_analytics_graphs_get_quiz_submission($course, $students) {
         $inclause[] = $tuple->id;
     }
     list($insql, $inparams) = $DB->get_in_or_equal($inclause);
-    $params = array_merge(array($course), $inparams);
+    $params = array_merge([$course], $inparams);
     $sql = "SELECT temp.id+(COALESCE(temp.userid,1)*1000000) as id, temp.id as assignment, name,
                 timeclose as duedate, timeclose as cutoffdate,
                 temp.userid, usr.firstname, usr.lastname, usr.email, temp.timecreated
@@ -339,7 +339,7 @@ function block_analytics_graphs_get_number_of_days_access_by_week($course, $estu
         $inclause[] = $tupla->id;
     }
     list($insql, $inparams) = $DB->get_in_or_equal($inclause);
-    $params = array_merge(array($timezoneadjust, $timezoneadjust, $startdate, $course, $startdate), $inparams);
+    $params = array_merge([$timezoneadjust, $timezoneadjust, $startdate, $course, $startdate], $inparams);
     $sql = "SELECT temp2.userid+(week*1000000) as id, temp2.userid, firstname, lastname, email, week,
                 number, numberofpageviews
                 FROM (
@@ -398,7 +398,7 @@ function block_analytics_graphs_get_number_of_modules_access_by_week($course, $e
         $inclause[] = $tupla->id;
     }
     list($insql, $inparams) = $DB->get_in_or_equal($inclause);
-    $params = array_merge(array($timezoneadjust, $startdate, $course, $startdate), $inparams);
+    $params = array_merge([$timezoneadjust, $startdate, $course, $startdate], $inparams);
     $sql = "SELECT userid+(week*1000000), userid, firstname, lastname, email, week, number
                 FROM (
                     SELECT  userid, week, COUNT(*) as number
@@ -424,7 +424,7 @@ function block_analytics_graphs_get_number_of_modules_accessed($course, $estudan
         $inclause[] = $tupla->id;
     }
     list($insql, $inparams) = $DB->get_in_or_equal($inclause);
-    $params = array_merge(array($course, $startdate), $inparams);
+    $params = array_merge([$course, $startdate], $inparams);
     $sql = "SELECT userid, COUNT(*) as number
             FROM (
                 SELECT log.userid, objecttable, objectid
@@ -449,8 +449,8 @@ function block_analytics_graphs_get_user_resource_url_page_access($course, $stud
 
     $startdate = $COURSE->startdate;
 
-    $paramsdefault = array($startdate, $student, $course);
-    $paramsids = array();
+    $paramsdefault = [$startdate, $student, $course];
+    $paramsids = [];
     $sqla = "SELECT temp.id, m.name as tipo, cm.id as cmid, ";
     $sqlb = "COALESCE(temp.userid,0) as userid,  temp.acessos
                     FROM (
@@ -477,7 +477,7 @@ function block_analytics_graphs_get_user_resource_url_page_access($course, $stud
     $sqle = "ORDER BY m.name";
 
     foreach ($requestedmodules as $module) {
-        $temp = $DB->get_record('modules', array('name' => $module->name), 'id');
+        $temp = $DB->get_record('modules', ['name' => $module->name], 'id');
         array_push($paramsdefault, $temp->id);
     }
 
@@ -486,7 +486,7 @@ function block_analytics_graphs_get_user_resource_url_page_access($course, $stud
     $result = $DB->get_records_sql($sql, $paramsdefault);
 
     $modinfo = get_fast_modinfo($course);
-    foreach($result as $object){
+    foreach ($result as $object) {
             $cm = $modinfo->get_cm($object->cmid);
             $object->cmid = $cm->name;
     }
@@ -497,8 +497,8 @@ function block_analytics_graphs_get_user_resource_url_page_access($course, $stud
 
 function block_analytics_graphs_get_user_assign_submission($course, $student) {
     global $DB;
-    $assign = $DB->get_record('modules', array('name' => 'assign'), 'id');
-    $params = array($student, $assign->id, $course);
+    $assign = $DB->get_record('modules', ['name' => 'assign'], 'id');
+    $params = [$student, $assign->id, $course];
     $sql = "SELECT  a.id, name, COALESCE(duedate, 0) as duedate, COALESCE(s.timemodified,0) as timecreated
                 FROM {assign} a
                 LEFT JOIN {assign_submission} s on a.id = s.assignment AND s.status = 'submitted' AND s.userid = ?
@@ -511,8 +511,8 @@ function block_analytics_graphs_get_user_assign_submission($course, $student) {
 
 function block_analytics_graphs_get_user_forum_state($course, $student) {
     global $DB;
-    $forum = $DB->get_record('modules', array('name' => 'forum'), 'id');
-    $params = array($student, $forum->id, $course);
+    $forum = $DB->get_record('modules', ['name' => 'forum'], 'id');
+    $params = [$student, $forum->id, $course];
     $sql = "SELECT b.id discussionid, a.name forumname, b.name discussionname, b.timemodified lastupdate
             FROM {forum} a
             LEFT JOIN {forum_discussions} b on a.id = b.forum
@@ -534,10 +534,10 @@ function block_analytics_graphs_get_user_forum_state($course, $student) {
             WHERE a.course = " . $course ." AND c.userid = " . $student;
     $totaldiscpostsbyuser = $DB->get_records_sql($sql, $params);
 
-    $read = array(); // Generating arrays.
-    $notread = array();
-    $posted = array();
-    $notposted = array();
+    $read = []; // Generating arrays.
+    $notread = [];
+    $posted = [];
+    $notposted = [];
 
     foreach ($totaldiscussions as $item) {
         $foundread = false;
@@ -573,7 +573,7 @@ function block_analytics_graphs_get_user_forum_state($course, $student) {
         }
     }
 
-    $result = array(); // Merging arrays.
+    $result = []; // Merging arrays.
 
     $i = 0;
     foreach ($read as $item) {
@@ -642,15 +642,15 @@ function block_analytics_graphs_get_course_days_since_startdate($course) {
 
 function block_analytics_graphs_get_user_quiz_state($course, $student) {
     global $DB;
-    $quiz = $DB->get_record('modules', array('name' => 'quiz'), 'id');
-    $params = array($student, $quiz->id, $course);
+    $quiz = $DB->get_record('modules', ['name' => 'quiz'], 'id');
+    $params = [$student, $quiz->id, $course];
     $sql = "SELECT  a.id, a.name, s.gradepass
                 FROM {quiz} a
                 LEFT JOIN {grade_items} s on a.id = s.iteminstance and s.itemmodule = 'quiz'
                 WHERE a.course = " . $course . "
                 ORDER BY name";
     $resultallquizes = $DB->get_records_sql($sql, $params);
-    $allquizes = array();
+    $allquizes = [];
     foreach ($resultallquizes as $item) {
         array_push($allquizes, $item->name);
     }
@@ -661,9 +661,9 @@ function block_analytics_graphs_get_user_quiz_state($course, $student) {
                 ORDER BY name";
     $resultstudentquizes = $DB->get_records_sql($sql, $params);
 
-    $passed = array(); // generating arrays
-    $failed = array();
-    $noaccess = array();
+    $passed = []; // Generating arrays.
+    $failed = [];
+    $noaccess = [];
 
     foreach ($resultstudentquizes as $item) {
         foreach ($resultallquizes as $subitem) {
@@ -683,7 +683,7 @@ function block_analytics_graphs_get_user_quiz_state($course, $student) {
         }
     }
 
-    $result = array(); // merging arrays
+    $result = []; // Merging arrays.
 
     $i = 0;
     foreach ($passed as $item) {
@@ -704,8 +704,9 @@ function block_analytics_graphs_get_user_quiz_state($course, $student) {
 }
 
 /**
- * This function extends the navigation with the report items
+ * This function extends the navigation with the report items.
  *
+ * @package block_analytics_graphs
  * @param navigation_node $navigation The navigation node to extend
  * @param stdClass $course The course to object for the report
  * @param context $context The context of the course
@@ -720,51 +721,51 @@ function block_analytics_graphs_extend_navigation_course($navigation, $course, $
             LEFT JOIN {modules} md ON cm.module = md.id
             WHERE cm.course = ?
             GROUP BY cm.module, md.name";
-        $params = array($course->id);
+        $params = [$course->id];
         $availablemodulestotal = $DB->get_records_sql($sql, $params);
-        $availablemodules = array();
+        $availablemodules = [];
         foreach ($availablemodulestotal as $result) {
             array_push($availablemodules, $result->name);
         }
 
-        $url = new moodle_url($CFG->wwwroot.'/blocks/analytics_graphs/grades_chart.php', array('id' => $course->id));
+        $url = new moodle_url($CFG->wwwroot . '/blocks/analytics_graphs/grades_chart.php', ['id' => $course->id]);
         $node = navigation_node::create(get_string('grades_chart', 'block_analytics_graphs'),
                 $url, navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
         $reportanalyticsgraphs->add_node($node);
 
-        $url = new moodle_url($CFG->wwwroot.'/blocks/analytics_graphs/graphresourcestartup.php', array('id' => $course->id));
+        $url = new moodle_url($CFG->wwwroot . '/blocks/analytics_graphs/graphresourcestartup.php', ['id' => $course->id]);
         $node = navigation_node::create(get_string('access_to_contents', 'block_analytics_graphs'),
                 $url, navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
         $reportanalyticsgraphs->add_node($node);
 
-        $url = new moodle_url($CFG->wwwroot.'/blocks/analytics_graphs/timeaccesseschart.php',
-                array('id' => $course->id, 'days' => '7'));
+        $url = new moodle_url($CFG->wwwroot . '/blocks/analytics_graphs/timeaccesseschart.php',
+                ['id' => $course->id, 'days' => '7']);
         $node = navigation_node::create(get_string('timeaccesschart_title', 'block_analytics_graphs'),
                 $url, navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
         $reportanalyticsgraphs->add_node($node);
 
         if (in_array("assign", $availablemodules)) {
-            $url = new moodle_url($CFG->wwwroot . '/blocks/analytics_graphs/assign.php', array('id' => $course->id));
+            $url = new moodle_url($CFG->wwwroot . '/blocks/analytics_graphs/assign.php', ['id' => $course->id]);
             $node = navigation_node::create(get_string('submissions_assign', 'block_analytics_graphs'),
                             $url, navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
             $reportanalyticsgraphs->add_node($node);
         }
 
         if (in_array("hotpot", $availablemodules)) {
-            $url = new moodle_url($CFG->wwwroot.'/blocks/analytics_graphs/hotpot.php', array('id' => $course->id));
+            $url = new moodle_url($CFG->wwwroot . '/blocks/analytics_graphs/hotpot.php', ['id' => $course->id]);
             $node = navigation_node::create(get_string('submissions_hotpot', 'block_analytics_graphs'),
                             $url, navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
             $reportanalyticsgraphs->add_node($node);
         }
 
         if (in_array("turnitintooltwo", $availablemodules)) {
-            $url = new moodle_url($CFG->wwwroot.'/blocks/analytics_graphs/turnitin.php', array('id' => $course->id));
+            $url = new moodle_url($CFG->wwwroot . '/blocks/analytics_graphs/turnitin.php', ['id' => $course->id]);
             $node = navigation_node::create(get_string('submissions_turnitin', 'block_analytics_graphs'),
                             $url, navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
             $reportanalyticsgraphs->add_node($node);
         }
 
-        $url = new moodle_url($CFG->wwwroot.'/blocks/analytics_graphs/hits.php', array('id' => $course->id,));
+        $url = new moodle_url($CFG->wwwroot . '/blocks/analytics_graphs/hits.php', ['id' => $course->id]);
         $node = navigation_node::create(get_string('hits_distribution', 'block_analytics_graphs'),
                 $url, navigation_node::TYPE_SETTING, null, null, new pix_icon('i/report', ''));
         $reportanalyticsgraphs->add_node($node);

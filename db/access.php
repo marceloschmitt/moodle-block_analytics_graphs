@@ -24,115 +24,115 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$capabilities = array(
-    'block/analytics_graphs:bemonitored' => array(
+$capabilities = [
+    'block/analytics_graphs:bemonitored' => [
         'captype' => 'read',
         'contextlevel' => CONTEXT_BLOCK,
-        'archetypes' => array(
+        'archetypes' => [
             'student' => CAP_ALLOW,
-        )
-    ),
+        ],
+    ],
 
-    'block/analytics_graphs:viewpages' => array(
+    'block/analytics_graphs:viewpages' => [
         'riskbitmask' => RISK_SPAM,
         'captype' => 'read',
         'contextlevel' => CONTEXT_BLOCK,
-        'archetypes' => array(
+        'archetypes' => [
             'guest' => CAP_PREVENT,
             'student' => CAP_PREVENT,
             'teacher' => CAP_ALLOW,
             'editingteacher' => CAP_ALLOW,
-            'manager' => CAP_ALLOW
-        )
-    ),
-    'block/analytics_graphs:myaddinstance' => array(
+            'manager' => CAP_ALLOW,
+        ],
+    ],
+    'block/analytics_graphs:myaddinstance' => [
         'riskbitmask' => RISK_SPAM | RISK_XSS,
         'captype' => 'write',
         'contextlevel' => CONTEXT_SYSTEM,
-        'archetypes' => array(
+        'archetypes' => [
             'editingteacher' => CAP_ALLOW,
-            'manager' => CAP_ALLOW
-        ),
-    ),
-    'block/analytics_graphs:addinstance' => array(
+            'manager' => CAP_ALLOW,
+        ],
+    ],
+    'block/analytics_graphs:addinstance' => [
         'riskbitmask' => RISK_SPAM | RISK_XSS,
         'captype' => 'write',
         'contextlevel' => CONTEXT_BLOCK,
-        'archetypes' => array(
+        'archetypes' => [
             'editingteacher' => CAP_ALLOW,
-            'manager' => CAP_ALLOW
-        )
-    ),
-    'block/analytics_graphs:viewgradeschart' => array(
+            'manager' => CAP_ALLOW,
+        ],
+    ],
+    'block/analytics_graphs:viewgradeschart' => [
         'riskbitmask' => RISK_SPAM,
         'captype' => 'read',
         'contextlevel' => CONTEXT_BLOCK,
-        'archetypes' => array(
+        'archetypes' => [
             'guest' => CAP_PREVENT,
             'student' => CAP_PREVENT,
             'teacher' => CAP_ALLOW,
             'editingteacher' => CAP_ALLOW,
-            'manager' => CAP_ALLOW
-        )
-    ),
-    'block/analytics_graphs:viewcontentaccesses' => array(
+            'manager' => CAP_ALLOW,
+        ],
+    ],
+    'block/analytics_graphs:viewcontentaccesses' => [
         'riskbitmask' => RISK_SPAM,
         'captype' => 'read',
         'contextlevel' => CONTEXT_BLOCK,
-        'archetypes' => array(
+        'archetypes' => [
             'guest' => CAP_PREVENT,
             'student' => CAP_PREVENT,
             'teacher' => CAP_ALLOW,
             'editingteacher' => CAP_ALLOW,
-            'manager' => CAP_ALLOW
-        )
-    ),
-    'block/analytics_graphs:viewnumberofactivestudents' => array(
+            'manager' => CAP_ALLOW,
+        ],
+    ],
+    'block/analytics_graphs:viewnumberofactivestudents' => [
         'riskbitmask' => RISK_SPAM,
         'captype' => 'read',
         'contextlevel' => CONTEXT_BLOCK,
-        'archetypes' => array(
+        'archetypes' => [
             'guest' => CAP_PREVENT,
             'student' => CAP_PREVENT,
             'teacher' => CAP_ALLOW,
             'editingteacher' => CAP_ALLOW,
-            'manager' => CAP_ALLOW
-        )
-    ),
-    'block/analytics_graphs:viewassignmentsubmissions' => array(
+            'manager' => CAP_ALLOW,
+        ],
+    ],
+    'block/analytics_graphs:viewassignmentsubmissions' => [
         'riskbitmask' => RISK_SPAM,
         'captype' => 'read',
         'contextlevel' => CONTEXT_BLOCK,
-        'archetypes' => array(
+        'archetypes' => [
             'guest' => CAP_PREVENT,
             'student' => CAP_PREVENT,
             'teacher' => CAP_ALLOW,
             'editingteacher' => CAP_ALLOW,
-            'manager' => CAP_ALLOW
-        )
-    ),
-    'block/analytics_graphs:viewquizsubmissions' => array(
+            'manager' => CAP_ALLOW,
+        ],
+    ],
+    'block/analytics_graphs:viewquizsubmissions' => [
         'riskbitmask' => RISK_SPAM,
         'captype' => 'read',
         'contextlevel' => CONTEXT_BLOCK,
-        'archetypes' => array(
+        'archetypes' => [
             'guest' => CAP_PREVENT,
             'student' => CAP_PREVENT,
             'teacher' => CAP_ALLOW,
             'editingteacher' => CAP_ALLOW,
-            'manager' => CAP_ALLOW
-        )
-    ),
-    'block/analytics_graphs:viewhitsdistribution' => array(
+            'manager' => CAP_ALLOW,
+        ],
+    ],
+    'block/analytics_graphs:viewhitsdistribution' => [
         'riskbitmask' => RISK_SPAM,
         'captype' => 'read',
         'contextlevel' => CONTEXT_BLOCK,
-        'archetypes' => array(
+        'archetypes' => [
             'guest' => CAP_PREVENT,
             'student' => CAP_PREVENT,
             'teacher' => CAP_ALLOW,
             'editingteacher' => CAP_ALLOW,
-            'manager' => CAP_ALLOW
-        )
-    ),
-);
+            'manager' => CAP_ALLOW,
+        ],
+    ],
+];

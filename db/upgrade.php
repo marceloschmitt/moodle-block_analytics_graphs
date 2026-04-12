@@ -24,6 +24,13 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Upgrade hook for the analytics graphs block.
+ *
+ * @param float $oldversion Old plugin version.
+ * @param stdClass $block Block instance (unused).
+ * @return bool
+ */
 function xmldb_block_analytics_graphs_upgrade($oldversion, $block) {
     global $CFG, $DB;
 
@@ -42,9 +49,9 @@ function xmldb_block_analytics_graphs_upgrade($oldversion, $block) {
         $table->add_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
 
         // Adding keys to table block_analytics_graphs_msg.
-        $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
-        $table->add_key('fromid', XMLDB_KEY_FOREIGN, array('fromid'), 'user', array('id'));
-        $table->add_key('courseid', XMLDB_KEY_FOREIGN, array('courseid'), 'course', array('id'));
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+        $table->add_key('fromid', XMLDB_KEY_FOREIGN, ['fromid'], 'user', ['id']);
+        $table->add_key('courseid', XMLDB_KEY_FOREIGN, ['courseid'], 'course', ['id']);
 
         // Conditionally launch create table for block_analytics_graphs_msg.
         if (!$dbman->table_exists($table)) {
@@ -60,9 +67,9 @@ function xmldb_block_analytics_graphs_upgrade($oldversion, $block) {
         $table->add_field('toid', XMLDB_TYPE_INTEGER, '10', null, null, null, null);
 
         // Adding keys to table block_analytics_graphs_dest.
-        $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
-        $table->add_key('messageid', XMLDB_KEY_FOREIGN, array('messageid'), 'block_analytics_graphs_msg', array('id'));
-        $table->add_key('toid', XMLDB_KEY_FOREIGN, array('toid'), 'user', array('id'));
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+        $table->add_key('messageid', XMLDB_KEY_FOREIGN, ['messageid'], 'block_analytics_graphs_msg', ['id']);
+        $table->add_key('toid', XMLDB_KEY_FOREIGN, ['toid'], 'user', ['id']);
 
         // Conditionally launch create table for block_analytics_graphs_dest.
         if (!$dbman->table_exists($table)) {
@@ -81,7 +88,7 @@ function xmldb_block_analytics_graphs_upgrade($oldversion, $block) {
         // Conditionally launch add field courseid.
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
-            $key = new xmldb_key('courseid', XMLDB_KEY_FOREIGN, array('courseid'), 'course', array('id'));
+            $key = new xmldb_key('courseid', XMLDB_KEY_FOREIGN, ['courseid'], 'course', ['id']);
             $dbman->add_key($table, $key);
         }
 
@@ -90,7 +97,7 @@ function xmldb_block_analytics_graphs_upgrade($oldversion, $block) {
         // Conditionally launch add field timecreated.
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
-            $index = new xmldb_index('timecreated', XMLDB_INDEX_NOTUNIQUE, array('timecreated'));
+            $index = new xmldb_index('timecreated', XMLDB_INDEX_NOTUNIQUE, ['timecreated']);
             if (!$dbman->index_exists($table, $index)) {
                 $dbman->add_index($table, $index);
             }

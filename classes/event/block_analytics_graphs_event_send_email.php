@@ -37,23 +37,43 @@ defined('MOODLE_INTERNAL') || die();
  * }
  */
 class block_analytics_graphs_event_send_email extends \core\event\base {
+
+    /**
+     * Initialise the event data.
+     */
     protected function init() {
         $this->data['crud'] = 'c';
         $this->data['edulevel'] = self::LEVEL_TEACHING;
         $this->data['objecttable'] = 'course';
-
     }
 
+    /**
+     * Returns a localised name for the event.
+     *
+     * @return string
+     */
     public static function get_name() {
         return get_string('event_send_email', 'block_analytics_graphs');
     }
 
+    /**
+     * Returns a textual description of the event.
+     *
+     * @return string
+     */
     public function get_description() {
         return "User: {$this->userid} - Course: {$this->objectid} - Graph: {$this->other}";
     }
 
+    /**
+     * Returns a URL related to the event.
+     *
+     * @return \moodle_url
+     */
     public function get_url() {
-        return new \moodle_url('/blocks/analytics_graphs/' . $this->other, array('id' => $this->objectid, 'legacy' => '0'));
+        return new \moodle_url('/blocks/analytics_graphs/' . $this->other, [
+            'id' => $this->objectid,
+            'legacy' => '0',
+        ]);
     }
-
 }

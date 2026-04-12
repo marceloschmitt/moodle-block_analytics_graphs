@@ -35,7 +35,7 @@ require_capability('block/analytics_graphs:viewpages', $context);
 
 $inclause[] = $studentids;
 list($insql, $inparams) = $DB->get_in_or_equal($inclause);
-$params = array_merge(array($courseid), $inparams);
+$params = array_merge([$courseid], $inparams);
 
 $sql = "SELECT msg.id, CONCAT(firstname, ' ', lastname) fromid, subject, message, msg.timecreated
         FROM {block_analytics_graphs_msg} AS msg
@@ -53,5 +53,6 @@ if (count($result) > 0) {
     }
     echo json_encode($result);
 } else {
-    echo json_encode(array());
+    echo json_encode([]);
 }
+
