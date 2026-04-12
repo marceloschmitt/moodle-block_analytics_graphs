@@ -82,11 +82,11 @@ foreach (block_analytics_graphs_get_course_used_modules($course) as $result) {
                 $module = "mod_$modulename";
                 $typename = "typename_$modulename";
                 echo block_analytics_graphs_generate_graph_startup_module_entry($OUTPUT->pix_icon("icon", $module,
-                    $module, array(
+                    $module, [
                         'width' => 24,
                         'height' => 24,
-                       'title' => ''
-                    )), "mod" . $num, $modulename, get_string('pluginname', $module));
+                        'title' => '',
+                    ]), "mod" . $num, $modulename, get_string('pluginname', $module));
                 $num++;
             }
 

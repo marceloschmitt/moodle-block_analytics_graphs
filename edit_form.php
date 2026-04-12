@@ -74,7 +74,7 @@ class block_analytics_graphs_edit_form extends block_edit_form {
             $courseid = $this->page->course->id;
             $data = $this->get_data();
 
-            if(!empty($data->config_onlyactive)) {
+            if (!empty($data->config_onlyactive)) {
                 if (!in_array($courseid, $onlyactivecourses)) {
                     $onlyactivecourses[] = $courseid;
                     $needupdate = true;

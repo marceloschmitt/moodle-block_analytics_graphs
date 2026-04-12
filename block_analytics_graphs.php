@@ -26,6 +26,11 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot . '/blocks/analytics_graphs/lib.php');
 
+/**
+ * Block that lists links to course-level analytics graph reports.
+ *
+ * @package    block_analytics_graphs
+ */
 class block_analytics_graphs extends block_base {
 
     /**
