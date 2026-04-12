@@ -6,5 +6,8 @@
     },
     "extra": {
         "installer-name": "analytics_graphs"
+    },
+    "require-dev": {
+        "moodlehq/moodle-cs": "^3.4"
     }
 }
