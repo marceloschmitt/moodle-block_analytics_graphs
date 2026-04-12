@@ -22,6 +22,8 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+// phpcs:disable moodle.Commenting.MissingDocblock -- Mixed HTML/PHP; each inline <?php open tag would otherwise require a file docblock.
+
 require('../../config.php');
 require_once('lib.php');
 $course = required_param('id', PARAM_INT);

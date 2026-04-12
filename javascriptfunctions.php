@@ -22,6 +22,8 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+// phpcs:disable moodle.Commenting.MissingDocblock -- Mixed JS/HTML with inline <?php for lang strings; each open tag would otherwise require a file docblock.
+
 defined('MOODLE_INTERNAL') || die();
 ?>
 
