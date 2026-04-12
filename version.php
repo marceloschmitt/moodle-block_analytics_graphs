@@ -14,11 +14,18 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * Version metadata for the analytics graphs block.
+ *
+ * @package    block_analytics_graphs
+ * @copyright  2026 Marcelo Augusto Rauh Schmitt <marcelo.schmitt@poa.ifrs.edu.br>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
 defined('MOODLE_INTERNAL') || die();
-$plugin->version = 2024112801;  // YYYYMMDDHH (year, month, day, 24-hr time).
+$plugin->version = 2026041201;  // YYYYMMDDHH (year, month, day, 24-hr time).
 $plugin->requires = 2015111600; // YYYYMMDDHH (This is the release version for Moodle 3.0).
 $plugin->maturity = MATURITY_STABLE;
-$plugin->release = '4.2.2';
+$plugin->release = '4.2.3';
 $plugin->branch = '4.2';
 $plugin->component = 'block_analytics_graphs';

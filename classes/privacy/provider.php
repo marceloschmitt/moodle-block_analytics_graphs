@@ -14,6 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * Privacy API provider for the analytics graphs block.
+ *
+ * @package    block_analytics_graphs
+ * @copyright  2026 Marcelo Augusto Rauh Schmitt <marcelo.schmitt@poa.ifrs.edu.br>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 namespace block_analytics_graphs\privacy;
 
 use core_privacy\local\metadata\collection;
@@ -24,12 +32,9 @@ use core_privacy\local\request\contextlist;
 use core_privacy\local\request\userlist;
 
 /**
- * Privacy Subsystem implementation for block_analytics_graphs.
+ * Privacy subsystem implementation for the analytics graphs block.
  *
  * @package    block_analytics_graphs
- * @author     Dmitrii Metelkin <dmitriim@catalyst-au.net>
- * @copyright  2022 Catalyst IT
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class provider implements \core_privacy\local\metadata\provider,
     \core_privacy\local\request\core_userlist_provider,

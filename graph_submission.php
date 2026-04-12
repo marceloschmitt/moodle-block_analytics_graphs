@@ -14,8 +14,21 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * Helper for building submission-style chart data for the analytics graphs block.
+ *
+ * @package    block_analytics_graphs
+ * @copyright  2026 Marcelo Augusto Rauh Schmitt <marcelo.schmitt@poa.ifrs.edu.br>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Builds chart data structures for activity submission reports.
+ *
+ * @package    block_analytics_graphs
+ */
 class graph_submission {
 
     private $context;

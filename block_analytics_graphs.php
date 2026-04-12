@@ -14,16 +14,32 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * Analytics graphs block: links to course-level participation and grade reports.
+ *
+ * @package    block_analytics_graphs
+ * @copyright  2026 Marcelo Augusto Rauh Schmitt <marcelo.schmitt@poa.ifrs.edu.br>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot . '/blocks/analytics_graphs/lib.php');
 
 class block_analytics_graphs extends block_base {
+
+    /**
+     * Initialise the block instance title.
+     */
     public function init() {
         $this->title = get_string('analytics_graphs', 'block_analytics_graphs');
     }
-    // The PHP tag and the curly bracket for the class definition
-    // will only be closed after there is another function added in the next section.
+
+    /**
+     * Generate the block content (list of report links for the current course).
+     *
+     * @return stdClass|null
+     */
     public function get_content() {
         global $CFG;
         global $DB;
@@ -44,9 +60,9 @@ class block_analytics_graphs extends block_base {
             LEFT JOIN {modules} md ON cm.module = md.id
             WHERE cm.course = ?
             GROUP BY cm.module, md.name";
-        $params = array($course->id);
+        $params = [$course->id];
         $availablemodulestotal = $DB->get_records_sql($sql, $params);
-        $availablemodules = array();
+        $availablemodules = [];
         foreach ($availablemodulestotal as $result) {
             array_push($availablemodules, $result->name);
         }
@@ -105,7 +121,7 @@ class block_analytics_graphs extends block_base {
      * @return true
      */
     public function instance_allow_config() {
-        return (bool) get_config('block_analytics_graphs', 'overrideonlyactive');;
+        return (bool) get_config('block_analytics_graphs', 'overrideonlyactive');
     }
 
     /**

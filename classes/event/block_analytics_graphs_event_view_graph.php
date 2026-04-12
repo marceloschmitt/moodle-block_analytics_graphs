@@ -15,29 +15,27 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * The EVENTNAME event.
+ * Event when a teacher views an analytics graphs report.
  *
- * @package    analytics_graphs
- * @copyright  2014 Marcelo Augusto Rauh Schmitt
+ * @package    block_analytics_graphs
+ * @copyright  2026 Marcelo Augusto Rauh Schmitt <marcelo.schmitt@poa.ifrs.edu.br>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-
 namespace block_analytics_graphs\event;
+
 defined('MOODLE_INTERNAL') || die();
+
 /**
  * The block_analytics_graphs_event_view_graph event class.
  *
+ * @package    block_analytics_graphs
  * @property-read array $other {
  *      Extra information about event.
  *
  *      - Whenever a teacher views a graph
  * }
- *
- * @since     Moodle MOODLEVERSION
- * @copyright 2014 YOUR NAME
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- **/
+ */
 class block_analytics_graphs_event_view_graph extends \core\event\base {
     protected function init() {
         $this->data['crud'] = 'r';

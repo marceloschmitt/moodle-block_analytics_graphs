@@ -15,11 +15,12 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * 翻译：汤和果（hgtang93@163.com）
- * 插件名称：分析图
- * 插件类型：版块
- * @package    block
- * @subpackage analytics_graphs
+ * Chinese language strings for the analytics graphs block.
+ *
+ * Translation by Tang Heguo (汤和果) <hgtang93@163.com>.
+ *
+ * @package    block_analytics_graphs
+ * @copyright  2026 Marcelo Augusto Rauh Schmitt <marcelo.schmitt@poa.ifrs.edu.br>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

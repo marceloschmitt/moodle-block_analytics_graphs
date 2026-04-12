@@ -14,11 +14,16 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-
-
+/**
+ * Brazilian Portuguese language strings for the analytics graphs block.
+ *
+ * @package    block_analytics_graphs
+ * @copyright  2026 Marcelo Augusto Rauh Schmitt <marcelo.schmitt@poa.ifrs.edu.br>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
 $string['analytics_graphs:addinstance'] = 'Add a new AG block';
-$string['nalytics_graphs:bemonitored'] = 'Usuário é monitorado na disciplina';
+$string['analytics_graphs:bemonitored'] = 'Usuário é monitorado na disciplina';
 $string['analytics_graphs:myaddinstance'] = 'Add a new AG block to the My Moodle page';
 $string['analytics_graphs:viewpages'] = 'Visualiza gráficos';
 

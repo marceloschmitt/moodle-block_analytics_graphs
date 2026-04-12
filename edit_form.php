@@ -14,16 +14,22 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
+/**
+ * Block instance configuration form for the analytics graphs block.
+ *
+ * @package    block_analytics_graphs
+ * @copyright  2026 Marcelo Augusto Rauh Schmitt <marcelo.schmitt@poa.ifrs.edu.br>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot . '/blocks/analytics_graphs/lib.php');
 
 /**
- * Form for editing lock instances.
+ * MoodleQuickForm definitions for the analytics graphs block instance.
  *
  * @package    block_analytics_graphs
- * @copyright  2024 Catalyst IT
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class block_analytics_graphs_edit_form extends block_edit_form {
 
