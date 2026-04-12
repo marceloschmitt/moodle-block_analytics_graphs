@@ -118,7 +118,7 @@ foreach ($result as $tuple) {
         }
         $resourceid = $tuple->ident;
     } else { // Not first time in loop.
-        if ($resourceid == $tuple->ident and $tuple->userid) {
+        if ($resourceid == $tuple->ident && $tuple->userid) {
             // If same resource and someone accessed, add student.
             $statistics[$counter]['studentswithaccess'][] = array('userid' => $tuple->userid,
                     'nome' => $tuple->firstname." ".$tuple->lastname, 'email' => $tuple->email);
@@ -412,14 +412,14 @@ foreach ($numberofresourcesintopic as $topico => $numberoftopics) {
                 foreach ($groupmembers as $key => $value) {
                 ?>
                     <option value="<?php echo $key; ?>"><?php echo $value["name"]; ?></option>
-                <?php
-                }
-                ?>
+                    <?php
+                    }
+                    ?>
             </select>
         </div>
-        <?php
-        }
-        ?>
+            <?php
+            }
+            ?>
         <div id="container" style="min-width: 800px; height:<?php echo ($counter + 1) * 50 + 180;?>; margin: 0 auto"></div>
         <script>
             $.each(geral, function(index, value) {

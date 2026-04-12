@@ -678,14 +678,14 @@ thead th {
                 <option value="-"><?php  echo json_encode(get_string('all_groups', 'block_analytics_graphs'));?></option>
             <?php    foreach ($groupmembers as $key => $value) { ?>
                 <option value="<?php echo $key; ?>"><?php echo $value["name"]; ?></option>
-                <?php
-                }
-                ?>
+            <?php
+            }
+            ?>
             </select>
         </div>
-        <?php
-        }
-        ?>
+    <?php
+    }
+    ?>
 <center>
 <H2><?php  echo   get_string('hits_distribution', 'block_analytics_graphs');?></H2>
 <H3><?php  echo $coursename;?> </H3>
