@@ -186,6 +186,7 @@ function block_analytics_graphs_generate_graph_startup_module_entry($iconhtml, $
 function block_analytics_graphs_get_content_access_graph_excluded_modules(): array {
     return [
         'subsection',
+        'questionbank',
     ];
 }
 
