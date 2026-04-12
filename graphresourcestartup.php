@@ -38,7 +38,7 @@ $startdate = date("Y-m-d", $courseparams->startdate);
 
 /* Initializing and filling array with available modules, to display only modules that are
  available on the server on the course */
-$availablemodules = array();
+$availablemodules = [];
 foreach (block_analytics_graphs_get_course_used_modules($course) as $result) {
     array_push($availablemodules, $result->name);
 }

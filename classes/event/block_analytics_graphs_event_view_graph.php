@@ -24,8 +24,6 @@
 
 namespace block_analytics_graphs\event;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * The block_analytics_graphs_event_view_graph event class.
  *

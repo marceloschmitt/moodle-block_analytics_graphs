@@ -83,7 +83,8 @@ class block_analytics_graphs extends block_base {
                           target=_blank>" . get_string('access_to_contents', 'block_analytics_graphs') . "</a>";
         }
         if (has_capability('block/analytics_graphs:viewnumberofactivestudents', $context)) {
-            $this->content->text .= "<li> <a href= {$CFG->wwwroot}/blocks/analytics_graphs/timeaccesseschart.php?id={$course->id}&days=7
+            $timeaccessurl = $CFG->wwwroot . '/blocks/analytics_graphs/timeaccesseschart.php?id=' . $course->id . '&days=7';
+            $this->content->text .= "<li> <a href= {$timeaccessurl}
                           target=_blank>" . get_string('timeaccesschart_title', 'block_analytics_graphs') . "</a>";
         }
         if (has_capability('block/analytics_graphs:viewassignmentsubmissions', $context) && in_array("assign", $availablemodules)) {

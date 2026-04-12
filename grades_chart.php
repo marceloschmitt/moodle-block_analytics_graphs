@@ -37,11 +37,11 @@ require_capability('block/analytics_graphs:viewpages', $context);
 require_capability('block/analytics_graphs:viewgradeschart', $context);
 
 /* Log */
-$event = \block_analytics_graphs\event\block_analytics_graphs_event_view_graph::create(array(
+$event = \block_analytics_graphs\event\block_analytics_graphs_event_view_graph::create([
     'objectid' => $courseid,
     'context' => $context,
     'other' => "grades_chart.php",
-));
+]);
 $event->trigger();
 
 $sql = "SELECT gi.id, categoryid, fullname, itemname, gradetype, grademax, grademin
@@ -53,7 +53,7 @@ $sql = "SELECT gi.id, categoryid, fullname, itemname, gradetype, grademax, grade
                     WHERE gg.itemid = gi.id AND gg.rawgrade IS NOT NULL )
         ORDER BY fullname, itemname";
 
-$result = $DB->get_records_sql($sql, array($courseid));
+$result = $DB->get_records_sql($sql, [$courseid]);
 
 $groupmembers = block_analytics_graphs_get_course_group_members($COURSE);
 $groupmembersjson = json_encode($groupmembers);
