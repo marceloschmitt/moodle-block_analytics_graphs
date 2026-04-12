@@ -413,13 +413,13 @@ foreach ($numberofresourcesintopic as $topico => $numberoftopics) {
                 ?>
                     <option value="<?php echo $key; ?>"><?php echo $value["name"]; ?></option>
                     <?php
-                    }
-                    ?>
+                }
+                ?>
             </select>
         </div>
             <?php
-            }
-            ?>
+        }
+        ?>
         <div id="container" style="min-width: 800px; height:<?php echo ($counter + 1) * 50 + 180;?>; margin: 0 auto"></div>
         <script>
             $.each(geral, function(index, value) {
