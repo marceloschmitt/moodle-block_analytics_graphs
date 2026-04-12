@@ -24,6 +24,14 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Return students present in the first list but not in the second (by userid).
+ *
+ * @package    block_analytics_graphs
+ * @param array $estudantes List of student rows with userid key.
+ * @param array $acessaram List of accessed student rows with userid key.
+ * @return array Filtered list of students from $estudantes.
+ */
 function block_analytics_graphs_subtract_student_arrays($estudantes, $acessaram) {
     $resultado = [];
     foreach ($estudantes as $estudante) {
@@ -41,6 +49,13 @@ function block_analytics_graphs_subtract_student_arrays($estudantes, $acessaram)
     return $resultado;
 }
 
+/**
+ * Build group id => members metadata for visible groups in a course.
+ *
+ * @package    block_analytics_graphs
+ * @param stdClass $course Course record (must include id).
+ * @return array Associative array keyed by group id with name, members, numberofmembers.
+ */
 function block_analytics_graphs_get_course_group_members($course) {
     global $DB, $USER;
     $groupmembers = [];
@@ -62,6 +77,13 @@ function block_analytics_graphs_get_course_group_members($course) {
     return($groupmembers);
 }
 
+/**
+ * Build grouping id => aggregated member ids for non-empty groupings.
+ *
+ * @package    block_analytics_graphs
+ * @param stdClass $course Course record (must include id).
+ * @return array Associative array keyed by grouping id.
+ */
 function block_analytics_graphs_get_course_grouping_members($course) {
     global $DB, $USER;
     $groupingmembers = [];
@@ -87,7 +109,13 @@ function block_analytics_graphs_get_course_grouping_members($course) {
     return($groupingmembers);
 }
 
-
+/**
+ * Return enrolled students to be monitored in reports for the course.
+ *
+ * @package    block_analytics_graphs
+ * @param stdClass $course Course record (must include id).
+ * @return stdClass[] List of user records.
+ */
 function block_analytics_graphs_get_students($course) {
     global $DB, $USER;
     $students = [];
@@ -105,7 +133,13 @@ function block_analytics_graphs_get_students($course) {
     return($students);
 }
 
-
+/**
+ * Return teachers (users with viewpages capability) for email copy and similar uses.
+ *
+ * @package    block_analytics_graphs
+ * @param int|stdClass $course Course id or course record.
+ * @return stdClass[] List of user records.
+ */
 function block_analytics_graphs_get_teachers($course) {
     $teachers = [];
     $context = context_course::instance($course);
@@ -120,7 +154,17 @@ function block_analytics_graphs_get_teachers($course) {
     return($teachers);
 }
 
-function block_analytics_graphs_generate_graph_startup_module_entry ($iconhtml, $name, $value, $title) {
+/**
+ * Render one checkbox row for the content access graph startup page.
+ *
+ * @package    block_analytics_graphs
+ * @param string $iconhtml Activity icon markup.
+ * @param string $name Form field name.
+ * @param string $value Checkbox value (module name).
+ * @param string $title Visible label.
+ * @return string HTML fragment.
+ */
+function block_analytics_graphs_generate_graph_startup_module_entry($iconhtml, $name, $value, $title) {
 
     return      "<div style='height: 24px;line-height: 24px;text-align: left;border: 1px solid lightgrey;" .
                 "margin-bottom: 2px; margin-top: 8px'>" .
@@ -131,7 +175,14 @@ function block_analytics_graphs_generate_graph_startup_module_entry ($iconhtml, 
                 "</div></div>";
 }
 
-function block_analytics_graphs_get_course_used_modules ($courseid) {
+/**
+ * List module types used in the course (excluding labels).
+ *
+ * @package    block_analytics_graphs
+ * @param int $courseid Course id.
+ * @return stdClass[] Module rows (module id and name).
+ */
+function block_analytics_graphs_get_course_used_modules($courseid) {
     global $DB;
 
     $sql = "SELECT cm.module, md.name
@@ -145,6 +196,17 @@ function block_analytics_graphs_get_course_used_modules ($courseid) {
     return $result;
 }
 
+/**
+ * Count resource/URL activity views per student from the standard log.
+ *
+ * @package    block_analytics_graphs
+ * @param int $course Course id.
+ * @param stdClass[] $estudantes Student user records (id).
+ * @param string[] $requestedtypes Module type names (e.g. resource, url).
+ * @param int $startdate Unix timestamp lower bound for log rows.
+ * @param bool $hidden Whether to include hidden course modules.
+ * @return stdClass[] Access count rows joined with user and section order.
+ */
 function block_analytics_graphs_get_resource_url_access($course, $estudantes, $requestedtypes, $startdate, $hidden) {
     global $COURSE;
     global $DB;
@@ -229,6 +291,14 @@ function block_analytics_graphs_get_resource_url_access($course, $estudantes, $r
     return($resultado);
 }
 
+/**
+ * Assignment submission rows for charting (includes non-submitting placeholders).
+ *
+ * @package    block_analytics_graphs
+ * @param int $course Course id.
+ * @param stdClass[] $students Student user records.
+ * @return stdClass[] Flat rows keyed by synthetic id.
+ */
 function block_analytics_graphs_get_assign_submission($course, $students) {
     global $DB;
     foreach ($students as $tuple) {
@@ -251,6 +321,14 @@ function block_analytics_graphs_get_assign_submission($course, $students) {
         return($resultado);
 }
 
+/**
+ * HotPot attempt rows for charting.
+ *
+ * @package    block_analytics_graphs
+ * @param int $course Course id.
+ * @param stdClass[] $students Student user records.
+ * @return stdClass[] Flat rows keyed by synthetic id.
+ */
 function block_analytics_graphs_get_hotpot_submission($course, $students) {
     global $DB;
     foreach ($students as $tuple) {
@@ -277,6 +355,14 @@ function block_analytics_graphs_get_hotpot_submission($course, $students) {
      return($resultado);
 }
 
+/**
+ * Turnitin submission rows for charting.
+ *
+ * @package    block_analytics_graphs
+ * @param int $course Course id.
+ * @param stdClass[] $students Student user records.
+ * @return stdClass[] Flat rows keyed by synthetic id.
+ */
 function block_analytics_graphs_get_turnitin_submission($course, $students) {
     global $DB;
     foreach ($students as $tuple) {
@@ -304,6 +390,14 @@ function block_analytics_graphs_get_turnitin_submission($course, $students) {
      return($resultado);
 }
 
+/**
+ * Quiz finished attempt rows for charting.
+ *
+ * @package    block_analytics_graphs
+ * @param int $course Course id.
+ * @param stdClass[] $students Student user records.
+ * @return stdClass[] Flat rows keyed by synthetic id.
+ */
 function block_analytics_graphs_get_quiz_submission($course, $students) {
     global $DB;
     foreach ($students as $tuple) {
@@ -329,8 +423,15 @@ function block_analytics_graphs_get_quiz_submission($course, $students) {
      return($resultado);
 }
 
-
-
+/**
+ * Days with course views per student per week from the standard log.
+ *
+ * @package    block_analytics_graphs
+ * @param int $course Course id.
+ * @param stdClass[] $estudantes Student user records.
+ * @param int $startdate Unix timestamp lower bound.
+ * @return stdClass[] Aggregated rows.
+ */
 function block_analytics_graphs_get_number_of_days_access_by_week($course, $estudantes, $startdate) {
     global $DB;
     $timezone = new DateTimeZone(core_date::get_server_timezone());
@@ -362,6 +463,15 @@ function block_analytics_graphs_get_number_of_days_access_by_week($course, $estu
     return($resultado);
 }
 
+/**
+ * Raw log rows for students over the last N calendar days (time as HHMMSS string).
+ *
+ * @package    block_analytics_graphs
+ * @param int $course Course id.
+ * @param stdClass[] $estudantes Student user records.
+ * @param int $daystoget Number of days to look back.
+ * @return stdClass[] Log rows (timecreated formatted for display).
+ */
 function block_analytics_graphs_get_accesses_last_days($course, $estudantes, $daystoget) {
     global $DB;
     $date = strtotime(date('Y-m-d', strtotime('-'. $daystoget .' days')));
@@ -390,6 +500,15 @@ function block_analytics_graphs_get_accesses_last_days($course, $estudantes, $da
     return($resultado);
 }
 
+/**
+ * Distinct course modules viewed per student per week.
+ *
+ * @package    block_analytics_graphs
+ * @param int $course Course id.
+ * @param stdClass[] $estudantes Student user records.
+ * @param int $startdate Unix timestamp lower bound.
+ * @return stdClass[] Aggregated rows.
+ */
 function block_analytics_graphs_get_number_of_modules_access_by_week($course, $estudantes, $startdate) {
     global $DB;
     $timezone = new DateTimeZone(core_date::get_server_timezone());
@@ -418,6 +537,15 @@ function block_analytics_graphs_get_number_of_modules_access_by_week($course, $e
     return($resultado);
 }
 
+/**
+ * Total distinct course modules viewed per student since a start date.
+ *
+ * @package    block_analytics_graphs
+ * @param int $course Course id.
+ * @param stdClass[] $estudantes Student user records.
+ * @param int $startdate Unix timestamp lower bound.
+ * @return stdClass[] Rows with userid and number.
+ */
 function block_analytics_graphs_get_number_of_modules_accessed($course, $estudantes, $startdate) {
     global $DB;
     foreach ($estudantes as $tupla) {
@@ -440,7 +568,14 @@ function block_analytics_graphs_get_number_of_modules_accessed($course, $estudan
     return($resultado);
 }
 
-
+/**
+ * Per-activity view counts for one student (cmid replaced by activity name).
+ *
+ * @package    block_analytics_graphs
+ * @param int $course Course id.
+ * @param int $student User id.
+ * @return stdClass[] Rows with tipo, cmid (name), userid, acessos.
+ */
 function block_analytics_graphs_get_user_resource_url_page_access($course, $student) {
     global $COURSE;
     global $DB;
@@ -494,7 +629,14 @@ function block_analytics_graphs_get_user_resource_url_page_access($course, $stud
 
 }
 
-
+/**
+ * Assignment rows with due and submitted times for one student.
+ *
+ * @package    block_analytics_graphs
+ * @param int $course Course id.
+ * @param int $student User id.
+ * @return stdClass[] Assign rows.
+ */
 function block_analytics_graphs_get_user_assign_submission($course, $student) {
     global $DB;
     $assign = $DB->get_record('modules', ['name' => 'assign'], 'id');
@@ -509,6 +651,14 @@ function block_analytics_graphs_get_user_assign_submission($course, $student) {
     return($result);
 }
 
+/**
+ * Forum read/post status lists for one student.
+ *
+ * @package    block_analytics_graphs
+ * @param int $course Course id.
+ * @param int $student User id.
+ * @return string[][] Keys read, notread, posted, notposted with discussion labels.
+ */
 function block_analytics_graphs_get_user_forum_state($course, $student) {
     global $DB;
     $forum = $DB->get_record('modules', ['name' => 'forum'], 'id');
@@ -598,6 +748,13 @@ function block_analytics_graphs_get_user_forum_state($course, $student) {
     return($result);
 }
 
+/**
+ * Course fullname for display.
+ *
+ * @package    block_analytics_graphs
+ * @param int $course Course id.
+ * @return string Full name or empty string.
+ */
 function block_analytics_graphs_get_course_name($course) {
     global $DB;
     $sql = "SELECT
@@ -619,6 +776,12 @@ function block_analytics_graphs_get_course_name($course) {
     return $resultname;
 }
 
+/**
+ * Log retention setting (days) for the standard log store.
+ *
+ * @package    block_analytics_graphs
+ * @return string|null Config value or null if missing.
+ */
 function block_analytics_graphs_get_logstore_loglife() {
     global $DB;
     $sql = "SELECT  a.id, a.plugin, a.name, a.value
@@ -629,6 +792,13 @@ function block_analytics_graphs_get_logstore_loglife() {
     return reset($result)->value;
 }
 
+/**
+ * Whole days elapsed since the course start date.
+ *
+ * @package    block_analytics_graphs
+ * @param int $course Course id.
+ * @return int Floor day count (may be negative if start is in the future).
+ */
 function block_analytics_graphs_get_course_days_since_startdate($course) {
     global $DB;
     $sql = "SELECT  a.id, a.startdate
@@ -640,6 +810,14 @@ function block_analytics_graphs_get_course_days_since_startdate($course) {
     return floor(($currentdate - $startdate) / (60 * 60 * 24));
 }
 
+/**
+ * Quiz pass/fail/not attempted lists for one student.
+ *
+ * @package    block_analytics_graphs
+ * @param int $course Course id.
+ * @param int $student User id.
+ * @return string[][] Keys passed, failed, noaccess with quiz names.
+ */
 function block_analytics_graphs_get_user_quiz_state($course, $student) {
     global $DB;
     $quiz = $DB->get_record('modules', ['name' => 'quiz'], 'id');
@@ -704,12 +882,13 @@ function block_analytics_graphs_get_user_quiz_state($course, $student) {
 }
 
 /**
- * This function extends the navigation with the report items.
+ * Add analytics graphs report links under course reports navigation.
  *
- * @package block_analytics_graphs
- * @param navigation_node $navigation The navigation node to extend
- * @param stdClass $course The course to object for the report
- * @param context $context The context of the course
+ * @package    block_analytics_graphs
+ * @param navigation_node $navigation The navigation node to extend.
+ * @param stdClass $course Course instance for the report.
+ * @param context $context Course context.
+ * @return void
  */
 function block_analytics_graphs_extend_navigation_course($navigation, $course, $context) {
     global $CFG;
@@ -773,9 +952,10 @@ function block_analytics_graphs_extend_navigation_course($navigation, $course, $
 }
 
 /**
- * Do we consider only active enrolments for a given course?
+ * Whether only active enrolments should be used for reports in this course.
  *
- * @param \stdClass $course Course instance.
+ * @package    block_analytics_graphs
+ * @param stdClass $course Course instance.
  * @return bool
  */
 function block_analytics_graphs_only_active_enrolments($course): bool {
@@ -789,9 +969,10 @@ function block_analytics_graphs_only_active_enrolments($course): bool {
 }
 
 /**
- * Gets a list of courses with enabled "onlyactive" setting.
+ * Course ids where per-block instance "only active enrolments" is enabled.
  *
- * @return array
+ * @package    block_analytics_graphs
+ * @return array List of course ids as strings from config (may be empty).
  */
 function block_analytics_graphs_get_onlyactivecourses(): array {
     $onlyactivecourses = get_config('block_analytics_graphs', 'onlyactivecourses');
