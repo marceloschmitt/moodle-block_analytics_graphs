@@ -175,7 +175,22 @@ function block_analytics_graphs_generate_graph_startup_module_entry($iconhtml, $
 }
 
 /**
- * List module types used in the course (excluding labels).
+ * Activity module names (as in {modules}.name) excluded from the content access graph.
+ *
+ * Edit this list to hide types from the picker in graphresourcestartup.php and from
+ * graphresourceurl.php / block_analytics_graphs_get_resource_url_access().
+ *
+ * @package    block_analytics_graphs
+ * @return string[] Frankenstyle module names, e.g. 'subsection', 'label' is already filtered elsewhere.
+ */
+function block_analytics_graphs_get_content_access_graph_excluded_modules(): array {
+    return [
+        'subsection',
+    ];
+}
+
+/**
+ * List module types used in the course (excluding labels and graph-excluded modules).
  *
  * @package    block_analytics_graphs
  * @param int $courseid Course id.
@@ -191,6 +206,13 @@ function block_analytics_graphs_get_course_used_modules($courseid) {
             GROUP BY cm.module, md.name";
     $params = [$courseid];
     $result = $DB->get_records_sql($sql, $params);
+
+    $excluded = array_flip(block_analytics_graphs_get_content_access_graph_excluded_modules());
+    foreach ($result as $key => $row) {
+        if (isset($excluded[$row->name])) {
+            unset($result[$key]);
+        }
+    }
 
     return $result;
 }
@@ -209,6 +231,14 @@ function block_analytics_graphs_get_course_used_modules($courseid) {
 function block_analytics_graphs_get_resource_url_access($course, $estudantes, $requestedtypes, $startdate, $hidden) {
     global $COURSE;
     global $DB;
+
+    $requestedtypes = array_values(
+        array_diff($requestedtypes, block_analytics_graphs_get_content_access_graph_excluded_modules())
+    );
+    if ($requestedtypes === []) {
+        return [];
+    }
+
     foreach ($estudantes as $tupla) {
         $inclause[] = $tupla->id;
     }

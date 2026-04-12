@@ -67,6 +67,10 @@ foreach ($_GET as $querystringvariable => $value) {
     }
 }
 
+$requestedtypes = array_values(
+    array_diff($requestedtypes, block_analytics_graphs_get_content_access_graph_excluded_modules())
+);
+
 if (count($requestedtypes) < 1) {
     echo "<html style=\"background-color: #f4f4f4;\">";
     echo "<div style=\"width: 200px;height: 100px;position:absolute;left:0; right:0;top:0;
