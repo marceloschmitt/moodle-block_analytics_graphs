@@ -56,9 +56,11 @@ if ($numberofstudents == 0) {
     exit;
 }
 foreach ($students as $tuple) {
-        $arrayofstudents[] = array('userid' => $tuple->id ,
-                                'nome' => $tuple->firstname.' '.$tuple->lastname,
-                                'email' => $tuple->email);
+    $arrayofstudents[] = [
+        'userid' => $tuple->id,
+        'nome' => $tuple->firstname . ' ' . $tuple->lastname,
+        'email' => $tuple->email,
+    ];
 }
 
 /* Get the number of days with access by week */
@@ -67,9 +69,11 @@ $resultado = block_analytics_graphs_get_number_of_days_access_by_week($course, $
 /* Get the students that have no access */
 $maxnumberofweeks = 0;
 foreach ($resultado as $tuple) {
-    $arrayofaccess[] = array('userid' => $tuple->userid ,
-                            'nome' => $tuple->firstname.' '.$tuple->lastname,
-                            'email' => $tuple->email);
+    $arrayofaccess[] = [
+        'userid' => $tuple->userid,
+        'nome' => $tuple->firstname . ' ' . $tuple->lastname,
+        'email' => $tuple->email,
+    ];
     if ($tuple->week > $maxnumberofweeks) {
         $maxnumberofweeks = $tuple->week;
     }
@@ -108,11 +112,11 @@ $accessresults = json_encode($accessresults);
 $numberofresourcesresult = json_encode($numberofresourcesresult);
 
 /* Log */
-$event = \block_analytics_graphs\event\block_analytics_graphs_event_view_graph::create(array(
+$event = \block_analytics_graphs\event\block_analytics_graphs_event_view_graph::create([
     'objectid' => $course,
     'context' => $context,
     'other' => "hits.php",
-));
+]);
 $event->trigger();
 ?>
 

@@ -53,12 +53,16 @@ if ($numberofstudents == 0) {
     exit;
 }
 foreach ($students as $tuple) {
-    $arrayofstudents[] = array('userid' => $tuple->id , 'nome' => $tuple->firstname.' '.$tuple->lastname, 'email' => $tuple->email);
+    $arrayofstudents[] = [
+        'userid' => $tuple->id,
+        'nome' => $tuple->firstname . ' ' . $tuple->lastname,
+        'email' => $tuple->email,
+    ];
 }
 /* Get accesses to resources and urls */
 
 
-$requestedtypes = array();
+$requestedtypes = [];
 foreach ($_GET as $querystringvariable => $value) {
     if (substr($querystringvariable, 0, strlen("mod")) !== "mod") {
         continue;
@@ -100,9 +104,8 @@ if ($numberofresources == 0) {
 }
 $counter = 0;
 $numberofaccesses = 0;
-$numberofresourcesintopic = 0;
 $resourceid = 0;
-$numberofresourcesintopic = array();
+$numberofresourcesintopic = [];
 foreach ($result as $tuple) {
     if ($resourceid == 0) { /* First time in loop -> get topic and content name */
         $numberofresourcesintopic[$tuple->section] = 1;
@@ -112,16 +115,22 @@ foreach ($result as $tuple) {
         $statistics[$counter]['material'] = $cm->name;
 
         if ($tuple->userid) { /* If a user accessed -> get name */
-            $statistics[$counter]['studentswithaccess'][] = array('userid' => $tuple->userid,
-                    'nome' => $tuple->firstname." ".$tuple->lastname, 'email' => $tuple->email);
+            $statistics[$counter]['studentswithaccess'][] = [
+                'userid' => $tuple->userid,
+                'nome' => $tuple->firstname . ' ' . $tuple->lastname,
+                'email' => $tuple->email,
+            ];
             $numberofaccesses++;
         }
         $resourceid = $tuple->ident;
     } else { // Not first time in loop.
         if ($resourceid == $tuple->ident && $tuple->userid) {
             // If same resource and someone accessed, add student.
-            $statistics[$counter]['studentswithaccess'][] = array('userid' => $tuple->userid,
-                    'nome' => $tuple->firstname." ".$tuple->lastname, 'email' => $tuple->email);
+            $statistics[$counter]['studentswithaccess'][] = [
+                'userid' => $tuple->userid,
+                'nome' => $tuple->firstname . ' ' . $tuple->lastname,
+                'email' => $tuple->email,
+            ];
             $numberofaccesses++;
         }
         if ($resourceid != $tuple->ident) {
@@ -147,8 +156,11 @@ foreach ($result as $tuple) {
             $statistics[$counter]['material'] = $cm->name;
 
             if ($tuple->userid) {
-                $statistics[$counter]['studentswithaccess'][] = array('userid' => $tuple->userid,
-                        'nome' => $tuple->firstname." ".$tuple->lastname, 'email' => $tuple->email);
+                $statistics[$counter]['studentswithaccess'][] = [
+                    'userid' => $tuple->userid,
+                    'nome' => $tuple->firstname . ' ' . $tuple->lastname,
+                    'email' => $tuple->email,
+                ];
                 $numberofaccesses = 1;
             } else {
                 $numberofaccesses = 0;
@@ -172,11 +184,11 @@ $groupmembers = array_merge($groupmembers, $groupingmembers);
 $groupmembersjson = json_encode($groupmembers);
 $statistics = json_encode($statistics);
 /* Log */
-$event = \block_analytics_graphs\event\block_analytics_graphs_event_view_graph::create(array(
+$event = \block_analytics_graphs\event\block_analytics_graphs_event_view_graph::create([
     'objectid' => $course,
     'context' => $context,
     'other' => "graphresourceurl.php",
-));
+]);
 $event->trigger();
 ?>
 <!--DOCTYPE HTML-->
