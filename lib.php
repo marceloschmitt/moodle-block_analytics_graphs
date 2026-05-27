@@ -191,6 +191,81 @@ function block_analytics_graphs_get_content_access_graph_excluded_modules(): arr
 }
 
 /**
+ * Resolve the top-level section number for a module instance.
+ *
+ * When course formats expose nested sections (e.g. subsections), this climbs
+ * the parent chain and returns the main section number so charts do not show
+ * subsection indices as standalone topics.
+ *
+ * @package    block_analytics_graphs
+ * @param int $course Course id.
+ * @param int $cmid Course module id.
+ * @param int $fallbacksection Section number from SQL fallback.
+ * @return int Top-level section number for display/grouping.
+ */
+function block_analytics_graphs_get_top_level_section_for_cm($course, $cmid, $fallbacksection) {
+    static $cache = [];
+
+    if (!isset($cache[$course])) {
+        $modinfo = get_fast_modinfo($course);
+        $sectionsbynumber = [];
+        $sectionsbyid = [];
+        foreach ($modinfo->get_section_info_all() as $sectioninfo) {
+            $sectionsbynumber[(int)$sectioninfo->section] = $sectioninfo;
+            $sectionsbyid[(int)$sectioninfo->id] = $sectioninfo;
+        }
+        $cache[$course] = [
+            'modinfo' => $modinfo,
+            'sectionsbynumber' => $sectionsbynumber,
+            'sectionsbyid' => $sectionsbyid,
+            'resolvedcmsections' => [],
+        ];
+    }
+
+    if (isset($cache[$course]['resolvedcmsections'][$cmid])) {
+        return $cache[$course]['resolvedcmsections'][$cmid];
+    }
+
+    $modinfo = $cache[$course]['modinfo'];
+    if (!isset($modinfo->cms[$cmid])) {
+        return (int)$fallbacksection;
+    }
+
+    $cm = $modinfo->cms[$cmid];
+    $sectionnum = (int)$fallbacksection;
+    if (isset($cm->sectionnum)) {
+        $sectionnum = (int)$cm->sectionnum;
+    }
+
+    $sectionsbynumber = $cache[$course]['sectionsbynumber'];
+    $sectionsbyid = $cache[$course]['sectionsbyid'];
+
+    if (isset($sectionsbynumber[$sectionnum])) {
+        $current = $sectionsbynumber[$sectionnum];
+    } else if (isset($sectionsbyid[$sectionnum])) {
+        $current = $sectionsbyid[$sectionnum];
+    } else {
+        $cache[$course]['resolvedcmsections'][$cmid] = $sectionnum;
+        return $sectionnum;
+    }
+
+    while (!empty($current->parent)) {
+        $parent = (int)$current->parent;
+        if (isset($sectionsbynumber[$parent])) {
+            $current = $sectionsbynumber[$parent];
+        } else if (isset($sectionsbyid[$parent])) {
+            $current = $sectionsbyid[$parent];
+        } else {
+            break;
+        }
+    }
+
+    $resolved = (int)$current->section;
+    $cache[$course]['resolvedcmsections'][$cmid] = $resolved;
+    return $resolved;
+}
+
+/**
  * List module types used in the course (excluding labels and graph-excluded modules).
  *
  * @package    block_analytics_graphs
@@ -272,9 +347,18 @@ function block_analytics_graphs_get_resource_url_access($course, $estudantes, $r
     foreach ($result as $tuple) {
         $modules = explode(',', $tuple->sequence);
         foreach ($modules as $module) {
+            $moduleid = (int)$module;
+            if ($moduleid <= 0) {
+                continue;
+            }
+
             $record = new stdClass();
-            $record->section = $tuple->section;
-            $record->module = $module;
+            $record->section = block_analytics_graphs_get_top_level_section_for_cm(
+                $course,
+                $moduleid,
+                (int)$tuple->section
+            );
+            $record->module = $moduleid;
             $record->sequence = $sequence++;
             $DB->insert_record('tmp_analytics_graphs', $record, false);
         }
