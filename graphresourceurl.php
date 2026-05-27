@@ -91,6 +91,35 @@ if (count($requestedtypes) < 1) {
 $result = block_analytics_graphs_get_resource_url_access($course, $students, $requestedtypes, $startdate, $hidden);
 $modinfo = get_fast_modinfo($course);
 
+// Build a map: subsection section number => parent section number.
+$sectionrecords = $DB->get_records('course_sections', ['course' => $course], '', 'id,section,component,itemid');
+$sectionnumbyid = [];
+$delegatedsectionnumbyinstance = [];
+foreach ($sectionrecords as $sectionrecord) {
+    $sectionnumbyid[(int)$sectionrecord->id] = (int)$sectionrecord->section;
+    if ($sectionrecord->component === 'mod_subsection' && !empty($sectionrecord->itemid)) {
+        $delegatedsectionnumbyinstance[(int)$sectionrecord->itemid] = (int)$sectionrecord->section;
+    }
+}
+$subsectionparentmap = [];
+$subsectioncmsql = "SELECT cm.instance, cm.section
+                      FROM {course_modules} cm
+                      JOIN {modules} m ON m.id = cm.module
+                     WHERE cm.course = ? AND m.name = ?";
+$subsectioncms = $DB->get_records_sql($subsectioncmsql, [$course, 'subsection']);
+foreach ($subsectioncms as $subsectioncm) {
+    $instanceid = (int)$subsectioncm->instance;
+    if (!isset($delegatedsectionnumbyinstance[$instanceid])) {
+        continue;
+    }
+    $childsectionnum = $delegatedsectionnumbyinstance[$instanceid];
+    $parentsectionid = (int)$subsectioncm->section;
+    if (!isset($sectionnumbyid[$parentsectionid])) {
+        continue;
+    }
+    $subsectionparentmap[$childsectionnum] = $sectionnumbyid[$parentsectionid];
+}
+
 $numberofresources = count($result);
 if ($numberofresources == 0) {
     echo "<html style=\"background-color: #f4f4f4;\">";
@@ -106,10 +135,23 @@ $counter = 0;
 $numberofaccesses = 0;
 $resourceid = 0;
 $numberofresourcesintopic = [];
+$topicolabel = 0;
+$topicmap = [];
+$topicnames = [];
 foreach ($result as $tuple) {
+    $displaysection = $subsectionparentmap[(int)$tuple->section] ?? (int)$tuple->section;
     if ($resourceid == 0) { /* First time in loop -> get topic and content name */
-        $numberofresourcesintopic[$tuple->section] = 1;
-        $statistics[$counter]['topico'] = $tuple->section;
+        if (!isset($topicmap[$displaysection])) {
+            $topicmap[$displaysection] = ++$topicolabel;
+        }
+        $currentlabel = $topicmap[$displaysection];
+        if (!isset($topicnames[$currentlabel])) {
+            $topicnames[$currentlabel] = get_section_name($courseparams, $displaysection);
+        }
+        $numberofresourcesintopic[$currentlabel] = 1;
+        $statistics[$counter]['topico'] = $displaysection;
+        $statistics[$counter]['topicooriginal'] = $tuple->section;
+        $statistics[$counter]['topicolabel'] = $currentlabel;
         $statistics[$counter]['tipo'] = $tuple->tipo;
         $cm = $modinfo->get_cm($tuple->cmid);
         $statistics[$counter]['material'] = $cm->name;
@@ -135,10 +177,17 @@ foreach ($result as $tuple) {
         }
         if ($resourceid != $tuple->ident) {
             // If new resource, finish previous and create new.
-            if ($statistics[$counter]['topico'] == $tuple->section) {
-                $numberofresourcesintopic[$tuple->section]++;
+            if (!isset($topicmap[$displaysection])) {
+                $topicmap[$displaysection] = ++$topicolabel;
+            }
+            $currentlabel = $topicmap[$displaysection];
+            if (!isset($topicnames[$currentlabel])) {
+                $topicnames[$currentlabel] = get_section_name($courseparams, $displaysection);
+            }
+            if ($statistics[$counter]['topicolabel'] == $currentlabel) {
+                $numberofresourcesintopic[$currentlabel]++;
             } else {
-                $numberofresourcesintopic[$tuple->section] = 1;
+                $numberofresourcesintopic[$currentlabel] = 1;
             }
             $statistics[$counter]['numberofaccesses'] = $numberofaccesses;
             $statistics[$counter]['numberofnoaccess'] = $numberofstudents - $numberofaccesses;
@@ -149,7 +198,9 @@ foreach ($result as $tuple) {
                                                                 $statistics[$counter]['studentswithaccess']);
             }
             $counter++;
-            $statistics[$counter]['topico'] = $tuple->section;
+            $statistics[$counter]['topico'] = $displaysection;
+            $statistics[$counter]['topicooriginal'] = $tuple->section;
+            $statistics[$counter]['topicolabel'] = $currentlabel;
             $statistics[$counter]['tipo'] = $tuple->tipo;
             $resourceid = $tuple->ident;
             $cm = $modinfo->get_cm($tuple->cmid);
@@ -208,6 +259,13 @@ $event->trigger();
         <style>
             .ui-dialog {
                 position: fixed;
+            }
+            .analytics-topic-label {
+                background: #ffffff;
+                padding: 0 6px;
+                border-radius: 3px;
+                font-weight: bold;
+                font-size: 13px;
             }
         </style>
 
@@ -310,16 +368,20 @@ $inicio = -0.5;
 $par = 2;
 foreach ($numberofresourcesintopic as $topico => $numberoftopics) {
     $fim = $inicio + $numberoftopics;
+    $topictitle = $topicnames[$topico] ?? (get_string('topic', 'block_analytics_graphs') . ' ' . $topico);
+    $topichtml = '<span class="analytics-topic-label">' . s($topictitle) . '</span>';
 ?>
                     {
                          color: ' <?php echo ($par % 2 ? 'rgba(0, 0, 0, 0)' : 'rgba(68, 170, 213, 0.1)'); ?>',
                          label: {
-                            align: 'right',
-                            x: -10,
-                            verticalAlign: 'middle' ,
-                            text: '<?php echo get_string('topic', 'block_analytics_graphs') . " " . $topico; ?>',
+                            useHTML: true,
+                            align: 'left',
+                            x: 0,
+                            y: 8,
+                            verticalAlign: 'top',
+                            text: <?php echo json_encode($topichtml); ?>,
                             style: {
-                            fontStyle: 'italic',
+                            textOutline: 'none',
                                    }
                           },
                           from: '<?php echo $inicio;?>', // Start of the plot band
@@ -432,7 +494,7 @@ foreach ($numberofresourcesintopic as $topico => $numberoftopics) {
             <?php
         }
         ?>
-        <div id="container" style="min-width: 800px; height:<?php echo ($counter + 1) * 50 + 180;?>; margin: 0 auto"></div>
+        <div id="container" style="min-width: 800px; height:<?php echo ($counter + 1) * 54 + 180;?>; margin: 0 auto"></div>
         <script>
             $.each(geral, function(index, value) {
                 var nome = value.material;

@@ -191,81 +191,6 @@ function block_analytics_graphs_get_content_access_graph_excluded_modules(): arr
 }
 
 /**
- * Resolve the top-level section number for a module instance.
- *
- * When course formats expose nested sections (e.g. subsections), this climbs
- * the parent chain and returns the main section number so charts do not show
- * subsection indices as standalone topics.
- *
- * @package    block_analytics_graphs
- * @param int $course Course id.
- * @param int $cmid Course module id.
- * @param int $fallbacksection Section number from SQL fallback.
- * @return int Top-level section number for display/grouping.
- */
-function block_analytics_graphs_get_top_level_section_for_cm($course, $cmid, $fallbacksection) {
-    static $cache = [];
-
-    if (!isset($cache[$course])) {
-        $modinfo = get_fast_modinfo($course);
-        $sectionsbynumber = [];
-        $sectionsbyid = [];
-        foreach ($modinfo->get_section_info_all() as $sectioninfo) {
-            $sectionsbynumber[(int)$sectioninfo->section] = $sectioninfo;
-            $sectionsbyid[(int)$sectioninfo->id] = $sectioninfo;
-        }
-        $cache[$course] = [
-            'modinfo' => $modinfo,
-            'sectionsbynumber' => $sectionsbynumber,
-            'sectionsbyid' => $sectionsbyid,
-            'resolvedcmsections' => [],
-        ];
-    }
-
-    if (isset($cache[$course]['resolvedcmsections'][$cmid])) {
-        return $cache[$course]['resolvedcmsections'][$cmid];
-    }
-
-    $modinfo = $cache[$course]['modinfo'];
-    if (!isset($modinfo->cms[$cmid])) {
-        return (int)$fallbacksection;
-    }
-
-    $cm = $modinfo->cms[$cmid];
-    $sectionnum = (int)$fallbacksection;
-    if (isset($cm->sectionnum)) {
-        $sectionnum = (int)$cm->sectionnum;
-    }
-
-    $sectionsbynumber = $cache[$course]['sectionsbynumber'];
-    $sectionsbyid = $cache[$course]['sectionsbyid'];
-
-    if (isset($sectionsbynumber[$sectionnum])) {
-        $current = $sectionsbynumber[$sectionnum];
-    } else if (isset($sectionsbyid[$sectionnum])) {
-        $current = $sectionsbyid[$sectionnum];
-    } else {
-        $cache[$course]['resolvedcmsections'][$cmid] = $sectionnum;
-        return $sectionnum;
-    }
-
-    while (!empty($current->parent)) {
-        $parent = (int)$current->parent;
-        if (isset($sectionsbynumber[$parent])) {
-            $current = $sectionsbynumber[$parent];
-        } else if (isset($sectionsbyid[$parent])) {
-            $current = $sectionsbyid[$parent];
-        } else {
-            break;
-        }
-    }
-
-    $resolved = (int)$current->section;
-    $cache[$course]['resolvedcmsections'][$cmid] = $resolved;
-    return $resolved;
-}
-
-/**
  * List module types used in the course (excluding labels and graph-excluded modules).
  *
  * @package    block_analytics_graphs
@@ -329,11 +254,11 @@ function block_analytics_graphs_get_resource_url_access($course, $estudantes, $r
 
     /* Temp table to order */
     $params = [$course];
-    $sql = "SELECT id, section, sequence
+    $sql = "SELECT id, section, sequence, component, itemid
             FROM {course_sections}
             WHERE course  = ? AND sequence <> ''
             ORDER BY section";
-    $result = $DB->get_records_sql($sql, $params);
+    $sections = $DB->get_records_sql($sql, $params);
 
     $dbman = $DB->get_manager();
     $table = new xmldb_table('tmp_analytics_graphs');
@@ -344,24 +269,67 @@ function block_analytics_graphs_get_resource_url_access($course, $estudantes, $r
     $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
     $dbman->create_temp_table($table);
     $sequence = 0;
-    foreach ($result as $tuple) {
-        $modules = explode(',', $tuple->sequence);
+
+    $cmsql = "SELECT cm.id, cm.instance, m.name
+              FROM {course_modules} cm
+              JOIN {modules} m ON m.id = cm.module
+              WHERE cm.course = ?";
+    $cmrecords = $DB->get_records_sql($cmsql, [$course]);
+    $cmsbyid = [];
+    foreach ($cmrecords as $cmrecord) {
+        $cmsbyid[$cmrecord->id] = $cmrecord;
+    }
+
+    $delegatedsectionsbyinstance = [];
+    foreach ($sections as $sectionrecord) {
+        if ($sectionrecord->component === 'mod_subsection' && !empty($sectionrecord->itemid)) {
+            $delegatedsectionsbyinstance[(int)$sectionrecord->itemid] = $sectionrecord;
+        }
+    }
+
+    $visitedsections = [];
+    $insertsectionmodules = function($sectionrecord) use (
+        &$insertsectionmodules,
+        &$visitedsections,
+        &$sequence,
+        $DB,
+        $cmsbyid,
+        $delegatedsectionsbyinstance
+    ) {
+        if (isset($visitedsections[$sectionrecord->id])) {
+            return;
+        }
+        $visitedsections[$sectionrecord->id] = true;
+
+        $modules = explode(',', $sectionrecord->sequence);
         foreach ($modules as $module) {
-            $moduleid = (int)$module;
-            if ($moduleid <= 0) {
+            if ($module === '') {
                 continue;
             }
-
             $record = new stdClass();
-            $record->section = block_analytics_graphs_get_top_level_section_for_cm(
-                $course,
-                $moduleid,
-                (int)$tuple->section
-            );
-            $record->module = $moduleid;
+            $record->section = $sectionrecord->section;
+            $record->module = $module;
             $record->sequence = $sequence++;
             $DB->insert_record('tmp_analytics_graphs', $record, false);
+
+            if (!isset($cmsbyid[$module])) {
+                continue;
+            }
+            $cmrecord = $cmsbyid[$module];
+            if ($cmrecord->name === 'subsection') {
+                $instanceid = (int)$cmrecord->instance;
+                if (isset($delegatedsectionsbyinstance[$instanceid])) {
+                    $insertsectionmodules($delegatedsectionsbyinstance[$instanceid]);
+                }
+            }
         }
+    };
+
+    foreach ($sections as $sectionrecord) {
+        if (!empty($sectionrecord->component)) {
+            continue;
+        }
+        $insertsectionmodules($sectionrecord);
     }
 
     $params = array_merge([$startdate], $inparams, $requestedmodules);
