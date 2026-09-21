@@ -30,6 +30,7 @@ $string['access_to_contents'] = '内容访问统计';
 $string['add_all'] = '全部添加';
 $string['add_task'] = '添加到图表';
 $string['all_groups'] = 'All groups';
+$string['group_filter'] = '按组筛选';
 $string['analytics_graphs'] = '分析图';
 $string['analytics_graphs:addinstance'] = '添加一个分析图版块';
 $string['analytics_graphs:bemonitored'] = '记录课程中用户的行为';

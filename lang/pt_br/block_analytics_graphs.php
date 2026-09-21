@@ -33,6 +33,7 @@ $string['analytics_graphs'] = 'Analytics Graphs';
 $string['access'] = 'Acessaram';
 $string['access_to_contents'] = 'Materiais acessados';
 $string['all_groups'] = 'Todos os grupos';
+$string['group_filter'] = 'Filtrar por grupo';
 $string['begin_date'] = 'Data de início';
 $string['contents'] = 'Material';
 $string['course'] = 'Disciplina';

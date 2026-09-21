@@ -190,8 +190,9 @@ $daysaccess = json_encode($daysaccess);
 
 <div style="width: 300px; min-width: 325px; height: 65px;left:10px; top:5px; border-radius: 0px;padding: 5px;
     border: 2px solid silver;text-align: center;">
-    <?php echo get_string('timeaccesschart_daysforstatistics', 'block_analytics_graphs'); ?>
-    <input style="width: 50px;" id = "days" type="number" name="days" min="1" max="<?php echo $maximumdays; ?>"
+    <?php echo '<label for="days">' . get_string('timeaccesschart_daysforstatistics', 'block_analytics_graphs') .
+        '</label>'; ?>
+    <input style="width: 50px;" id="days" type="number" name="days" min="1" max="<?php echo $maximumdays; ?>"
         value="<?php echo $days ?>">
     <br>
     <button style="width: 225px;" id="apply"><?php echo get_string('timeaccesschart_button_apply', 'block_analytics_graphs');

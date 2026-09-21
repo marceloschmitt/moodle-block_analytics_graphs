@@ -84,6 +84,10 @@ function createEmailForm(titulo, alunos, courseid, other, subject) {
                         ids.push(val.userid);
                         email.push(val.email);
                 });
+                var uid = 'ag-email-' + Date.now() + '-' + Math.floor(Math.random() * 100000);
+                var idsubject = uid + '-subject';
+                var idtexto = uid + '-texto';
+                var idcc = uid + '-ccteachers';
                 var string =
             "<h3>" + titulo + "</h3>" +  
             "<p style='font-size:small'>" + nomes + "</p>" +
@@ -91,12 +95,15 @@ function createEmailForm(titulo, alunos, courseid, other, subject) {
                         "<input type='hidden' name='other' value='" + other + "'>" +
                         "<input type='hidden' name='ids[]' value='" + ids + "'>" +
                         "<center>" +
-                        "<p style='font-size:small'><?php echo get_string('subject', 'block_analytics_graphs');?>: " +
-                        "<input type='text' name='subject' value='" + subject +"'></p>" +
-                        "<textarea style='font-size:small' cols='100' rows='6' name='texto' ></textarea>" +
+                        "<p style='font-size:small'>" +
+                        "<label for='" + idsubject + "'><?php echo get_string('subject', 'block_analytics_graphs');?></label>: " +
+                        "<input type='text' id='" + idsubject + "' name='subject' value='" + subject +"'></p>" +
+                        "<p style='font-size:small'>" +
+                        "<label for='" + idtexto + "'><?php echo get_string('message_text', 'block_analytics_graphs');?></label></p>" +
+                        "<textarea style='font-size:small' cols='100' rows='6' id='" + idtexto + "' name='texto'></textarea>" +
                         "<br>" +
-                        "<input type='checkbox' name='ccteachers' checked>" +
-                        "<?php echo get_string('lbl_ccteachers', 'block_analytics_graphs');?>" +
+                        "<input type='checkbox' id='" + idcc + "' name='ccteachers' checked>" +
+                        "<label for='" + idcc + "'><?php echo get_string('lbl_ccteachers', 'block_analytics_graphs');?></label>" +
                         "<br>" +
                         "<input type='submit' " +
             "value='<?php echo get_string('send_email', 'block_analytics_graphs');?>' " +

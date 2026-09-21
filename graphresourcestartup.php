@@ -47,7 +47,7 @@ foreach (block_analytics_graphs_get_course_used_modules($course) as $result) {
 
 <script>
     function checkUncheck(setTo) {
-        var c = document.getElementsByTagName('input');
+        var c = document.getElementsByClassName('selectable');
         for (var i = 0; i < c.length; i++) {
             if (c[i].type == 'checkbox') {
                 c[i].checked = setTo;
@@ -94,10 +94,11 @@ foreach (block_analytics_graphs_get_course_used_modules($course) as $result) {
 
             echo "<h4 style='margin-bottom: 3px'>" . get_string('options', 'block_analytics_graphs') . ":</h4>";
 
-            echo get_string('startfrom', 'block_analytics_graphs') . ": <input type=\"date\" name=\"from\"
-                value=\"$startdate\"><br>";
+            echo "<label for=\"ag-startup-from\">" . get_string('startfrom', 'block_analytics_graphs') .
+                "</label>: <input type=\"date\" id=\"ag-startup-from\" name=\"from\" value=\"$startdate\"><br>";
 
-            echo "<input type=\"checkbox\" name=\"hidden\" value=\"true\">" . get_string('displayhidden', 'block_analytics_graphs');
+            echo "<input type=\"checkbox\" id=\"ag-startup-hidden\" name=\"hidden\" value=\"true\">" .
+                "<label for=\"ag-startup-hidden\">" . get_string('displayhidden', 'block_analytics_graphs') . "</label>";
             ?>
     </div>
     <?php

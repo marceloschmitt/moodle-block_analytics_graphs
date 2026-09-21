@@ -95,6 +95,7 @@ $string['typename_url'] = 'URL';
 $string['access'] = 'Access';
 $string['access_to_contents'] = 'Content accesses';
 $string['all_groups'] = 'Show all groups';
+$string['group_filter'] = 'Filter by group';
 $string['begin_date'] = 'Begin date';
 $string['contents'] = 'Contents';
 $string['course'] = 'Course';

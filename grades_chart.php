@@ -177,6 +177,7 @@ $groupmembersjson = json_encode($groupmembers);
     <body>
         <?php if (count($groupmembers) > 0) : ?>
             <div style="margin: 20px;">
+                <label for="group_select"><?php echo get_string('group_filter', 'block_analytics_graphs'); ?></label>
                 <select id="group_select">
                     <option value="-">
                         <?php echo json_encode(get_string('all_groups', 'block_analytics_graphs')); ?>

@@ -170,7 +170,9 @@ function block_analytics_graphs_generate_graph_startup_module_entry($iconhtml, $
                 "<div style='display: table;'>" .
                 $iconhtml .
                 "<div style='display: table-cell; vertical-align: middle;'>" .
-                "<input type='checkbox' id='selectable' name='" . $name . "' value='" . $value . "'>" . $title . "</div>" .
+                "<input type='checkbox' class='selectable' id='ag-mod-" . s($value) . "' name='" . $name .
+                "' value='" . $value . "'>" .
+                "<label for='ag-mod-" . s($value) . "'>" . $title . "</label></div>" .
                 "</div></div>";
 }
 
