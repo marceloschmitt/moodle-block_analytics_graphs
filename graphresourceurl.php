@@ -495,7 +495,7 @@ foreach ($numberofresourcesintopic as $topico => $numberoftopics) {
             <?php
         }
         ?>
-        <div id="container" style="min-width: 800px; height:<?php echo ($counter + 1) * 54 + 180;?>; margin: 0 auto"></div>
+        <div id="container" style="min-width: 800px; height:<?php echo ($counter + 1) * 54 + 180;?>px; margin: 0 auto"></div>
         <script>
             $.each(geral, function(index, value) {
                 var nome = value.material;
