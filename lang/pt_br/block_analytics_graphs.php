@@ -119,4 +119,13 @@ $string['startfrom'] = "Iniciar em";
 
 // Privacy.
 $string['privacy:metadata'] = 'O bloco Analytics Graphs mostra apenas dados já existentes no moodle.';
+$string['privacy:metadata:block_analytics_graphs_msg'] = 'Informações sobre as mensagens enviadas aos estudantes.';
+$string['privacy:metadata:block_analytics_graphs_msg:fromid'] = 'O ID do utilizador que enviou a mensagem.';
+$string['privacy:metadata:block_analytics_graphs_msg:subject'] = 'Assunto da mensagem.';
+$string['privacy:metadata:block_analytics_graphs_msg:message'] = 'Conteúdo da mensagem.';
+$string['privacy:metadata:block_analytics_graphs_msg:courseid'] = 'O ID do curso em que a mensagem foi enviada.';
+$string['privacy:metadata:block_analytics_graphs_msg:timecreated'] = 'A data e hora em que a mensagem foi enviada.';
+$string['privacy:metadata:block_analytics_graphs_dest'] = 'Informações sobre os estudantes que receberam mensagens.';
+$string['privacy:metadata:block_analytics_graphs_dest:toid'] = 'O ID do utilizador para quem a mensagem foi enviada.';
+$string['privacy:metadata:block_analytics_graphs_dest:messageid'] = 'O ID da mensagem.';
 

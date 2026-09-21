@@ -178,3 +178,14 @@ $string['typename_workshop'] = '互动评价';
 $string['under_development'] = '开发中……敬请期待下个版本！';
 $string['week_number'] = '周次';
 $string['yellow_tooltip'] = '至今为止未访问过';
+
+// Privacy.
+$string['privacy:metadata:block_analytics_graphs_msg'] = '发送给学生的消息信息。';
+$string['privacy:metadata:block_analytics_graphs_msg:fromid'] = '发送消息的用户 ID。';
+$string['privacy:metadata:block_analytics_graphs_msg:subject'] = '消息主题。';
+$string['privacy:metadata:block_analytics_graphs_msg:message'] = '消息内容。';
+$string['privacy:metadata:block_analytics_graphs_msg:courseid'] = '发送消息所在课程的 ID。';
+$string['privacy:metadata:block_analytics_graphs_msg:timecreated'] = '消息发送的时间。';
+$string['privacy:metadata:block_analytics_graphs_dest'] = '收到消息的学生信息。';
+$string['privacy:metadata:block_analytics_graphs_dest:toid'] = '消息接收者的用户 ID。';
+$string['privacy:metadata:block_analytics_graphs_dest:messageid'] = '消息 ID。';

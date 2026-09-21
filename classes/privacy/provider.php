@@ -30,6 +30,7 @@ use core_privacy\local\request\approved_userlist;
 use core_privacy\local\request\writer;
 use core_privacy\local\request\contextlist;
 use core_privacy\local\request\userlist;
+use core_privacy\local\request\transform;
 
 /**
  * Privacy subsystem implementation for the analytics graphs block.
@@ -53,6 +54,9 @@ class provider implements \core_privacy\local\metadata\provider,
             [
                 'fromid' => 'privacy:metadata:block_analytics_graphs_msg:fromid',
                 'subject' => 'privacy:metadata:block_analytics_graphs_msg:subject',
+                'message' => 'privacy:metadata:block_analytics_graphs_msg:message',
+                'courseid' => 'privacy:metadata:block_analytics_graphs_msg:courseid',
+                'timecreated' => 'privacy:metadata:block_analytics_graphs_msg:timecreated',
             ],
             'privacy:metadata:block_analytics_graphs_msg'
         );
@@ -163,13 +167,16 @@ class provider implements \core_privacy\local\metadata\provider,
                     $data = (object) [
                         'fromid' => $message->fromid,
                         'subject' => $message->subject,
+                        'message' => $message->message,
+                        'courseid' => $message->courseid,
+                        'timecreated' => transform::datetime($message->timecreated),
                     ];
 
                     writer::with_context($context)->export_data($subcontext, $data);
                 }
 
-                // Destinations.
-                $sql = "SELECT agd.toid, agd.messageid
+                // Destinations (messages received by the user).
+                $sql = "SELECT agd.id, agd.toid, agd.messageid, agm.subject, agm.message, agm.timecreated, agm.fromid
                           FROM {block_analytics_graphs_dest} agd
                     INNER JOIN {block_analytics_graphs_msg} agm ON agd.messageid = agm.id
                          WHERE agm.courseid = :courseid AND agd.toid = :userid";
@@ -191,6 +198,10 @@ class provider implements \core_privacy\local\metadata\provider,
                     $data = (object) [
                         'toid' => $message->toid,
                         'messageid' => $message->messageid,
+                        'fromid' => $message->fromid,
+                        'subject' => $message->subject,
+                        'message' => $message->message,
+                        'timecreated' => transform::datetime($message->timecreated),
                     ];
 
                     writer::with_context($context)->export_data($subcontext, $data);
