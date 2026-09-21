@@ -44,26 +44,29 @@ foreach (block_analytics_graphs_get_course_used_modules($course) as $result) {
 }
 
 ?>
-
-<script>
-    function checkUncheck(setTo) {
-        var c = document.getElementsByClassName('selectable');
-        for (var i = 0; i < c.length; i++) {
-            if (c[i].type == 'checkbox') {
-                c[i].checked = setTo;
+<!DOCTYPE html>
+<html style="background-color: #f4f4f4;">
+<head>
+    <meta charset="utf-8">
+    <title><?php echo get_string('access_graph', 'block_analytics_graphs'); ?></title>
+    <script>
+        function checkUncheck(setTo) {
+            var c = document.getElementsByClassName('selectable');
+            for (var i = 0; i < c.length; i++) {
+                if (c[i].type == 'checkbox') {
+                    c[i].checked = setTo;
+                }
             }
         }
-    }
-</script>
-
- <style>
-    .my_text {
-        font-family: Arial, Helvetica, sans-serif;
-        font-size: 12px;
-    }
-</style>
-
-<html style="background-color: #f4f4f4;">
+    </script>
+    <style>
+        .my_text {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
 <div class = "my_text" style="width: 250px;height: 80%;position:absolute;left:0; right:0;top:0;
     bottom:0;margin:auto;max-width:100%;max-height:100%;
     overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2px solid darkgray;text-align: center;">
@@ -110,4 +113,5 @@ foreach (block_analytics_graphs_get_course_used_modules($course) as $result) {
     ?>
     </form>
 </div>
+</body>
 </html>
