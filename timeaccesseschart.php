@@ -26,7 +26,6 @@
 
 require('../../config.php');
 require_once('lib.php');
-require('javascriptfunctions.php');
 $course = required_param('id', PARAM_INT);
 $days = required_param('days', PARAM_INT);
 global $DB;
@@ -67,7 +66,7 @@ $daysaccess = json_encode($daysaccess);
 
 
 ?>
-
+<!DOCTYPE html>
 <html>
 <head>
 
@@ -81,6 +80,7 @@ $daysaccess = json_encode($daysaccess);
     <script src="externalref/no-data-to-display.js"></script>
     <script src="externalref/exporting.js"></script>
     <script src="externalref/export-csv-master/export-csv.js"></script>
+    <?php require('javascriptfunctions.php'); ?>
 
     <style>
         div.res_query {

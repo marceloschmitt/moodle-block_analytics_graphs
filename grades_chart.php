@@ -26,7 +26,6 @@
 
 require_once("../../config.php");
 require("lib.php");
-require('javascriptfunctions.php');
 global $DB;
 require_once($CFG->dirroot.'/lib/moodlelib.php');
 
@@ -58,7 +57,7 @@ $result = $DB->get_records_sql($sql, [$courseid]);
 $groupmembers = block_analytics_graphs_get_course_group_members($COURSE);
 $groupmembersjson = json_encode($groupmembers);
 ?>
-
+<!DOCTYPE html>
 <html>
     <head>
         <meta charset=utf-8>
@@ -74,6 +73,7 @@ $groupmembersjson = json_encode($groupmembers);
         <script src="externalref/export-csv-master/export-csv.js"></script>
         <script src="highslide/highslide-full.min.js"></script>
         <link rel="stylesheet" type="text/css" href="highslide/highslide.css" />
+        <?php require('javascriptfunctions.php'); ?>
         <style>
             body {
                 height: 90%;

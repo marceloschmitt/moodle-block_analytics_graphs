@@ -26,7 +26,6 @@
 
 require('../../config.php');
 require_once('lib.php');
-require('javascriptfunctions.php');
 $course = htmlspecialchars(required_param('id', PARAM_INT));
 $startdate = optional_param('from', '***', PARAM_TEXT);
 $hidden = optional_param('hidden', false, PARAM_TEXT);
@@ -242,7 +241,7 @@ $event = \block_analytics_graphs\event\block_analytics_graphs_event_view_graph::
 ]);
 $event->trigger();
 ?>
-<!--DOCTYPE HTML-->
+<!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -255,6 +254,7 @@ $event->trigger();
         <script src="externalref/no-data-to-display.js"></script>
         <script src="externalref/exporting.js"></script>
         <script src="externalref/export-csv-master/export-csv.js"></script>
+        <?php require('javascriptfunctions.php'); ?>
 
         <style>
             .ui-dialog {

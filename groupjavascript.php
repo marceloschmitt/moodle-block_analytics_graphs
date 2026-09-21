@@ -26,7 +26,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 ?>
-<!--DOCTYPE HTML-->
+<!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -39,6 +39,7 @@ defined('MOODLE_INTERNAL') || die();
         <script src="externalref/no-data-to-display.js"></script>
         <script src="externalref/exporting.js"></script>
         <script src="externalref/export-csv-master/export-csv.js"></script>
+        <?php require('javascriptfunctions.php'); ?>
 
 
         <script type="text/javascript">
