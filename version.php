@@ -23,9 +23,9 @@
  */
 
 defined('MOODLE_INTERNAL') || die();
-$plugin->version = 2026052803;  // YYYYMMDDHH (year, month, day, 24-hr time).
+$plugin->version = 2026092100;  // YYYYMMDDHH (year, month, day, 24-hr time).
 $plugin->requires = 2015111600; // YYYYMMDDHH (This is the release version for Moodle 3.0).
 $plugin->maturity = MATURITY_STABLE;
-$plugin->release = '4.2.4';
-$plugin->branch = '4.2';
+$plugin->release = '4.2.1';
+$plugin->branch = '4.3';
 $plugin->component = 'block_analytics_graphs';
