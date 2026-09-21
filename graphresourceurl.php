@@ -78,9 +78,9 @@ $requestedtypes = array_values(
 
 if (count($requestedtypes) < 1) {
     echo "<html style=\"background-color: #f4f4f4;\">";
-    echo "<div style=\"width: 200px;height: 100px;position:absolute;left:0; right:0;top:0;
+    echo "<div style=\"width: 12.5rem;height: 6.25rem;position:absolute;left:0; right:0;top:0;
         bottom:0;margin:auto;max-width:100%;max-height:100%;
-        overflow:auto;background-color: white;border-radius: 25px;padding: 20px;border: 2px solid darkgray;text-align: center;\">";
+        overflow:auto;background-color: white;border-radius: 1.5625rem;padding: 1.25rem;border: 2px solid darkgray;text-align: center;\">";
     echo "<h3>" . (get_string('no_types_requested', 'block_analytics_graphs')) . "</h3>";
     echo "</div>";
     echo "</html>";
@@ -122,9 +122,9 @@ foreach ($subsectioncms as $subsectioncm) {
 $numberofresources = count($result);
 if ($numberofresources == 0) {
     echo "<html style=\"background-color: #f4f4f4;\">";
-    echo "<div style=\"width: 200px;height: 100px;position:absolute;left:0; right:0;top:0;
+    echo "<div style=\"width: 12.5rem;height: 6.25rem;position:absolute;left:0; right:0;top:0;
         bottom:0;margin:auto;max-width:100%;max-height:100%;
-        overflow:auto;background-color: white;border-radius: 25px;padding: 20px;border: 2px solid darkgray;text-align: center;\">";
+        overflow:auto;background-color: white;border-radius: 1.5625rem;padding: 1.25rem;border: 2px solid darkgray;text-align: center;\">";
     echo "<h3>" . (get_string('no_graph', 'block_analytics_graphs')) . "</h3>";
     echo "</div>";
     echo "</html>";
@@ -262,10 +262,10 @@ $event->trigger();
             }
             .analytics-topic-label {
                 background: #ffffff;
-                padding: 0 6px;
-                border-radius: 3px;
+                padding: 0 0.375rem;
+                border-radius: 0.1875rem;
                 font-weight: bold;
-                font-size: 13px;
+                font-size: 0.8125rem;
             }
         </style>
 
@@ -479,7 +479,7 @@ foreach ($numberofresourcesintopic as $topico => $numberoftopics) {
     </head>
     <body>
         <?php if (count($groupmembers) > 0) { ?>
-        <div style="margin: 20px;">
+        <div style="margin: 1.25rem;">
             <label for="group_select"><?php echo get_string('group_filter', 'block_analytics_graphs'); ?></label>
             <select id="group_select">
                 <option value="-"><?php  echo json_encode(get_string('all_groups', 'block_analytics_graphs'));?></option>
@@ -495,7 +495,7 @@ foreach ($numberofresourcesintopic as $topico => $numberoftopics) {
             <?php
         }
         ?>
-        <div id="container" style="min-width: 800px; height:<?php echo ($counter + 1) * 54 + 180;?>px; margin: 0 auto"></div>
+        <div id="container" style="min-width: 50rem; height:<?php echo (($counter + 1) * 54 + 180) / 16;?>rem; margin: 0 auto"></div>
         <script>
             $.each(geral, function(index, value) {
                 var nome = value.material;

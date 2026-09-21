@@ -107,7 +107,7 @@ $daysaccess = json_encode($daysaccess);
         }
         div.student_panel{
             font-size: 0.85em;
-            min-height: 450px;
+            min-height: 28.125rem;
             margin-left: auto;
             margin-right: auto;
         }
@@ -118,26 +118,26 @@ $daysaccess = json_encode($daysaccess);
             font-size: 0.85em;
         }
         .image-exclamation {
-            width: 25px;
-            height: 20px;
+            width: 1.5625rem;
+            height: 1.25rem;
             vertical-align: middle;
             visibility: hidden;
         }
         .warnings {
             float: right;
             align: right;
-            margin-left: 10px;
+            margin-left: 0.625rem;
             display: inline-flex;
             flex-direction: row;
             justify-content: space-around;
-            width: 55px;
+            width: 3.4375rem;
         }
         .warning1, .warning2 {
-            width: 25px;
+            width: 1.5625rem;
         }
         .warning1 {
             order: 1;
-            margin-right: 5px;
+            margin-right: 0.3125rem;
         }
         .warning2 {
             order: 2;
@@ -147,11 +147,11 @@ $daysaccess = json_encode($daysaccess);
             text-align: left;
         }
         td, th {
-            padding: 5px;
+            padding: 0.3125rem;
             border-top: 1px solid silver;
             border-bottom: 1px solid silver;
             border-right: 1px solid silver;
-            height: 60px;
+            height: 3.75rem;
         }
         thead th {
             border-top: 2px solid gray;
@@ -166,10 +166,10 @@ $daysaccess = json_encode($daysaccess);
         .highcharts-tooltip>span {
             background: white;
             border: 1px solid silver;
-            border-radius: 3px;
+            border-radius: 0.1875rem;
             box-shadow: 1px 1px 2px #888;
-            padding: 8px;
-            max-height: 250px;
+            padding: 0.5rem;
+            max-height: 15.625rem;
             width: auto;
             overflow: auto;
         }
@@ -177,35 +177,35 @@ $daysaccess = json_encode($daysaccess);
             position: relative;
             z-index: 50;
             border: 2px solid rgb(0, 108, 169);
-            border-radius: 5px;
+            border-radius: 0.3125rem;
             background-color: #ffffff;
-            padding: 5px;
+            padding: 0.3125rem;
             font-size: 9pt;
             overflow: auto;
-            height: 200px;
+            height: 12.5rem;
         }
     </style>
 
 </head>
 
-<div style="width: 300px; min-width: 325px; height: 65px;left:10px; top:5px; border-radius: 0px;padding: 5px;
+<div style="width: 18.75rem; min-width: 20.3125rem; height: 4.0625rem;left:0.625rem; top:0.3125rem; border-radius: 0;padding: 0.3125rem;
     border: 2px solid silver;text-align: center;">
     <?php echo '<label for="days">' . get_string('timeaccesschart_daysforstatistics', 'block_analytics_graphs') .
         '</label>'; ?>
-    <input style="width: 50px;" id="days" type="number" name="days" min="1" max="<?php echo $maximumdays; ?>"
+    <input style="width: 3.125rem;" id="days" type="number" name="days" min="1" max="<?php echo $maximumdays; ?>"
         value="<?php echo $days ?>">
     <br>
-    <button style="width: 225px;" id="apply"><?php echo get_string('timeaccesschart_button_apply', 'block_analytics_graphs');
+    <button style="width: 14.0625rem;" id="apply"><?php echo get_string('timeaccesschart_button_apply', 'block_analytics_graphs');
         ?></button>
     <br>
     <?php echo get_string('timeaccesschart_maxdays', 'block_analytics_graphs') . "<b>" . $maximumdays . "</b>"; ?>
 </div>
 
-<div id="containerA" style="min-width: 300px; height: 400px; margin: 0 auto"></div>
+<div id="containerA" style="min-width: 18.75rem; height: 25rem; margin: 0 auto"></div>
 <br>
 <hr/>
 <br>
-<div id="containerB" style="min-width: 300px; height: 400px; margin: 0 auto"></div>
+<div id="containerB" style="min-width: 18.75rem; height: 25rem; margin: 0 auto"></div>
 
 <script type="text/javascript">
     var data = <?php echo $daysaccess; ?>;
@@ -293,7 +293,7 @@ $daysaccess = json_encode($daysaccess);
                 var hourend = hour * 10000 + 9999;
                 var countedIds = [];
 
-                var tooltipStr = "<span style='font-size: 13px'><b>" +
+                var tooltipStr = "<span style='font-size: 0.8125rem'><b>" +
                     this.point.name +
                     "</b></span>:<br>";
 
@@ -407,7 +407,7 @@ $daysaccess = json_encode($daysaccess);
                 var hourbegin = hour * 10000;
                 var hourend = hour * 10000 + 9999;
 
-                var tooltipStr = "<span style='font-size: 13px'><b>" +
+                var tooltipStr = "<span style='font-size: 0.8125rem'><b>" +
                     this.point.name +
                     "</b></span>:<br>";
 

@@ -165,8 +165,8 @@ function block_analytics_graphs_get_teachers($course) {
  */
 function block_analytics_graphs_generate_graph_startup_module_entry($iconhtml, $name, $value, $title) {
 
-    return      "<div style='height: 24px;line-height: 24px;text-align: left;border: 1px solid lightgrey;" .
-                "margin-bottom: 2px; margin-top: 8px'>" .
+    return      "<div style='height: 1.5rem;line-height: 1.5rem;text-align: left;border: 1px solid lightgrey;" .
+                "margin-bottom: 0.125rem; margin-top: 0.5rem'>" .
                 "<div style='display: table;'>" .
                 $iconhtml .
                 "<div style='display: table-cell; vertical-align: middle;'>" .

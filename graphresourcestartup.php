@@ -62,14 +62,14 @@ foreach (block_analytics_graphs_get_course_used_modules($course) as $result) {
     <style>
         .my_text {
             font-family: Arial, Helvetica, sans-serif;
-            font-size: 12px;
+            font-size: 0.75rem;
         }
     </style>
 </head>
 <body>
-<div class = "my_text" style="width: 250px;height: 80%;position:absolute;left:0; right:0;top:0;
+<div class = "my_text" style="width: 15.625rem;height: 80%;position:absolute;left:0; right:0;top:0;
     bottom:0;margin:auto;max-width:100%;max-height:100%;
-    overflow:auto;background-color: white;border-radius: 0px;padding: 20px;border: 2px solid darkgray;text-align: center;">
+    overflow:auto;background-color: white;border-radius: 0;padding: 1.25rem;border: 2px solid darkgray;text-align: center;">
     <?php
     echo "<input type=\"hidden\" name=\"id\" value=\"$course\">";
 
@@ -80,7 +80,7 @@ foreach (block_analytics_graphs_get_course_used_modules($course) as $result) {
         <form action="graphresourceurl.php" method="get">
             <?php
             $num = 1;
-            echo "<h4 style='margin-bottom: 3px'>" . get_string('activities', 'block_analytics_graphs') . ":</h4>";
+            echo "<h4 style='margin-bottom: 0.1875rem'>" . get_string('activities', 'block_analytics_graphs') . ":</h4>";
             foreach ($availablemodules as $modulename) {
                 $module = "mod_$modulename";
                 $typename = "typename_$modulename";
@@ -95,7 +95,7 @@ foreach (block_analytics_graphs_get_course_used_modules($course) as $result) {
 
             echo "<input type=\"hidden\" name=\"id\" value=\"$course\">";
 
-            echo "<h4 style='margin-bottom: 3px'>" . get_string('options', 'block_analytics_graphs') . ":</h4>";
+            echo "<h4 style='margin-bottom: 0.1875rem'>" . get_string('options', 'block_analytics_graphs') . ":</h4>";
 
             echo "<label for=\"ag-startup-from\">" . get_string('startfrom', 'block_analytics_graphs') .
                 "</label>: <input type=\"date\" id=\"ag-startup-from\" name=\"from\" value=\"$startdate\"><br>";
