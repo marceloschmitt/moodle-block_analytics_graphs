@@ -82,7 +82,7 @@ $groupmembersjson = json_encode($groupmembers);
             #chart_outerdiv {
                 width: 90%;
                 height: 50vh;
-                margin: 0px auto 0px auto;
+                margin: 0 auto;
             }
 
             #grades_chart_text, #tasklist_text {
@@ -92,13 +92,13 @@ $groupmembersjson = json_encode($groupmembers);
             #chart_div {
                 width: 100%;
                 height: 85%;
-                margin: 0px auto 0px auto;
+                margin: 0 auto;
             }
 
             #tasklist_outerdiv {
                 height: 40vh;
                 width: 90%;
-                margin: 0px auto 0px auto;
+                margin: 0 auto;
             }
 
             #tasklist_buttons {
@@ -129,12 +129,12 @@ $groupmembersjson = json_encode($groupmembers);
                 height: 85%;
                 width: 100%;
                 overflow: auto;
-                margin: 0px auto 0px auto;
+                margin: 0 auto;
             }
 
             .individual_task_div {
-                margin: 10px 5px 10px 5px;
-                height: 40px;
+                margin: 0.625rem 0.3125rem;
+                height: 2.5rem;
                 background-color: #f3f3f3;
                 display: -webkit-box;
                 display: -webkit-flex;
@@ -149,11 +149,11 @@ $groupmembersjson = json_encode($groupmembers);
                 flex: 1.5;
                 -webkit-box-flex: 1.5;
                 height: 100%;
-                border: 0px;
+                border: 0;
             }
 
             .task_name {
-                margin: auto 0px auto 5px;
+                margin: auto 0 auto 0.3125rem;
                 flex: 5;
                 -webkit-box-flex: 5;
             }
@@ -167,16 +167,16 @@ $groupmembersjson = json_encode($groupmembers);
             }
 
             .no_student_img {
-                width: 20px;
-                height: 18px;
+                width: 1.25rem;
+                height: 1.125rem;
                 vertical-align: middle;
-                margin: 0px 0px 0px 10px;
+                margin: 0 0 0 0.625rem;
             }
         </style>
     </head>
     <body>
         <?php if (count($groupmembers) > 0) : ?>
-            <div style="margin: 20px;">
+            <div style="margin: 1.25rem;">
                 <label for="group_select"><?php echo get_string('group_filter', 'block_analytics_graphs'); ?></label>
                 <select id="group_select">
                     <option value="-">

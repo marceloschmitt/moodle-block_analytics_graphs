@@ -170,7 +170,7 @@ defined('MOODLE_INTERNAL') || die();
     </head>
     <body>
         <?php if (count($groupmembers) > 0) { ?>
-        <div style="margin: 20px;">
+        <div style="margin: 1.25rem;">
             <label for="group_select"><?php echo get_string('group_filter', 'block_analytics_graphs'); ?></label>
             <select id="group_select">
                 <option value="-"><?php  echo json_encode(get_string('all_groups', 'block_analytics_graphs'));?></option>
@@ -186,7 +186,7 @@ defined('MOODLE_INTERNAL') || die();
             <?php
         }
         ?>
-        <div id="container" style="min-width: 310px; min-width: 800px; height: 650px; margin: 0 auto"></div>
+        <div id="container" style="min-width: 19.375rem; min-width: 50rem; height: 40.625rem; margin: 0 auto"></div>
         <script>
             $(function(){
                 var groups = <?php echo $groupmembersjson; ?>;

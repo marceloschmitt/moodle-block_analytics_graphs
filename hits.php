@@ -159,7 +159,7 @@ div.res_query {
 }
 div.student_panel{
     font-size: 0.85em;
-    min-height: 450px;
+    min-height: 28.125rem;
     margin-left: auto;
     margin-right: auto;
 }
@@ -170,26 +170,26 @@ table.res_query {
     font-size: 0.85em;
 }
 .image-exclamation {
-    width: 25px;
-    height: 20px;
+    width: 1.5625rem;
+    height: 1.25rem;
     vertical-align: middle;
     visibility: hidden;
 }
 .warnings {
     float: right;
     align: right;
-    margin-left: 10px;
+    margin-left: 0.625rem;
     display: inline-flex;
     flex-direction: row;
     justify-content: space-around;
-    width: 55px;
+    width: 3.4375rem;
 }
 .warning1, .warning2 {
-    width: 25px;
+    width: 1.5625rem;
 }
 .warning1 {
     order: 1;
-    margin-right: 5px;
+    margin-right: 0.3125rem;
 }
 .warning2 {
     order: 2;
@@ -199,11 +199,11 @@ th {
     text-align: left;
 }
 td, th {
-    padding: 5px;
+    padding: 0.3125rem;
     border-top: 1px solid silver;
     border-bottom: 1px solid silver;
     border-right: 1px solid silver;
-    height: 60px;
+    height: 3.75rem;
 }
 thead th {
     border-top: 2px solid gray;
@@ -218,10 +218,10 @@ thead th {
 .highcharts-tooltip>span {
     background: white;
     border: 1px solid silver;
-    border-radius: 3px;
+    border-radius: 0.1875rem;
     box-shadow: 1px 1px 2px #888;
-    padding: 8px;
-    max-height: 250px;
+    padding: 0.5rem;
+    max-height: 15.625rem;
     width: auto;
     overflow: auto;
 }
@@ -229,21 +229,21 @@ thead th {
     position: relative;
     z-index: 50;
     border: 2px solid rgb(0, 108, 169);
-    border-radius: 5px;
+    border-radius: 0.3125rem;
     background-color: #ffffff;
-    padding: 5px;
+    padding: 0.3125rem;
     font-size: 9pt;
     overflow: auto;
-    height: 200px;
+    height: 12.5rem;
 }
 .totalgraph {
     width: 55%;
     display: block;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 50px;
-    border-radius: 0px;
-    padding: 10px;
+    margin-top: 3.125rem;
+    border-radius: 0;
+    padding: 0.625rem;
     border-top: 1px solid silver;
     border-bottom: 1px solid silver;
     border-right: 1px solid silver;
@@ -674,7 +674,7 @@ thead th {
 </head>
 <body>
     <?php if (count($groupmembers) > 0) { ?>
-        <div style="margin: 20px;">
+        <div style="margin: 1.25rem;">
             <label for="group_select"><?php echo get_string('group_filter', 'block_analytics_graphs'); ?></label>
             <select id="group_select">
                 <option value="-"><?php  echo json_encode(get_string('all_groups', 'block_analytics_graphs'));?></option>
@@ -904,7 +904,7 @@ thead th {
                         title: {
                             text: <?php echo json_encode(get_string('access_to_contents', 'block_analytics_graphs'))?>,
                             style: {
-                                fontSize: '13px',
+                                fontSize: '0.8125rem',
                                 fontWeight: 'bold'
                             }
                         },
@@ -913,7 +913,7 @@ thead th {
                             useHTML: true,
                             backgroundColor: "rgba(255, 255, 255, 1.0)",
                             formatter: function(){
-                                var tooltipStr = "<span style='font-size: 13px'><b>" +
+                                var tooltipStr = "<span style='font-size: 0.8125rem'><b>" +
                                     this.point.name +
                                     "</b></span>:<br>";
                                 if(this.point.name == <?php echo json_encode(get_string('access',
@@ -1072,7 +1072,7 @@ thead th {
                         title: {
                             text: <?php echo json_encode(get_string('submissions_assign', 'block_analytics_graphs'))?>,
                             style: {
-                                fontSize: '13px',
+                                fontSize: '0.8125rem',
                                 fontWeight: 'bold'
                             }
                         },
@@ -1081,7 +1081,7 @@ thead th {
                             useHTML: true,
                             backgroundColor: "rgba(255, 255, 255, 1.0)",
                             formatter: function(){
-                                var tooltipStr = "<span style='font-size: 13px'><b>" +
+                                var tooltipStr = "<span style='font-size: 0.8125rem'><b>" +
                                     this.point.name +
                                     "</b></span>:<br>";
                                 if(this.point.name == ONTIMESTR){
@@ -1231,7 +1231,7 @@ thead th {
                         title: {
                             text: <?php echo json_encode(get_string('submissions_quizchart', 'block_analytics_graphs'))?>,
                             style: {
-                                fontSize: '13px',
+                                fontSize: '0.8125rem',
                                 fontWeight: 'bold'
                             }
                         },
@@ -1240,7 +1240,7 @@ thead th {
                             useHTML: true,
                             backgroundColor: "rgba(255, 255, 255, 1.0)",
                             formatter: function(){
-                                var tooltipStr = "<span style='font-size: 13px'><b>" +
+                                var tooltipStr = "<span style='font-size: 0.8125rem'><b>" +
                                     this.point.name +
                                     "</b></span>:<br>";
                                 if(this.point.name == PASSEDSTR){
@@ -1398,7 +1398,7 @@ thead th {
                         title: {
                             text: <?php echo json_encode(get_string('submissions_forumchart_reads', 'block_analytics_graphs'))?>,
                             style: {
-                                fontSize: '13px',
+                                fontSize: '0.8125rem',
                                 fontWeight: 'bold'
                             }
                         },
@@ -1407,7 +1407,7 @@ thead th {
                             useHTML: true,
                             backgroundColor: "rgba(255, 255, 255, 1.0)",
                             formatter: function(){
-                                var tooltipStr = "<span style='font-size: 13px'><b>" +
+                                var tooltipStr = "<span style='font-size: 0.8125rem'><b>" +
                                     this.point.name +
                                     "</b></span>:<br>";
                                 if(this.point.name == READSTR){
@@ -1478,7 +1478,7 @@ thead th {
                         title: {
                             text: <?php echo json_encode(get_string('submissions_forumchart_posts', 'block_analytics_graphs'))?>,
                             style: {
-                                fontSize: '13px',
+                                fontSize: '0.8125rem',
                                 fontWeight: 'bold'
                             }
                         },
@@ -1487,7 +1487,7 @@ thead th {
                             useHTML: true,
                             backgroundColor: "rgba(255, 255, 255, 1.0)",
                             formatter: function(){
-                                var tooltipStr = "<span style='font-size: 13px'><b>" +
+                                var tooltipStr = "<span style='font-size: 0.8125rem'><b>" +
                                     this.point.name +
                                     "</b></span>:<br>";
                                 if(this.point.name == POSTEDSTR){
