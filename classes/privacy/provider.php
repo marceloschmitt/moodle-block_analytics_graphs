@@ -165,7 +165,7 @@ class provider implements \core_privacy\local\metadata\provider,
                     ];
 
                     $data = (object) [
-                        'fromid' => $message->fromid,
+                        'fromid' => transform::user($message->fromid),
                         'subject' => $message->subject,
                         'message' => $message->message,
                         'courseid' => $message->courseid,
@@ -196,9 +196,9 @@ class provider implements \core_privacy\local\metadata\provider,
                     ];
 
                     $data = (object) [
-                        'toid' => $message->toid,
+                        'toid' => transform::user($message->toid),
                         'messageid' => $message->messageid,
-                        'fromid' => $message->fromid,
+                        'fromid' => transform::user($message->fromid),
                         'subject' => $message->subject,
                         'message' => $message->message,
                         'timecreated' => transform::datetime($message->timecreated),
