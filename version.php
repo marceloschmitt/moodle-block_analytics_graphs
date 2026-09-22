@@ -23,11 +23,7 @@
  */
 
 defined('MOODLE_INTERNAL') || die();
-<<<<<<< HEAD
 $plugin->version = 2026092200;  // YYYYMMDDHH (year, month, day, 24-hr time).
-=======
-$plugin->version = 2026092107;  // YYYYMMDDHH (year, month, day, 24-hr time).
->>>>>>> d769dd3b8d83c2ac3459a24877169da4148af67d
 $plugin->requires = 2015111600; // YYYYMMDDHH (This is the release version for Moodle 3.0).
 $plugin->maturity = MATURITY_STABLE;
 $plugin->release = '4.2.1';
